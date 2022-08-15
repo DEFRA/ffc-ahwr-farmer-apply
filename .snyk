@@ -6,4 +6,7 @@ ignore:
     - '@hapi/hapi > @hapi/statehood':
         reason: None given
         expires: '2022-09-08T11:46:11.839Z'
+      '@hapi/yar > @hapi/statehood':
+        reason: None given
+        expires: '2022-09-14T09:45:19.435Z'
 patch: {}
