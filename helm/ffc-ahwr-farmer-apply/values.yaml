@@ -61,3 +61,7 @@ readinessProbe:
   initialDelaySeconds: 10
   periodSeconds: 10
   failureThreshold: 3
+
+service:
+  port: 80
+  type: ClusterIP
