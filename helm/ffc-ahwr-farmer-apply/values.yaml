@@ -6,8 +6,14 @@ image: ffc-ahwr-farmer-apply
 
 labels: {}
 
+aadPodIdentity: true
+
 appInsights:
   key:
+
+azureIdentity:
+  clientID:
+  resourceID:
 
 containerConfigMap:
   name: ffc-ahwr-farmer-apply-config-map
