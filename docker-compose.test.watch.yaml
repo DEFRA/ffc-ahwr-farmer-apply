@@ -3,13 +3,6 @@ version: '3.8'
 services:
   ffc-ahwr-farmer-apply:
     command: >
-      sh -c "npm run test:watch:all"
+      sh -c "npm run test:watch"
     volumes:
-      - ./app:/home/node/app
-      - ./test:/home/node/test
-      - ./jest.config.js:/home/node/jest.config.js
-      - ./webpack.config.js:/home/node/webpack.config.js
-
-volumes:
-  dist:
-  layouts:
+      - ./.git:/home/node/.git

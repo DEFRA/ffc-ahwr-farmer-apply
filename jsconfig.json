@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es6",
-    "module": "commonJS"
+    "module": "commonjs"
   },
   "exclude": ["node_modules"]
 }
