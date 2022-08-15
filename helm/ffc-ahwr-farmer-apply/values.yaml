@@ -38,7 +38,7 @@ container:
   limitCpu: 40m
   port: 3000
   redisHostname: redis-hostname.default
-  redisPartition: ffc-ahwr-frontend
+  redisPartition: ffc-ahwr-farmer-apply
   redisPassword: redis
   redisPort: 6379
   serviceUri:
