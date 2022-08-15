@@ -37,6 +37,11 @@ container:
   redisPort: 6379
   serviceUri:
 
+ingress:
+  class: nginx
+  endpoint: ffc-ahwr-farmer-apply
+  server: value.replaced.from.app.config
+
 livenessProbe:
   path: /healthz
   port: 3000
