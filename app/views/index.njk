@@ -1,0 +1,35 @@
+{% extends './layouts/layout.njk' %}
+
+{% block pageTitle %}{{ serviceName }}{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">Apply for an annual health and welfare review of your livestock</h1>
+
+    <p>Use this service to get a reference number to book a review with your vet.</p>
+    <p>The reference number is valid for 12 months.</p>
+    <p>Applying takes around 5 minutes.</p>
+
+    {{ govukButton({
+      classes: "govuk-!-margin-top-2 govuk-!-margin-bottom-8",
+      href: "/",
+      isStartButton: true,
+      text: "Start now"
+    }) }}
+
+    <h2 class="govuk-heading-m">Before you start</h2>
+    <p>You'll need an email address.</p>
+    <p>You must be eligible to apply for an annual health and welfare review. Read the guidance on <a href="https://ffc-ahwr-content.herokuapp.com/guidance-for-farmers">getting a funded annual health and welfare review for cattle, sheep and pigs</a> before you use this service.</p>
+
+    <h2 class="govuk-heading-m">Get help with your application</h2>
+    <p>If you cannot apply online or have a question about your application, contact the Rural Payments Agency.</p>
+    <ul class="govuk-list">
+      <li>Telephone: 03000 200 301</li>
+      <li>Monday to Friday, 8:30am to 5pm</li>
+      <li><a href="mailto:ruralpayments@defra.gov.uk">ruralpayments@defra.gov.uk</a></li>
+    </ul>
+
+  </div>
+</div>
+{% endblock %}
