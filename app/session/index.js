@@ -16,6 +16,8 @@ function get (request, entryKey, key) {
 
 function clear (request) {
   request.yar.clear(entries.farmerApplyData)
+  request.yar.clear(entries.application)
+  request.yar.clear(entries.organisation)
 }
 
 function setApplication (request, key, value) {
