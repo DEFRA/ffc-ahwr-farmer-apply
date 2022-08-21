@@ -20,8 +20,6 @@ const raiseEvent = async (event, status = 'success') => {
     }
   }
 
-  console.log(JSON.stringify(eventMessage))
-
   await eventPublisher.sendEvent(eventMessage)
 }
 
