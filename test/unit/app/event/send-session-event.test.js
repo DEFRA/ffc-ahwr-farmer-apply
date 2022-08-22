@@ -14,13 +14,14 @@ describe('Send event on session set', () => {
   beforeEach(async () => {
     organisation = {
       sbi: '123456789',
-      email: 'email@email.com'
+      email: 'email@email.com',
+      cph: '123/456/789'
     }
 
     event = {
       name: 'send-session-event',
-      type: entryKey,
-      message: `Session set for ${entryKey}.`
+      type: `${entryKey}-${key}`,
+      message: `Session set for ${entryKey} and ${key}.`
     }
   })
 
@@ -38,6 +39,7 @@ describe('Send event on session set', () => {
       ...event,
       sbi: organisation.sbi,
       email: organisation.email,
+      cph: organisation.cph,
       id: sessionId,
       data: { [key]: value }
     }
