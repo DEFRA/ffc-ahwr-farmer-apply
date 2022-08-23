@@ -2,7 +2,7 @@ const { ReportAggregator, HtmlReporter } = require('wdio-html-nice-reporter')
 const log4js = require('@log4js-node/log4js-api')
 const path = require('path')
 const logger = log4js.getLogger('default')
-const envRoot = (process.env.TEST_ENVIRONMENT_ROOT_URL || 'http://host.docker.internal:3003')
+const envRoot = (process.env.TEST_ENVIRONMENT_ROOT_URL || 'http://host.docker.internal:3000')
 const chromeArgs = process.env.CHROME_ARGS ? process.env.CHROME_ARGS.split(' ') : []
 const maxInstances = process.env.MAX_INSTANCES ? Number(process.env.MAX_INSTANCES) : 1
 
