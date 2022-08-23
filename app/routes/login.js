@@ -1,15 +1,30 @@
+const boom = require('@hapi/boom')
 const Joi = require('joi')
 const { getByEmail } = require('../api-requests/users')
 const { email: emailValidation } = require('../lib/validation/email')
-const { clear, setFarmerApplyData } = require('../session')
-const { organisation: organisationKey } = require('../session/keys').farmerApplyData
+const { sendFarmerApplyLoginMagicLink } = require('../lib/email/send-magic-link-email')
+const { clear } = require('../session')
+
+const hintText = 'We\'ll use this to send you a link to apply for a review'
 
 module.exports = [{
   method: 'GET',
   path: '/login',
   options: {
-    handler: async (_, h) => {
-      return h.view('login')
+    auth: {
+      mode: 'try'
+    },
+    plugins: {
+      'hapi-auth-cookie': {
+        redirectTo: false
+      }
+    },
+    handler: async (request, h) => {
+      if (request.auth.isAuthenticated) {
+        return h.redirect(request.query?.next || '/org-review')
+      }
+
+      return h.view('login', { hintText })
     }
   }
 },
@@ -17,12 +32,15 @@ module.exports = [{
   method: 'POST',
   path: '/login',
   options: {
+    auth: {
+      mode: 'try'
+    },
     validate: {
       payload: Joi.object({
         email: emailValidation
       }),
       failAction: async (request, h, error) => {
-        return h.view('login', { ...request.payload, errorMessage: { text: error.details[0].message }, hintText: 'Oh dear!!' }).code(400).takeover()
+        return h.view('login', { ...request.payload, errorMessage: { text: error.details[0].message }, hintText }).code(400).takeover()
       }
     },
     handler: async (request, h) => {
@@ -30,13 +48,17 @@ module.exports = [{
       const organisation = await getByEmail(email)
 
       if (!organisation) {
-        return h.view('login', { ...request.payload, errorMessage: { text: `No user found with email address "${email}"` }, hintText: 'Oh dear!!' }).code(400).takeover()
+        return h.view('login', { ...request.payload, errorMessage: { text: `No user found with email address "${email}"` }, hintText }).code(400).takeover()
       }
 
       clear(request)
-      setFarmerApplyData(request, organisationKey, organisation)
+      const result = await sendFarmerApplyLoginMagicLink(request, email)
 
-      return h.redirect('/org-review')
+      if (!result) {
+        return boom.internal()
+      }
+
+      return h.view('check-email', { activityText: 'The email includes a link to apply for a review. This link will expire in 15 minutes.', email })
     }
   }
 }]

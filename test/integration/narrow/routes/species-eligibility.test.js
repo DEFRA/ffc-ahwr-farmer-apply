@@ -30,6 +30,24 @@ describe('Species eligibility test', () => {
       expect($('.govuk-hint').text()).toMatch(speciesContent[species].hintText)
       expectPhaseBanner.ok($)
     })
+
+    test.each([
+      { species: species.beef },
+      { species: species.dairy },
+      { species: species.pigs },
+      { species: species.sheep }
+    ])('when not logged in redirects to /login', async ({ species }) => {
+      const url = `/${species}-eligibility`
+      const options = {
+        method: 'GET',
+        url
+      }
+
+      const res = await global.__SERVER__.inject(options)
+
+      expect(res.statusCode).toBe(302)
+      expect(res.headers.location).toEqual('/login')
+    })
   })
 
   describe('POST species eligibility route', () => {
@@ -97,6 +115,26 @@ describe('Species eligibility test', () => {
       const $ = cheerio.load(res.payload)
       expect($('p.govuk-error-message').text()).toMatch(speciesContent[species].errorText)
       expect(res.statusCode).toBe(400)
+    })
+
+    test.each([
+      { species: species.beef },
+      { species: species.dairy },
+      { species: species.pigs },
+      { species: species.sheep }
+    ])('when not logged in redirects to /login', async ({ species }) => {
+      const url = `/${species}-eligibility`
+      const options = {
+        method,
+        url,
+        payload: { crumb, eligibleSpecies: 'no' },
+        headers: { cookie: `crumb=${crumb}` }
+      }
+
+      const res = await global.__SERVER__.inject(options)
+
+      expect(res.statusCode).toBe(302)
+      expect(res.headers.location).toEqual('/login')
     })
   })
 })

@@ -72,6 +72,20 @@ describe('Org review page test', () => {
       const $ = cheerio.load(res.payload)
       expect($('.govuk-heading-l').text()).toEqual('404 - Not Found')
     })
+
+    describe(`GET ${url} route when not logged in`, () => {
+      test('redirects to /login', async () => {
+        const options = {
+          method: 'GET',
+          url
+        }
+
+        const res = await global.__SERVER__.inject(options)
+
+        expect(res.statusCode).toBe(302)
+        expect(res.headers.location).toEqual('/login')
+      })
+    })
   })
 
   describe(`POST ${url} route`, () => {

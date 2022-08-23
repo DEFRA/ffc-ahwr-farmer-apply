@@ -11,6 +11,7 @@ data:
   EVENT_QUEUE_ADDRESS: {{ .Values.container.eventQueueAddress }}-{{ .Values.environmentCode }}
   GOOGLE_TAG_MANAGER_KEY: {{ quote .Values.container.googleTagManagerKey}}
   MESSAGE_QUEUE_HOST: {{ quote .Values.container.messageQueueHost }}
+  NOTIFY_TEMPLATE_ID_FARMER_APPLY_LOGIN: {{ quote .Values.container.notifyTemplateIdFarmerApplyLogin }}
   {{- if .Values.container.redisHostname }}
   REDIS_HOSTNAME: {{ quote .Values.container.redisHostname }}
   {{- end }}

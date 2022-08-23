@@ -1,5 +1,6 @@
 const Joi = require('joi')
 const mqConfig = require('./messaging')
+const notifyConfig = require('./notify')
 const storageConfig = require('./storage')
 
 const schema = Joi.object({
@@ -38,7 +39,8 @@ const schema = Joi.object({
   googleTagManagerKey: Joi.string().allow(null, ''),
   isDev: Joi.boolean().default(false),
   port: Joi.number().default(3000),
-  serviceName: Joi.string().default('Annual health and welfare review of livestock'),
+  serviceUri: Joi.string().uri(),
+  serviceName: Joi.string().default('Annual health and welfare review of your livestock'),
   useRedis: Joi.boolean().default(false)
 })
 
@@ -71,6 +73,7 @@ const config = {
   googleTagManagerKey: process.env.GOOGLE_TAG_MANAGER_KEY,
   isDev: process.env.NODE_ENV === 'development',
   port: process.env.PORT,
+  serviceUri: process.env.SERVICE_URI,
   useRedis: process.env.NODE_ENV !== 'test'
 }
 
@@ -85,5 +88,6 @@ if (result.error) {
 const value = result.value
 value.storageConfig = storageConfig
 value.mqConfig = mqConfig
+value.notifyConfig = notifyConfig
 
 module.exports = value
