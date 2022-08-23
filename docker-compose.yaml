@@ -26,5 +26,5 @@ services:
       REDIS_HOSTNAME: redis
       REDIS_PORT: 6379
       REDIS_PASSWORD: ""
-      SERVICE_URI: http://localhost:3003
+      SERVICE_URI: http://localhost:3000
       TEST_TOKEN:
