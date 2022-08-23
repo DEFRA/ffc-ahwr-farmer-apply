@@ -1,3 +1,5 @@
+const { sendSessionEvent } = require('../event')
+
 const entries = {
   application: 'application',
   farmerApplyData: 'farmerApplyData',
@@ -8,6 +10,8 @@ function set (request, entryKey, key, value) {
   const entryValue = request.yar?.get(entryKey) || {}
   entryValue[key] = typeof (value) === 'string' ? value.trim() : value
   request.yar.set(entryKey, entryValue)
+  const organisation = getFarmerApplyData(request, entries.organisation)
+  sendSessionEvent(organisation, request.yar.id, entryKey, key, value)
 }
 
 function get (request, entryKey, key) {

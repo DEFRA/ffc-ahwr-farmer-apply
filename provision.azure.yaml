@@ -3,3 +3,4 @@ resources:
     - name: applicationRequest
     - name: applicationResponse
       enableSessions: true
+    - name: event

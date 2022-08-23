@@ -3,6 +3,8 @@ const getCrumbs = require('../../../utils/get-crumbs')
 const expectPhaseBanner = require('../../../utils/phase-banner-expect')
 const { serviceName } = require('../../../../app/config')
 
+jest.mock('ffc-messaging')
+
 describe('Species review test', () => {
   const auth = { credentials: { reference: '1111', sbi: '111111111' }, strategy: 'cookie' }
   const url = '/which-review'
