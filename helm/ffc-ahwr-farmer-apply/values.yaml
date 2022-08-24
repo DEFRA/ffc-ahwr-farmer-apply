@@ -47,12 +47,15 @@ container:
   limitMemory: 100Mi
   limitCpu: 100m
   messageQueueHost: namespace.servicebus.windows.net
+  notifyApiKey:
+  notifyTemplateIdFarmerApplyLogin:
   port: 3000
   redisHostname: redis-hostname.default
   redisPartition: ffc-ahwr-farmer-apply
   redisPassword: redis
   redisPort: 6379
   serviceUri:
+  testToken:
 
 ingress:
   class: nginx

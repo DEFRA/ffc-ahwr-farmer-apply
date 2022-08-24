@@ -10,7 +10,8 @@ const routes = [].concat(
   require('../routes/species-eligibility'),
   require('../routes/not-eligible'),
   require('../routes/check-answers'),
-  require('../routes/declaration')
+  require('../routes/declaration'),
+  require('../routes/verify-login')
 )
 
 module.exports = {

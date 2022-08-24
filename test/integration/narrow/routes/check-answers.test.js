@@ -68,5 +68,17 @@ describe('Check Answers test', () => {
       expect($('.govuk-summary-list__value').eq(1).text()).toMatch(content[eligibleSpecies].liveStockNumber)
       expect($('.govuk-summary-list__actions a').eq(1).attr('href')).toMatch(`/${eligibleSpecies}-eligibility`)
     })
+
+    test('when not logged in redirects to /login', async () => {
+      const options = {
+        method: 'GET',
+        url
+      }
+
+      const res = await global.__SERVER__.inject(options)
+
+      expect(res.statusCode).toBe(302)
+      expect(res.headers.location).toEqual('/login')
+    })
   })
 })

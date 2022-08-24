@@ -25,6 +25,18 @@ describe('Species review test', () => {
       expect($('title').text()).toEqual(`Which livestock do you want a review for? - ${serviceName}`)
       expectPhaseBanner.ok($)
     })
+
+    test('when not logged in redirects to /login', async () => {
+      const options = {
+        method: 'GET',
+        url
+      }
+
+      const res = await global.__SERVER__.inject(options)
+
+      expect(res.statusCode).toBe(302)
+      expect(res.headers.location).toEqual('/login')
+    })
   })
 
   describe(`POST ${url} route`, () => {
@@ -74,6 +86,20 @@ describe('Species review test', () => {
       const $ = cheerio.load(res.payload)
       expect($('p.govuk-error-message').text()).toMatch('Select the livestock type you want reviewed')
       expect(res.statusCode).toBe(400)
+    })
+
+    test('when not logged in redirects to /login', async () => {
+      const options = {
+        method,
+        url,
+        payload: { crumb, whichReview: 'pigs' },
+        headers: { cookie: `crumb=${crumb}` }
+      }
+
+      const res = await global.__SERVER__.inject(options)
+
+      expect(res.statusCode).toBe(302)
+      expect(res.headers.location).toEqual('/login')
     })
   })
 })
