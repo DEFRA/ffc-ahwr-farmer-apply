@@ -1,4 +1,4 @@
-import Page from './page'
+import Page from './pages'
 
 class FarmerLogin extends Page {
   get email () { return $('#email') }

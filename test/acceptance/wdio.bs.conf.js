@@ -13,6 +13,9 @@ exports.config = {
     ],
     capabilities: [{
       browserName: 'chrome',
+      'goog:chromeOptions': {
+        args: config.chromeArgs
+      },
       acceptInsecureCerts: true,
       'bstack:options': {
         networkLogs: true,
