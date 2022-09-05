@@ -17,7 +17,7 @@ Feature: Farmer apply
 
  @wip
   Scenario: Farmer completes application
-     Given farmer clicks on email link "afc64e3c-ee87-4509-a582-382b01ddfb4f" "livsey-erubamie.williams@capgemini.com"
+     Given farmer clicks on email link "fd51a82f-2030-45f1-83e6-775f7ed86091" "livsey-erubamie.williams@capgemini.com"
      When I select yes my details are correct on farmer review page
      And I select beef cattle on the livestock review page
      And I select yes option from farmer eligibility
