@@ -11,7 +11,7 @@ class FarmerCattleEligibility extends Pages {
   }
 
   async selectCattleYes () {
-    await (await this.yesRadioButton).scrollIntoView();
+    await (await this.yesRadioButton).scrollIntoView()
     await (await this.yesRadioButton).click()
   }
 

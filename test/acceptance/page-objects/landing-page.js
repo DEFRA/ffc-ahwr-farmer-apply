@@ -1,19 +1,18 @@
-const Page = require('./page');
+const Page = require('./page')
 
 /**
  * sub page containing specific selectors and methods for a specific page
  */
 class LandingPage extends Page {
-  get farmerApplyBtn () { return browser.$('//a[contains(.,\'Farmer Apply\')]')}
+  get farmerApplyBtn () { return browser.$('//a[contains(.,\'Farmer Apply\')]') }
   open () {
-    return super.open('/');
+    return super.open('/')
   }
-  async gotoFarmerApply() {
 
+  async gotoFarmerApply () {
     browser.pause(100000000)
-    await this.farmerApplyBtn.click();
+    await this.farmerApplyBtn.click()
   }
-
 }
 
-module.exports = new LandingPage();
+module.exports = new LandingPage()

@@ -38,8 +38,8 @@ export default async (elementType, selector, falseCase) => {
   }
 
   if (boolFalseCase) {
-   await expect(text).to.equal('')
+    await expect(text).to.equal('')
   } else {
-   await expect(text).to.not.equal('')
+    await expect(text).to.not.equal('')
   }
 }

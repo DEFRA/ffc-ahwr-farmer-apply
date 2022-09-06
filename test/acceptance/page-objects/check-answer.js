@@ -1,6 +1,5 @@
 import Page from './page'
 
-
 class CheckAnswer extends Page {
   get yesRadioButton () { return $('#pigs') }
   get noRadioButton () { return $('#pigs-2') }

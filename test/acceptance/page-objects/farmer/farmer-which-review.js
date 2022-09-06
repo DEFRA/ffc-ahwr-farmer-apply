@@ -13,39 +13,36 @@ class WhichReview extends Pages {
   }
 
   async selectBeef () {
-    await (await this.beefRadioButton).scrollIntoView();
-    await browser.pause(3000);
+    await (await this.beefRadioButton).scrollIntoView()
+    await browser.pause(3000)
     await (await this.beefRadioButton).click()
-    await browser.pause(3000);
+    await browser.pause(3000)
   }
 
   async selectDairy () {
-    await (await this.dairyRadioButton).scrollIntoView();
-    await browser.pause(3000);
+    await (await this.dairyRadioButton).scrollIntoView()
+    await browser.pause(3000)
     await (await this.dairyRadioButton).click()
-    await browser.pause(3000);
+    await browser.pause(3000)
   }
 
   async selectSheep () {
-    await (await this.sheepRadioButton).scrollIntoView();
-    await browser.pause(3000);
+    await (await this.sheepRadioButton).scrollIntoView()
+    await browser.pause(3000)
     await (await this.sheepRadioButton).click()
-    await browser.pause(3000);
+    await browser.pause(3000)
   }
 
   async selectPig () {
-    await (await this.pigRadioButton).scrollIntoView();
-    await browser.pause(3000);
+    await (await this.pigRadioButton).scrollIntoView()
+    await browser.pause(3000)
     await (await this.pigRadioButton).click()
-    await browser.pause(3000);
+    await browser.pause(3000)
   }
 
   async verifyHeaderTitle () {
     await this.headerTitle.getText()
   }
-
-
 }
 
-module.exports =  new WhichReview()
-
+module.exports = new WhichReview()

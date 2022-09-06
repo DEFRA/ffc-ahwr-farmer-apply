@@ -9,7 +9,7 @@ export default async (falseCase, expectedTitle) => {
      * The title of the current browser window
      * @type {String}
      */
-  const title =  browser.getTitle()
+  const title = browser.getTitle()
 
   if (falseCase) {
     await expect(title).to.not

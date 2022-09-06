@@ -3,7 +3,7 @@ import Pages from '../page'
 class FarmerLogin extends Pages {
   get email () { return $('#email') }
   get signin () { return $('#submit') }
-  get errorField(){return browser.$('//p[contains(@class,\'govuk-error-message\')]')}
+  get errorField () { return browser.$('//p[contains(@class,\'govuk-error-message\')]') }
 
   open () {
     super.open('')
