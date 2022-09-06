@@ -9,7 +9,7 @@ const schema = Joi.object({
     expiresIn: Joi.number().default(1000 * 3600 * 24 * 3), // 3 days
     options: {
       host: Joi.string().default('redis-hostname.default'),
-      partition: Joi.string().default('ffc-ahwr-frontend'),
+      partition: Joi.string().default('ffc-ahwr-farmer-apply'),
       password: Joi.string().allow(''),
       port: Joi.number().default(6379),
       tls: Joi.object()

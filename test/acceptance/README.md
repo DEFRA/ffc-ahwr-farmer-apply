@@ -3,7 +3,7 @@
 > Future Farming and Countryside Programme - AHWR Frontend Acceptance Tests.
 
 This folder contains the acceptance tests for the AHWR Frontend user facing
-`ffc-ahwr-frontend` front end microservice.
+`ffc-ahwr-farmer-apply` front end microservice.
 
 The tests use [Cucumber](https://cucumber.io/) and
 [webdriver.io](https://webdriver.io/). It is based on the

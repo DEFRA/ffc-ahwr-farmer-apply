@@ -12,7 +12,7 @@ export default async (obsolete) => {
 
   // Close all tabs but the first one
   await windowHandles.reverse()
-  await windowHandles.forEach( (handle, index) => {
+  await windowHandles.forEach((handle, index) => {
     browser.switchToWindow(handle)
     if (index < windowHandles.length - 1) {
       browser.closeWindow()

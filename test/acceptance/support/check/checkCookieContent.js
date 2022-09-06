@@ -17,7 +17,7 @@ export default async (name, falseCase, expectedValue) => {
   )
 
   if (falseCase) {
-   await expect(cookie.value).to.not
+    await expect(cookie.value).to.not
       .equal(
         expectedValue,
         `expected cookie "${name}" not to have value "${expectedValue}"`
