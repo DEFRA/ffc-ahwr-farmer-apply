@@ -17,6 +17,7 @@ class FarmerLogin extends Pages {
   async clickSignin () {
     await (await this.signin).click()
   }
+
 }
 
 module.exports = new FarmerLogin()
