@@ -43,6 +43,10 @@ When('I select yes my details are correct on farmer review page', async () => {
   await FarmerOrgReview.selectYes()
   await FarmerOrgReview.clickContinue()
 })
+When('I select No my details are not correct on farmer review page', async () => {
+  await FarmerOrgReview.selectNo()
+  await FarmerOrgReview.clickContinue()
+})
 Then('I select beef cattle on the livestock review page', async () => {
   await whichReview.selectBeef()
   await whichReview.clickContinue()
@@ -53,6 +57,11 @@ When('I select yes option from farmer eligibility', async () => {
   await FarmerCattleEligibility.clickContinue()
   await browser.pause(2000)
 })
+Then('I select no option from farmer eligibility',async ()=>{
+  await FarmerCattleEligibility.selectCattleNo()
+  await FarmerCattleEligibility.clickContinue()
+  await browser.pause(2000)
+})
 When('I select confirm from check your answers', async () => {
   await CheckAnswer.clickContinue()
 })
@@ -60,7 +69,7 @@ Then('I check the terms and condition checkbox and click submit application', as
   await TermsPage.selectAgreeRadioOption()
   await TermsPage.submit()
   await browser.pause(5000)
-  expect(await DeclarationPage.applicationSuccessful.getText()).to.equals('Application successful')
+  wdioExpect(await DeclarationPage.applicationSuccessful).toHaveTextContaining('Application successful')
 })
 
 Given('I go back to start page', async () => {
@@ -91,7 +100,20 @@ When('I enter my invalid {string}', async (email) => {
   await browser.pause(5000)
 })
 When('I should see an error {string}', async (email) => {
-  const errorText = 'No user found with email address "' + email + '"'
-  const actualText = await FarmerLogin.errorField.getText()
-  expect(errorText).to.equals(actualText)
+  await browser.pause(5000)
+  const errorText = 'Error:\\n' +
+    'No user found with email address "' + email + '"'
+  await wdioExpect(await FarmerLogin.errorField).toHaveTextContaining(email)
+})
+Then('I should presented with {string} on the org-review page',async (text)=>{
+  await wdioExpect(await FarmerReview.updateDetails).toHaveTextContaining(text)
+})
+Then('I should see the link "update your details with the Rural Payments Agency" on the org-review page',async ()=>{
+  await wdioExpect(await FarmerReview.updateDetailsLink).toBePresent()
+})
+Then('I should presented with {string} on the not-eligible page',async (text)=>{
+  await wdioExpect(await FarmerEligibility.eligibilityDetails).toHaveTextContaining(text)
+})
+Then('I should see the link "find out if you could be eligible for other farming schemes." on the not-eligible page',async ()=>{
+  await wdioExpect(await FarmerEligibility.eligibilityDetailsLink).toBePresent()
 })
