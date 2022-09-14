@@ -1,6 +1,6 @@
 {% extends './layouts/layout.njk' %}
 
-{% block pageTitle %}Review your application - {{ serviceName }}{% endblock %}
+{% block pageTitle %}Accept your offer - {{ serviceName }}{% endblock %}
 
 {% block beforeContent %}
   {{ govukBackLink({
@@ -13,7 +13,7 @@
 {% block content %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l">Review your application</h1>
+    <h1 class="govuk-heading-l">Accept your offer</h1>
 
     <p class="govuk-body">You’re applying for funding for a {{ species }} review for this business:</p>
     <div class="govuk-inset-text">
@@ -59,7 +59,7 @@
       }) }}
 
       {{ govukButton({
-        text: "Submit application"
+        text: "Agree and submit"
       }) }}
     </form>
   </div>
