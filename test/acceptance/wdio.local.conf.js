@@ -3,7 +3,7 @@ import { config } from './wdio.conf'
 exports.config = {
   ...config,
   ...{
-    services: ['chromedriver'],
+    //services: ['chromedriver'],
     capabilities: [{
       maxInstances: 1,
       pageLoadStrategy: 'none',
@@ -19,7 +19,7 @@ exports.config = {
       console.log('Connecting to Local')
     },
 
-    onComplete: function (exitCode, config, capabilities, results) {
+    onComplete: function (config, capabilities, results) {
       console.log('Testing complete, Browser closed')
     }
   }

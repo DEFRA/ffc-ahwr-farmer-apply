@@ -37,7 +37,7 @@
     "@wdio/config": "^7.16.11",
     "@wdio/cucumber-framework": "^7.16.12",
     "@wdio/spec-reporter": "^7.16.11",
-    "chai": "^4.3.4",
+    "chai": "^4.3.6",
     "chromedriver": "^96.0.0",
     "eslint": "^7.22.0",
     "eslint-plugin-import": "^2.20.2",
@@ -48,7 +48,8 @@
     "standard": "16.0.4",
     "wdio-chromedriver-service": "^7.2.2",
     "wdio-html-nice-reporter": "^7.9.1",
-    "webdriverio": "^7.16.12"
+    "webdriverio": "^7.16.12",
+    "expect-webdriverio": "^3.4.0"
   },
   "standard": {
     "globals": [

@@ -13,7 +13,7 @@ class FarmerApply extends Pages {
   }
 
   async istTitleExist () {
-    return await this.title.isDisplayed()
+    return this.title.isDisplayed()
   }
 }
 

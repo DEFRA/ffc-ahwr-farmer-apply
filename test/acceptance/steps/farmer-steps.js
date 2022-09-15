@@ -9,6 +9,8 @@ const FarmerCattleEligibility = require('../page-objects/farmer/farmer-cattle-el
 const CheckAnswer = require('../page-objects/check-answer')
 const TermsPage = require('../page-objects/terms-page')
 const DeclarationPage = require('../page-objects/declaration')
+const FarmerReview = require('../page-objects/farmer/farmer-review')
+const FarmerEligibility = require('../page-objects/farmer/farmer-not-eligible')
 const pages = {
   formApply: FarmerApply,
   landing: LandingPage
@@ -88,7 +90,7 @@ Then('I select sheep cattle on the livestock review page', async () => {
   await whichReview.clickContinue()
   await browser.pause(2000)
 })
-Then('I select pig cattle on the livestock review page', async () => {
+Then('I select pig on the livestock review page', async () => {
   await whichReview.selectPig()
   await whichReview.clickContinue()
   await browser.pause(2000)
@@ -116,4 +118,5 @@ Then('I should presented with {string} on the not-eligible page',async (text)=>{
 })
 Then('I should see the link "find out if you could be eligible for other farming schemes." on the not-eligible page',async ()=>{
   await wdioExpect(await FarmerEligibility.eligibilityDetailsLink).toBePresent()
+
 })
