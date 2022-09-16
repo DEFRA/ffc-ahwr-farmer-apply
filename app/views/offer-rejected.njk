@@ -1,0 +1,30 @@
+{% extends './layouts/layout.njk' %}
+
+{% block pageTitle %}{{ serviceName }}{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-l">You’ve rejected the agreement offer</h1>
+    <p class="govuk-body">
+      Based on your choice you’re not able to claim for an Annual Health and Welfare Review.
+    </p>
+    <p class="govuk-body">
+      If you still want to apply for a review, you can <a class="govuk-link" href="/">start a new application</a>.
+    </p>
+
+    <p class="govuk-body">
+      If you have a question about the service contact the Rural Payments Agency:
+    </p>
+    <ul class="govuk-list">
+      <li>Rural Payments Agency</li>
+      <li>Telephone: 01900 508 622</li>
+      <li>Monday to Friday, 8:30am to 5pm (except public holidays)</li>
+      <li><a class="govuk-link" href="mailto:ruralpayments@defra.gov.uk">ruralpayments@defra.gov.uk</a></li>
+    </ul>
+    <p class="govuk-body">Find out about <a class="govuk-link" href="https://www.gov.uk/call-charges">call charges</a></p>
+
+  </div>
+</div>
+{% endblock %}
