@@ -12,8 +12,8 @@ const messagingMock = require('../../../../app/messaging')
 jest.mock('../../../../app/messaging')
 
 function expectPageContentOk ($, organisation) {
-  expect($('h1.govuk-heading-l').text()).toEqual('Review your application')
-  expect($('title').text()).toEqual(`Review your application - ${serviceName}`)
+  expect($('h1.govuk-heading-l').text()).toEqual('Review your agreement offer')
+  expect($('title').text()).toEqual(`Review your agreement offer - ${serviceName}`)
   expect($('#organisation-name').text()).toEqual(organisation.name)
   expect($('#organisation-address').text()).toEqual(organisation.address)
   expect($('#organisation-sbi').text()).toEqual(organisation.sbi)
