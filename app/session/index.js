@@ -3,7 +3,8 @@ const { sendSessionEvent } = require('../event')
 const entries = {
   application: 'application',
   farmerApplyData: 'farmerApplyData',
-  organisation: 'organisation'
+  organisation: 'organisation',
+  answers: 'answers'
 }
 
 function set (request, entryKey, key, value) {
@@ -22,6 +23,7 @@ function clear (request) {
   request.yar.clear(entries.farmerApplyData)
   request.yar.clear(entries.application)
   request.yar.clear(entries.organisation)
+  request.yar.clear(entries.answers)
 }
 
 function setApplication (request, key, value) {
