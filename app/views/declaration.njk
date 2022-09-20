@@ -1,6 +1,6 @@
 {% extends './layouts/layout.njk' %}
 
-{% block pageTitle %}Accept your offer - {{ serviceName }}{% endblock %}
+{% block pageTitle %}Review your agreement offer - {{ serviceName }}{% endblock %}
 
 {% block beforeContent %}
   {{ govukBackLink({
@@ -13,7 +13,7 @@
 {% block content %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l">Accept your offer</h1>
+    <h1 class="govuk-heading-l">Review your agreement offer</h1>
 
     <p class="govuk-body">You’re applying for funding for a {{ species }} review for this business:</p>
     <div class="govuk-inset-text">
@@ -22,29 +22,25 @@
       SBI: <span id="organisation-sbi">{{ organisation.sbi }}</span>
     </div>
 
-    <p>You confirm that:</p>
-      <ul class="govuk-list govuk-list--bullet">
-        <li>the livestock are registered in England</li>
-        <li>you’re the registered keeper</li>
-        <li>{{ minNumText }}</li>
-      </ul><br>
-
     <p>You must:</p>
     <ul class="govuk-list govuk-list--bullet">
-      <li>book your review within 12 months of the date of your application</li>
+      <li>complete your review and claim within 6 months of the date of your application and agreement</li>
       <li>{{ testText }}</li>
-      <li>share some information with Defra including vet details, test results and some species-specific data</li>
+      <li>share some information with Defra including the date of the review, name of the vet and their Royal College of Veterinary Surgeons (RCVS) number</li>
     </ul><br>
 
-    <p>To claim your payment:</p>
+    <p>You may need to:</p>
     <ul class="govuk-list govuk-list--bullet">
-      <li>you may need to provide the Rural Payments agency with evidence the review took place such as an invoice or signed declaration from the vet</li>
-      <li>you must claim within 15 months of the date of your application</li>
+      <li>provide the Rural Payments Agency (RPA) with evidence the review took place such as a review record form</li>
     </ul><br>
 
-    <p>By applying for this funding you're entering into an agreement with the RPA.</p>
-
-    <p><a hef="#" class="govuk-link">Read the full terms and conditions</a></p>
+    <p>You confirm that:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>your farm or business has a Single Business Identifier (SBI) and an English County Parish Holding (CPH) number</li>
+      <li>you’re the registered keeper</li>
+      <li>{{ minNumText }}</li>
+      <li>you’ve carefully read and accept the <a href="#">full terms and conditions</a></li>
+    </ul><br>
 
     <form method="POST" autocomplete="off" novalidate="novalidate">
       <input type="hidden" name="crumb" value="{{crumb}}"/>
@@ -54,12 +50,24 @@
         errorMessage: errorMessage,
         items: [{
             value: "agree",
-            text: "I have read and agree to the terms and conditions"
+            text: "I accept the offer of agreement and agree to the terms and conditions"
           }]
       }) }}
 
+      <p class="govuk-body">
+          If you wish to accept this offer for funding you confirm that you are entering into an agreement with the RPA and 
+          confirm you have read and accept the terms and conditions set out above.
+      </p>
+
+      <p>If you do not wish to accept the offer, please click 'reject offer' below.</p>
+
       {{ govukButton({
-        text: "Agree and submit"
+        text: "Accept and send"
+      }) }}
+      {{ govukButton({
+        text: "Reject offer",
+        classes: "govuk-button--secondary",
+        href: "/offer-rejected"
       }) }}
     </form>
   </div>
