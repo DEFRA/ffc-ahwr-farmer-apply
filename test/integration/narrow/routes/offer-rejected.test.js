@@ -3,7 +3,7 @@ const expectPhaseBanner = require('../../../utils/phase-banner-expect')
 const { serviceName } = require('../../../../app/config')
 const { clear } = require('../../../../app/session')
 
-jest.mock('../../../../app/session');
+jest.mock('../../../../app/session')
 
 describe('Farmer offer rejected page test', () => {
   const method = 'GET'
