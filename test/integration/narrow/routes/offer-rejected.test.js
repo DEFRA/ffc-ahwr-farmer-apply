@@ -1,6 +1,9 @@
 const cheerio = require('cheerio')
 const expectPhaseBanner = require('../../../utils/phase-banner-expect')
 const { serviceName } = require('../../../../app/config')
+const { clear } = require('../../../../app/session')
+
+jest.mock('../../../../app/session');
 
 describe('Farmer offer rejected page test', () => {
   const method = 'GET'
@@ -34,8 +37,6 @@ describe('Farmer offer rejected page test', () => {
     expect($('.govuk-heading-l').text()).toEqual('You’ve rejected the agreement offer')
     expect($('title').text()).toEqual(serviceName)
     expectPhaseBanner.ok($)
-    const backLink = $('.govuk-back-link')
-    expect(backLink.text()).toMatch('Back')
-    expect(backLink.attr('href')).toMatch('/declaration')
+    expect(clear).toBeCalledTimes(1)
   })
 })
