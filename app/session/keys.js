@@ -11,6 +11,7 @@ module.exports = {
     organisation: 'organisation',
     whichReview: 'whichReview',
     confirmCheckDetails: 'confirmCheckDetails',
-    reference: 'reference'
+    reference: 'reference',
+    offerStatus: 'offerStatus'
   }
 }
