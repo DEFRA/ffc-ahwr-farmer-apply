@@ -1,7 +1,7 @@
 const cheerio = require('cheerio')
 const getCrumbs = require('../../../utils/get-crumbs')
 const expectPhaseBanner = require('../../../utils/phase-banner-expect')
-const { farmerApplyData: { declaration, offerStatus } } = require('../../../../app/session/keys')
+const { farmerApplyData: { declaration } } = require('../../../../app/session/keys')
 const species = require('../../../../app/constants/species')
 const states = require('../../../../app/constants/states')
 const { serviceName } = require('../../../../app/config')
