@@ -53,6 +53,7 @@ module.exports = [{
       }
 
       clear(request)
+      request.cookieAuth.clear()
 
       if (request.payload.offerStatus === 'rejected') {
         return h.view('offer-rejected')
