@@ -27,7 +27,7 @@ module.exports = [{
     validate: {
       payload: Joi.object({
         terms: Joi.string().valid('agree').required(),
-        offerStatus: Joi.string().valid('accepted', 'rejected'),
+        offerStatus: Joi.string().valid('accepted', 'rejected')
       }),
       failAction: async (request, h, _) => {
         const application = session.getFarmerApplyData(request)
