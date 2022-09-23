@@ -58,6 +58,7 @@ container:
   testToken:
 
 ingress:
+  type: minion
   class: nginx
   endpoint: ffc-ahwr-farmer-apply
   server: value.replaced.from.app.config
