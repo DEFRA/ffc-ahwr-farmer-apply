@@ -106,9 +106,42 @@ describe('Declaration test', () => {
       expect($('h1').text()).toMatch('Application successful')
       expect($('title').text()).toEqual(`Application successful - ${serviceName}`)
       expectPhaseBanner.ok($)
+      expect(sessionMock.clear).toBeCalledTimes(1)
       expect(sessionMock.setFarmerApplyData).toHaveBeenCalledTimes(3)
       expect(sessionMock.setFarmerApplyData).toHaveBeenNthCalledWith(1, res.request, declaration, true)
-      expect(sessionMock.setFarmerApplyData).toHaveBeenNthCalledWith(1, res.request, offerStatus, 'accepted')
+      expect(sessionMock.getFarmerApplyData).toHaveBeenCalledTimes(1)
+      expect(sessionMock.getFarmerApplyData).toHaveBeenCalledWith(res.request)
+      expect(messagingMock.sendMessage).toHaveBeenCalledTimes(1)
+    })
+
+    test.each([
+      { whichReview: species.beef },
+      { whichReview: species.dairy },
+      { whichReview: species.pigs },
+      { whichReview: species.sheep }
+    ])('returns 200, caches data and sends message for rejected request for $whichReview', async ({ whichReview }) => {
+      const application = { whichReview, organisation }
+      sessionMock.getFarmerApplyData.mockReturnValue(application)
+      messagingMock.receiveMessage.mockResolvedValueOnce({ applicationReference: 'abc123' })
+      const crumb = await getCrumbs(global.__SERVER__)
+      const options = {
+        method: 'POST',
+        url,
+        payload: { crumb, terms: 'agree', offerStatus: 'rejected' },
+        auth,
+        headers: { cookie: `crumb=${crumb}` }
+      }
+
+      const res = await global.__SERVER__.inject(options)
+
+      expect(res.statusCode).toBe(200)
+      const $ = cheerio.load(res.payload)
+      expect($('.govuk-heading-l').text()).toEqual('You’ve rejected the agreement offer')
+      expect($('title').text()).toEqual(serviceName)
+      expectPhaseBanner.ok($)
+      expect(sessionMock.clear).toBeCalledTimes(1)
+      expect(sessionMock.setFarmerApplyData).toHaveBeenCalledTimes(3)
+      expect(sessionMock.setFarmerApplyData).toHaveBeenNthCalledWith(1, res.request, declaration, true)
       expect(sessionMock.getFarmerApplyData).toHaveBeenCalledTimes(1)
       expect(sessionMock.getFarmerApplyData).toHaveBeenCalledWith(res.request)
       expect(messagingMock.sendMessage).toHaveBeenCalledTimes(1)
