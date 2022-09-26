@@ -2,7 +2,7 @@ const cheerio = require('cheerio')
 const expectPhaseBanner = require('../../../utils/phase-banner-expect')
 const { serviceName } = require('../../../../app/config')
 
-describe('Farmer guidence page test', () => {
+describe('Farmer guidance page test', () => {
   test('GET / route returns 200 when not logged in', async () => {
     const options = {
       method: 'GET',
