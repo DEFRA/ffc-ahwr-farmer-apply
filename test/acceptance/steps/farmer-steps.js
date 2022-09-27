@@ -11,6 +11,7 @@ const TermsPage = require('../page-objects/terms-page')
 const DeclarationPage = require('../page-objects/declaration')
 const FarmerReview = require('../page-objects/farmer/farmer-review')
 const FarmerEligibility = require('../page-objects/farmer/farmer-not-eligible')
+const FarmerOfferRejected = require('../page-objects/farmer/farmer-offer-rejected')
 const pages = {
   formApply: FarmerApply,
   landing: LandingPage
@@ -72,6 +73,15 @@ Then('I check the terms and condition checkbox and click submit application', as
   await TermsPage.submit()
   await browser.pause(5000)
   wdioExpect(await DeclarationPage.applicationSuccessful).toHaveTextContaining('Application successful')
+})
+
+Then('I select reject offer',async ()=>{
+  await TermsPage.reject()
+  await browser.pause(5000)
+
+})
+Then('I should see {string}',async (text)=>{
+  wdioExpect(await FarmerOfferRejected.rejectedHeading).toHaveTextContaining(text)
 })
 
 Given('I go back to start page', async () => {
