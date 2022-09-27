@@ -62,12 +62,15 @@
       <p>If you do not wish to accept the offer, please click 'reject offer' below.</p>
 
       {{ govukButton({
-        text: "Accept and send"
+        text: "Accept and send",
+        value: "accepted",
+        name: "offerStatus"
       }) }}
       {{ govukButton({
         text: "Reject offer",
         classes: "govuk-button--secondary",
-        href: "/offer-rejected"
+        value: "rejected",
+        name: "offerStatus"
       }) }}
     </form>
   </div>
