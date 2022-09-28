@@ -2,11 +2,11 @@ const cheerio = require('cheerio')
 const expectPhaseBanner = require('../../../utils/phase-banner-expect')
 const { serviceName } = require('../../../../app/config')
 
-describe('Farmer apply home page test', () => {
+describe('Farmer apply terms and condition page test', () => {
   test('GET / route returns 200 when not logged in', async () => {
     const options = {
       method: 'GET',
-      url: '/apply'
+      url: '/terms'
     }
 
     const res = await global.__SERVER__.inject(options)
@@ -14,11 +14,9 @@ describe('Farmer apply home page test', () => {
     expect(res.statusCode).toBe(200)
     const $ = cheerio.load(res.payload)
     expect($('.govuk-heading-l').text()).toEqual(
-      'Apply for an annual health and welfare review of your livestock'
+      'Terms and condition'
     )
-    const button = $('.govuk-main-wrapper .govuk-button')
-    expect(button.attr('href')).toMatch('/')
-    expect(button.text()).toMatch('Start now')
+
     expect($('title').text()).toEqual(serviceName)
     expectPhaseBanner.ok($)
   })

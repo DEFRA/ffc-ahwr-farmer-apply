@@ -12,6 +12,7 @@ const routes = [].concat(
   require('../routes/not-eligible'),
   require('../routes/check-answers'),
   require('../routes/declaration'),
+  require('../routes/terms'),
   require('../routes/verify-login')
 )
 
