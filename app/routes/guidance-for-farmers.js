@@ -1,6 +1,6 @@
 module.exports = {
   method: 'GET',
-  path: '/guidance-for-farmers',
+  path: '/',
   options: {
     auth: false,
     handler: async (_, h) => {

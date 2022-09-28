@@ -1,6 +1,6 @@
 module.exports = {
   method: 'GET',
-  path: '/',
+  path: '/farmer-apply',
   options: {
     auth: false,
     handler: async (_, h) => {

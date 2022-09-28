@@ -6,7 +6,7 @@ describe('Farmer guidance page test', () => {
   test('GET / route returns 200 when not logged in', async () => {
     const options = {
       method: 'GET',
-      url: '/guidance-for-farmers'
+      url: '/'
     }
 
     const res = await global.__SERVER__.inject(options)
