@@ -1,4 +1,13 @@
-module.exports = {
+module.exports = [{
+  method: 'GET',
+  path: '/',
+  options: {
+    auth: false,
+    handler: async (_, h) => {
+      return h.view('guidance-for-farmers')
+    }
+  }
+}, {
   method: 'GET',
   path: '/guidance-for-farmers',
   options: {
@@ -7,4 +16,13 @@ module.exports = {
       return h.view('guidance-for-farmers')
     }
   }
-}
+}, {
+  method: 'GET',
+  path: '/guidance-for-vet',
+  options: {
+    auth: false,
+    handler: async (_, h) => {
+      return h.view('guidance-for-farmers')
+    }
+  }
+}]

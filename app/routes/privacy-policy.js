@@ -1,10 +1,10 @@
 module.exports = {
   method: 'GET',
-  path: '/apply',
+  path: '/privacy-policy',
   options: {
     auth: false,
     handler: async (_, h) => {
-      return h.view('index')
+      return h.view('privacy-policy')
     }
   }
 }
