@@ -5,8 +5,8 @@ const session = require('../session')
 
 const legendText = 'Which livestock do you want a review for?'
 const errorText = 'Select the livestock type you want reviewed'
-const hintHtml = `<p>You can have one review each year for one type of livestock.</p>
-<p>If you're eligible for more than one type of livestock, you must choose which one you want reviewed.</p>`
+const hintHtml = `<p>You can have one review every 10 months for one type of livestock.</p>
+<p>If you’re eligible for more than one type of livestock, you must choose which one you want reviewed.</p>`
 const backLink = '/org-review'
 const radioOptions = { isPageHeading: true, legendClasses: 'govuk-fieldset__legend--l', inline: false, hintHtml }
 

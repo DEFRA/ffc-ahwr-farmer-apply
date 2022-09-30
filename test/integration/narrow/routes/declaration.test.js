@@ -103,8 +103,8 @@ describe('Declaration test', () => {
 
       expect(res.statusCode).toBe(200)
       const $ = cheerio.load(res.payload)
-      expect($('h1').text()).toMatch('Application successful')
-      expect($('title').text()).toEqual(`Application successful - ${serviceName}`)
+      expect($('h1').text()).toMatch('Application complete')
+      expect($('title').text()).toEqual(`Application complete - ${serviceName}`)
       expectPhaseBanner.ok($)
       expect(sessionMock.clear).toBeCalledTimes(1)
       expect(sessionMock.setFarmerApplyData).toHaveBeenCalledTimes(3)
@@ -166,8 +166,8 @@ describe('Declaration test', () => {
 
       expect(res.statusCode).toBe(200)
       const $ = cheerio.load(res.payload)
-      expect($('h1').text()).toMatch('Application successful')
-      expect($('title').text()).toEqual(`Application successful - ${serviceName}`)
+      expect($('h1').text()).toMatch('Application complete')
+      expect($('title').text()).toEqual(`Application complete - ${serviceName}`)
       expectPhaseBanner.ok($)
       expect(sessionMock.getFarmerApplyData).toHaveBeenCalledTimes(1)
       expect(sessionMock.setFarmerApplyData).toHaveBeenCalledTimes(0)

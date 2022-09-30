@@ -1,6 +1,6 @@
 {% extends './layouts/layout.njk' %}
 
-{% block pageTitle %}Update your details - {{ serviceName }}{% endblock %}
+{% block pageTitle %}Details are not recognised - {{ serviceName }}{% endblock %}
 
 {% block beforeContent %}
   {{ govukBackLink({
@@ -13,9 +13,18 @@
 {% block content %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l">Update your details</h1>
+    <h1 class="govuk-heading-l">Details are not recognised</h1>
 
-    <p>Sign in to <a href="https://www.gov.uk/claim-rural-payments">update your details with the Rural Payments Agency</a>.</p>
+    <p>The details you’ve entered do not match our records. To update your details contact the Rural Payments Agency.</p>
+
+    <ul class="govuk-list">
+      <li>Rural Payments Agency</li>
+      <li>Telephone: 01900 508 622</li>
+      <li>Monday to Friday, 8:30am to 5pm (except public holidays)</li>
+      <li><a href="mailto:ruralpayments@defra.gov.uk">ruralpayments@defra.gov.uk</a></li>
+    </ul>
+
+    <p class="govuk-body"><a class="govuk-link" href="https://www.gov.uk/call-charges">Find out about call charges</a>.</p>
   </div>
 </div>
 {% endblock %}
