@@ -1,0 +1,28 @@
+{% extends './layouts/layout.njk' %}
+
+{% block pageTitle %}Guidance for vets - {{ serviceName }}{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <div>
+        <span class="govuk-caption-xl govuk-!-margin-top-9">Guidance</span>
+        <h1 class="govuk-heading-xl">How to carry out endemic disease and condition testing for an annual health and welfare review of livestock</h1>
+      </div>
+    </div>
+  </div>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <p class="govuk-body govuk-!-font-size-24">
+        Follow this technical guidance when you test livestock as part of an annual health and welfare review.
+      </p>
+    </div>
+    <div class="govuk-grid-column-one-third">
+      <aside class="app-related-items">
+        {% block sidebar %}
+          {% include "./includes/related-content.njk" %}
+        {% endblock %}
+      </aside>
+    </div>
+  </div>
+{% endblock %}
