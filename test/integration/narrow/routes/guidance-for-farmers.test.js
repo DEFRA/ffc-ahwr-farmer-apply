@@ -14,7 +14,7 @@ describe('Farmer and vet guidance page test', () => {
     expect(res.statusCode).toBe(200)
     const $ = cheerio.load(res.payload)
     expect($('.govuk-heading-xl').text()).toEqual(
-      'Farmers: get a funded annual health and welfare review of your livestock'
+      'Farmers: get a funded annual health and welfare review of livestock'
     )
     expect($('title').text()).toEqual(`Guidance for farmers - ${serviceName}`)
     expectPhaseBanner.ok($)
@@ -30,7 +30,7 @@ describe('Farmer and vet guidance page test', () => {
     expect(res.statusCode).toBe(200)
     const $ = cheerio.load(res.payload)
     expect($('.govuk-heading-xl').text()).toEqual(
-      'Farmers: get a funded annual health and welfare review of your livestock'
+      'Farmers: get a funded annual health and welfare review of livestock'
     )
     expect($('title').text()).toEqual(`Guidance for farmers - ${serviceName}`)
     expectPhaseBanner.ok($)
