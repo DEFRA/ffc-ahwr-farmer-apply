@@ -15,7 +15,8 @@ const routes = [].concat(
   require('../routes/check-answers'),
   require('../routes/declaration'),
   require('../routes/terms'),
-  require('../routes/verify-login')
+  require('../routes/verify-login'),
+  require('../routes/vet-technical')
 )
 
 module.exports = {
