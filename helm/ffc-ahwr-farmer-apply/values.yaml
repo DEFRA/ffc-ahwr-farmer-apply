@@ -28,7 +28,7 @@ deployment:
   minReadySeconds: 0
   minReplicas: 1
   maxReplicas: 2
-  priorityClassName: default
+  priorityClassName: high
   replicas: 1
   restartPolicy: Always
 
@@ -42,10 +42,10 @@ container:
   eventQueueAddress: ffc-ahwr-event
   googleTagManagerKey:
   imagePullPolicy: IfNotPresent
-  requestMemory: 100Mi
-  requestCpu: 40m
-  limitMemory: 100Mi
-  limitCpu: 100m
+  requestMemory: 120Mi
+  requestCpu: 120m
+  limitMemory: 120Mi
+  limitCpu: 120m
   messageQueueHost: namespace.servicebus.windows.net
   notifyApiKey:
   notifyTemplateIdFarmerApplyLogin:
@@ -65,16 +65,18 @@ ingress:
 livenessProbe:
   path: /healthz
   port: 3000
-  initialDelaySeconds: 10
-  periodSeconds: 10
-  failureThreshold: 3
+  initialDelaySeconds: 30
+  periodSeconds: 30
+  failureThreshold: 5
+  timeoutSeconds: 5
 
 readinessProbe:
   path: /healthy
   port: 3000
-  initialDelaySeconds: 10
-  periodSeconds: 10
-  failureThreshold: 3
+  initialDelaySeconds: 20
+  periodSeconds: 30
+  failureThreshold: 5
+  timeoutSeconds: 5
 
 service:
   port: 80
