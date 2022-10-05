@@ -3,9 +3,9 @@ const species = require('../../constants/species')
 function getSpeciesTestText (application) {
   switch (application.whichReview) {
     case species.beef:
-      return 'allow a vet to test for BVD'
+      return 'allow a vet to test for bovine viral diarrhoea (BVD)'
     case species.dairy:
-      return 'allow a vet to test for BVD'
+      return 'allow a vet to test for bovine viral diarrhoea (BVD)'
     case species.pigs:
       return 'allow a vet to test for PRRS'
     case species.sheep:

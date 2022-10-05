@@ -14,7 +14,7 @@ describe('Vet technical guidance pages', () => {
     expect(res.statusCode).toBe(200)
     const $ = cheerio.load(res.payload)
     expect($('.govuk-panel__title').text()).toEqual(
-      'Test for bovine viral diarrhoea (BVD) in cattle'
+      'Vet: test for bovine viral diarrhoea (BVD) in cattle'
     )
     expect($('title').text()).toEqual(`Guidance for vets - ${serviceName}`)
     expectPhaseBanner.ok($)
@@ -46,7 +46,7 @@ describe('Vet technical guidance pages', () => {
     expect(res.statusCode).toBe(200)
     const $ = cheerio.load(res.payload)
     expect($('.govuk-panel__title').text()).toEqual(
-      'Test for the effectiveness of worming treatments in sheep'
+      'Vet: test for the effectiveness of worming treatments in sheep'
     )
     expect($('title').text()).toEqual(`Guidance for vets - ${serviceName}`)
     expectPhaseBanner.ok($)
@@ -78,7 +78,7 @@ describe('Vet technical guidance pages', () => {
     expect(res.statusCode).toBe(200)
     const $ = cheerio.load(res.payload)
     expect($('.govuk-panel__title').text()).toEqual(
-      'Test for porcine reproductive and respiratory syndrome (PRRS) in pigs'
+      'Vet: test for porcine reproductive and respiratory syndrome (PRRS) in pigs'
     )
     expect($('title').text()).toEqual(`Guidance for vets - ${serviceName}`)
     expectPhaseBanner.ok($)
