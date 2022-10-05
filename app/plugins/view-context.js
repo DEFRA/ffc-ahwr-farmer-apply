@@ -21,8 +21,6 @@ module.exports = {
           ctx.serviceUrl = serviceUrl
           ctx.claimServiceUri = claimServiceUri
 
-          console.log(process.env)
-
           response.source.context = ctx
         }
 
