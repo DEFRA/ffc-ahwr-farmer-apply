@@ -7,7 +7,7 @@ function getSpeciesTestText (application) {
     case species.dairy:
       return 'allow a vet to test for bovine viral diarrhoea (BVD)'
     case species.pigs:
-      return 'allow a vet to test for PRRS'
+      return 'allow a vet to test for porcine reproductive and respiratory syndrome (PRRS)'
     case species.sheep:
       return 'allow a vet to test for the effectiveness of worming treatments in sheep'
   }

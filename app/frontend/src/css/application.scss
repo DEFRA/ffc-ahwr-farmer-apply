@@ -121,3 +121,17 @@ $govuk-global-styles: true; // https://frontend.design-system.service.gov.uk/sas
 .app-related-items .govuk-list > li {
   margin-bottom: govuk-spacing(2);
 }
+
+.govuk-list--alphabet {
+  counter-reset: list;
+}
+.govuk-list--alphabet > li {
+  list-style: none;
+  position: relative;
+}
+.govuk-list--alphabet > li:before {
+  counter-increment: list;
+  content: counter(list, lower-alpha) ") ";
+  position: absolute;
+  left: -1.4em;
+}
