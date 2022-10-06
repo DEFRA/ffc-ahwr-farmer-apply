@@ -41,7 +41,7 @@ const schema = Joi.object({
   port: Joi.number().default(3000),
   serviceUri: Joi.string().uri(),
   claimServiceUri: Joi.string().uri(),
-  serviceName: Joi.string().default('Annual health and welfare review of your livestock'),
+  serviceName: Joi.string().default('Annual health and welfare review of livestock'),
   useRedis: Joi.boolean().default(false)
 })
 
