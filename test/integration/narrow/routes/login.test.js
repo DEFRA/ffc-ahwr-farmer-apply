@@ -9,6 +9,8 @@ const { templateIdFarmerApplyLogin } = require('../../../../app/config').notifyC
 const { farmerApply } = require('../../../../app/constants/user-types')
 const uuidRegex = require('../../../../app/config/uuid-regex')
 
+jest.mock('ffc-ahwr-event-publisher')
+
 describe('FarmerApply application login page test', () => {
   let sendEmail
   let getByEmail
