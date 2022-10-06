@@ -13,7 +13,7 @@ module.exports = {
   },
   pigs: {
     errorText: 'Select yes if you\'ll have 51 or more pigs when the vet visits.',
-    hintText: 'You\'re only eligible for funding if you’re keeping 51 or more pigs on the date the vet visits.',
+    hintText: 'You\'re only eligible for funding if you’re keeping 51 or more pigs when the vet visits.',
     legendText: 'Will you have 51 or more pigs on the date of the review?',
     title: 'Will you have 51 or more pigs on the date of the review?'
   },
