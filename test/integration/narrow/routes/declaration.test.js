@@ -186,7 +186,7 @@ describe('Declaration test', () => {
       const options = {
         method: 'POST',
         url,
-        payload: { crumb },
+        payload: { crumb, offerStatus: 'accepted' },
         auth,
         headers: { cookie: `crumb=${crumb}` }
       }
