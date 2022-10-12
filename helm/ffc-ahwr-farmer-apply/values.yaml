@@ -62,6 +62,8 @@ ingress:
   class: nginx
   endpoint: ffc-ahwr-farmer-apply
   server: value.replaced.from.app.config
+  path: /apply
+  type: minion
 
 livenessProbe:
   path: /healthz
