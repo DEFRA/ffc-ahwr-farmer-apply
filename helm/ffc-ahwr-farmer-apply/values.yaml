@@ -62,6 +62,7 @@ ingress:
   class: nginx
   endpoint: ffc-ahwr-farmer-apply
   server: value.replaced.from.app.config
+  path: /apply
 
 livenessProbe:
   path: /healthz
