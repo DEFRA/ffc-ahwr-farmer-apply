@@ -1,11 +1,11 @@
 const cheerio = require('cheerio')
 const expectPhaseBanner = require('../../../utils/phase-banner-expect')
 const getCrumbs = require('../../../utils/get-crumbs')
-const { serviceName } = require('../../../../app/config')
+const { serviceName, urlPrefix } = require('../../../../app/config')
 
 describe('Org review page test', () => {
   let session
-  const url = '/org-review'
+  const url = `${urlPrefix}/org-review`
   const auth = {
     credentials: { reference: '1111', sbi: '111111111' },
     strategy: 'cookie'
@@ -83,7 +83,7 @@ describe('Org review page test', () => {
         const res = await global.__SERVER__.inject(options)
 
         expect(res.statusCode).toBe(302)
-        expect(res.headers.location).toEqual('/login')
+        expect(res.headers.location).toEqual(`${urlPrefix}/login`)
       })
     })
   })
@@ -108,7 +108,7 @@ describe('Org review page test', () => {
       const res = await global.__SERVER__.inject(options)
 
       expect(res.statusCode).toBe(302)
-      expect(res.headers.location).toEqual('/which-review')
+      expect(res.headers.location).toEqual(`${urlPrefix}/which-review`)
     })
 
     test('returns 200 with details are not recognised when no is answered', async () => {

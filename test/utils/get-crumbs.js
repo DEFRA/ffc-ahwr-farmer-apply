@@ -1,4 +1,6 @@
-module.exports = async (server, options = { url: '/cookies', crumbKey: 'crumb' }, mockForRequest = () => {}) => {
+const { urlPrefix } = require('../../app/config')
+
+module.exports = async (server, options = { url: `${urlPrefix}/cookies`, crumbKey: 'crumb' }, mockForRequest = () => {}) => {
   mockForRequest()
   const { crumbKey, url } = options
   const res = await server.inject({ method: 'GET', url })

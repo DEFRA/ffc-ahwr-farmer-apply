@@ -23,7 +23,7 @@ module.exports = [{
     },
     handler: async (request, h) => {
       if (request.auth.isAuthenticated) {
-        return h.redirect(request.query?.next || '/org-review')
+        return h.redirect(request.query?.next || `${urlPrefix}/org-review`)
       }
 
       return h.view('login', { hintText })

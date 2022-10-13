@@ -1,9 +1,9 @@
 const cheerio = require('cheerio')
 const expectPhaseBanner = require('../../../utils/phase-banner-expect')
-const { serviceName } = require('../../../../app/config')
+const { serviceName, urlPrefix } = require('../../../../app/config')
 
 describe('Not eligible page test', () => {
-  const url = '/not-eligible'
+  const url = `${urlPrefix}/not-eligible`
 
   describe(`GET ${url} route`, () => {
     test('when logged in returns 200', async () => {
@@ -31,7 +31,7 @@ describe('Not eligible page test', () => {
       const res = await global.__SERVER__.inject(options)
 
       expect(res.statusCode).toBe(302)
-      expect(res.headers.location).toEqual('/login')
+      expect(res.headers.location).toEqual(`${urlPrefix}/login`)
     })
   })
 })
