@@ -2,12 +2,13 @@ const cheerio = require('cheerio')
 const expectPhaseBanner = require('../../../utils/phase-banner-expect')
 const content = require('../../../../app/constants/species-review-content')
 const sessionMock = require('../../../../app/session')
-const { serviceName } = require('../../../../app/config')
+const { serviceName, urlPrefix } = require('../../../../app/config')
+
 jest.mock('../../../../app/session')
 
 describe('Check Answers test', () => {
   const auth = { credentials: { reference: '1111', sbi: '111111111' }, strategy: 'cookie' }
-  const url = '/check-answers'
+  const url = `${urlPrefix}/check-answers`
 
   afterAll(() => {
     jest.resetAllMocks()
@@ -42,7 +43,7 @@ describe('Check Answers test', () => {
       const res = await global.__SERVER__.inject(options)
 
       expect(res.statusCode).toBe(302)
-      expect(res.headers.location).toEqual('/not-eligible')
+      expect(res.headers.location).toEqual(`${urlPrefix}/not-eligible`)
     })
 
     test.each([
@@ -78,7 +79,7 @@ describe('Check Answers test', () => {
       const res = await global.__SERVER__.inject(options)
 
       expect(res.statusCode).toBe(302)
-      expect(res.headers.location).toEqual('/login')
+      expect(res.headers.location).toEqual(`${urlPrefix}/login`)
     })
   })
 })

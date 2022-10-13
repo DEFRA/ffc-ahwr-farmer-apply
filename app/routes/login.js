@@ -7,10 +7,11 @@ const { clear } = require('../session')
 const { sendMonitoringEvent } = require('../event')
 
 const hintText = 'We\'ll use this to send you a link to apply for a review'
+const urlPrefix = require('../config/index').urlPrefix
 
 module.exports = [{
   method: 'GET',
-  path: '/login',
+  path: `${urlPrefix}/login`,
   options: {
     auth: {
       mode: 'try'
@@ -22,7 +23,7 @@ module.exports = [{
     },
     handler: async (request, h) => {
       if (request.auth.isAuthenticated) {
-        return h.redirect(request.query?.next || '/org-review')
+        return h.redirect(request.query?.next || `${urlPrefix}/org-review`)
       }
 
       return h.view('login', { hintText })
@@ -31,7 +32,7 @@ module.exports = [{
 },
 {
   method: 'POST',
-  path: '/login',
+  path: `${urlPrefix}/login`,
   options: {
     auth: {
       mode: 'try'

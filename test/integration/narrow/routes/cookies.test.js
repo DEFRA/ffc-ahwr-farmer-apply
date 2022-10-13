@@ -1,12 +1,12 @@
 const cheerio = require('cheerio')
-const { serviceName } = require('../../../../app/config')
+const { serviceName, urlPrefix } = require('../../../../app/config')
 const expectPhaseBanner = require('../../../utils/phase-banner-expect')
-
+const url = `${urlPrefix}/cookies`
 describe('cookies route', () => {
   test('GET /cookies returns 200', async () => {
     const options = {
       method: 'GET',
-      url: '/cookies'
+      url
     }
 
     const result = await global.__SERVER__.inject(options)
@@ -16,7 +16,7 @@ describe('cookies route', () => {
   test('GET /cookies returns cookie policy', async () => {
     const options = {
       method: 'GET',
-      url: '/cookies'
+      url
     }
 
     const result = await global.__SERVER__.inject(options)
@@ -27,7 +27,7 @@ describe('cookies route', () => {
   test('GET /cookies context includes Header', async () => {
     const options = {
       method: 'GET',
-      url: '/cookies'
+      url
     }
 
     const result = await global.__SERVER__.inject(options)
@@ -37,7 +37,7 @@ describe('cookies route', () => {
   test('POST /cookies returns 302 if not async', async () => {
     const options = {
       method: 'POST',
-      url: '/cookies',
+      url,
       payload: { analytics: true }
     }
 
@@ -48,7 +48,7 @@ describe('cookies route', () => {
   test('POST /cookies returns 200 if async', async () => {
     const options = {
       method: 'POST',
-      url: '/cookies',
+      url,
       payload: { analytics: true, async: true }
     }
 
@@ -59,7 +59,7 @@ describe('cookies route', () => {
   test('POST /cookies invalid returns 400', async () => {
     const options = {
       method: 'POST',
-      url: '/cookies',
+      url,
       payload: { invalid: 'aaaaaa' }
     }
 
@@ -70,19 +70,19 @@ describe('cookies route', () => {
   test('POST /cookies redirects to GET with querystring', async () => {
     const options = {
       method: 'POST',
-      url: '/cookies',
+      url,
       payload: { analytics: true }
     }
 
     const result = await global.__SERVER__.inject(options)
     expect(result.statusCode).toBe(302)
-    expect(result.headers.location).toBe('/cookies?updated=true')
+    expect(result.headers.location).toBe(`${urlPrefix}/cookies?updated=true`)
   })
 
   test('Cookie banner appears when no cookie option selected', async () => {
     const options = {
       method: 'GET',
-      url: '/cookies'
+      url
     }
     const response = await global.__SERVER__.inject(options)
     expect(response.statusCode).toBe(200)

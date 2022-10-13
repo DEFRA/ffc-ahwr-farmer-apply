@@ -1,6 +1,7 @@
+const urlPrefix = require('../config/index').urlPrefix
 module.exports = {
   method: 'GET',
-  path: '/assets/{path*}',
+  path: `${urlPrefix}/assets/{path*}`,
   options: {
     auth: false,
     handler: {

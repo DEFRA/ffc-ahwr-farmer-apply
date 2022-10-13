@@ -4,7 +4,7 @@ const expectPhaseBanner = require('../../../utils/phase-banner-expect')
 const { farmerApplyData: { declaration } } = require('../../../../app/session/keys')
 const species = require('../../../../app/constants/species')
 const states = require('../../../../app/constants/states')
-const { serviceName } = require('../../../../app/config')
+const { serviceName, urlPrefix } = require('../../../../app/config')
 
 const sessionMock = require('../../../../app/session')
 jest.mock('../../../../app/session')
@@ -22,7 +22,7 @@ function expectPageContentOk ($, organisation) {
 describe('Declaration test', () => {
   const organisation = { id: 'organisation', name: 'org-name', address: 'org-address', sbi: '0123456789' }
   const auth = { credentials: { reference: '1111', sbi: '111111111' }, strategy: 'cookie' }
-  const url = '/declaration'
+  const url = `${urlPrefix}/declaration`
 
   afterEach(() => {
     jest.resetAllMocks()
@@ -62,7 +62,7 @@ describe('Declaration test', () => {
       const res = await global.__SERVER__.inject(options)
 
       expect(res.statusCode).toBe(302)
-      expect(res.headers.location).toEqual('/login')
+      expect(res.headers.location).toEqual(`${urlPrefix}/login`)
     })
 
     test('returns 400 when no application found', async () => {
@@ -231,7 +231,7 @@ describe('Declaration test', () => {
       const res = await global.__SERVER__.inject(options)
 
       expect(res.statusCode).toBe(302)
-      expect(res.headers.location).toEqual('/login')
+      expect(res.headers.location).toEqual(`${urlPrefix}/login`)
     })
   })
 })

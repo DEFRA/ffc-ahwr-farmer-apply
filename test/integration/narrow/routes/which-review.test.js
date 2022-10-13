@@ -1,13 +1,13 @@
 const cheerio = require('cheerio')
 const getCrumbs = require('../../../utils/get-crumbs')
 const expectPhaseBanner = require('../../../utils/phase-banner-expect')
-const { serviceName } = require('../../../../app/config')
+const { serviceName, urlPrefix } = require('../../../../app/config')
 
 jest.mock('ffc-messaging')
 
 describe('Species review test', () => {
   const auth = { credentials: { reference: '1111', sbi: '111111111' }, strategy: 'cookie' }
-  const url = '/which-review'
+  const url = `${urlPrefix}/which-review`
 
   describe(`GET ${url} route`, () => {
     test('returns 200', async () => {
@@ -35,7 +35,7 @@ describe('Species review test', () => {
       const res = await global.__SERVER__.inject(options)
 
       expect(res.statusCode).toBe(302)
-      expect(res.headers.location).toEqual('/login')
+      expect(res.headers.location).toEqual(`${urlPrefix}/login`)
     })
   })
 
@@ -64,7 +64,7 @@ describe('Species review test', () => {
       const res = await global.__SERVER__.inject(options)
 
       expect(res.statusCode).toBe(302)
-      expect(res.headers.location).toEqual(`/${whichReview}-eligibility`)
+      expect(res.headers.location).toEqual(`${urlPrefix}/${whichReview}-eligibility`)
     })
 
     test.each([
@@ -99,7 +99,7 @@ describe('Species review test', () => {
       const res = await global.__SERVER__.inject(options)
 
       expect(res.statusCode).toBe(302)
-      expect(res.headers.location).toEqual('/login')
+      expect(res.headers.location).toEqual(`${urlPrefix}/login`)
     })
   })
 })

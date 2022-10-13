@@ -1,6 +1,6 @@
 const { v4: uuid } = require('uuid')
 const { farmerApply } = require('../../../../app/constants/user-types')
-const { cookie: { ttl } } = require('../../../../app/config')
+const { cookie: { ttl }, urlPrefix } = require('../../../../app/config')
 const { farmerApplyData: { organisation: organisationKey } } = require('../../../../app/session/keys')
 
 describe('Auth plugin test', () => {
@@ -24,15 +24,15 @@ describe('Auth plugin test', () => {
   const validEmail = 'dairy@ltd.com'
 
   describe('GET requests to /login', () => {
-    const url = '/login'
-    const redirectTo = '/org-review'
+    const url = `${urlPrefix}/login`
+    const redirectTo = `${urlPrefix}/org-review`
 
     async function login () {
       const email = uuid() + validEmail
       const token = uuid()
       const options = {
         method: 'GET',
-        url: `/verify-login?email=${email}&token=${token}`
+        url: `${urlPrefix}/verify-login?email=${email}&token=${token}`
       }
 
       await global.__SERVER__.app.magiclinkCache.set(email, [token])

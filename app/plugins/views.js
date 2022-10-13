@@ -33,9 +33,9 @@ module.exports = {
     isCached: !isLocal,
     context: {
       appVersion: version,
-      assetPath: '/assets',
+      assetPath: '/apply/assets',
       pageTitle: serviceName,
-      googleTagManagerKey: googleTagManagerKey
+      googleTagManagerKey
     }
   }
 }

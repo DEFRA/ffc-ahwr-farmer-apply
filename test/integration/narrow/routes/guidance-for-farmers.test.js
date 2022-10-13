@@ -1,12 +1,12 @@
 const cheerio = require('cheerio')
 const expectPhaseBanner = require('../../../utils/phase-banner-expect')
-const { serviceName } = require('../../../../app/config')
+const { serviceName, urlPrefix } = require('../../../../app/config')
 
 describe('Farmer and vet guidance page test', () => {
   test('GET / route returns 200 when not logged in', async () => {
     const options = {
       method: 'GET',
-      url: '/'
+      url: `${urlPrefix}/`
     }
 
     const res = await global.__SERVER__.inject(options)
@@ -22,7 +22,7 @@ describe('Farmer and vet guidance page test', () => {
   test('GET / route returns 200 when not logged in', async () => {
     const options = {
       method: 'GET',
-      url: '/guidance-for-farmers'
+      url: `${urlPrefix}/guidance-for-farmers`
     }
 
     const res = await global.__SERVER__.inject(options)
@@ -38,7 +38,7 @@ describe('Farmer and vet guidance page test', () => {
   test('GET / route returns 200 when not logged in', async () => {
     const options = {
       method: 'GET',
-      url: '/guidance-for-vet'
+      url: `${urlPrefix}/guidance-for-vet`
     }
 
     const res = await global.__SERVER__.inject(options)
@@ -54,7 +54,7 @@ describe('Farmer and vet guidance page test', () => {
   test('GET / route returns 200 when not logged in', async () => {
     const options = {
       method: 'GET',
-      url: '/guidance-for-vet-technical'
+      url: `${urlPrefix}/guidance-for-vet-technical`
     }
 
     const res = await global.__SERVER__.inject(options)

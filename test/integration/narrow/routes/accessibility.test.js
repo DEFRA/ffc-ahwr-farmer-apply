@@ -1,12 +1,12 @@
 const cheerio = require('cheerio')
 const expectPhaseBanner = require('../../../utils/phase-banner-expect')
-const { serviceName } = require('../../../../app/config')
+const { serviceName, urlPrefix } = require('../../../../app/config')
 
 describe('Farmer apply accessibility page test', () => {
   test('GET / route returns 200 when not logged in', async () => {
     const options = {
       method: 'GET',
-      url: '/accessibility'
+      url: `${urlPrefix}/accessibility`
     }
 
     const res = await global.__SERVER__.inject(options)

@@ -1,12 +1,12 @@
 const cheerio = require('cheerio')
 const expectPhaseBanner = require('../../../utils/phase-banner-expect')
-const { serviceName } = require('../../../../app/config')
+const { serviceName, urlPrefix } = require('../../../../app/config')
 
 describe('Vet technical guidance pages', () => {
   test('GET /test-cattle route returns 200 when not logged in', async () => {
     const options = {
       method: 'GET',
-      url: '/test-cattle'
+      url: `${urlPrefix}/test-cattle`
     }
 
     const res = await global.__SERVER__.inject(options)
@@ -22,7 +22,7 @@ describe('Vet technical guidance pages', () => {
   test('GET /labs-cattle route returns 200 when not logged in', async () => {
     const options = {
       method: 'GET',
-      url: '/labs-cattle'
+      url: `${urlPrefix}/labs-cattle`
     }
 
     const res = await global.__SERVER__.inject(options)
@@ -38,7 +38,7 @@ describe('Vet technical guidance pages', () => {
   test('GET /test-sheep route returns 200 when not logged in', async () => {
     const options = {
       method: 'GET',
-      url: '/test-sheep'
+      url: `${urlPrefix}/test-sheep`
     }
 
     const res = await global.__SERVER__.inject(options)
@@ -54,7 +54,7 @@ describe('Vet technical guidance pages', () => {
   test('GET /labs-sheep route returns 200 when not logged in', async () => {
     const options = {
       method: 'GET',
-      url: '/labs-sheep'
+      url: `${urlPrefix}/labs-sheep`
     }
 
     const res = await global.__SERVER__.inject(options)
@@ -70,7 +70,7 @@ describe('Vet technical guidance pages', () => {
   test('GET /test-pigs route returns 200 when not logged in', async () => {
     const options = {
       method: 'GET',
-      url: '/test-pigs'
+      url: `${urlPrefix}/test-pigs`
     }
 
     const res = await global.__SERVER__.inject(options)
@@ -86,7 +86,7 @@ describe('Vet technical guidance pages', () => {
   test('GET /labs-pigs route returns 200 when not logged in', async () => {
     const options = {
       method: 'GET',
-      url: '/labs-pigs'
+      url: `${urlPrefix}/labs-pigs`
     }
 
     const res = await global.__SERVER__.inject(options)

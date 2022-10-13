@@ -5,10 +5,11 @@ const session = require('../session')
 const { declaration, reference, offerStatus } = require('../session/keys').farmerApplyData
 const { sendApplication } = require('../messaging/application')
 const { clear } = require('../session')
+const urlPrefix = require('../config/index').urlPrefix
 
 module.exports = [{
   method: 'GET',
-  path: '/declaration',
+  path: `${urlPrefix}/declaration`,
   options: {
     handler: async (request, h) => {
       const application = session.getFarmerApplyData(request)
@@ -17,12 +18,12 @@ module.exports = [{
       }
       const viewData = getDeclarationData(application)
       session.setFarmerApplyData(request, reference, null)
-      return h.view('declaration', { backLink: '/check-answers', ...viewData })
+      return h.view('declaration', { backLink: `${urlPrefix}/check-answers`, ...viewData })
     }
   }
 }, {
   method: 'POST',
-  path: '/declaration',
+  path: `${urlPrefix}/declaration`,
   options: {
     validate: {
       payload: Joi.object({
@@ -33,7 +34,7 @@ module.exports = [{
         const application = session.getFarmerApplyData(request)
         const viewData = getDeclarationData(application)
         return h.view('declaration', {
-          backLink: '/check-answers',
+          backLink: `${urlPrefix}/check-answers`,
           ...viewData,
           errorMessage: { text: 'Confirm you have read and agree to the terms and conditions' }
         }).code(400).takeover()

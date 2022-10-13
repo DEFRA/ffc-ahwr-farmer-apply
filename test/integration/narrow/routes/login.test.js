@@ -8,6 +8,7 @@ const { serviceUri } = require('../../../../app/config')
 const { templateIdFarmerApplyLogin } = require('../../../../app/config').notifyConfig
 const { farmerApply } = require('../../../../app/constants/user-types')
 const uuidRegex = require('../../../../app/config/uuid-regex')
+const { urlPrefix } = require('../../../../app/config')
 
 jest.mock('ffc-ahwr-event-publisher')
 
@@ -26,7 +27,7 @@ describe('FarmerApply application login page test', () => {
     jest.mock('../../../../app/api-requests/users')
   })
 
-  const url = '/login'
+  const url = `${urlPrefix}/login`
   const validEmail = 'dairy@ltd.com'
 
   describe(`GET requests to '${url}'`, () => {
@@ -54,7 +55,7 @@ describe('FarmerApply application login page test', () => {
       const res = await global.__SERVER__.inject(options)
 
       expect(res.statusCode).toBe(302)
-      expect(res.headers.location).toEqual('/org-review')
+      expect(res.headers.location).toEqual(`${urlPrefix}/org-review`)
     })
   })
 

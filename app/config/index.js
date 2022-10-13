@@ -2,6 +2,7 @@ const Joi = require('joi')
 const mqConfig = require('./messaging')
 const notifyConfig = require('./notify')
 const storageConfig = require('./storage')
+const urlPrefix = '/apply'
 
 const schema = Joi.object({
   appInsights: Joi.object(),
@@ -42,7 +43,8 @@ const schema = Joi.object({
   serviceUri: Joi.string().uri(),
   claimServiceUri: Joi.string().uri(),
   serviceName: Joi.string().default('Annual health and welfare review of livestock'),
-  useRedis: Joi.boolean().default(false)
+  useRedis: Joi.boolean().default(false),
+  urlPrefix: Joi.string().default(urlPrefix)
 })
 
 const config = {
@@ -76,7 +78,8 @@ const config = {
   port: process.env.PORT,
   serviceUri: process.env.SERVICE_URI,
   claimServiceUri: process.env.CLAIM_SERVICE_URI,
-  useRedis: process.env.NODE_ENV !== 'test'
+  useRedis: process.env.NODE_ENV !== 'test',
+  urlPrefix: process.env.URL_PREFIX
 }
 
 const result = schema.validate(config, {

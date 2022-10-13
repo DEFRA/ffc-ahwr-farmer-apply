@@ -1,3 +1,4 @@
+const { urlPrefix } = require('../../../../app/config')
 describe('verify-login route', () => {
   beforeAll(async () => {
     jest.resetAllMocks()
@@ -7,7 +8,7 @@ describe('verify-login route', () => {
   test('GET /verify-login returns 400', async () => {
     const options = {
       method: 'GET',
-      url: '/verify-login?email=test@test.com'
+      url: `${urlPrefix}/verify-login?email=test@test.com`
     }
 
     const result = await global.__SERVER__.inject(options)
@@ -17,7 +18,7 @@ describe('verify-login route', () => {
   test('GET /verify-login returns 400', async () => {
     const options = {
       method: 'GET',
-      url: '/verify-login?email=test@test.com&token=0c8f9708-453b-11ed-b878-0242ac120002'
+      url: `${urlPrefix}/verify-login?email=test@test.com&token=0c8f9708-453b-11ed-b878-0242ac120002`
     }
 
     const result = await global.__SERVER__.inject(options)
