@@ -14,8 +14,8 @@ module.exports = {
 
           let serviceUrl = '/'
 
-          if (path.startsWith('/cookies')) {
-            serviceUrl = '/cookies'
+          if (path.startsWith('/apply/cookies')) {
+            serviceUrl = '/apply/cookies'
           }
           ctx.serviceName = serviceName
           ctx.serviceUrl = serviceUrl

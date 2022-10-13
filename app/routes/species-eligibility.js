@@ -4,8 +4,9 @@ const { getYesNoRadios } = require('./models/form-component/yes-no-radios')
 const session = require('../session')
 const speciesTypes = require('../constants/species')
 const speciesContent = require('../constants/species-content')
+const urlPrefix = require('../config/index').urlPrefix
 
-const backLink = '/which-review'
+const backLink = `${urlPrefix}/which-review`
 
 const getRadioOptions = (species) => {
   return { isPageHeading: true, legendClasses: 'govuk-fieldset__legend--l', inline: true, hintText: speciesContent[species].hintText }
@@ -14,7 +15,7 @@ const getRadioOptions = (species) => {
 module.exports = [
   {
     method: 'GET',
-    path: '/{species}-eligibility',
+    path: `${urlPrefix}/{species}-eligibility`,
     options: {
       validate: {
         params: Joi.object({
@@ -34,7 +35,7 @@ module.exports = [
   },
   {
     method: 'POST',
-    path: '/{species}-eligibility',
+    path: `${urlPrefix}/{species}-eligibility`,
     options: {
       validate: {
         payload: Joi.object({
@@ -56,7 +57,7 @@ module.exports = [
       handler: async (request, h) => {
         session.setFarmerApplyData(request, eligibleSpecies, request.payload[eligibleSpecies])
         const redirect = request.payload[eligibleSpecies] === 'yes' ? 'check-answers' : 'not-eligible'
-        return h.redirect(`/${redirect}`)
+        return h.redirect(`${urlPrefix}/${redirect}`)
       }
     }
   }]

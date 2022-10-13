@@ -19,6 +19,7 @@
 {% from "../macros/search-box.njk"                       import searchBox %}
 
 {% block pageTitle %}{{ serviceName }} - GOV.UK{% endblock %}
+{% set urlPrefix = "<%= htmlWebpackPlugin.options.metadata.urlPrefix %>" %}
 
 {% block head %}
   {% if cookiesPolicy.analytics %}
@@ -69,19 +70,19 @@
 <ul class="govuk-footer__inline-list">
      
   <li class="govuk-footer__inline-list-item">
-    <a class="govuk-footer__link" href="/accessibility">
+    <a class="govuk-footer__link" href="<%= htmlWebpackPlugin.options.metadata.urlPrefix %>/accessibility">
       Accessibility
     </a>
   </li>
 
   <li class="govuk-footer__inline-list-item">
-    <a class="govuk-footer__link" href="/cookies">
+    <a class="govuk-footer__link" href="<%= htmlWebpackPlugin.options.metadata.urlPrefix %>/cookies">
       Cookies
     </a>
   </li>
 
   <li class="govuk-footer__inline-list-item">
-    <a class="govuk-footer__link" href="/privacy-policy">
+    <a class="govuk-footer__link" href="<%= htmlWebpackPlugin.options.metadata.urlPrefix %>/privacy-policy">
       Privacy
     </a>
   </li>

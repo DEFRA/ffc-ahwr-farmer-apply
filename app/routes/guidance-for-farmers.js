@@ -1,6 +1,7 @@
+const urlPrefix = require('../config/index').urlPrefix
 module.exports = [{
   method: 'GET',
-  path: '/',
+  path: `${urlPrefix}`,
   options: {
     auth: false,
     handler: async (_, h) => {
@@ -9,7 +10,7 @@ module.exports = [{
   }
 }, {
   method: 'GET',
-  path: '/guidance-for-farmers',
+  path: `${urlPrefix}/guidance-for-farmers`,
   options: {
     auth: false,
     handler: async (_, h) => {
@@ -18,7 +19,7 @@ module.exports = [{
   }
 }, {
   method: 'GET',
-  path: '/guidance-for-vet',
+  path: `${urlPrefix}/guidance-for-vet`,
   options: {
     auth: false,
     handler: async (_, h) => {
@@ -27,7 +28,7 @@ module.exports = [{
   }
 }, {
   method: 'GET',
-  path: '/guidance-for-vet-technical',
+  path: `${urlPrefix}/guidance-for-vet-technical`,
   options: {
     auth: false,
     handler: async (_, h) => {

@@ -4,6 +4,7 @@ const { setFarmerApplyData } = require('../session')
 const { organisation: organisationKey } = require('../session/keys').farmerApplyData
 const { lookupToken, setAuthCookie } = require('../auth')
 const { sendMonitoringEvent } = require('../event')
+const urlPrefix = require('../config/index').urlPrefix
 
 function isRequestInvalid (cachedEmail, email) {
   return !cachedEmail || email !== cachedEmail
@@ -16,7 +17,7 @@ async function cacheFarmerApplyData (request, email) {
 
 module.exports = [{
   method: 'GET',
-  path: '/verify-login',
+  path: `${urlPrefix}/verify-login`,
   options: {
     auth: false,
     validate: {
