@@ -35,7 +35,7 @@ module.exports = {
       appVersion: version,
       assetPath: '/apply/assets',
       pageTitle: serviceName,
-      googleTagManagerKey: googleTagManagerKey
+      googleTagManagerKey
     }
   }
 }

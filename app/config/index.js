@@ -78,7 +78,7 @@ const config = {
   port: process.env.PORT,
   serviceUri: process.env.SERVICE_URI,
   claimServiceUri: process.env.CLAIM_SERVICE_URI,
-  useRedis: process.env.NODE_ENV !== 'test',  
+  useRedis: process.env.NODE_ENV !== 'test',
   urlPrefix: process.env.URL_PREFIX
 }
 
