@@ -12,7 +12,7 @@ module.exports = {
 
           const { path } = request
 
-          let serviceUrl = '/'
+          let serviceUrl = '/apply'
 
           if (path.startsWith('/apply/cookies')) {
             serviceUrl = '/apply/cookies'
