@@ -23,4 +23,5 @@ data:
   REDIS_PORT: {{ quote .Values.container.redisPort }}
   SERVICE_URI: {{ quote .Values.container.serviceUri }}
   CLAIM_SERVICE_URI: {{ quote .Values.container.claimServiceUri }}
+  URL_PREFIX: {{ quote .Values.container.urlPrefix }}
 {{- end -}}
