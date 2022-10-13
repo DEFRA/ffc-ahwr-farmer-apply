@@ -5,6 +5,7 @@ const rejectedBanner = document.querySelector('.js-cookies-rejected')
 const questionBanner = document.querySelector('.js-question-banner')
 const cookieBanner = document.querySelector('.js-cookies-banner')
 const cookieContainer = document.querySelector('.js-cookies-container')
+const urlPrefix = require('../../../config/index').urlPrefix
 
 if (cookieContainer) {
   cookieContainer.style.display = 'block'
@@ -43,7 +44,7 @@ if (cookieContainer) {
 
   function submitPreference (accepted) {
   const xhr = new XMLHttpRequest() // eslint-disable-line
-    xhr.open('POST', '/cookies', true)
+    xhr.open('POST', `${urlPrefix}/cookies`, true)
     xhr.setRequestHeader('Content-Type', 'application/json')
     xhr.send(JSON.stringify({
       analytics: accepted,
