@@ -43,6 +43,23 @@ async function createServer () {
   await server.register(require('./plugins/session'))
   await server.register(require('./plugins/view-context'))
   await server.register(require('./plugins/views'))
+  await server.register({
+    plugin: require('./plugins/header'),
+    options: {
+      keys: [
+        { key: 'X-Frame-Options', value: 'deny' },
+        { key: 'X-Content-Type-Options', value: 'nosniff' },
+        { key: 'Access-Control-Allow-Origin', value: server.info.uri },
+        { key: 'Cross-Origin-Opener-Policy', value: 'same-origin' },
+        { key: 'Cross-Origin-Embedder-Policy', value: 'require-corp' },
+        { key: 'X-Robots-Tag', value: 'noindex, nofollow' },
+        { key: 'X-XSS-Protection', value: '1; mode=block' },
+        { key: 'Strict-Transport-Security', value: 'max-age=31536000;' },
+        { key: 'Cache-Control', value: 'no-cache' },
+        { key: 'Referrer-Policy', value: 'no-referrer' },
+      ]
+    }
+  })
 
   if (config.isDev) {
     await server.register(require('blipp'))
