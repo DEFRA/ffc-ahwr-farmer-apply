@@ -56,7 +56,6 @@ Feature: Farmer apply
     And I select confirm from check your answers
     And  I check the terms and condition checkbox and click submit application
 
-#@wip
   Scenario:  Farmer not eligible for Dairy Cattle application
     Given farmer clicks on email link "fd51a82f-2030-45f1-83e6-775f7ed86091" "livsey-erubamie.williams@capgemini.com"
     When I select yes my details are correct on farmer review page
@@ -65,7 +64,6 @@ Feature: Farmer apply
     Then I should presented with "You're not eligible to apply" on the not-eligible page
     And I should see the link "find out if you could be eligible for other farming schemes." on the not-eligible page
 
-#@wip
   Scenario:  Farmer rejects offer for Dairy Cattle
     Given farmer clicks on email link "fd51a82f-2030-45f1-83e6-775f7ed86091" "livsey-erubamie.williams@capgemini.com"
     When I select yes my details are correct on farmer review page
