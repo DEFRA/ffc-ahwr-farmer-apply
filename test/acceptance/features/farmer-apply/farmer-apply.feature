@@ -124,7 +124,6 @@ Feature: Farmer apply
     Then  I select reject offer
     And I should see "You’ve rejected the agreement offer"
 
-#test
 
 
 
