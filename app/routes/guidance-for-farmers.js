@@ -9,6 +9,16 @@ module.exports = [{
     }
   }
 }, {
+  method: 'POST',
+  path: `${urlPrefix}`,
+  options: {
+    auth: false,
+    handler: async (request, h) => {
+      console.log(request.payload)
+      return h.view('guidance-for-farmers')
+    }
+  }
+},{
   method: 'GET',
   path: `${urlPrefix}/guidance-for-farmers`,
   options: {

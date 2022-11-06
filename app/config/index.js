@@ -2,6 +2,7 @@ const Joi = require('joi')
 const mqConfig = require('./messaging')
 const notifyConfig = require('./notify')
 const storageConfig = require('./storage')
+const authConfig = require('./auth')
 const urlPrefix = '/apply'
 
 const schema = Joi.object({
@@ -94,5 +95,6 @@ const value = result.value
 value.storageConfig = storageConfig
 value.mqConfig = mqConfig
 value.notifyConfig = notifyConfig
+value.authConfig = authConfig
 
 module.exports = value

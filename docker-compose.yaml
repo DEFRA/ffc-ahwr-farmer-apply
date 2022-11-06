@@ -30,3 +30,7 @@ services:
       CLAIM_SERVICE_URI: http://localhost:3004/claim
       TEST_TOKEN: 
       URL_PREFIX: "/apply"
+      DEFRA_AUTH_HOST_URL:
+      DEFRA_AUTH_CLIENT_ID:
+      DEFRA_AUTH_CLIENT_SECRET:
+      DEFRA_USE_AUTH:

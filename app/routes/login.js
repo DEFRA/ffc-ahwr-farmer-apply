@@ -5,6 +5,8 @@ const { email: emailValidation } = require('../lib/validation/email')
 const { sendFarmerApplyLoginMagicLink } = require('../lib/email/send-magic-link-email')
 const { clear } = require('../session')
 const { sendMonitoringEvent } = require('../event')
+const authConfig = require('../config').authConfig
+const { serviceUri } = require('../config')
 
 const hintText = 'We\'ll use this to send you a link to apply for a review'
 const urlPrefix = require('../config/index').urlPrefix
@@ -22,6 +24,15 @@ module.exports = [{
       }
     },
     handler: async (request, h) => {
+      if(authConfig.useAuth){
+        const redirect_uri ='https%3A%2F%2Fffc-ahwr-farmer-test.azure.defra.cloud%2Fclaim%2Fsignout' //encodeURI(`${serviceUri}/signout`)
+        let url = `${authConfig.authHostUrl}client_Id=${authConfig.authClientId}&nonce=defaultNonce&scope=openid&response_type=code&prompt=login&serviceId=edd7a972-414d-402c-9dc5-a39403035413`
+        url = `${url}&redirect_uri=${redirect_uri}`
+        
+        console.log(url)
+        return h.redirect(url)
+      }
+
       if (request.auth.isAuthenticated) {
         return h.redirect(request.query?.next || `${urlPrefix}/org-review`)
       }
