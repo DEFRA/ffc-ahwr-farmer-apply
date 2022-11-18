@@ -1,6 +1,6 @@
 # FFC AHWR Farmer Apply
 
-> Web frontend for the farmer apply journe
+> Web frontend for the farmer apply journey
 
 ## Prerequisites
 
