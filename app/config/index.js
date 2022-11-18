@@ -44,7 +44,10 @@ const schema = Joi.object({
   claimServiceUri: Joi.string().uri(),
   serviceName: Joi.string().default('Annual health and welfare review of livestock'),
   useRedis: Joi.boolean().default(false),
-  urlPrefix: Joi.string().default(urlPrefix)
+  urlPrefix: Joi.string().default(urlPrefix),
+  ruralPaymentsLoginUri: Joi.string().uri().default('https://www.ruralpayments.service.gov.uk'),
+  callChargesUri: Joi.string().uri().default('https://www.gov.uk/call-charges'),
+  ruralPaymentsEmail: Joi.string().email().default('ruralpayments@defra.gov.uk')
 })
 
 const config = {
@@ -79,7 +82,10 @@ const config = {
   serviceUri: process.env.SERVICE_URI,
   claimServiceUri: process.env.CLAIM_SERVICE_URI,
   useRedis: process.env.NODE_ENV !== 'test',
-  urlPrefix: process.env.URL_PREFIX
+  urlPrefix: process.env.URL_PREFIX,
+  ruralPaymentsLoginUri: 'https://www.ruralpayments.service.gov.uk',
+  callChargesUri: 'https://www.gov.uk/call-charges',
+  ruralPaymentsEmail: 'ruralpayments@defra.gov.uk'
 }
 
 const result = schema.validate(config, {
