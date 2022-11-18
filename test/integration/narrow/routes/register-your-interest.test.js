@@ -13,7 +13,7 @@ describe('Register your interest page test', () => {
 
     expect(res.statusCode).toBe(200)
     const $ = cheerio.load(res.payload)
-    expect($('.govuk-heading-l').text()).toEqual('Register your interest in a health and welfare review of your livestock')
+    expect($('.govuk-heading-l').first().text()).toEqual('Register your interest in a health and welfare review of your livestock')
 
     expect($('title').text()).toEqual(serviceName)
     expectPhaseBanner.ok($)
@@ -29,7 +29,7 @@ describe('Register your interest page test', () => {
 
     expect(res.statusCode).toBe(200)
     const $ = cheerio.load(res.payload)
-    expect($('.govuk-heading-l').text()).toEqual('Enter your customer reference number (CRN)')
+    expect($('.govuk-heading-l').first().text()).toEqual('Enter your customer reference number (CRN)')
 
     expect($('title').text()).toEqual(serviceName)
     expectPhaseBanner.ok($)
