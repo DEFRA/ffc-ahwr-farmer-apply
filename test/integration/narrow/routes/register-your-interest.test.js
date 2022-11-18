@@ -6,7 +6,7 @@ describe('Register your interest page test', () => {
   test('GET apply/register-your-interest route returns 200 when not logged in', async () => {
     const options = {
       method: 'GET',
-      url: `${urlPrefix}/apply/register-your-interest`
+      url: `${urlPrefix}/register-your-interest`
     }
 
     const res = await global.__SERVER__.inject(options)
@@ -22,7 +22,7 @@ describe('Register your interest page test', () => {
   test('GET apply/register-your-interest/crn-enter route returns 200 when not logged in', async () => {
     const options = {
       method: 'GET',
-      url: `${urlPrefix}/apply/register-your-interest/crn-enter`
+      url: `${urlPrefix}/register-your-interest/crn-enter`
     }
 
     const res = await global.__SERVER__.inject(options)
