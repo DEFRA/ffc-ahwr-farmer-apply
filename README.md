@@ -26,6 +26,8 @@ Values for development are set in the Docker Compose configuration. Default
 values for production-like deployments are set in the Helm chart and may be
 overridden by build and release pipelines.
 
+Please ask a developer for an example `.env` file that you can include in the root of your project that will contain environment variables overrirdes for local development that are different than the docker-compose file.
+
 | Name                                  | Description                                                                                      |
 | ----                                  | -----------                                                                                      |
 | APPLICATIONREQUEST_QUEUE_ADDRESS      | Name of message queue used to send application requests                                          |
