@@ -1,3 +1,5 @@
+const config = require('../config')
+
 const routes = [].concat(
   require('../routes/accessibility'),
   require('../routes/assets'),
@@ -16,8 +18,7 @@ const routes = [].concat(
   require('../routes/declaration'),
   require('../routes/terms'),
   require('../routes/verify-login'),
-  require('../routes/vet-technical'),
-  require('../routes/register-your-interest')
+  require('../routes/vet-technical')
 )
 
 module.exports = {
@@ -25,6 +26,7 @@ module.exports = {
     name: 'router',
     register: (server, _) => {
       server.route(routes)
+      if (config.registerYourInterest.enabled) { server.route(require('../routes/register-your-interest')) }
     }
   }
 }

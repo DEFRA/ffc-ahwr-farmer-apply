@@ -47,7 +47,10 @@ const schema = Joi.object({
   urlPrefix: Joi.string().default(urlPrefix),
   ruralPaymentsLoginUri: Joi.string().uri().default('https://www.ruralpayments.service.gov.uk'),
   callChargesUri: Joi.string().uri().default('https://www.gov.uk/call-charges'),
-  ruralPaymentsEmail: Joi.string().email().default('ruralpayments@defra.gov.uk')
+  ruralPaymentsEmail: Joi.string().email().default('ruralpayments@defra.gov.uk'),
+  registerYourInterest: {
+    enabled: Joi.bool().default(true)
+  }
 })
 
 const config = {
@@ -85,7 +88,10 @@ const config = {
   urlPrefix: process.env.URL_PREFIX,
   ruralPaymentsLoginUri: 'https://www.ruralpayments.service.gov.uk',
   callChargesUri: 'https://www.gov.uk/call-charges',
-  ruralPaymentsEmail: 'ruralpayments@defra.gov.uk'
+  ruralPaymentsEmail: 'ruralpayments@defra.gov.uk',
+  registerYourInterest: {
+    enabled: process.env.REGISTER_YOUR_INTEREST_ENABLED
+  }
 }
 
 const result = schema.validate(config, {

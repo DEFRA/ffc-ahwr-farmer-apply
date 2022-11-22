@@ -30,3 +30,4 @@ services:
       CLAIM_SERVICE_URI: http://localhost:3004/claim
       TEST_TOKEN: 
       URL_PREFIX: "/apply"
+      REGISTER_YOUR_INTEREST_ENABLED: true

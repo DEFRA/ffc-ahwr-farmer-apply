@@ -46,6 +46,23 @@ describe('Org review page test', () => {
       expect($('title').text()).toEqual(serviceName)
       expectPhaseBanner.ok($)
     })
+
+    test('GET apply/register-your-interest/sbi-enter route returns 200 ', async () => {
+      session.getRegisterYourInterestData.mockReturnValue({})
+      const options = {
+        method: 'GET',
+        url: `${urlPrefix}/register-your-interest/sbi-enter`
+      }
+
+      const res = await global.__SERVER__.inject(options)
+
+      expect(res.statusCode).toBe(200)
+      const $ = cheerio.load(res.payload)
+      expect($('.govuk-heading-l').first().text()).toEqual('Enter the single business identifier (SBI) number')
+
+      expect($('title').text()).toEqual(serviceName)
+      expectPhaseBanner.ok($)
+    })
   })
 
   describe(`POST ${urlPrefix}/register-your-interest/crn-enter route`, () => {
