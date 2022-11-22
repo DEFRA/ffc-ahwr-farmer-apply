@@ -25,7 +25,7 @@ function clear (request) {
   request.yar.clear(entries.application)
   request.yar.clear(entries.organisation)
   request.yar.clear(entries.answers)
-  request.ay.clear(entries.registerYourInterestData)
+  request.yar.clear(entries.registerYourInterestData)
 }
 
 function setApplication (request, key, value) {
