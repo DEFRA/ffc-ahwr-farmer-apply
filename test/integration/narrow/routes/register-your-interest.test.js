@@ -33,7 +33,7 @@ describe('Org review page test', () => {
     })
 
     test('GET apply/register-your-interest/crn-enter route returns 200 ', async () => {
-      session.registerYourInterestData.mockReturnValue({})
+      session.getRegisterYourInterestData.mockReturnValue({})
       const options = {
         method: 'GET',
         url: `${urlPrefix}/register-your-interest/crn-enter`
