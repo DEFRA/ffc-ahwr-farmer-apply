@@ -26,7 +26,7 @@ module.exports = {
     name: 'router',
     register: (server, _) => {
       server.route(routes)
-      if (config.registerYourInterest.enabled) { server.route(require('../routes/register-your-interest')) }
+      if (config.registerYourInterest.enabled === true) { server.route(require('../routes/register-your-interest')) }
     }
   }
 }

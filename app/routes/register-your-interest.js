@@ -55,7 +55,9 @@ module.exports = [{
         const errors = {}
         error.details.forEach(e => {
           const messageForLabel = e.context.label + 'ErrorMessage'
-          errors[messageForLabel] = e.message
+          errors[messageForLabel] = {
+            text: e.message
+          }
         })
         return h.view('crn-enter', { ...request.payload, errors }).code(400).takeover()
       }
