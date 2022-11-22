@@ -13,7 +13,67 @@
 {% block content %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
+    <form method="POST" autocomplete="off" novalidate>
+    <input type="hidden" name="crumb" value="{{crumb}}"/>
     <h1 class="govuk-heading-l">Enter your customer reference number (CRN)</h1>
+    <p class="govuk-body">Enter your CRN number so we can identify you. This is the 10 digit number emailed to you when you created your Rural Payments account.</p>
+
+    {{ 
+      govukInput({
+        label: {
+          text: "Enter your CRN number",
+          classes: "govuk-label",
+          for: "crn"
+        },
+        classes: "govuk-input govuk-input--width-10",
+        id: "crn",
+        name: "crn",
+        value: crn,
+        errorMessage:  { 
+          text: errors.crnErrorMessage
+        }
+      }) 
+    }}
+
+    {{ 
+      govukInput({
+        label: {
+          text: "Confirm your CRN number",
+          classes: "govuk-label",
+          for: "confirmcrn"
+        },
+        classes: "govuk-input govuk-input--width-10",
+        id: "confirmcrn",
+        name: "confirmcrn",
+        value: confirmcrn,
+        errorMessage:  { 
+          text: errors.confirmcrnErrorMessage
+        }
+      }) 
+    }}
+
+    {{ 
+      govukButton({
+        classes: "govuk-!-margin-top-2 govuk-!-margin-bottom-8",
+        text: "Continue"
+      }) 
+    }}
+
+    {{ 
+      govukDetails({
+        summaryText: "Problems with your CRN",
+        html: "<p>If you’ve lost or forgotten your CRN, contact the Rural Payments Agency.</p>
+        <ul class='govuk-list'>
+          <li>Rural Payments Agency</li>
+          <li>Telephone: 03000 200 301</li>
+          <li>Monday to Friday, 8:30am to 5pm (except public holidays)</li>
+          <li><a href='mailto:" + ruralPaymentsEmail + "'>" + ruralPaymentsEmail + "</a></li>
+        </ul>
+        <p class='govuk-body'>Find out about <a class='govuk-link' target='_blank' href='" + callChargesUri + "'> call charges</a></p>
+        " 
+      })  
+    }}
+    </form>
   </div>
 </div>
 {% endblock %}

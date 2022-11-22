@@ -4,7 +4,8 @@ const entries = {
   application: 'application',
   farmerApplyData: 'farmerApplyData',
   organisation: 'organisation',
-  answers: 'answers'
+  answers: 'answers',
+  registerYourInterestData: 'registerYourInterestData'
 }
 
 function set (request, entryKey, key, value) {
@@ -24,6 +25,7 @@ function clear (request) {
   request.yar.clear(entries.application)
   request.yar.clear(entries.organisation)
   request.yar.clear(entries.answers)
+  request.ay.clear(entries.registerYourInterestData)
 }
 
 function setApplication (request, key, value) {
@@ -42,10 +44,20 @@ function getFarmerApplyData (request, key) {
   return get(request, entries.farmerApplyData, key)
 }
 
+function getRegisterYourInterestData (request, key) {
+  return get(request, entries.registerYourInterestData, key)
+}
+
+function setRegisterYourInterestData (request, key, value) {
+  set(request, entries.registerYourInterestData, key, value)
+}
+
 module.exports = {
   clear,
   getApplication,
   getFarmerApplyData,
   setApplication,
-  setFarmerApplyData
+  setFarmerApplyData,
+  getRegisterYourInterestData,
+  setRegisterYourInterestData
 }

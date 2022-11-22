@@ -13,5 +13,8 @@ module.exports = {
     confirmCheckDetails: 'confirmCheckDetails',
     reference: 'reference',
     offerStatus: 'offerStatus'
+  },
+  registerYourInterestData: {
+    crn: 'crn'
   }
 }
