@@ -15,42 +15,44 @@
   <div class="govuk-grid-column-two-thirds">
     <form method="POST" autocomplete="off" novalidate>
     <input type="hidden" name="crumb" value="{{crumb}}"/>
-    <h1 class="govuk-heading-l">Enter your customer reference number (CRN)</h1>
-    <p class="govuk-body">Enter your CRN number so we can identify you. This is the 10 digit number emailed to you when you created your Rural Payments account.</p>
 
-    {{ 
-      govukInput({
-        label: {
-          text: "Enter your CRN number",
-          classes: "govuk-label",
-          for: "crn"
-        },
-        classes: "govuk-input govuk-input--width-10",
-        id: "crn",
-        name: "crn",
-        value: crn,
-        errorMessage:  { 
-          text: errors.crnErrorMessage
-        }
-      }) 
-    }}
-
-    {{ 
-      govukInput({
-        label: {
-          text: "Confirm your CRN number",
-          classes: "govuk-label",
-          for: "confirmcrn"
-        },
-        classes: "govuk-input govuk-input--width-10",
-        id: "confirmcrn",
-        name: "confirmcrn",
-        value: confirmcrn,
-        errorMessage:  { 
-          text: errors.confirmcrnErrorMessage
-        }
-      }) 
-    }}
+    {% call govukFieldset({
+      legend: {
+        text: "Enter your customer reference number (CRN)",
+        classes: "govuk-fieldset__legend--l",
+        isPageHeading: true
+      }
+    }) %}
+      <p class="govuk-body">Enter your CRN number so we can identify you. This is the 10 digit number emailed to you when you created your Rural Payments account.</p>
+      {{ 
+        govukInput({
+          label: {
+            text: "Enter your CRN number",
+            classes: "govuk-label",
+            for: "crn"
+          },
+          classes: "govuk-input govuk-input--width-10",
+          id: "crn",
+          name: "crn",
+          value: crn,
+          errorMessage: errorMessages.crn
+        }) 
+      }}
+      {{ 
+        govukInput({
+          label: {
+            text: "Confirm your CRN number",
+            classes: "govuk-label",
+            for: "confirmCrn"
+          },
+          classes: "govuk-input govuk-input--width-10",
+          id: "confirmCrn",
+          name: "confirmCrn",
+          value: confirmCrn,
+          errorMessage: errorMessages.confirmCrn
+        }) 
+      }}
+    {% endcall %}
 
     {{ 
       govukButton({

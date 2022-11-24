@@ -18,6 +18,7 @@ const routes = [].concat(
   require('../routes/verify-login'),
   require('../routes/vet-technical'),
   require('../routes/register-your-interest'),
+  require('../routes/enter-your-crn'),
   require('../routes/enter-your-sbi')
 )
 
