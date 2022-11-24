@@ -19,7 +19,7 @@ describe('Farmer apply "Enter your SBI" page', () => {
     test('returns a page allowing for entering the single business identifier (SBI) number', async () => {
       const options = {
         method: 'GET',
-        url: `${urlPrefix}/enter-your-sbi`
+        url: `${urlPrefix}/register-your-interest/enter-your-sbi`
       }
       const EXPECTED_SBI = '123456789'
       when(session.getRegisterYourInterestData)
@@ -55,7 +55,7 @@ describe('Farmer apply "Enter your SBI" page', () => {
     ])('when a user provides correct data then returns 302 and redirects to "Enter your email address" page', async (testCase) => {
       const options = {
         method: 'POST',
-        url: `${urlPrefix}/enter-your-sbi`,
+        url: `${urlPrefix}/register-your-interest/enter-your-sbi`,
         payload: { crumb, ...testCase.payload },
         auth,
         headers: { cookie: `crumb=${crumb}` }
@@ -112,7 +112,7 @@ describe('Farmer apply "Enter your SBI" page', () => {
     ])('when a user provides wrong data then returns 400 and displays an error', async (testCase) => {
       const options = {
         method: 'POST',
-        url: `${urlPrefix}/enter-your-sbi`,
+        url: `${urlPrefix}/register-your-interest/enter-your-sbi`,
         payload: { crumb, ...testCase.payload },
         auth,
         headers: { cookie: `crumb=${crumb}` }

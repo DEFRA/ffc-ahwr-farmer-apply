@@ -7,6 +7,8 @@ const expectPhaseBanner = require('../../../utils/phase-banner-expect')
 describe('Farmer apply "Enter your CRN" page', () => {
   let session
 
+  const URL = `${urlPrefix}/register-your-interest/enter-your-crn`
+
   beforeAll(async () => {
     jest.resetAllMocks()
     resetAllWhenMocks()
@@ -19,7 +21,7 @@ describe('Farmer apply "Enter your CRN" page', () => {
     test('returns a page allowing for entering the CRN number', async () => {
       const options = {
         method: 'GET',
-        url: `${urlPrefix}/register-your-interest/crn-enter`
+        url: URL
       }
       const EXPECTED_CRN = '0123456789'
       when(session.getRegisterYourInterestData)
@@ -55,7 +57,7 @@ describe('Farmer apply "Enter your CRN" page', () => {
     ])('when a user provides correct data then returns 302 and redirects to "Enter your email address" page', async (testCase) => {
       const options = {
         method: 'POST',
-        url: `${urlPrefix}/register-your-interest/crn-enter`,
+        url: URL,
         payload: { crumb, ...testCase.payload },
         auth,
         headers: { cookie: `crumb=${crumb}` }
@@ -112,7 +114,7 @@ describe('Farmer apply "Enter your CRN" page', () => {
     ])('when a user provides wrong data then returns 400 and displays an error', async (testCase) => {
       const options = {
         method: 'POST',
-        url: `${urlPrefix}/register-your-interest/crn-enter`,
+        url: URL,
         payload: { crumb, ...testCase.payload },
         auth,
         headers: { cookie: `crumb=${crumb}` }

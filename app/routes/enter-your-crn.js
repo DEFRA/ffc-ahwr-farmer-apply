@@ -12,10 +12,12 @@ const ERROR_MESSAGE = {
   crnNumbersDoNotMatch: 'The CRNs do not match'
 }
 
+const PATH = `${urlPrefix}/register-your-interest/enter-your-crn`
+
 module.exports = [
   {
     method: 'GET',
-    path: `${urlPrefix}/register-your-interest/crn-enter`,
+    path: PATH,
     options: {
       auth: false,
       handler: async (request, h) => {
@@ -26,7 +28,7 @@ module.exports = [
   },
   {
     method: 'POST',
-    path: `${urlPrefix}/register-your-interest/crn-enter`,
+    path: PATH,
     options: {
       auth: false,
       validate: {

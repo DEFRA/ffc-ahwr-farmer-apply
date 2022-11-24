@@ -15,7 +15,7 @@ const ERROR_MESSAGE = {
 module.exports = [
   {
     method: 'GET',
-    path: `${urlPrefix}/enter-your-sbi`,
+    path: `${urlPrefix}/register-your-interest/enter-your-sbi`,
     options: {
       auth: false,
       handler: async (request, h) => {
@@ -26,7 +26,7 @@ module.exports = [
   },
   {
     method: 'POST',
-    path: `${urlPrefix}/enter-your-sbi`,
+    path: `${urlPrefix}/register-your-interest/enter-your-sbi`,
     options: {
       auth: false,
       validate: {
