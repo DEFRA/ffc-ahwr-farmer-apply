@@ -16,5 +16,8 @@ module.exports = {
   },
   registerYourInterestData: {
     crn: 'crn'
+  },
+  enterYourSbi: {
+    sbi: 'sbi'
   }
 }

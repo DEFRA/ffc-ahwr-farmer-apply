@@ -65,14 +65,4 @@ module.exports = [{
       return h.redirect('sbi-enter', { callChargesUri, ruralPaymentsEmail })
     }
   }
-},
-{
-  method: 'GET',
-  path: `${urlPrefix}/register-your-interest/sbi-enter`,
-  options: {
-    auth: false,
-    handler: async (request, h) => {
-      return h.view('sbi-enter', { callChargesUri, ruralPaymentsEmail })
-    }
-  }
 }]
