@@ -1,0 +1,87 @@
+{% extends './layouts/layout.njk' %}
+
+{% block pageTitle %}{{serviceName}}{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "/apply",
+	  attributes: {id: "back"}
+  }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">Register your interest in a health and welfare review of your livestock</h1>
+    <p class="govuk-heading-body">To be eligible for a review you must have one of the following: </p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>11 or more beef or dairy cattle</li>
+      <li>21 or more sheep</li>
+      <li>51 or more pigs</li>
+    </ul>
+    <p class="govuk-heading-body">If you’ve received the lump sum payment to leave or retire from farming you’re still eligible for a review.</p>
+    <p class="govuk-heading-body">The animals must be registered in England and you must be responsible for their welfare.</p>
+    <p class="govuk-heading-body">Your business must have:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>a single business identifier (SBI) linked to an English county parish holding (CPH) number</li>
+      <li>the CPH number can be permanent or temporary</li>
+    </ul>
+    <p class="govuk-heading-body">The CPH number cannot be:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>an 8000 number used for abattoirs, pet food manufacturers, racing pigeon establishments and showgrounds</li>
+      <li>a 9000 number used for poultry keepers</li>
+    </ul>
+    
+    {{ 
+      govukButton({
+        classes: "govuk-!-margin-top-2 govuk-!-margin-bottom-8",
+        href: "/apply/register-your-interest/crn-enter",
+        isStartButton: true,
+        text: "Register now"
+      }) 
+    }}
+
+    <h1 class="govuk-heading-l">Before you register</h1>
+    <p class="govuk-heading-body">You’ll need:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>your customer reference number (CRN)</li>
+      <li>the single business identifier (SBI) number of the business you want to apply for the review</li>
+      <li>the email associated to your Rural Payments account</li>
+    </ul>
+
+    {{ 
+      govukDetails({
+        summaryText: "Need to update your SBI or email address?",
+        html: "If you need to update your SBI or email address you’ll need to <a target='_blank' href='" + ruralPaymentsLoginUri + "'>sign in to the Rural Payments service</a> before you use this service and update your details. You may need your CRN to sign in." 
+      })  
+    }}
+
+    {{ 
+      govukDetails({
+        summaryText: "Problems with your CRN",
+        html: "<p>If you’ve lost or forgotten your CRN, contact the Rural Payments Agency.</p>
+        <ul class='govuk-list'>
+          <li>Rural Payments Agency</li>
+          <li>Telephone: 03000 200 301</li>
+          <li>Monday to Friday, 8:30am to 5pm (except public holidays)</li>
+          <li><a href='mailto:" + ruralPaymentsEmail + "'>" + ruralPaymentsEmail + "</a></li>
+        </ul>
+        <p class='govuk-body'>Find out about <a class='govuk-link' target='_blank' href='" + callChargesUri + "'> call charges</a></p>
+        " 
+      })  
+    }}
+
+    <h2 class="govuk-heading-m">Get help with registering</h2>
+    <p class="govuk-heading-body">If you’re unable to sign in to your Rural Payments account or have a question about your registration, contact the RPA.</p>
+    <ul class='govuk-list'>
+      <li>Rural Payments Agency</li>
+      <li>Telephone: 03000 200 301</li>
+      <li>Monday to Friday, 8:30am to 5pm (except public holidays)</li>
+      <li><a href="mailto:{{ ruralPaymentsEmail }}">{{ ruralPaymentsEmail }}</a></li>
+    </ul>
+    <p class='govuk-body'>Find out about <a class="govuk-link" target="_blank" href={{ callChargesUri }}> call charges</a></p>
+
+  </div>
+</div>
+{% endblock %}
