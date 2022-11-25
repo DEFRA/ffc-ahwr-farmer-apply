@@ -1,0 +1,41 @@
+{% extends './layouts/layout.njk' %}
+
+{% block pageTitle %}{{serviceName}}{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "/apply/register-your-interest/enter-your-email-address",
+	  attributes: {id: "back"}
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-l">Check your answers and register your interest</h1>
+
+    {{
+      govukSummaryList({
+        classes: "govuk-!-margin-bottom-9",
+        rows: rows
+      })
+    }}
+
+    <h2 class="govuk-heading-m">Now register your interest</h2>
+
+    <p class="govuk-body">By registering your interest you're confirming the information you've provided is correct.</p>
+
+    {{ 
+      govukButton({
+        classes: "govuk-!-margin-top-2 govuk-!-margin-bottom-8",
+        text: "Register"
+      }) 
+    }}
+
+  </div>
+</div>
+
+{% endblock %}

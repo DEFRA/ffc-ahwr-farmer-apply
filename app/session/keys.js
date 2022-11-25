@@ -15,9 +15,11 @@ module.exports = {
     offerStatus: 'offerStatus'
   },
   registerYourInterestData: {
-    crn: 'crn'
-  },
-  enterYourSbi: {
-    sbi: 'sbi'
+    crn: 'crn',
+    confirmCrn: 'confirmCrn',
+    sbi: 'sbi',
+    confirmSbi: 'confirmSbi',
+    emailAddress: 'emailAddress',
+    confirmEmailAddress: 'confirmEmailAddress'
   }
 }

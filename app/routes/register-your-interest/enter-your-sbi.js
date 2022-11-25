@@ -1,9 +1,9 @@
 const Joi = require('joi')
-const session = require('../session')
-const sessionKeys = require('../session/keys')
-const urlPrefix = require('../config/index').urlPrefix
-const callChargesUri = require('../config/index').callChargesUri
-const ruralPaymentsEmail = require('../config/index').ruralPaymentsEmail
+const session = require('../../session')
+const sessionKeys = require('../../session/keys')
+const urlPrefix = require('../../config/index').urlPrefix
+const callChargesUri = require('../../config/index').callChargesUri
+const ruralPaymentsEmail = require('../../config/index').ruralPaymentsEmail
 
 const ERROR_MESSAGE = {
   enterYourSbiNumber: 'Enter your SBI number',
@@ -19,8 +19,21 @@ module.exports = [
     options: {
       auth: false,
       handler: async (request, h) => {
-        const sbi = session.getRegisterYourInterestData(request, sessionKeys.enterYourSbi.sbi)
-        return h.view('enter-your-sbi', { callChargesUri, ruralPaymentsEmail, sbi })
+        return h.view(
+          'register-your-interest/enter-your-sbi',
+          {
+            callChargesUri,
+            ruralPaymentsEmail,
+            sbi: session.getRegisterYourInterestData(
+              request,
+              sessionKeys.registerYourInterestData.sbi
+            ),
+            confirmSbi: session.getRegisterYourInterestData(
+              request,
+              sessionKeys.registerYourInterestData.confirmSbi
+            )
+          }
+        )
       }
     }
   },
@@ -62,12 +75,24 @@ module.exports = [
           const errorMessages = error
             .details
             .reduce((acc, e) => ({ ...acc, [e.context.label]: { text: e.message } }), {})
-          return h.view('enter-your-sbi', { ...request.payload, errorMessages }).code(400).takeover()
+          return h.view(
+            'register-your-interest/enter-your-sbi',
+            { ...request.payload, errorMessages }
+          ).code(400).takeover()
         }
       },
       handler: async (request, h) => {
-        session.setRegisterYourInterestData(request, sessionKeys.enterYourSbi.sbi, request.payload[sessionKeys.enterYourSbi.sbi])
-        return h.redirect('enter-your-email', { callChargesUri, ruralPaymentsEmail })
+        session.setRegisterYourInterestData(
+          request,
+          sessionKeys.registerYourInterestData.sbi,
+          request.payload[sessionKeys.registerYourInterestData.sbi]
+        )
+        session.setRegisterYourInterestData(
+          request,
+          sessionKeys.registerYourInterestData.confirmSbi,
+          request.payload[sessionKeys.registerYourInterestData.confirmSbi]
+        )
+        return h.redirect('enter-your-email-address', { callChargesUri, ruralPaymentsEmail })
       }
     }
   }

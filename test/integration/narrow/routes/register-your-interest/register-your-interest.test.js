@@ -1,11 +1,11 @@
 const cheerio = require('cheerio')
-const expectPhaseBanner = require('../../../utils/phase-banner-expect')
-const { serviceName, urlPrefix } = require('../../../../app/config')
+const expectPhaseBanner = require('../../../../utils/phase-banner-expect')
+const { serviceName, urlPrefix } = require('../../../../../app/config')
 
 describe('Farmer apply "Register your interest" page', () => {
   beforeAll(async () => {
     jest.resetAllMocks()
-    jest.mock('../../../../app/session')
+    jest.mock('../../../../../app/session')
   })
 
   describe('GET', () => {
