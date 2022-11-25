@@ -1,0 +1,81 @@
+{% extends './layouts/layout.njk' %}
+
+{% block pageTitle %}{{serviceName}}{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "/apply/register-your-interest/enter-your-crn",
+	  attributes: {id: "back"}
+  }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <form method="POST">
+      <input type="hidden" name="crumb" value="{{crumb}}"/>
+
+      {% call govukFieldset({
+        legend: {
+          text: "Enter the single business identifier (SBI) number",
+          classes: "govuk-fieldset__legend--l",
+          isPageHeading: true
+        }
+      }) %}
+        <p class="govuk-body">Enter the SBI number of your business. This is the 9 digit number emailed to you in your Rural Payments account used to identify your business.</p>
+        {{ 
+          govukInput({
+            label: {
+              text: "Enter your SBI number",
+              classes: "govuk-label",
+              for: "sbi"
+            },
+            classes: "govuk-input govuk-input--width-10",
+            id: "sbi",
+            name: "sbi",
+            value: sbi,
+            errorMessage: errorMessages.sbi
+          }) 
+        }}
+        {{ 
+          govukInput({
+            label: {
+              text: "Confirm your SBI number",
+              classes: "govuk-label",
+              for: "confirmSbi"
+            },
+            classes: "govuk-input govuk-input--width-10",
+            id: "confirmSbi",
+            name: "confirmSbi",
+            value: confirmSbi,
+            errorMessage: errorMessages.confirmSbi
+          }) 
+        }}
+      {% endcall %}
+
+      {{ 
+        govukButton({
+          classes: "govuk-!-margin-top-2 govuk-!-margin-bottom-8",
+          text: "Continue"
+        }) 
+      }}
+
+      {{ 
+        govukDetails({
+          summaryText: "Problems with your SBI",
+          html: "<p>If you’ve lost or forgotten the SBI number, contact the Rural Payments Agency.</p>
+          <ul class='govuk-list'>
+            <li>Rural Payments Agency</li>
+            <li>Telephone: 03000 200 301</li>
+            <li>Monday to Friday, 8:30am to 5pm (except public holidays)</li>
+            <li><a href='mailto:" + ruralPaymentsEmail + "'>" + ruralPaymentsEmail + "</a></li>
+          </ul>
+          <p class='govuk-body'>Find out about <a class='govuk-link' target='_blank' href='" + callChargesUri + "'> call charges</a></p>
+          " 
+        })  
+      }}
+    </form>
+  </div>
+</div>
+{% endblock %}

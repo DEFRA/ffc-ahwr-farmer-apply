@@ -3,18 +3,21 @@ const session = require('../../../../app/session')
 describe('session', () => {
   const applicationSectionKey = 'application'
   const farmerApplyDataSectionKey = 'farmerApplyData'
+  const registerYourInterestDataSectionKey = 'registerYourInterestData'
 
   const value = 'value'
   const objectValue = { key: value }
 
   const getFunctionsToTest = [
     { func: 'getApplication', expectedSectionKey: applicationSectionKey },
-    { func: 'getFarmerApplyData', expectedSectionKey: farmerApplyDataSectionKey }
+    { func: 'getFarmerApplyData', expectedSectionKey: farmerApplyDataSectionKey },
+    { func: 'getRegisterYourInterestData', expectedSectionKey: registerYourInterestDataSectionKey }
   ]
 
   const setFunctionsToTest = [
     { func: 'setApplication', expectedSectionKey: applicationSectionKey },
-    { func: 'setFarmerApplyData', expectedSectionKey: farmerApplyDataSectionKey }
+    { func: 'setFarmerApplyData', expectedSectionKey: farmerApplyDataSectionKey },
+    { func: 'setRegisterYourInterestData', expectedSectionKey: registerYourInterestDataSectionKey }
   ]
 
   const keysAndValuesToTest = [
