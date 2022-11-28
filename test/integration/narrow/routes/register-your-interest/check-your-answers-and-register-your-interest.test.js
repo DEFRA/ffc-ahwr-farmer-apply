@@ -1,5 +1,6 @@
 const { when, resetAllWhenMocks } = require('jest-when')
 const cheerio = require('cheerio')
+const getCrumbs = require('../../../../utils/get-crumbs')
 const expectPhaseBanner = require('../../../../utils/phase-banner-expect')
 const { serviceName, urlPrefix } = require('../../../../../app/config')
 
@@ -57,6 +58,33 @@ describe('Farmer apply "Check your answers and register your interest" page', ()
 
       expect($('title').text()).toEqual(serviceName)
       expectPhaseBanner.ok($)
+    })
+  })
+
+  describe('POST', () => {
+    const auth = { credentials: { reference: '1111', sbi: '111111111' }, strategy: 'cookie' }
+    let crumb
+
+    beforeEach(async () => {
+      crumb = await getCrumbs(global.__SERVER__)
+    })
+
+    test.each([
+      {
+      }
+    ])('when post then expect 302 and redirect to "Registration complete" page', async (testCase) => {
+      const options = {
+        method: 'POST',
+        url: URL,
+        payload: { crumb, ...testCase.payload },
+        auth,
+        headers: { cookie: `crumb=${crumb}` }
+      }
+
+      const res = await global.__SERVER__.inject(options)
+
+      expect(res.statusCode).toBe(302)
+      expect(res.headers.location).toEqual('registration-complete')
     })
   })
 })

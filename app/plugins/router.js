@@ -21,7 +21,8 @@ const routes = [].concat(
   require('../routes/register-your-interest/enter-your-crn'),
   require('../routes/register-your-interest/enter-your-sbi'),
   require('../routes/register-your-interest/enter-your-email-address'),
-  require('../routes/register-your-interest/check-your-answers-and-register-your-interest')
+  require('../routes/register-your-interest/check-your-answers-and-register-your-interest'),
+  require('../routes/register-your-interest/registration-complete')
 )
 
 module.exports = {

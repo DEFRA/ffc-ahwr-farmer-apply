@@ -28,12 +28,17 @@
 
     <p class="govuk-body">By registering your interest you're confirming the information you've provided is correct.</p>
 
-    {{ 
-      govukButton({
-        classes: "govuk-!-margin-top-2 govuk-!-margin-bottom-8",
-        text: "Register"
-      }) 
-    }}
+    <form method="POST" autocomplete="off" novalidate>
+    <input type="hidden" name="crumb" value="{{crumb}}"/>
+
+      {{ 
+        govukButton({
+          classes: "govuk-!-margin-top-2 govuk-!-margin-bottom-8",
+          text: "Register"
+        }) 
+      }}
+
+    </form>
 
   </div>
 </div>
