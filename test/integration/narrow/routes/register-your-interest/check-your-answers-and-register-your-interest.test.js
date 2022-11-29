@@ -20,7 +20,7 @@ describe('Farmer apply "Check your answers and register your interest" page', ()
     test('returns a page allowing for checking answers and registering interest', async () => {
       const options = {
         method: 'GET',
-        url: URL,
+        url: URL
       }
       const EXPECTED_CRN = '0123456789'
       const EXPECTED_SBI = '123456789'
