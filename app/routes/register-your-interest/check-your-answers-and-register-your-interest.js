@@ -64,6 +64,7 @@ module.exports = [
     options: {
       auth: false,
       handler: async (request, h) => {
+        session.clear(request)
         return h.redirect('registration-complete', { callChargesUri, ruralPaymentsEmail })
       }
     }

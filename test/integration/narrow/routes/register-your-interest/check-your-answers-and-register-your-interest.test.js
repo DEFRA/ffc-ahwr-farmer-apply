@@ -78,6 +78,7 @@ describe('Farmer apply "Check your answers and register your interest" page', ()
 
       const res = await global.__SERVER__.inject(options)
 
+      expect(session.clear).toBeCalledTimes(1)
       expect(res.statusCode).toBe(302)
       expect(res.headers.location).toEqual('registration-complete')
     })
