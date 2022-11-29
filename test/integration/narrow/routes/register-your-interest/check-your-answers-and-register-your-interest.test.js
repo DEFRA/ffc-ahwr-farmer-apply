@@ -7,8 +7,6 @@ const { serviceName, urlPrefix } = require('../../../../../app/config')
 const URL = `${urlPrefix}/register-your-interest/check-your-answers-and-register-your-interest`
 
 describe('Farmer apply "Check your answers and register your interest" page', () => {
-  const auth = { credentials: { reference: '1111', sbi: '111111111' }, strategy: 'cookie' }
-
   let session
 
   beforeAll(async () => {
@@ -23,7 +21,6 @@ describe('Farmer apply "Check your answers and register your interest" page', ()
       const options = {
         method: 'GET',
         url: URL,
-        auth
       }
       const EXPECTED_CRN = '0123456789'
       const EXPECTED_SBI = '123456789'
@@ -62,7 +59,6 @@ describe('Farmer apply "Check your answers and register your interest" page', ()
   })
 
   describe('POST', () => {
-    const auth = { credentials: { reference: '1111', sbi: '111111111' }, strategy: 'cookie' }
     let crumb
 
     beforeEach(async () => {
@@ -77,7 +73,6 @@ describe('Farmer apply "Check your answers and register your interest" page', ()
         method: 'POST',
         url: URL,
         payload: { crumb, ...testCase.payload },
-        auth,
         headers: { cookie: `crumb=${crumb}` }
       }
 

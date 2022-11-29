@@ -43,7 +43,6 @@ describe('Farmer apply "Enter your SBI" page', () => {
   })
 
   describe('POST', () => {
-    const auth = { credentials: { reference: '1111', sbi: '111111111' }, strategy: 'cookie' }
     let crumb
 
     beforeEach(async () => {
@@ -62,7 +61,6 @@ describe('Farmer apply "Enter your SBI" page', () => {
         method: 'POST',
         url: `${urlPrefix}/register-your-interest/enter-your-sbi`,
         payload: { crumb, ...testCase.payload },
-        auth,
         headers: { cookie: `crumb=${crumb}` }
       }
 
@@ -161,7 +159,6 @@ describe('Farmer apply "Enter your SBI" page', () => {
         method: 'POST',
         url: `${urlPrefix}/register-your-interest/enter-your-sbi`,
         payload: { crumb, ...testCase.payload },
-        auth,
         headers: { cookie: `crumb=${crumb}` }
       }
 

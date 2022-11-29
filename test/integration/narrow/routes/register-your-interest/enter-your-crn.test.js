@@ -45,7 +45,6 @@ describe('Farmer apply "Enter your CRN" page', () => {
   })
 
   describe('POST', () => {
-    const auth = { credentials: { reference: '1111', sbi: '111111111' }, strategy: 'cookie' }
     let crumb
 
     beforeEach(async () => {
@@ -64,7 +63,6 @@ describe('Farmer apply "Enter your CRN" page', () => {
         method: 'POST',
         url: URL,
         payload: { crumb, ...testCase.payload },
-        auth,
         headers: { cookie: `crumb=${crumb}` }
       }
 
@@ -163,7 +161,6 @@ describe('Farmer apply "Enter your CRN" page', () => {
         method: 'POST',
         url: URL,
         payload: { crumb, ...testCase.payload },
-        auth,
         headers: { cookie: `crumb=${crumb}` }
       }
 

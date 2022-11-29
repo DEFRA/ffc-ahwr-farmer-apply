@@ -11,6 +11,7 @@ module.exports = [
     method: 'GET',
     path: PATH,
     options: {
+      auth: false,
       handler: async (request, h) => {
         const rows = [
           {
