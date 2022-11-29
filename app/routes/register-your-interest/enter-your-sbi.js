@@ -47,15 +47,13 @@ module.exports = [
           sbi: Joi
             .string()
             .trim()
-            .min(9)
-            .max(9)
+            .regex(/^\d{9}$/)
             .required()
             .messages({
               'any.required': ERROR_MESSAGE.enterYourSbiNumber,
               'string.base': ERROR_MESSAGE.enterYourSbiNumber,
               'string.empty': ERROR_MESSAGE.enterYourSbiNumber,
-              'string.max': ERROR_MESSAGE.enterSbiNumberThatHas9Digits,
-              'string.min': ERROR_MESSAGE.enterSbiNumberThatHas9Digits
+              'string.pattern.base': ERROR_MESSAGE.enterSbiNumberThatHas9Digits
             }),
           confirmSbi: Joi
             .alternatives()
