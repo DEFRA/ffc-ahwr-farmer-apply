@@ -40,13 +40,16 @@ module.exports = [
       auth: false,
       validate: {
         payload: Joi.object({
-          crn: Joi.string().trim().min(10).max(10).required()
+          crn: Joi
+            .string()
+            .trim()
+            .regex(/^\d{10}$/)
+            .required()
             .messages({
               'any.required': ERROR_MESSAGE.enterYourCrnNumber,
               'string.base': ERROR_MESSAGE.enterYourCrnNumber,
               'string.empty': ERROR_MESSAGE.enterYourCrnNumber,
-              'string.max': ERROR_MESSAGE.enterCrnNumberThatHas10Digits,
-              'string.min': ERROR_MESSAGE.enterCrnNumberThatHas10Digits
+              'string.pattern.base': ERROR_MESSAGE.enterCrnNumberThatHas10Digits
             }),
           confirmCrn: Joi.alternatives().conditional('confirmCrn', { is: Joi.string().trim().required(), then: Joi.equal(Joi.ref('crn')), otherwise: Joi.string().trim().required() })
             .messages({

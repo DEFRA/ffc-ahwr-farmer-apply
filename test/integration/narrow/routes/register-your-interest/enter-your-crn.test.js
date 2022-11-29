@@ -119,6 +119,15 @@ describe('Farmer apply "Enter your CRN" page', () => {
       },
       {
         payload: {
+          crn: 'ABCDEFGHIJ'
+        },
+        expectedErrors: {
+          crn: 'Error: Enter a CRN that has 10 digits',
+          confirmCrn: 'Error: Confirm your CRN'
+        }
+      },
+      {
+        payload: {
           crn: '0123456789'
         },
         expectedErrors: {
