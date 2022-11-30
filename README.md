@@ -41,6 +41,7 @@ Please ask a developer for an example `.env` file that you can include in the ro
 | NOTIFY_TEMPLATE_ID_FARMER_APPLY_LOGIN | Id of email template used for farmer apply login email                                           |
 | NOTIFY_TEMPLATE_ID_FARMER_CLAIM_LOGIN | Id of email template used for farmer claim login email                                           |
 | NOTIFY_TEMPLATE_ID_VET_LOGIN          | Id of email template used for vet login email                                                    |
+| NOTIFY_TEMPLATE_ID_FARMER_REGISTER_INTEREST          | Id of email template used for registration of interest                                                  |
 | SERVICE_URI                           | URI of service (used in links, in emails) e.g. `http://localhost:3000` or `https://defra.gov.uk` |
 | TEST_TOKEN                            | Test Token for Magic link for getting access to test access                                      |
 | AZURE_STORAGE_CREATE_CONTAINERS       | Set true to use connection string, false to connect using azure credentials for blobstorage      |
