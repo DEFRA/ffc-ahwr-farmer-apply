@@ -1,8 +1,8 @@
 const { when, resetAllWhenMocks } = require('jest-when')
 const cheerio = require('cheerio')
-const getCrumbs = require('../../../utils/get-crumbs')
-const { serviceName, urlPrefix } = require('../../../../app/config')
-const expectPhaseBanner = require('../../../utils/phase-banner-expect')
+const getCrumbs = require('../../../../utils/get-crumbs')
+const { serviceName, urlPrefix } = require('../../../../../app/config')
+const expectPhaseBanner = require('../../../../utils/phase-banner-expect')
 
 describe('Farmer apply "Enter your CRN" page', () => {
   let session
@@ -13,8 +13,8 @@ describe('Farmer apply "Enter your CRN" page', () => {
     jest.resetAllMocks()
     resetAllWhenMocks()
 
-    session = require('../../../../app/session')
-    jest.mock('../../../../app/session')
+    session = require('../../../../../app/session')
+    jest.mock('../../../../../app/session')
   })
 
   describe('GET', () => {
@@ -27,6 +27,10 @@ describe('Farmer apply "Enter your CRN" page', () => {
       when(session.getRegisterYourInterestData)
         .calledWith(expect.anything(), 'crn')
         .mockReturnValue(EXPECTED_CRN)
+      const EXPECTED_CONFIRM_CRN = '1234567890'
+      when(session.getRegisterYourInterestData)
+        .calledWith(expect.anything(), 'confirmCrn')
+        .mockReturnValue(EXPECTED_CONFIRM_CRN)
 
       const res = await global.__SERVER__.inject(options)
       const $ = cheerio.load(res.payload)
@@ -34,13 +38,13 @@ describe('Farmer apply "Enter your CRN" page', () => {
       expect(res.statusCode).toBe(200)
       expect($('.govuk-fieldset__legend--l').text().trim()).toEqual('Enter your customer reference number (CRN)')
       expect($('#crn').attr('value')).toEqual(EXPECTED_CRN)
+      expect($('#confirmCrn').attr('value')).toEqual(EXPECTED_CONFIRM_CRN)
       expect($('title').text()).toEqual(serviceName)
       expectPhaseBanner.ok($)
     })
   })
 
   describe('POST', () => {
-    const auth = { credentials: { reference: '1111', sbi: '111111111' }, strategy: 'cookie' }
     let crumb
 
     beforeEach(async () => {
@@ -54,12 +58,11 @@ describe('Farmer apply "Enter your CRN" page', () => {
           confirmCrn: '0123456789'
         }
       }
-    ])('when a user provides correct data then returns 302 and redirects to "Enter your email address" page', async (testCase) => {
+    ])('when proper $payload then expect 302 and redirect to "Enter your email address" page', async (testCase) => {
       const options = {
         method: 'POST',
         url: URL,
         payload: { crumb, ...testCase.payload },
-        auth,
         headers: { cookie: `crumb=${crumb}` }
       }
 
@@ -67,18 +70,40 @@ describe('Farmer apply "Enter your CRN" page', () => {
 
       expect(res.statusCode).toBe(302)
       expect(res.headers.location).toEqual('enter-your-sbi')
-
       expect(session.setRegisterYourInterestData).toHaveBeenCalledWith(
         expect.anything(),
         'crn',
         testCase.payload.crn
+      )
+      expect(session.setRegisterYourInterestData).toHaveBeenCalledWith(
+        expect.anything(),
+        'confirmCrn',
+        testCase.payload.confirmCrn
       )
     })
 
     test.each([
       {
         payload: {},
-        expectedError: {
+        expectedErrors: {
+          crn: 'Error: Enter a CRN',
+          confirmCrn: 'Error: Confirm your CRN'
+        }
+      },
+      {
+        payload: {
+          crn: ''
+        },
+        expectedErrors: {
+          crn: 'Error: Enter a CRN',
+          confirmCrn: 'Error: Confirm your CRN'
+        }
+      },
+      {
+        payload: {
+          crn: 1
+        },
+        expectedErrors: {
           crn: 'Error: Enter a CRN',
           confirmCrn: 'Error: Confirm your CRN'
         }
@@ -87,7 +112,16 @@ describe('Farmer apply "Enter your CRN" page', () => {
         payload: {
           crn: '12345'
         },
-        expectedError: {
+        expectedErrors: {
+          crn: 'Error: Enter a CRN that has 10 digits',
+          confirmCrn: 'Error: Confirm your CRN'
+        }
+      },
+      {
+        payload: {
+          crn: 'ABCDEFGHIJ'
+        },
+        expectedErrors: {
           crn: 'Error: Enter a CRN that has 10 digits',
           confirmCrn: 'Error: Confirm your CRN'
         }
@@ -96,7 +130,27 @@ describe('Farmer apply "Enter your CRN" page', () => {
         payload: {
           crn: '0123456789'
         },
-        expectedError: {
+        expectedErrors: {
+          crn: '',
+          confirmCrn: 'Error: Confirm your CRN'
+        }
+      },
+      {
+        payload: {
+          crn: '0123456789',
+          confirmCrn: ''
+        },
+        expectedErrors: {
+          crn: '',
+          confirmCrn: 'Error: Confirm your CRN'
+        }
+      },
+      {
+        payload: {
+          crn: '0123456789',
+          confirmCrn: 1
+        },
+        expectedErrors: {
           crn: '',
           confirmCrn: 'Error: Confirm your CRN'
         }
@@ -106,17 +160,16 @@ describe('Farmer apply "Enter your CRN" page', () => {
           crn: '0123456789',
           confirmCrn: '9876543210'
         },
-        expectedError: {
+        expectedErrors: {
           crn: '',
           confirmCrn: 'Error: The CRNs do not match'
         }
       }
-    ])('when a user provides wrong data then returns 400 and displays an error', async (testCase) => {
+    ])('when wrong $payload then expect 400 and $expectedErrors', async (testCase) => {
       const options = {
         method: 'POST',
         url: URL,
         payload: { crumb, ...testCase.payload },
-        auth,
         headers: { cookie: `crumb=${crumb}` }
       }
 
@@ -124,8 +177,8 @@ describe('Farmer apply "Enter your CRN" page', () => {
       const $ = cheerio.load(res.payload)
 
       expect(res.statusCode).toBe(400)
-      expect($('#crn-error').text().trim()).toEqual(testCase.expectedError.crn)
-      expect($('#confirmCrn-error').text().trim()).toEqual(testCase.expectedError.confirmCrn)
+      expect($('#crn-error').text().trim()).toEqual(testCase.expectedErrors.crn)
+      expect($('#confirmCrn-error').text().trim()).toEqual(testCase.expectedErrors.confirmCrn)
     })
   })
 })

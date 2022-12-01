@@ -1,9 +1,9 @@
-const session = require('../session')
-const { crn: crnKey } = require('../session/keys').registerYourInterestData
+const session = require('../../session')
+const sessionKeys = require('../../session/keys')
 const Joi = require('joi')
-const urlPrefix = require('../config/index').urlPrefix
-const callChargesUri = require('../config/index').callChargesUri
-const ruralPaymentsEmail = require('../config/index').ruralPaymentsEmail
+const urlPrefix = require('../../config/index').urlPrefix
+const callChargesUri = require('../../config/index').callChargesUri
+const ruralPaymentsEmail = require('../../config/index').ruralPaymentsEmail
 
 const ERROR_MESSAGE = {
   enterYourCrnNumber: 'Enter a CRN',
@@ -21,8 +21,15 @@ module.exports = [
     options: {
       auth: false,
       handler: async (request, h) => {
-        const crn = session.getRegisterYourInterestData(request, crnKey)
-        return h.view('enter-your-crn', { callChargesUri, ruralPaymentsEmail, crn })
+        return h.view(
+          'register-your-interest/enter-your-crn',
+          {
+            callChargesUri,
+            ruralPaymentsEmail,
+            crn: session.getRegisterYourInterestData(request, sessionKeys.registerYourInterestData.crn),
+            confirmCrn: session.getRegisterYourInterestData(request, sessionKeys.registerYourInterestData.confirmCrn)
+          }
+        )
       }
     }
   },
@@ -33,13 +40,16 @@ module.exports = [
       auth: false,
       validate: {
         payload: Joi.object({
-          crn: Joi.string().trim().min(10).max(10).required()
+          crn: Joi
+            .string()
+            .trim()
+            .regex(/^\d{10}$/)
+            .required()
             .messages({
               'any.required': ERROR_MESSAGE.enterYourCrnNumber,
               'string.base': ERROR_MESSAGE.enterYourCrnNumber,
               'string.empty': ERROR_MESSAGE.enterYourCrnNumber,
-              'string.max': ERROR_MESSAGE.enterCrnNumberThatHas10Digits,
-              'string.min': ERROR_MESSAGE.enterCrnNumberThatHas10Digits
+              'string.pattern.base': ERROR_MESSAGE.enterCrnNumberThatHas10Digits
             }),
           confirmCrn: Joi.alternatives().conditional('confirmCrn', { is: Joi.string().trim().required(), then: Joi.equal(Joi.ref('crn')), otherwise: Joi.string().trim().required() })
             .messages({
@@ -53,11 +63,20 @@ module.exports = [
           const errorMessages = error
             .details
             .reduce((acc, e) => ({ ...acc, [e.context.label]: { text: e.message } }), {})
-          return h.view('enter-your-crn', { ...request.payload, errorMessages }).code(400).takeover()
+          return h.view('register-your-interest/enter-your-crn', { ...request.payload, errorMessages }).code(400).takeover()
         }
       },
       handler: async (request, h) => {
-        session.setRegisterYourInterestData(request, crnKey, request.payload[crnKey])
+        session.setRegisterYourInterestData(
+          request,
+          sessionKeys.registerYourInterestData.crn,
+          request.payload[sessionKeys.registerYourInterestData.crn]
+        )
+        session.setRegisterYourInterestData(
+          request,
+          sessionKeys.registerYourInterestData.confirmCrn,
+          request.payload[sessionKeys.registerYourInterestData.confirmCrn]
+        )
         return h.redirect('enter-your-sbi', { callChargesUri, ruralPaymentsEmail })
       }
     }

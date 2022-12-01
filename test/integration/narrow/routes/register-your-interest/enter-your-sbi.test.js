@@ -1,8 +1,8 @@
 const { when, resetAllWhenMocks } = require('jest-when')
 const cheerio = require('cheerio')
-const getCrumbs = require('../../../utils/get-crumbs')
-const { serviceName, urlPrefix } = require('../../../../app/config')
-const expectPhaseBanner = require('../../../utils/phase-banner-expect')
+const getCrumbs = require('../../../../utils/get-crumbs')
+const { serviceName, urlPrefix } = require('../../../../../app/config')
+const expectPhaseBanner = require('../../../../utils/phase-banner-expect')
 
 describe('Farmer apply "Enter your SBI" page', () => {
   let session
@@ -11,8 +11,8 @@ describe('Farmer apply "Enter your SBI" page', () => {
     jest.resetAllMocks()
     resetAllWhenMocks()
 
-    session = require('../../../../app/session')
-    jest.mock('../../../../app/session')
+    session = require('../../../../../app/session')
+    jest.mock('../../../../../app/session')
   })
 
   describe('GET', () => {
@@ -25,6 +25,10 @@ describe('Farmer apply "Enter your SBI" page', () => {
       when(session.getRegisterYourInterestData)
         .calledWith(expect.anything(), 'sbi')
         .mockReturnValue(EXPECTED_SBI)
+      const EXPECTED_CONFIRM_SBI = '012345678'
+      when(session.getRegisterYourInterestData)
+        .calledWith(expect.anything(), 'confirmSbi')
+        .mockReturnValue(EXPECTED_CONFIRM_SBI)
 
       const res = await global.__SERVER__.inject(options)
       const $ = cheerio.load(res.payload)
@@ -32,13 +36,13 @@ describe('Farmer apply "Enter your SBI" page', () => {
       expect(res.statusCode).toBe(200)
       expect($('.govuk-fieldset__legend--l').text().trim()).toEqual('Enter the single business identifier (SBI) number')
       expect($('#sbi').attr('value')).toEqual(EXPECTED_SBI)
+      expect($('#confirmSbi').attr('value')).toEqual(EXPECTED_CONFIRM_SBI)
       expect($('title').text()).toEqual(serviceName)
       expectPhaseBanner.ok($)
     })
   })
 
   describe('POST', () => {
-    const auth = { credentials: { reference: '1111', sbi: '111111111' }, strategy: 'cookie' }
     let crumb
 
     beforeEach(async () => {
@@ -52,31 +56,52 @@ describe('Farmer apply "Enter your SBI" page', () => {
           confirmSbi: '123456789'
         }
       }
-    ])('when a user provides correct data then returns 302 and redirects to "Enter your email address" page', async (testCase) => {
+    ])('when proper $payload then expect 302 and redirect to "Enter your email address" page', async (testCase) => {
       const options = {
         method: 'POST',
         url: `${urlPrefix}/register-your-interest/enter-your-sbi`,
         payload: { crumb, ...testCase.payload },
-        auth,
         headers: { cookie: `crumb=${crumb}` }
       }
 
       const res = await global.__SERVER__.inject(options)
 
       expect(res.statusCode).toBe(302)
-      expect(res.headers.location).toEqual('enter-your-email')
-
+      expect(res.headers.location).toEqual('enter-your-email-address')
       expect(session.setRegisterYourInterestData).toHaveBeenCalledWith(
         expect.anything(),
         'sbi',
         testCase.payload.sbi
+      )
+      expect(session.setRegisterYourInterestData).toHaveBeenCalledWith(
+        expect.anything(),
+        'confirmSbi',
+        testCase.payload.confirmSbi
       )
     })
 
     test.each([
       {
         payload: {},
-        expectedError: {
+        expectedErrors: {
+          sbi: 'Error: Enter your SBI number',
+          confirmSbi: 'Error: Confirm your SBI number'
+        }
+      },
+      {
+        payload: {
+          sbi: ''
+        },
+        expectedErrors: {
+          sbi: 'Error: Enter your SBI number',
+          confirmSbi: 'Error: Confirm your SBI number'
+        }
+      },
+      {
+        payload: {
+          sbi: 1
+        },
+        expectedErrors: {
           sbi: 'Error: Enter your SBI number',
           confirmSbi: 'Error: Confirm your SBI number'
         }
@@ -85,7 +110,16 @@ describe('Farmer apply "Enter your SBI" page', () => {
         payload: {
           sbi: '12345'
         },
-        expectedError: {
+        expectedErrors: {
+          sbi: 'Error: Enter an SBI number that has 9 digits',
+          confirmSbi: 'Error: Confirm your SBI number'
+        }
+      },
+      {
+        payload: {
+          sbi: 'ABCDEFGHI'
+        },
+        expectedErrors: {
           sbi: 'Error: Enter an SBI number that has 9 digits',
           confirmSbi: 'Error: Confirm your SBI number'
         }
@@ -94,7 +128,27 @@ describe('Farmer apply "Enter your SBI" page', () => {
         payload: {
           sbi: '123456789'
         },
-        expectedError: {
+        expectedErrors: {
+          sbi: '',
+          confirmSbi: 'Error: Confirm your SBI number'
+        }
+      },
+      {
+        payload: {
+          sbi: '123456789',
+          confirmSbi: ''
+        },
+        expectedErrors: {
+          sbi: '',
+          confirmSbi: 'Error: Confirm your SBI number'
+        }
+      },
+      {
+        payload: {
+          sbi: '123456789',
+          confirmSbi: 1
+        },
+        expectedErrors: {
           sbi: '',
           confirmSbi: 'Error: Confirm your SBI number'
         }
@@ -104,17 +158,16 @@ describe('Farmer apply "Enter your SBI" page', () => {
           sbi: '123456789',
           confirmSbi: '987654321'
         },
-        expectedError: {
+        expectedErrors: {
           sbi: '',
           confirmSbi: 'Error: SBI numbers do not match'
         }
       }
-    ])('when a user provides wrong data then returns 400 and displays an error', async (testCase) => {
+    ])('when wrong $payload then expect 400 and $expectedErrors', async (testCase) => {
       const options = {
         method: 'POST',
         url: `${urlPrefix}/register-your-interest/enter-your-sbi`,
         payload: { crumb, ...testCase.payload },
-        auth,
         headers: { cookie: `crumb=${crumb}` }
       }
 
@@ -122,8 +175,8 @@ describe('Farmer apply "Enter your SBI" page', () => {
       const $ = cheerio.load(res.payload)
 
       expect(res.statusCode).toBe(400)
-      expect($('#sbi-error').text().trim()).toEqual(testCase.expectedError.sbi)
-      expect($('#confirmSbi-error').text().trim()).toEqual(testCase.expectedError.confirmSbi)
+      expect($('#sbi-error').text().trim()).toEqual(testCase.expectedErrors.sbi)
+      expect($('#confirmSbi-error').text().trim()).toEqual(testCase.expectedErrors.confirmSbi)
     })
   })
 })
