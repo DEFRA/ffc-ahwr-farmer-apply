@@ -6,7 +6,7 @@ class FarmerOrgReview extends Pages {
   get orgNoRadioOption () { return browser.$('#confirmCheckDetails-2') }
 
   open (token, email) {
-    super.open('/verify-login?token=' + token + '&email=' + email)
+    super.open('/apply/verify-login?token=' + token + '&email=' + email)
     browser.pause(30000)
   }
 

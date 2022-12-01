@@ -6,7 +6,7 @@ const Page = require('./page')
 class LandingPage extends Page {
   get farmerApplyBtn () { return browser.$('//a[contains(.,\'Farmer Apply\')]') }
   open () {
-    return super.open('/')
+    return super.open('/apply/start')
   }
 
   async gotoFarmerApply () {
