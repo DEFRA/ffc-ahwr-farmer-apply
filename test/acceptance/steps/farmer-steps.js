@@ -29,7 +29,6 @@ Then('I click on farmer Apply', async () => {
   await LandingPage.gotoFarmerApply()
 })
 Then('I click on startNow', async () => {
-  await FarmerApply.open()
   await FarmerApply.clickStartNow()
 })
 
@@ -72,7 +71,7 @@ Then('I check the terms and condition checkbox and click submit application', as
   await TermsPage.selectAgreeRadioOption()
   await TermsPage.submit()
   await browser.pause(5000)
-  wdioExpect(await DeclarationPage.applicationSuccessful).toHaveTextContaining('Application successful')
+  wdioExpect(await DeclarationPage.applicationSuccessful).toHaveTextContaining('Application complete')
 })
 
 Then('I select reject offer',async ()=>{
