@@ -5,6 +5,7 @@ const callChargesUri = require('../../config/index').callChargesUri
 const ruralPaymentsEmail = require('../../config/index').ruralPaymentsEmail
 const sendEmail = require('../../lib/email/send-email')
 const { registerYourInterest } = require('../../config').notifyConfig.emailTemplates
+const { sendRegisterYourInterestMessage } = require('../../messaging/register-your-interest')
 
 const PATH = `${urlPrefix}/register-your-interest/check-your-answers-and-register-your-interest`
 
@@ -67,9 +68,11 @@ module.exports = [
       auth: false,
       handler: async (request, h) => {
         const email = session.getRegisterYourInterestData(request, sessionKeys.registerYourInterestData.emailAddress)
+        const sbi = session.getRegisterYourInterestData(request, sessionKeys.registerYourInterestData.sbi)
+        const crn = session.getRegisterYourInterestData(request, sessionKeys.registerYourInterestData.crn)
         sendEmail(registerYourInterest, email)
+        sendRegisterYourInterestMessage(sbi, crn, email, request.yar.id)
         session.clear(request)
-        // todo place message on queue
         return h.redirect('registration-complete', { callChargesUri, ruralPaymentsEmail })
       }
     }
