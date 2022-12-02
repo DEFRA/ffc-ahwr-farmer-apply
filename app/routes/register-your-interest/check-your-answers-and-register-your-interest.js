@@ -67,7 +67,7 @@ module.exports = [
       auth: false,
       handler: async (request, h) => {
         const email = session.getRegisterYourInterestData(request, sessionKeys.registerYourInterestData.emailAddress)
-        sendEmail(registerYourInterest , email)
+        sendEmail(registerYourInterest, email)
         session.clear(request)
         // todo place message on queue
         return h.redirect('registration-complete', { callChargesUri, ruralPaymentsEmail })

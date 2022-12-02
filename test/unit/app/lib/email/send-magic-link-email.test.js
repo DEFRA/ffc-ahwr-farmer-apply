@@ -1,6 +1,6 @@
 const sendMagicLinkEmail = require('../../../../../app/lib/email/send-magic-link-email')
 const { serviceUri } = require('../../../../../app/config')
-const { applyLogin } = require('../../../../../app/config').notifyConfig
+const { applyLogin } = require('../../../../../app/config').notifyConfig.emailTemplates
 const { farmerApply } = require('../../../../../app/constants/user-types')
 
 const getToken = require('../../../../../app/lib/auth/get-token')
