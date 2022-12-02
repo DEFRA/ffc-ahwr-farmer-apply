@@ -87,7 +87,7 @@ describe('Farmer apply "Check your answers and register your interest" page', ()
 
       when(sendEmail)
         .calledWith(expect.anything(), EXPECTED_EMAIL_ADDRESS)
-        .mockReturnValue(true)
+        .mockResolvedValue(true)
 
       const res = await global.__SERVER__.inject(options)
 
