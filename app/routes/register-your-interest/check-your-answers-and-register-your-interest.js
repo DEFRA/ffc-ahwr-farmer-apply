@@ -23,7 +23,7 @@ module.exports = [
         ])) {
           session.clear(request)
           return h.redirect(
-            '/apply/register-your-interest',
+            `${urlPrefix}/register-your-interest`,
             {
               ruralPaymentsLoginUri,
               callChargesUri,

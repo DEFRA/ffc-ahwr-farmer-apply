@@ -109,7 +109,7 @@ describe('session', () => {
   })
 
   test('doesRegisterYourInterestDataLackAnyOf returns true if the session is lacking any of the given keys', () => {
-    let entries = {}
+    const entries = {}
     const yarMock = {
       get: jest.fn((key) => {
         return entries[key]

@@ -62,7 +62,7 @@ function setRegisterYourInterestData (request, key, value) {
   set(request, entries.registerYourInterestData, key, value)
 }
 
-function doesRegisterYourInterestDataLackAnyOf(request, keys) {
+function doesRegisterYourInterestDataLackAnyOf (request, keys) {
   return lacksAny(request, entries.registerYourInterestData, keys)
 }
 
