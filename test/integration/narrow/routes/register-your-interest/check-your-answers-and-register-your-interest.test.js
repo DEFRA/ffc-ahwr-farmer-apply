@@ -28,8 +28,8 @@ describe('Farmer apply "Check your answers and register your interest" page', ()
         method: 'GET',
         url: URL
       }
-      when(session.doesRegisterYourInterestDataLackAnyOf)
-        .calledWith(expect.anything(), [
+      when(session.lacksAny)
+        .calledWith(expect.anything(), session.entries.registerYourInterestData, [
           'crn',
           'sbi',
           'emailAddress'
@@ -75,8 +75,8 @@ describe('Farmer apply "Check your answers and register your interest" page', ()
         method: 'GET',
         url: URL
       }
-      when(session.doesRegisterYourInterestDataLackAnyOf)
-        .calledWith(expect.anything(), [
+      when(session.lacksAny)
+        .calledWith(expect.anything(), session.entries.registerYourInterestData, [
           'crn',
           'sbi',
           'emailAddress'

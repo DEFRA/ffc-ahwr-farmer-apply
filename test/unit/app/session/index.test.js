@@ -3,7 +3,7 @@ const session = require('../../../../app/session')
 describe('session', () => {
   const applicationSectionKey = 'application'
   const farmerApplyDataSectionKey = 'farmerApplyData'
-  const registerYourInterestDataSectionKey = 'registerYourInterestData'
+  const registerYourInterestDataSectionKey = session.entries.registerYourInterestData
 
   const value = 'value'
   const objectValue = { key: value }
@@ -108,7 +108,7 @@ describe('session', () => {
     expect(requestSetMock.yar.set).toHaveBeenCalledWith(expectedSectionKey, { [key]: objectValue })
   })
 
-  test('doesRegisterYourInterestDataLackAnyOf returns true if the session is lacking any of the given keys', () => {
+  test.each(setFunctionsToTest)('given some $func keys lacksAny function returns true if the session is lacking any of the given keys', ({ func, expectedSectionKey }) => {
     const entries = {}
     const yarMock = {
       get: jest.fn((key) => {
@@ -120,14 +120,14 @@ describe('session', () => {
     }
     const requestSetMock = { yar: yarMock }
 
-    session.setRegisterYourInterestData(requestSetMock, 'key1', 'value1')
-    session.setRegisterYourInterestData(requestSetMock, 'key2', 'value2')
+    session[func](requestSetMock, 'key1', 'value1')
+    session[func](requestSetMock, 'key2', 'value2')
 
-    expect(session.doesRegisterYourInterestDataLackAnyOf(requestSetMock, [
+    expect(session.lacksAny(requestSetMock, expectedSectionKey, [
       'key1',
       'key2'
     ])).toBeFalsy()
-    expect(session.doesRegisterYourInterestDataLackAnyOf(requestSetMock, [
+    expect(session.lacksAny(requestSetMock, expectedSectionKey, [
       'key1',
       'key2',
       'key3'

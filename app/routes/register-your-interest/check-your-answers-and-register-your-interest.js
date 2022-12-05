@@ -16,7 +16,7 @@ module.exports = [
     options: {
       auth: false,
       handler: async (request, h) => {
-        if (session.doesRegisterYourInterestDataLackAnyOf(request, [
+        if (session.lacksAny(request, session.entries.registerYourInterestData, [
           sessionKeys.registerYourInterestData.crn,
           sessionKeys.registerYourInterestData.sbi,
           sessionKeys.registerYourInterestData.emailAddress

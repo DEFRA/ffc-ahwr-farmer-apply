@@ -62,17 +62,14 @@ function setRegisterYourInterestData (request, key, value) {
   set(request, entries.registerYourInterestData, key, value)
 }
 
-function doesRegisterYourInterestDataLackAnyOf (request, keys) {
-  return lacksAny(request, entries.registerYourInterestData, keys)
-}
-
 module.exports = {
+  entries,
+  lacksAny,
   clear,
   getApplication,
   getFarmerApplyData,
   setApplication,
   setFarmerApplyData,
   getRegisterYourInterestData,
-  setRegisterYourInterestData,
-  doesRegisterYourInterestDataLackAnyOf
+  setRegisterYourInterestData
 }
