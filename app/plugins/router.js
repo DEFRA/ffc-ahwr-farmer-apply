@@ -21,18 +21,22 @@ const routes = [].concat(
   require('../routes/vet-technical'),
 )
 
+const registerYourInterestRoutes = [].concat(
+  require('../routes/register-your-interest/register-your-interest'),
+  require('../routes/register-your-interest/enter-your-crn'),
+  require('../routes/register-your-interest/enter-your-sbi'),
+  require('../routes/register-your-interest/enter-your-email-address'),
+  require('../routes/register-your-interest/check-your-answers-and-register-your-interest'),
+  require('../routes/register-your-interest/registration-complete')
+)
+
 module.exports = {
   plugin: {
     name: 'router',
     register: (server, _) => {
       server.route(routes)
       if (config.registerYourInterest.enabled === true) { 
-        server.route(require('../routes/register-your-interest/register-your-interest'))
-        server.route(require('../routes/register-your-interest/enter-your-crn'))
-        server.route(require('../routes/register-your-interest/enter-your-sbi'))
-        server.route(require('../routes/register-your-interest/enter-your-email-address'))
-        server.route(require('../routes/register-your-interest/check-your-answers-and-register-your-interest'))
-        server.route(require('../routes/register-your-interest/registration-complete'))
+        server.route(registerYourInterestRoutes)
       }
     }
   }
