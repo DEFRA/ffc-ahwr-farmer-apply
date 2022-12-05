@@ -59,6 +59,7 @@ container:
   claimServiceUri:
   testToken:
   urlPrefix: /apply
+  registerYourInterestEnabled:
 
 ingress:
   class: nginx

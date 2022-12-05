@@ -25,4 +25,5 @@ data:
   SERVICE_URI: {{ quote .Values.container.serviceUri }}
   CLAIM_SERVICE_URI: {{ quote .Values.container.claimServiceUri }}
   URL_PREFIX: {{ quote .Values.container.urlPrefix }}
+  REGISTER_YOUR_INTEREST_ENABLED: {{ quote .Values.container.registerYourInterestEnabled }}
 {{- end -}}
