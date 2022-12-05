@@ -8,6 +8,16 @@ const entries = {
   registerYourInterestData: 'registerYourInterestData'
 }
 
+function lacksAny (request, entryKey, keys) {
+  let result = false
+  keys.forEach(key => {
+    if (!get(request, entryKey, key)) {
+      result = true
+    }
+  })
+  return result
+}
+
 function set (request, entryKey, key, value) {
   const entryValue = request.yar?.get(entryKey) || {}
   entryValue[key] = typeof (value) === 'string' ? value.trim() : value
@@ -52,6 +62,10 @@ function setRegisterYourInterestData (request, key, value) {
   set(request, entries.registerYourInterestData, key, value)
 }
 
+function doesRegisterYourInterestDataLackAnyOf(request, keys) {
+  return lacksAny(request, entries.registerYourInterestData, keys)
+}
+
 module.exports = {
   clear,
   getApplication,
@@ -59,5 +73,6 @@ module.exports = {
   setApplication,
   setFarmerApplyData,
   getRegisterYourInterestData,
-  setRegisterYourInterestData
+  setRegisterYourInterestData,
+  doesRegisterYourInterestDataLackAnyOf
 }

@@ -107,4 +107,30 @@ describe('session', () => {
     expect(requestSetMock.yar.set).toHaveBeenCalledTimes(1)
     expect(requestSetMock.yar.set).toHaveBeenCalledWith(expectedSectionKey, { [key]: objectValue })
   })
+
+  test('doesRegisterYourInterestDataLackAnyOf returns true if the session is lacking any of the given keys', () => {
+    let entries = {}
+    const yarMock = {
+      get: jest.fn((key) => {
+        return entries[key]
+      }),
+      set: jest.fn((key, value) => {
+        entries[key] = value
+      })
+    }
+    const requestSetMock = { yar: yarMock }
+
+    session.setRegisterYourInterestData(requestSetMock, 'key1', 'value1')
+    session.setRegisterYourInterestData(requestSetMock, 'key2', 'value2')
+
+    expect(session.doesRegisterYourInterestDataLackAnyOf(requestSetMock, [
+      'key1',
+      'key2'
+    ])).toBeFalsy()
+    expect(session.doesRegisterYourInterestDataLackAnyOf(requestSetMock, [
+      'key1',
+      'key2',
+      'key3'
+    ])).toBeTruthy()
+  })
 })

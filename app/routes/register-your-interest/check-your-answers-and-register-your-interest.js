@@ -1,6 +1,7 @@
 const session = require('../../session')
 const sessionKeys = require('../../session/keys')
 const urlPrefix = require('../../config/index').urlPrefix
+const ruralPaymentsLoginUri = require('../../config/index').ruralPaymentsLoginUri
 const callChargesUri = require('../../config/index').callChargesUri
 const ruralPaymentsEmail = require('../../config/index').ruralPaymentsEmail
 const sendEmail = require('../../lib/email/send-email')
@@ -15,6 +16,21 @@ module.exports = [
     options: {
       auth: false,
       handler: async (request, h) => {
+        if (session.doesRegisterYourInterestDataLackAnyOf(request, [
+          sessionKeys.registerYourInterestData.crn,
+          sessionKeys.registerYourInterestData.sbi,
+          sessionKeys.registerYourInterestData.emailAddress
+        ])) {
+          session.clear(request)
+          return h.redirect(
+            '/apply/register-your-interest',
+            {
+              ruralPaymentsLoginUri,
+              callChargesUri,
+              ruralPaymentsEmail
+            }
+          )
+        }
         const rows = [
           {
             key: { text: 'Customer reference number' },

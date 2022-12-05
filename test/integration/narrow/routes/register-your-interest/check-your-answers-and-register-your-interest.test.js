@@ -11,12 +11,15 @@ describe('Farmer apply "Check your answers and register your interest" page', ()
   let sendEmail
 
   beforeAll(async () => {
-    jest.resetAllMocks()
-    resetAllWhenMocks()
     session = require('../../../../../app/session')
     jest.mock('../../../../../app/session')
     sendEmail = require('../../../../../app/lib/email/send-email')
     jest.mock('../../../../../app/lib/email/send-email')
+  })
+
+  beforeEach(async () => {
+    jest.resetAllMocks()
+    resetAllWhenMocks()
   })
 
   describe('GET', () => {
@@ -25,6 +28,13 @@ describe('Farmer apply "Check your answers and register your interest" page', ()
         method: 'GET',
         url: URL
       }
+      when(session.doesRegisterYourInterestDataLackAnyOf)
+        .calledWith(expect.anything(), [
+          'crn',
+          'sbi',
+          'emailAddress'
+        ])
+        .mockReturnValue(false)
       const EXPECTED_CRN = '0123456789'
       const EXPECTED_SBI = '123456789'
       const EXPECTED_EMAIL_ADDRESS = 'name@example.com'
@@ -58,6 +68,27 @@ describe('Farmer apply "Check your answers and register your interest" page', ()
 
       expect($('title').text()).toEqual(serviceName)
       expectPhaseBanner.ok($)
+    })
+
+    test('clears a session and gets back to the start of the journey if no crn or sbi or emailAddress is found in the session', async () => {
+      const options = {
+        method: 'GET',
+        url: URL
+      }
+      when(session.doesRegisterYourInterestDataLackAnyOf)
+        .calledWith(expect.anything(), [
+          'crn',
+          'sbi',
+          'emailAddress'
+        ])
+        .mockReturnValue(true)
+
+      const res = await global.__SERVER__.inject(options)
+      const $ = cheerio.load(res.payload)
+
+      expect(session.clear).toHaveBeenCalledTimes(1)
+      expect(res.statusCode).toBe(302)
+      expect(res.headers.location).toEqual(`${urlPrefix}/register-your-interest`)
     })
   })
 
