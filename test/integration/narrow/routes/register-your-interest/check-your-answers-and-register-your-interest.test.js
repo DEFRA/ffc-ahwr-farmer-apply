@@ -84,7 +84,6 @@ describe('Farmer apply "Check your answers and register your interest" page', ()
         .mockReturnValue(true)
 
       const res = await global.__SERVER__.inject(options)
-      const $ = cheerio.load(res.payload)
 
       expect(session.clear).toHaveBeenCalledTimes(1)
       expect(res.statusCode).toBe(302)
