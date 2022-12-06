@@ -28,7 +28,7 @@ const mqSchema = Joi.object({
     address: process.env.REGISTER_YOUR_INTEREST_REQUEST_QUEUE_ADDRESS,
     type: 'queue',
     messageType: `${msgTypePrefix}.register.your.interest.request`
-  },
+  }
 })
 
 const mqConfig = {
