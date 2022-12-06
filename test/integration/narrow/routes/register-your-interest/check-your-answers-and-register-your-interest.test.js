@@ -2,15 +2,27 @@ const { when, resetAllWhenMocks } = require('jest-when')
 const cheerio = require('cheerio')
 const getCrumbs = require('../../../../utils/get-crumbs')
 const expectPhaseBanner = require('../../../../utils/phase-banner-expect')
-const { serviceName, urlPrefix } = require('../../../../../app/config')
+const mockConfig = require('../../../../../app/config')
 
-const URL = `${urlPrefix}/register-your-interest/check-your-answers-and-register-your-interest`
+const URL = `${mockConfig.urlPrefix}/register-your-interest/check-your-answers-and-register-your-interest`
 
 describe('Farmer apply "Check your answers and register your interest" page', () => {
+  const MOCK_EMAIL_TEMPLATE_ID = '4ba7a2d5-4d23-4e30-b0e5-c3c1c5b655e7'
+
   let session
   let sendEmail
 
   beforeAll(async () => {
+    jest.mock('../../../../../app/config', () => ({
+      ...mockConfig,
+      notifyConfig: {
+        ...mockConfig.notifyConfig,
+        emailTemplates: {
+          ...mockConfig.notifyConfig.emailTemplates,
+          registerYourInterest: MOCK_EMAIL_TEMPLATE_ID
+        }
+      }
+    }))
     session = require('../../../../../app/session')
     jest.mock('../../../../../app/session')
     sendEmail = require('../../../../../app/lib/email/send-email')
@@ -56,17 +68,17 @@ describe('Farmer apply "Check your answers and register your interest" page', ()
 
       expect($('.govuk-summary-list__row').first().find('.govuk-summary-list__key').text().trim()).toEqual('Customer reference number')
       expect($('.govuk-summary-list__row').first().find('.govuk-summary-list__value').text().trim()).toEqual(EXPECTED_CRN)
-      expect($('.govuk-summary-list__row').first().find('.govuk-link').attr('href')).toEqual(`${urlPrefix}/register-your-interest/enter-your-crn`)
+      expect($('.govuk-summary-list__row').first().find('.govuk-link').attr('href')).toEqual(`${mockConfig.urlPrefix}/register-your-interest/enter-your-crn`)
 
       expect($('.govuk-summary-list__row').next().first().find('.govuk-summary-list__key').text().trim()).toEqual('Single business identifier number')
       expect($('.govuk-summary-list__row').next().first().find('.govuk-summary-list__value').text().trim()).toEqual(EXPECTED_SBI)
-      expect($('.govuk-summary-list__row').next().first().find('.govuk-link').attr('href')).toEqual(`${urlPrefix}/register-your-interest/enter-your-sbi`)
+      expect($('.govuk-summary-list__row').next().first().find('.govuk-link').attr('href')).toEqual(`${mockConfig.urlPrefix}/register-your-interest/enter-your-sbi`)
 
       expect($('.govuk-summary-list__row').next().next().first().find('.govuk-summary-list__key').text().trim()).toEqual('Email address')
       expect($('.govuk-summary-list__row').next().next().first().find('.govuk-summary-list__value').text().trim()).toEqual(EXPECTED_EMAIL_ADDRESS)
-      expect($('.govuk-summary-list__row').next().next().first().find('.govuk-link').attr('href')).toEqual(`${urlPrefix}/register-your-interest/enter-your-email-address`)
+      expect($('.govuk-summary-list__row').next().next().first().find('.govuk-link').attr('href')).toEqual(`${mockConfig.urlPrefix}/register-your-interest/enter-your-email-address`)
 
-      expect($('title').text()).toEqual(serviceName)
+      expect($('title').text()).toEqual(mockConfig.serviceName)
       expectPhaseBanner.ok($)
     })
 
@@ -87,7 +99,7 @@ describe('Farmer apply "Check your answers and register your interest" page', ()
 
       expect(session.clear).toHaveBeenCalledTimes(1)
       expect(res.statusCode).toBe(302)
-      expect(res.headers.location).toEqual(`${urlPrefix}/register-your-interest`)
+      expect(res.headers.location).toEqual(`${mockConfig.urlPrefix}/register-your-interest`)
     })
   })
 
@@ -110,8 +122,6 @@ describe('Farmer apply "Check your answers and register your interest" page', ()
       }
 
       const EXPECTED_EMAIL_ADDRESS = 'name@example.com'
-      const EXPECTED_TEMPLATED_ID = 'd4d9f03d-fa93-4ca7-b404-be93559af657'
-
       when(session.getRegisterYourInterestData)
         .calledWith(expect.anything(), 'emailAddress')
         .mockReturnValue(EXPECTED_EMAIL_ADDRESS)
@@ -120,7 +130,7 @@ describe('Farmer apply "Check your answers and register your interest" page', ()
 
       expect(session.clear).toBeCalledTimes(1)
       expect(sendEmail).toHaveBeenCalledWith(
-        EXPECTED_TEMPLATED_ID,
+        MOCK_EMAIL_TEMPLATE_ID,
         EXPECTED_EMAIL_ADDRESS
       )
       expect(res.statusCode).toBe(302)
