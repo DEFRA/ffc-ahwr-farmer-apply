@@ -71,7 +71,7 @@ module.exports = [
         const sbi = session.getRegisterYourInterestData(request, sessionKeys.registerYourInterestData.sbi)
         const crn = session.getRegisterYourInterestData(request, sessionKeys.registerYourInterestData.crn)
         await sendEmail(registerYourInterest, emailAddress)
-        sendRegisterYourInterestMessage(sbi, crn, email, request.yar.id)
+        await sendRegisterYourInterestMessage(sbi, crn, emailAddress, request.yar.id)
         session.clear(request)
         return h.redirect('registration-complete', { callChargesUri, ruralPaymentsEmail })
       }
