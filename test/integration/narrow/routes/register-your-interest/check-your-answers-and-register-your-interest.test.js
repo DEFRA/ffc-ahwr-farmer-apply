@@ -80,19 +80,19 @@ describe('Farmer apply "Check your answers and register your interest" page', ()
       }
 
       const EXPECTED_EMAIL_ADDRESS = 'name@example.com'
+      const EXPECTED_TEMPLATED_ID = 'd4d9f03d-fa93-4ca7-b404-be93559af657'
 
       when(session.getRegisterYourInterestData)
         .calledWith(expect.anything(), 'emailAddress')
         .mockReturnValue(EXPECTED_EMAIL_ADDRESS)
 
-      when(sendEmail)
-        .calledWith(expect.anything(), EXPECTED_EMAIL_ADDRESS)
-        .mockResolvedValue(true)
-
       const res = await global.__SERVER__.inject(options)
 
       expect(session.clear).toBeCalledTimes(1)
-      expect(sendEmail).toBeCalledTimes(1)
+      expect(sendEmail).toHaveBeenCalledWith(
+        EXPECTED_TEMPLATED_ID,
+        EXPECTED_EMAIL_ADDRESS
+      )
       expect(res.statusCode).toBe(302)
       expect(res.headers.location).toEqual('registration-complete')
     })

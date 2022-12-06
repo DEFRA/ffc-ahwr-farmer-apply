@@ -67,10 +67,10 @@ module.exports = [
     options: {
       auth: false,
       handler: async (request, h) => {
-        const email = session.getRegisterYourInterestData(request, sessionKeys.registerYourInterestData.emailAddress)
+        const emailAddress = session.getRegisterYourInterestData(request, sessionKeys.registerYourInterestData.emailAddress)
         const sbi = session.getRegisterYourInterestData(request, sessionKeys.registerYourInterestData.sbi)
         const crn = session.getRegisterYourInterestData(request, sessionKeys.registerYourInterestData.crn)
-        sendEmail(registerYourInterest, email)
+        await sendEmail(registerYourInterest, emailAddress)
         sendRegisterYourInterestMessage(sbi, crn, email, request.yar.id)
         session.clear(request)
         return h.redirect('registration-complete', { callChargesUri, ruralPaymentsEmail })
