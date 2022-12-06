@@ -5,7 +5,7 @@ const expectLoginPage = require('../../../utils/login-page-expect')
 const pageExpects = require('../../../utils/page-expects')
 const expectPhaseBanner = require('../../../utils/phase-banner-expect')
 const { serviceUri } = require('../../../../app/config')
-const { templateIdFarmerApplyLogin } = require('../../../../app/config').notifyConfig
+const { applyLogin } = require('../../../../app/config').notifyConfig.emailTemplates
 const { farmerApply } = require('../../../../app/constants/user-types')
 const uuidRegex = require('../../../../app/config/uuid-regex')
 const { urlPrefix } = require('../../../../app/config')
@@ -164,7 +164,7 @@ describe('FarmerApply application login page test', () => {
 
       expect(res.statusCode).toBe(200)
       expect(sendEmail).toHaveBeenCalledWith(
-        templateIdFarmerApplyLogin,
+        applyLogin,
         validEmail,
         expect.objectContaining(
           { personalisation: { magiclink: expect.stringMatching(new RegExp(`${serviceUri}/verify-login\\?token=${uuidRegex}&email=${validEmail}`)) }, reference: expect.stringMatching(new RegExp(uuidRegex)) })

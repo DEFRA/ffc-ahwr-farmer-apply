@@ -49,6 +49,7 @@ container:
   messageQueueHost: namespace.servicebus.windows.net
   notifyApiKey:
   notifyTemplateIdFarmerApplyLogin:
+  notifyTemplateIdFarmerRegisterYourInterest:
   port: 3000
   redisHostname: redis-hostname.default
   redisPartition: ffc-ahwr-farmer-apply
@@ -58,6 +59,7 @@ container:
   claimServiceUri:
   testToken:
   urlPrefix: /apply
+  registerYourInterestEnabled:
 
 ingress:
   class: nginx

@@ -1,6 +1,6 @@
 const sendMagicLinkEmail = require('../../../../../app/lib/email/send-magic-link-email')
 const { serviceUri } = require('../../../../../app/config')
-const { templateIdFarmerApplyLogin } = require('../../../../../app/config').notifyConfig
+const { applyLogin } = require('../../../../../app/config').notifyConfig.emailTemplates
 const { farmerApply } = require('../../../../../app/constants/user-types')
 
 const getToken = require('../../../../../app/lib/auth/get-token')
@@ -48,7 +48,7 @@ describe('Send Magic Link test', () => {
     expect(cacheData[email]).toEqual([token])
     expect(cacheData[token]).toEqual({ email, redirectTo: 'org-review', userType: farmerApply })
     expect(sendEmail).toHaveBeenCalledTimes(1)
-    expect(sendEmail).toHaveBeenCalledWith(templateIdFarmerApplyLogin, email, {
+    expect(sendEmail).toHaveBeenCalledWith(applyLogin, email, {
       personalisation: { magiclink: `${serviceUri}/verify-login?token=${token}&email=${email}` },
       reference: token
     })

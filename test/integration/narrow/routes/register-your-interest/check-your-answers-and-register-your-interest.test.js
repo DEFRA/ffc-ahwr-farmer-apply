@@ -8,12 +8,15 @@ const URL = `${urlPrefix}/register-your-interest/check-your-answers-and-register
 
 describe('Farmer apply "Check your answers and register your interest" page', () => {
   let session
+  let sendEmail
 
   beforeAll(async () => {
     jest.resetAllMocks()
     resetAllWhenMocks()
     session = require('../../../../../app/session')
     jest.mock('../../../../../app/session')
+    sendEmail = require('../../../../../app/lib/email/send-email')
+    jest.mock('../../../../../app/lib/email/send-email')
   })
 
   describe('GET', () => {
@@ -76,9 +79,20 @@ describe('Farmer apply "Check your answers and register your interest" page', ()
         headers: { cookie: `crumb=${crumb}` }
       }
 
+      const EXPECTED_EMAIL_ADDRESS = 'name@example.com'
+      const EXPECTED_TEMPLATED_ID = 'd4d9f03d-fa93-4ca7-b404-be93559af657'
+
+      when(session.getRegisterYourInterestData)
+        .calledWith(expect.anything(), 'emailAddress')
+        .mockReturnValue(EXPECTED_EMAIL_ADDRESS)
+
       const res = await global.__SERVER__.inject(options)
 
       expect(session.clear).toBeCalledTimes(1)
+      expect(sendEmail).toHaveBeenCalledWith(
+        EXPECTED_TEMPLATED_ID,
+        EXPECTED_EMAIL_ADDRESS
+      )
       expect(res.statusCode).toBe(302)
       expect(res.headers.location).toEqual('registration-complete')
     })
