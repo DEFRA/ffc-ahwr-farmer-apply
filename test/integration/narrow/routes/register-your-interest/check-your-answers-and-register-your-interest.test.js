@@ -147,8 +147,7 @@ describe('Farmer apply "Check your answers and register your interest" page', ()
       expect(sendRegisterYourInterestMessage).toHaveBeenCalledWith(
         EXPECTED_SBI,
         EXPECTED_CRN,
-        EXPECTED_EMAIL_ADDRESS,
-        expect.anything()
+        EXPECTED_EMAIL_ADDRESS
       )
 
       expect(res.statusCode).toBe(302)
