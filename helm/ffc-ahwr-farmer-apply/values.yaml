@@ -60,6 +60,7 @@ container:
   testToken:
   urlPrefix: /apply
   registerYourInterestEnabled:
+  registerYourInterestRequestQueueAddress: ffc-ahwr-register-your-interest-request
 
 ingress:
   class: nginx

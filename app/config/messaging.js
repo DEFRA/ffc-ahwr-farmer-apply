@@ -23,7 +23,12 @@ const mqSchema = Joi.object({
     address: process.env.EVENT_QUEUE_ADDRESS,
     type: 'queue'
   },
-  fetchApplicationRequestMsgType: `${msgTypePrefix}.fetch.app.request`
+  fetchApplicationRequestMsgType: `${msgTypePrefix}.fetch.app.request`,
+  registerYourInterestRequestQueue: {
+    address: process.env.REGISTER_YOUR_INTEREST_REQUEST_QUEUE_ADDRESS,
+    type: 'queue',
+    messageType: `${msgTypePrefix}.register.your.interest.request`
+  }
 })
 
 const mqConfig = {
@@ -47,7 +52,12 @@ const mqConfig = {
     address: process.env.EVENT_QUEUE_ADDRESS,
     type: 'queue'
   },
-  fetchApplicationRequestMsgType: `${msgTypePrefix}.fetch.app.request`
+  fetchApplicationRequestMsgType: `${msgTypePrefix}.fetch.app.request`,
+  registerYourInterestRequestQueue: {
+    address: process.env.REGISTER_YOUR_INTEREST_REQUEST_QUEUE_ADDRESS,
+    type: 'queue',
+    messageType: `${msgTypePrefix}.register.your.interest.request`
+  }
 }
 
 const mqResult = mqSchema.validate(mqConfig, {
@@ -63,11 +73,13 @@ const applicationResponseQueue = { ...mqResult.value.messageQueue, ...mqResult.v
 const eventQueue = { ...mqResult.value.messageQueue, ...mqResult.value.eventQueue }
 const fetchApplicationRequestQueue = { ...mqResult.value.messageQueue, ...mqResult.value.fetchApplicationRequestQueue }
 const applicationRequestMsgType = mqResult.value.applicationRequestMsgType
+const registerYourInterestRequestQueue = { ...mqResult.value.messageQueue, ...mqResult.value.registerYourInterestRequestQueue }
 
 module.exports = {
   applicationRequestQueue,
   applicationResponseQueue,
   eventQueue,
   fetchApplicationRequestQueue,
-  applicationRequestMsgType
+  applicationRequestMsgType,
+  registerYourInterestRequestQueue
 }

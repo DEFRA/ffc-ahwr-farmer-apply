@@ -27,6 +27,7 @@ services:
       REDIS_HOSTNAME: redis
       REDIS_PORT: 6379
       REDIS_PASSWORD: ""
+      REGISTER_YOUR_INTEREST_REQUEST_QUEUE_ADDRESS: ${REGISTER_YOUR_INTEREST_REQUEST_QUEUE_ADDRESS:-ffc-ahwr-register-your-interest-request}${MESSAGE_QUEUE_SUFFIX}
       SERVICE_URI: http://localhost:3000/apply
       CLAIM_SERVICE_URI: http://localhost:3004/claim
       TEST_TOKEN: 

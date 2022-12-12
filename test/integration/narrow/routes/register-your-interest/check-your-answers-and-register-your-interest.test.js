@@ -3,7 +3,6 @@ const cheerio = require('cheerio')
 const getCrumbs = require('../../../../utils/get-crumbs')
 const expectPhaseBanner = require('../../../../utils/phase-banner-expect')
 const mockConfig = require('../../../../../app/config')
-
 const URL = `${mockConfig.urlPrefix}/register-your-interest/check-your-answers-and-register-your-interest`
 
 describe('Farmer apply "Check your answers and register your interest" page', () => {
@@ -11,6 +10,7 @@ describe('Farmer apply "Check your answers and register your interest" page', ()
 
   let session
   let sendEmail
+  let sendRegisterYourInterestMessage
 
   beforeAll(async () => {
     jest.mock('../../../../../app/config', () => ({
@@ -27,6 +27,8 @@ describe('Farmer apply "Check your answers and register your interest" page', ()
     jest.mock('../../../../../app/session')
     sendEmail = require('../../../../../app/lib/email/send-email')
     jest.mock('../../../../../app/lib/email/send-email')
+    sendRegisterYourInterestMessage = require('../../../../../app/messaging/register-your-interest').sendRegisterYourInterestMessage
+    jest.mock('../../../../../app/messaging/register-your-interest')
   })
 
   beforeEach(async () => {
@@ -122,9 +124,17 @@ describe('Farmer apply "Check your answers and register your interest" page', ()
       }
 
       const EXPECTED_EMAIL_ADDRESS = 'name@example.com'
+      const EXPECTED_SBI = '01234567890'
+      const EXPECTED_CRN = '0123456789'
       when(session.getRegisterYourInterestData)
         .calledWith(expect.anything(), 'emailAddress')
         .mockReturnValue(EXPECTED_EMAIL_ADDRESS)
+      when(session.getRegisterYourInterestData)
+        .calledWith(expect.anything(), 'crn')
+        .mockReturnValue(EXPECTED_CRN)
+      when(session.getRegisterYourInterestData)
+        .calledWith(expect.anything(), 'sbi')
+        .mockReturnValue(EXPECTED_SBI)
 
       const res = await global.__SERVER__.inject(options)
 
@@ -133,6 +143,13 @@ describe('Farmer apply "Check your answers and register your interest" page', ()
         MOCK_EMAIL_TEMPLATE_ID,
         EXPECTED_EMAIL_ADDRESS
       )
+
+      expect(sendRegisterYourInterestMessage).toHaveBeenCalledWith(
+        EXPECTED_SBI,
+        EXPECTED_CRN,
+        EXPECTED_EMAIL_ADDRESS
+      )
+
       expect(res.statusCode).toBe(302)
       expect(res.headers.location).toEqual('registration-complete')
     })
