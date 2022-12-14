@@ -1,66 +1,77 @@
-const { usersContainer, usersFile } = require('../../../../app/config').storageConfig
+const { when, resetAllWhenMocks } = require('jest-when')
+const mockConfig = require('../../../../app/config')
 
 describe('Get users', () => {
-  let downloadBlobMock
-  let getByEmail
-  const email = 'hit@email.com'
+  let mockEligibilityApi
+  let mockUsersFile
+  let users
 
-  beforeEach(() => {
+  afterEach(() => {
     jest.resetAllMocks()
     jest.resetModules()
-
-    downloadBlobMock = require('../../../../app/lib/storage/download-blob')
-    jest.mock('../../../../app/lib/storage/download-blob')
-
-    const users = require('../../../../app/api-requests/users')
-    getByEmail = users.getByEmail
+    resetAllWhenMocks()
   })
 
-  test('makes request to download users blob', async () => {
-    await getByEmail('email')
+  describe('given the eligibilityApi feature toggle is enabled ', () => {
+    beforeAll(() => {
+      jest.mock('../../../../app/config', () => ({
+        ...mockConfig,
+        eligibilityApi: {
+          enabled: true
+        }
+      }))
 
-    expect(downloadBlobMock).toHaveBeenCalledTimes(1)
-    expect(downloadBlobMock).toHaveBeenCalledWith(usersContainer, usersFile)
+      jest.mock('../../../../app/api-requests/eligibility-api')
+      mockEligibilityApi = require('../../../../app/api-requests/eligibility-api')
+
+      jest.mock('../../../../app/api-requests/users-file')
+      mockUsersFile = require('../../../../app/api-requests/users-file')
+
+      users = require('../../../../app/api-requests/users')
+    })
+
+    test('it hits the eligibility api', async () => {
+      const emailAddress = 'name@email.com'
+
+      await users.getByEmail(emailAddress)
+
+      expect(mockEligibilityApi.getEligibility).toHaveBeenCalledTimes(1)
+      expect(mockEligibilityApi.getEligibility).toHaveBeenCalledWith(emailAddress)
+    })
   })
 
-  test.each([
-    { fileContent: null },
-    { fileContent: undefined }
-  ])('return undefined when blob content is $fileContent', async ({ fileContent }) => {
-    downloadBlobMock.mockResolvedValue(fileContent)
+  describe('given the eligibilityApi feature toggle is disabled', () => {
+    beforeAll(() => {
+      jest.mock('../../../../app/config', () => ({
+        ...mockConfig,
+        eligibilityApi: {
+          enabled: false
+        }
+      }))
 
-    const res = await getByEmail('email')
+      jest.mock('../../../../app/api-requests/eligibility-api')
+      mockEligibilityApi = require('../../../../app/api-requests/eligibility-api')
 
-    expect(res).toEqual(undefined)
-  })
+      jest.mock('../../../../app/api-requests/users-file')
+      mockUsersFile = require('../../../../app/api-requests/users-file')
 
-  test('return undefined when email doesn\'t match any users', async () => {
-    const fileContent = '[{ "email": "a@b.com" }]'
-    downloadBlobMock.mockResolvedValue(fileContent)
+      users = require('../../../../app/api-requests/users')
+    })
 
-    const res = await getByEmail('miss@email.com')
+    test('it hits the users file', async () => {
+      when(mockUsersFile.getUsers).mockResolvedValue([])
+      const emailAddress = 'name@email.com'
 
-    expect(res).toEqual(undefined)
-  })
+      jest.mock('../../../../app/config', () => ({
+        ...mockConfig,
+        eligibilityApi: {
+          enabled: false
+        }
+      }))
 
-  test('return user data when email is matched', async () => {
-    const fileContent = `[{ "email": "${email}" }]`
-    downloadBlobMock.mockResolvedValue(fileContent)
+      await users.getByEmail(emailAddress)
 
-    const res = await getByEmail(email)
-
-    expect(res).toEqual(JSON.parse(fileContent)[0])
-  })
-
-  test.each([
-    { fileContent: `[{ "email": "${email}" }]` },
-    { fileContent: `[{ "email": "${email}" , "isTest": true }]` }
-  ])('return user data when test email is matched but has different casing', async ({ fileContent }) => {
-    downloadBlobMock.mockResolvedValue(fileContent)
-
-    const res = await getByEmail(email.toUpperCase())
-
-    expect(res).toEqual(JSON.parse(fileContent)[0])
-    expect(res.isTest).toEqual(JSON.parse(fileContent)[0].isTest)
+      expect(mockUsersFile.getUsers).toHaveBeenCalledTimes(1)
+    })
   })
 })

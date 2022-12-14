@@ -33,3 +33,5 @@ services:
       TEST_TOKEN: 
       URL_PREFIX: "/apply"
       REGISTER_YOUR_INTEREST_ENABLED: ${REGISTER_YOUR_INTEREST_ENABLED:-true}
+      ELIGIBILITY_API_ENABLED: ${ELIGIBILITY_API_ENABLED:-true}
+      ELIGIBILITY_API_URI: http://host.docker.internal:3010/api
