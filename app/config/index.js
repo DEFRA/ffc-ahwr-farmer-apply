@@ -51,10 +51,7 @@ const schema = Joi.object({
   registerYourInterest: {
     enabled: Joi.bool().default(true)
   },
-  eligibilityApi: {
-    uri: Joi.string().uri().default('http://host.docker.internal:3010/api'),
-    enabled: Joi.bool().default(true)
-  }
+  eligibilityApi: require('../api-requests/eligibility-api.config.schema')
 })
 
 const config = {
@@ -96,10 +93,7 @@ const config = {
   registerYourInterest: {
     enabled: process.env.REGISTER_YOUR_INTEREST_ENABLED
   },
-  eligibilityApi: {
-    uri: process.env.ELIGIBILITY_API_URI,
-    enabled: process.env.ELIGIBILITY_API_ENABLED
-  }
+  eligibilityApi: require('../api-requests/eligibility-api.config')
 }
 
 const result = schema.validate(config, {

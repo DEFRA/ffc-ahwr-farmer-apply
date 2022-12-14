@@ -1,17 +1,8 @@
-const Joi = require('joi')
-
-const schema = Joi.object({
-  eligibilityApi: {
-    uri: Joi.string().uri().default('http://host.docker.internal:3010/api'),
-    enabled: Joi.bool().default(true)
-  }
-})
+const schema = require('./eligibility-api.config.schema')
 
 const config = {
-  eligibilityApi: {
-    uri: process.env.ELIGIBILITY_API_URI,
-    enabled: process.env.ELIGIBILITY_API_ENABLED
-  }
+  uri: process.env.ELIGIBILITY_API_URI,
+  enabled: process.env.ELIGIBILITY_API_ENABLED
 }
 
 const result = schema.validate(config, {
@@ -19,9 +10,7 @@ const result = schema.validate(config, {
 })
 
 if (result.error) {
-  throw new Error(`The eligibility API config is invalid: ${result.error.message}`)
+  throw new Error(`The config is invalid: ${result.error.message}`)
 }
 
-const value = result.value
-
-module.exports = value
+module.exports = result.value
