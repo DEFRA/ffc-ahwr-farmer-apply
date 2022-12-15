@@ -46,7 +46,7 @@ describe('EligibilityAPI config', () => {
     process.env.ELIGIBILITY_API_ENABLED = testCase.processEnv.enabled
     expect(
       () => require('../../../../app/api-requests/eligibility-api.config')
-    ).toThrow(testCase.errorMessage);
+    ).toThrow(testCase.errorMessage)
   })
 
   afterEach(() => {
