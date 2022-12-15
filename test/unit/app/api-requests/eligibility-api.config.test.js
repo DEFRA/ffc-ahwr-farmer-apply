@@ -44,12 +44,9 @@ describe('EligibilityAPI config', () => {
   ])('GIVEN $processEnv EXPECT $errorMessage', (testCase) => {
     process.env.ELIGIBILITY_API_URI = testCase.processEnv.uri
     process.env.ELIGIBILITY_API_ENABLED = testCase.processEnv.enabled
-    try {
-      require('../../../../app/api-requests/eligibility-api.config')
-      fail()
-    } catch (error) {
-      expect(error.message).toEqual(testCase.errorMessage)
-    }
+    expect(
+      () => require('../../../../app/api-requests/eligibility-api.config')
+    ).toThrow(testCase.errorMessage);
   })
 
   afterEach(() => {
