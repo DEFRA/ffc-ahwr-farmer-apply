@@ -61,7 +61,8 @@ container:
   urlPrefix: /apply
   registerYourInterestEnabled:
   registerYourInterestRequestQueueAddress: ffc-ahwr-register-your-interest-request
-  eligibilityApiEnabled: false
+  eligibilityApiEnabled:
+  eligibilityApiUri:
 
 ingress:
   class: nginx
