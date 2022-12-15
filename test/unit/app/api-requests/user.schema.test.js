@@ -28,7 +28,7 @@ describe('User schema', () => {
         address: 'Some Road, London, MK55 7ES',
         email: 'name@email.com'
       },
-      errorMessage: `"farmerName" is required`
+      errorMessage: '"farmerName" is required'
     },
     {
       invalidUser: {
@@ -38,7 +38,7 @@ describe('User schema', () => {
         address: 'Some Road, London, MK55 7ES',
         email: 'name@email.com'
       },
-      errorMessage: `"name" is required`
+      errorMessage: '"name" is required'
     },
     {
       invalidUser: {
@@ -48,7 +48,7 @@ describe('User schema', () => {
         address: 'Some Road, London, MK55 7ES',
         email: 'name@email.com'
       },
-      errorMessage: `"sbi" is required`
+      errorMessage: '"sbi" is required'
     },
     {
       invalidUser: {
@@ -59,7 +59,7 @@ describe('User schema', () => {
         address: 'Some Road, London, MK55 7ES',
         email: 'name@email.com'
       },
-      errorMessage: `"sbi" with value "44111111" fails to match the required pattern: /^\\d{9}$/`
+      errorMessage: '"sbi" with value "44111111" fails to match the required pattern: /^\\d{9}$/'
     },
     {
       invalidUser: {
@@ -69,7 +69,7 @@ describe('User schema', () => {
         address: 'Some Road, London, MK55 7ES',
         email: 'name@email.com'
       },
-      errorMessage: `"crn" is required`
+      errorMessage: '"crn" is required'
     },
     {
       invalidUser: {
@@ -80,7 +80,7 @@ describe('User schema', () => {
         address: 'Some Road, London, MK55 7ES',
         email: 'name@email.com'
       },
-      errorMessage: `"crn" with value "441111114" fails to match the required pattern: /^\\d{10}$/`
+      errorMessage: '"crn" with value "441111114" fails to match the required pattern: /^\\d{10}$/'
     },
     {
       invalidUser: {
@@ -90,7 +90,7 @@ describe('User schema', () => {
         crn: '4411111144',
         email: 'name@email.com'
       },
-      errorMessage: `"address" is required`
+      errorMessage: '"address" is required'
     },
     {
       invalidUser: {
@@ -98,9 +98,9 @@ describe('User schema', () => {
         name: 'David\'s Farm',
         sbi: '441111114',
         crn: '4411111144',
-        address: 'Some Road, London, MK55 7ES',
+        address: 'Some Road, London, MK55 7ES'
       },
-      errorMessage: `"email" is required`
+      errorMessage: '"email" is required'
     }
   ])('validate($invalidUser) => $errorMessage', (testCase) => {
     const result = userSchema.validate(testCase.invalidUser)

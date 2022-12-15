@@ -4,7 +4,6 @@ const mockConfig = require('../../../../app/config')
 
 jest.mock('@hapi/wreck')
 
-const consoleLogSpy = jest.spyOn(console, 'log')
 const consoleErrorSpy = jest.spyOn(console, 'error')
 
 const mockEligibilityApiUri = 'http://internal:3333/api'
@@ -103,7 +102,7 @@ describe('Eligibility API', () => {
       const response = await eligibilityApi.getEligibility(BUSINESS_EMAIL_ADDRESS)
 
       expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
-      expect(consoleErrorSpy).toHaveBeenCalledWith(`Get eligibility failed: {\"_original\":{\"farmerName\":\"David Smith\",\"name\":\"David's Farm\",\"sbi\":\"441111114\",\"crn\":\"4411111144\",\"cph\":\"44/333/1112\",\"address\":\"Some Road, London, MK55 7ES\",\"email\":\"name@email.com\"},\"details\":[{\"message\":\"\\\"cph\\\" is not allowed\",\"path\":[\"cph\"],\"type\":\"object.unknown\",\"context\":{\"child\":\"cph\",\"label\":\"cph\",\"value\":\"44/333/1112\",\"key\":\"cph\"}}]}`)
+      expect(consoleErrorSpy).toHaveBeenCalledWith('Get eligibility failed: {"_original":{"farmerName":"David Smith","name":"David\'s Farm","sbi":"441111114","crn":"4411111144","cph":"44/333/1112","address":"Some Road, London, MK55 7ES","email":"name@email.com"},"details":[{"message":"\\"cph\\" is not allowed","path":["cph"],"type":"object.unknown","context":{"child":"cph","label":"cph","value":"44/333/1112","key":"cph"}}]}')
       expect(response).toBeNull()
       expect(Wreck.get).toHaveBeenCalledTimes(1)
       expect(Wreck.get).toHaveBeenCalledWith(

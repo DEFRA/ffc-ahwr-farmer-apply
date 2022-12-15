@@ -27,7 +27,7 @@ const userSchema = Joi.object({
     .string()
     .trim()
     .email()
-    .required(),
+    .required()
 })
 
 module.exports = userSchema
