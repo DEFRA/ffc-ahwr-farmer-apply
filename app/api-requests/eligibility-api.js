@@ -1,5 +1,6 @@
 const Wreck = require('@hapi/wreck')
 const config = require('../config')
+const userSchema = require('./user.schema')
 
 async function getEligibility (emailAddress) {
   try {
@@ -8,12 +9,15 @@ async function getEligibility (emailAddress) {
       { json: true }
     )
     if (response.res.statusCode !== 200) {
-      console.log(`Bad response: ${response.res.statusCode} - ${response.res.statusMessage}`)
-      return null
+      throw new Error(`HTTP ${response.res.statusCode} (${response.res.statusMessage})`)
     }
-    return response.payload
+    const payload = userSchema.validate(response.payload)
+    if (payload.error) {
+      throw new Error(JSON.stringify(payload.error))
+    }
+    return payload.value
   } catch (err) {
-    console.error(`eligiblityApiUri.getEligibility failed: ${err.message}`)
+    console.error(`Get eligibility failed: ${err.message}`)
     return null
   }
 }

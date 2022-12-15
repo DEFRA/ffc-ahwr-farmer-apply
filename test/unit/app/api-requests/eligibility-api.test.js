@@ -22,10 +22,13 @@ describe('Eligibility API', () => {
     eligibilityApi = require('../../../../app/api-requests/eligibility-api')
   })
 
-  afterAll(() => {
+  afterEach(() => {
     jest.resetAllMocks()
-    jest.resetModules()
     resetAllWhenMocks()
+  })
+
+  afterAll(() => {
+    jest.resetModules()
   })
 
   describe('getEligibility', () => {
@@ -35,7 +38,7 @@ describe('Eligibility API', () => {
           farmerName: 'David Smith',
           name: 'David\'s Farm',
           sbi: '441111114',
-          cph: '44/333/1112',
+          crn: '4411111144',
           address: 'Some Road, London, MK55 7ES',
           email: 'name@email.com'
         },
@@ -70,7 +73,46 @@ describe('Eligibility API', () => {
       )
     })
 
-    test('given Wreck.get returns 400 it logs the issue and returns null', async () => {
+    test('when an invalid response is returned it logs the issue and returns null', async () => {
+      const expectedResponse = {
+        payload: {
+          farmerName: 'David Smith',
+          name: 'David\'s Farm',
+          sbi: '441111114',
+          crn: '4411111144',
+          // CPH is not allowed
+          cph: '44/333/1112',
+          address: 'Some Road, London, MK55 7ES',
+          email: 'name@email.com'
+        },
+        res: {
+          statusCode: 200
+        }
+      }
+      const options = {
+        json: true
+      }
+      const BUSINESS_EMAIL_ADDRESS = 'name@email.com'
+      when(Wreck.get)
+        .calledWith(
+          `${mockEligibilityApiUri}/eligibility?emailAddress=${BUSINESS_EMAIL_ADDRESS}`,
+          options
+        )
+        .mockResolvedValue(expectedResponse)
+
+      const response = await eligibilityApi.getEligibility(BUSINESS_EMAIL_ADDRESS)
+
+      expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
+      expect(consoleErrorSpy).toHaveBeenCalledWith(`Get eligibility failed: {\"_original\":{\"farmerName\":\"David Smith\",\"name\":\"David's Farm\",\"sbi\":\"441111114\",\"crn\":\"4411111144\",\"cph\":\"44/333/1112\",\"address\":\"Some Road, London, MK55 7ES\",\"email\":\"name@email.com\"},\"details\":[{\"message\":\"\\\"cph\\\" is not allowed\",\"path\":[\"cph\"],\"type\":\"object.unknown\",\"context\":{\"child\":\"cph\",\"label\":\"cph\",\"value\":\"44/333/1112\",\"key\":\"cph\"}}]}`)
+      expect(response).toBeNull()
+      expect(Wreck.get).toHaveBeenCalledTimes(1)
+      expect(Wreck.get).toHaveBeenCalledWith(
+          `${mockEligibilityApiUri}/eligibility?emailAddress=${BUSINESS_EMAIL_ADDRESS}`,
+          options
+      )
+    })
+
+    test('when Wreck.get returns 400 it logs the issue and returns null', async () => {
       const statusCode = 400
       const statusMessage = 'A valid email address must be specified.'
       const expectedResponse = {
@@ -97,12 +139,12 @@ describe('Eligibility API', () => {
 
       const response = await eligibilityApi.getEligibility(businessEmailAddress)
 
-      expect(consoleLogSpy).toHaveBeenCalledTimes(1)
-      expect(consoleLogSpy).toHaveBeenCalledWith(`Bad response: ${statusCode} - ${statusMessage}`)
+      expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
+      expect(consoleErrorSpy).toHaveBeenCalledWith(`Get eligibility failed: HTTP ${statusCode} (${statusMessage})`)
       expect(response).toBeNull()
     })
 
-    test('given Wreck.get throws an error it logs the error and returns null', async () => {
+    test('when Wreck.get throws an error it logs the error and returns null', async () => {
       const expectedError = new Error('msg')
       const options = {
         json: true
@@ -118,7 +160,7 @@ describe('Eligibility API', () => {
       const response = await eligibilityApi.getEligibility(BUSINESS_EMAIL_ADDRESS)
 
       expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
-      expect(consoleErrorSpy).toHaveBeenCalledWith(`eligiblityApiUri.getEligibility failed: ${expectedError.message}`)
+      expect(consoleErrorSpy).toHaveBeenCalledWith(`Get eligibility failed: ${expectedError.message}`)
       expect(response).toBeNull()
     })
   })
