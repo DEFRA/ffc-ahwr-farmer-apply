@@ -113,7 +113,7 @@ describe('Farmer apply "Enter your business email address" page', () => {
           emailAddress: 'name'
         },
         expectedErrors: {
-          emailAddress: 'Error: Enter your business email address in the correct format, like name@example.com',
+          emailAddress: 'Error: Enter your email address in the correct format, like name@example.com',
           confirmEmailAddress: 'Error: Confirm your email address'
         }
       },
