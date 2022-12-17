@@ -6,7 +6,7 @@ const callChargesUri = require('../../config/index').callChargesUri
 const ruralPaymentsEmail = require('../../config/index').ruralPaymentsEmail
 
 const ERROR_MESSAGE = {
-  enterYourEmailAddress: 'Enter your email address',
+  enterYourEmailAddress: 'Enter your business email address',
   enterYourEmailAddressInCorrectFormat: 'Enter your email address in the correct format, like name@example.com',
   confirmYourEmailAddress: 'Confirm your email address',
   emailAddressesDoNotMatch: 'Email addresses entered do not match'
