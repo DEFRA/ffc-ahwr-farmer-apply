@@ -4,6 +4,8 @@ const { eventQueue } = require('../config').mqConfig
 const raiseEvent = async (event, status = 'success') => {
   const eventPublisher = new PublishEvent(eventQueue)
 
+  console.log('raise-event', eventQueue)
+
   const eventMessage = {
     name: event.name,
     properties: {

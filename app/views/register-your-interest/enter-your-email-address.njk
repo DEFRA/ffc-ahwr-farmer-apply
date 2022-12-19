@@ -18,12 +18,13 @@
 
       {% call govukFieldset({
         legend: {
-          text: "Enter your email address",
+          text: "Enter your business email address",
           classes: "govuk-fieldset__legend--l",
           isPageHeading: true
         }
       }) %}
-        <p class="govuk-body">Enter the email address linked to your Rural Payments account. We'll use this to send you confirmation you’ve successfully registered your interest.</p>
+        <p class="govuk-body">Enter the business email address linked to the business registering an interest. This may be different to your personal email address which may also be linked to the business.</p>
+        <p class="govuk-body">We'll use this to send you confirmation you’ve successfully registered your interest.</p>
         {{ 
           govukInput({
             label: {

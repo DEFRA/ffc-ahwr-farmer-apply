@@ -4,7 +4,7 @@ const getCrumbs = require('../../../../utils/get-crumbs')
 const { serviceName, urlPrefix } = require('../../../../../app/config')
 const expectPhaseBanner = require('../../../../utils/phase-banner-expect')
 
-describe('Farmer apply "Enter your email address" page', () => {
+describe('Farmer apply "Enter your business email address" page', () => {
   let session
 
   const URL = `${urlPrefix}/register-your-interest/enter-your-email-address`
@@ -36,7 +36,7 @@ describe('Farmer apply "Enter your email address" page', () => {
       const $ = cheerio.load(res.payload)
 
       expect(res.statusCode).toBe(200)
-      expect($('.govuk-fieldset__legend--l').text().trim()).toEqual('Enter your email address')
+      expect($('.govuk-fieldset__legend--l').text().trim()).toEqual('Enter your business email address')
       expect($('#emailAddress').attr('value')).toEqual(EXPECTED_EMAIL_ADDRESS)
       expect($('#confirmEmailAddress').attr('value')).toEqual(EXPECTED_CONFIRM_EMAIL_ADDRESS)
       expect($('title').text()).toEqual(serviceName)
@@ -86,7 +86,7 @@ describe('Farmer apply "Enter your email address" page', () => {
       {
         payload: {},
         expectedErrors: {
-          emailAddress: 'Error: Enter your email address',
+          emailAddress: 'Error: Enter your business email address',
           confirmEmailAddress: 'Error: Confirm your email address'
         }
       },
@@ -95,7 +95,7 @@ describe('Farmer apply "Enter your email address" page', () => {
           emailAddress: ''
         },
         expectedErrors: {
-          emailAddress: 'Error: Enter your email address',
+          emailAddress: 'Error: Enter your business email address',
           confirmEmailAddress: 'Error: Confirm your email address'
         }
       },
@@ -104,7 +104,7 @@ describe('Farmer apply "Enter your email address" page', () => {
           emailAddress: 1
         },
         expectedErrors: {
-          emailAddress: 'Error: Enter your email address',
+          emailAddress: 'Error: Enter your business email address',
           confirmEmailAddress: 'Error: Confirm your email address'
         }
       },

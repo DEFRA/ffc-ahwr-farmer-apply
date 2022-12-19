@@ -34,7 +34,7 @@ describe('Farmer apply "Enter your SBI" page', () => {
       const $ = cheerio.load(res.payload)
 
       expect(res.statusCode).toBe(200)
-      expect($('.govuk-fieldset__legend--l').text().trim()).toEqual('Enter the single business identifier (SBI) number')
+      expect($('.govuk-fieldset__legend--l').text().trim()).toEqual('Enter your single business identifier (SBI) number')
       expect($('#sbi').attr('value')).toEqual(EXPECTED_SBI)
       expect($('#confirmSbi').attr('value')).toEqual(EXPECTED_CONFIRM_SBI)
       expect($('title').text()).toEqual(serviceName)
