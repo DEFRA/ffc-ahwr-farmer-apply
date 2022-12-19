@@ -2,8 +2,6 @@ const { ReportAggregator, HtmlReporter } = require('wdio-html-nice-reporter')
 const log4js = require('@log4js-node/log4js-api')
 const path = require('path')
 const logger = log4js.getLogger('default')
-//const envRoot = 'http://localhost:3000'
-//const envRoot = 'https://ffc-ahwr-farmer-dev.azure.defra.cloud/apply/start'
 const envRoot = (process.env.TEST_ENVIRONMENT_ROOT_URL || 'http://host.docker.internal:3000')
 const chromeArgs = process.env.CHROME_ARGS ? process.env.CHROME_ARGS.split(' ') : []
 const maxInstances = process.env.MAX_INSTANCES ? Number(process.env.MAX_INSTANCES) : 1
@@ -70,7 +68,7 @@ exports.config = {
     global.reportAggregator = reportAggregator
   },
 
-  onComplete: function (exitCode, config, capabilities, results) {
+  onComplete: function (config, capabilities, results) {
     (async () => {
       await global.reportAggregator.createReport()
     })()

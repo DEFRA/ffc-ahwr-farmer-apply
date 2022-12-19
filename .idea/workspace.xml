@@ -4,11 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2253b5d6-5b94-4177-a922-282e8d633f14" name="Changes" comment="Testing my signed signature">
-      <change beforePath="$PROJECT_DIR$/.idea/ffc-ahwr-farmer-apply.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ffc-ahwr-farmer-apply.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="2253b5d6-5b94-4177-a922-282e8d633f14" name="Changes" comment="new branch for acceptance test">
+      <changelist_data name="livwil" email="livwil@talk21.com" />
+      <change beforePath="$PROJECT_DIR$/test/acceptance/wdio.conf.js" beforeDir="false" afterPath="$PROJECT_DIR$/test/acceptance/wdio.conf.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,6 +21,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="PREVIOUS_COMMIT_AUTHORS">
+      <list>
+        <option value="livwil &lt;livwil@talk21.com&gt;" />
+      </list>
+    </option>
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
         <entry key="$PROJECT_DIR$" value="acceptance-tests" />
@@ -30,8 +33,15 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="ROOT_SYNC" value="DONT_SYNC" />
+    <option name="SIGN_OFF_COMMIT" value="true" />
   </component>
   <component name="GithubPullRequestsUISettings">
+    <option name="recentNewPullRequestHead">
+      <RepoCoordinatesHolder>
+        <option name="owner" value="DEFRA" />
+        <option name="repository" value="ffc-ahwr-farmer-apply" />
+      </RepoCoordinatesHolder>
+    </option>
     <option name="selectedUrlAndAccountId">
       <UrlAndAccount>
         <option name="accountId" value="207d971e-28ee-4fcd-8ff7-34a41395a8aa" />
@@ -58,6 +68,8 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
     "codeWithMe.voiceChat.enabledByDefault": "false",
+    "javascript.nodejs.core.library.configured.version": "14.17.0",
+    "javascript.nodejs.core.library.typings.version": "14.17.0",
     "last_opened_file_path": "C:/Users/livwilli/ffc-ahwr-farmer-apply",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.standard": "true",
@@ -118,7 +130,7 @@
       <workItem from="1667494327087" duration="78000" />
       <workItem from="1667494425691" duration="1355000" />
       <workItem from="1670514722018" duration="4778000" />
-      <workItem from="1670872461781" duration="9467000" />
+      <workItem from="1670872461781" duration="9946000" />
     </task>
     <task id="LOCAL-00001" summary="update test to reflect farmer rejection of application">
       <created>1663832872264</created>
@@ -155,7 +167,14 @@
       <option name="project" value="LOCAL" />
       <updated>1666862405582</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="new branch for acceptance test">
+      <created>1671442280288</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1671442280288</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -179,7 +198,8 @@
     <MESSAGE value="update test to reflect farmer rejection of application" />
     <MESSAGE value="Update farmer apply scriots submit button element change to accept and send" />
     <MESSAGE value="Testing my signed signature" />
-    <option name="LAST_COMMIT_MESSAGE" value="Testing my signed signature" />
+    <MESSAGE value="new branch for acceptance test" />
+    <option name="LAST_COMMIT_MESSAGE" value="new branch for acceptance test" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
