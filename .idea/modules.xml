@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/../ffc-ahwr-backoffice/.idea/ffc-ahwr-backoffice.iml" filepath="$PROJECT_DIR$/../ffc-ahwr-backoffice/.idea/ffc-ahwr-backoffice.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/ffc-ahwr-farmer-apply.iml" filepath="$PROJECT_DIR$/.idea/ffc-ahwr-farmer-apply.iml" />
     </modules>
   </component>
