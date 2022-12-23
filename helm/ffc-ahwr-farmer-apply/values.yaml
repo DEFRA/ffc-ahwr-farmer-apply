@@ -59,6 +59,8 @@ container:
   claimServiceUri:
   testToken:
   urlPrefix: /apply
+  eligibilityApiEnabled:
+  eligibilityApiUri:
   registerYourInterestEnabled:
   registerYourInterestRequestQueueAddress: ffc-ahwr-register-your-interest-request
 

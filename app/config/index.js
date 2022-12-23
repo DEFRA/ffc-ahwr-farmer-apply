@@ -50,7 +50,8 @@ const schema = Joi.object({
   ruralPaymentsEmail: Joi.string().email().default('ruralpayments@defra.gov.uk'),
   registerYourInterest: {
     enabled: Joi.bool().default(true)
-  }
+  },
+  eligibilityApi: require('../api-requests/eligibility-api.config.schema')
 })
 
 const config = {
@@ -91,7 +92,8 @@ const config = {
   ruralPaymentsEmail: 'ruralpayments@defra.gov.uk',
   registerYourInterest: {
     enabled: process.env.REGISTER_YOUR_INTEREST_ENABLED
-  }
+  },
+  eligibilityApi: require('../api-requests/eligibility-api.config')
 }
 
 const result = schema.validate(config, {
