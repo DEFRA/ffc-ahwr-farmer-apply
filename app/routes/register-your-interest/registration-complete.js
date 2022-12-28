@@ -1,3 +1,4 @@
+const session = require('../../session')
 const urlPrefix = require('../../config/index').urlPrefix
 const callChargesUri = require('../../config/index').callChargesUri
 const ruralPaymentsEmail = require('../../config/index').ruralPaymentsEmail
@@ -11,6 +12,7 @@ module.exports = [
     options: {
       auth: false,
       handler: async (request, h) => {
+        session.clear(request)
         return h.view(
           'register-your-interest/registration-complete',
           {
