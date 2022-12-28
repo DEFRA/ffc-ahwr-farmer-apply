@@ -138,7 +138,6 @@ describe('Farmer apply "Check your answers and register your interest" page', ()
 
       const res = await global.__SERVER__.inject(options)
 
-      expect(session.clear).toBeCalledTimes(1)
       expect(sendEmail).toHaveBeenCalledWith(
         MOCK_EMAIL_TEMPLATE_ID,
         EXPECTED_EMAIL_ADDRESS
