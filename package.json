@@ -1,6 +1,6 @@
 {
   "name": "ffc-ahwr-farmer-apply",
-  "version": "0.24.0",
+  "version": "0.25.0",
   "description": "Web frontend for the farmer apply journey",
   "homepage": "https://github.com/DEFRA/ffc-ahwr-farmer-apply",
   "main": "app/index.js",
@@ -23,6 +23,7 @@
   ],
   "license": "OGL-UK-3.0",
   "dependencies": {
+    "@azure/identity": "^3.1.2",
     "@azure/storage-blob": "^12.9.0",
     "@hapi/boom": "^9.1.4",
     "@hapi/catbox-redis": "^6.0.2",
@@ -35,7 +36,7 @@
     "@hapi/yar": "^10.1.1",
     "applicationinsights": "^2.1.6",
     "ffc-ahwr-event-publisher": "1.0.0",
-    "ffc-messaging": "^2.3.4",
+    "ffc-messaging": "^2.6.2",
     "govuk-frontend": "4.0.1",
     "hapi-pino": "^9.1.2",
     "joi": "^17.6.0",
