@@ -4,10 +4,10 @@ const { serviceUri } = require('../../config')
 const { emailTemplates } = require('../../config').notifyConfig
 const { farmerApply } = require('../../constants/user-types')
 
-async function createAndCacheToken (request, email, redirectTo, userType, data) {
+async function createAndCacheToken (request, email, redirectTo, userType, data, sbi) {
   const { magiclinkCache } = request.server.app
 
-  const token = await getToken(email)
+  const token = await getToken(email, sbi)
   const tokens = await magiclinkCache.get(email) ?? []
   tokens.push(token)
   await magiclinkCache.set(email, tokens)
@@ -19,13 +19,13 @@ async function sendMagicLinkEmail (request, email, templateId, redirectTo, userT
   const token = await createAndCacheToken(request, email, redirectTo, userType, data)
 
   return sendEmail(templateId, email, {
-    personalisation: { magiclink: `${serviceUri}/verify-login?token=${token}&email=${email}` },
+    personalisation: { magiclink: `${serviceUri}/verify-login?token=${token}&email=${email}&sbi=${data.sbi}` },
     reference: token
   })
 }
 
-async function sendFarmerApplyLoginMagicLink (request, email) {
-  return sendMagicLinkEmail(request, email, emailTemplates.applyLogin, 'org-review', farmerApply)
+async function sendFarmerApplyLoginMagicLink (request, email, sbi) {
+  return sendMagicLinkEmail(request, email, emailTemplates.applyLogin, 'org-review', farmerApply, { sbi })
 }
 
 module.exports = {

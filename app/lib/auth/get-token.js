@@ -1,10 +1,10 @@
 const { v4: uuid } = require('uuid')
 const { testToken } = require('../../config').notifyConfig
-const { getByEmail } = require('../../api-requests/users')
+const { getByEmailAndSbi } = require('../../api-requests/users')
 
-module.exports = async function getToken (email) {
+module.exports = async function getToken (email, sbi) {
   if (testToken) {
-    const user = await getByEmail(email)
+    const user = await getByEmailAndSbi(email, sbi)
     if (user.isTest) {
       return testToken
     }

@@ -2,10 +2,10 @@ const Wreck = require('@hapi/wreck')
 const config = require('../config')
 const userSchema = require('./user.schema')
 
-async function getEligibility (emailAddress) {
+async function getEligibility (emailAddress, sbi) {
   try {
     const response = await Wreck.get(
-      `${config.eligibilityApi.uri}/eligibility?emailAddress=${emailAddress}`,
+      `${config.eligibilityApi.uri}/eligibility?emailAddress=${emailAddress}&sbi=${sbi}`,
       { json: true }
     )
     if (response.res.statusCode !== 200) {

@@ -1,7 +1,8 @@
 const boom = require('@hapi/boom')
 const Joi = require('joi')
-const { getByEmail } = require('../api-requests/users')
+const { getByEmailAndSbi } = require('../api-requests/users')
 const { email: emailValidation } = require('../lib/validation/email')
+const { sbi: sbiValidation } = require('../lib/validation/sbi')
 const { sendFarmerApplyLoginMagicLink } = require('../lib/email/send-magic-link-email')
 const { clear } = require('../session')
 const { sendMonitoringEvent } = require('../event')
@@ -39,25 +40,29 @@ module.exports = [{
     },
     validate: {
       payload: Joi.object({
-        email: emailValidation
+        email: emailValidation,
+        sbi: sbiValidation
       }),
       failAction: async (request, h, error) => {
-        const { email } = request.payload
-        sendMonitoringEvent(request.yar.id, error.details[0].message, email)
-        return h.view('login', { ...request.payload, errorMessage: { text: error.details[0].message }, hintText }).code(400).takeover()
+        const { email, sbi } = request.payload
+        const errorMessages = error
+        .details
+        .reduce((acc, e) => ({ ...acc, [e.context.label]: { text: e.message } }), {})
+        sendMonitoringEvent(request.yar.id, error.details[0].message, email, sbi)
+        return h.view('login', { ...request.payload, errorMessages, hintText }).code(400).takeover()
       }
     },
     handler: async (request, h) => {
-      const { email } = request.payload
-      const organisation = await getByEmail(email)
+      const { email, sbi } = request.payload
+      const organisation = await getByEmailAndSbi(email, sbi)
 
       if (!organisation) {
-        sendMonitoringEvent(request.yar.id, `No user found with email address "${email}"`, email)
-        return h.view('login', { ...request.payload, errorMessage: { text: `No user found with email address "${email}"` }, hintText }).code(400).takeover()
+        sendMonitoringEvent(request.yar.id, `No user found with email address and sbi "${email}", "${sbi}"`, email, sbi)
+        return h.view('login', { ...request.payload, errorMessage: { text: `No user found with email address "${email}" and sbi "${sbi}"` }, hintText }).code(400).takeover()
       }
 
       clear(request)
-      const result = await sendFarmerApplyLoginMagicLink(request, email)
+      const result = await sendFarmerApplyLoginMagicLink(request, email, sbi)
 
       if (!result) {
         return boom.internal()

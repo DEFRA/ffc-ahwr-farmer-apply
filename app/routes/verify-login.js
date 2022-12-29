@@ -1,5 +1,5 @@
 const Joi = require('joi')
-const { getByEmail } = require('../api-requests/users')
+const { getByEmailAndSbi } = require('../api-requests/users')
 const { setFarmerApplyData } = require('../session')
 const { organisation: organisationKey } = require('../session/keys').farmerApplyData
 const { lookupToken, setAuthCookie } = require('../auth')
@@ -10,8 +10,8 @@ function isRequestInvalid (cachedEmail, email) {
   return !cachedEmail || email !== cachedEmail
 }
 
-async function cacheFarmerApplyData (request, email) {
-  const organisation = await getByEmail(email)
+async function cacheFarmerApplyData (request, email, sbi) {
+  const organisation = await getByEmailAndSbi(email, sbi)
   setFarmerApplyData(request, organisationKey, organisation)
 }
 
@@ -23,7 +23,8 @@ module.exports = [{
     validate: {
       query: Joi.object({
         email: Joi.string().email(),
-        token: Joi.string().uuid().required()
+        token: Joi.string().uuid().required(),
+        sbi: Joi.string()
       }),
       failAction: async (request, h, error) => {
         console.error(error)
@@ -32,7 +33,7 @@ module.exports = [{
       }
     },
     handler: async (request, h) => {
-      const { email, token } = request.query
+      const { email, token, sbi } = request.query
 
       const { email: cachedEmail, redirectTo, userType } = await lookupToken(request, token)
       if (isRequestInvalid(cachedEmail, email)) {
@@ -41,7 +42,7 @@ module.exports = [{
       }
 
       setAuthCookie(request, email, userType)
-      await cacheFarmerApplyData(request, email)
+      await cacheFarmerApplyData(request, email, sbi)
 
       return h.redirect(redirectTo)
     }

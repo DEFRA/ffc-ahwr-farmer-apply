@@ -1,12 +1,12 @@
 const raiseEvent = require('./raise-event')
 
-const sendMonitoringEvent = async (sessionId, alert, email, status = 'alert') => {
+const sendMonitoringEvent = async (sessionId, alert, email, sbi, status = 'alert') => {
   if (sessionId) {
     const event = {
       id: sessionId,
-      sbi: 'n/a',
+      sbi: sbi && sbi === '' ? sbi : 'n/a',
       cph: 'n/a',
-      email: email ?? 'unknown',
+      email: email && email === '' ? email : 'unknown',
       name: 'send-monitoring-event',
       type: 'monitoring-magic-link',
       message: 'Monitoring magic link.',
