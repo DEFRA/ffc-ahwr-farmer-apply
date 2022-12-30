@@ -12,25 +12,26 @@
       <h2 class="govuk-heading-m">What happens next?</h2>
 
       <p class="govuk-body">
-        We’ll check the information you’ve provided and send you an email to confirm if you’re eligible to apply.
-      </p>
-      <p class="govuk-body">
-        This may take a few days but can take longer.
+        We’ll check the information you’ve provided and send you an email to confirm one of the following:
       </p>
 
-      {{ 
-        govukInsetText({
-          html: "<p>If you don't receive an email, contact the Rural Payments Agency.</p>
-          <ul class='govuk-list'>
-            <li>Rural Payments Agency</li>
-            <li>Telephone: 03000 200 301</li>
-            <li>Monday to Friday, 8:30am to 5pm (except public holidays)</li>
-            <li><a href='mailto:" + ruralPaymentsEmail + "'>" + ruralPaymentsEmail + "</a></li>
-          </ul>
-          <p class='govuk-body'>Find out about <a class='govuk-link' target='_blank' href='" + callChargesUri + "'> call charges</a></p>
-          "
-        })
-      }}
+      <ul class="govuk-list govuk-list--bullet">
+        <li>you’re eligible to apply</li>
+        <li>what you need to do to be eligible to apply</li>
+      </ul>
+
+      <p class="govuk-body">This may take a few days but can take longer.</p>
+
+      <p class="govuk-body">If you don’t receive an email, contact the Rural Payments Agency.</p>   
+      
+      <ul class="govuk-list">
+        <li>Rural Payments Agency</li>
+        <li>Telephone: 03000 200 301</li>
+        <li>Monday to Friday, 8:30am to 5pm (except public holidays)</li>
+        <li><a href="mailto:{{ ruralPaymentsEmail }}"> {{ ruralPaymentsEmail }}</a></li>
+      </ul>   
+
+      <p class="govuk-body">Find out about <a class="govuk-link" target="_blank" href="{{ callChargesUri }}"> call charges</a></p>
     </div>
   </div>
 {% endblock %}
