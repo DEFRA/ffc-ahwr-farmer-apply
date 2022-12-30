@@ -1,6 +1,6 @@
 const cheerio = require('cheerio')
 const expectPhaseBanner = require('../../../../utils/phase-banner-expect')
-const { serviceName, urlPrefix, ruralPaymentsEmail, callChargesUri } = require('../../../../../app/config')
+const { serviceName, urlPrefix } = require('../../../../../app/config')
 
 describe('Farmer apply "Registration complete" page', () => {
   let session
