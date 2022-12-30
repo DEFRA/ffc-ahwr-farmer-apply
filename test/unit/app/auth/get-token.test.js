@@ -2,6 +2,7 @@ const uuidRegex = require('../../../../app/config/uuid-regex')
 
 describe('Get Token test', () => {
   const testEmail = 'test@unit-test.com'
+  const testSbi = '123456789'
   const testToken = '644a2a30-7487-4e98-a908-b5ecd82d5225'
 
   let config
@@ -19,35 +20,35 @@ describe('Get Token test', () => {
 
   test('when test token exists and user is test user, return test token', async () => {
     config.notifyConfig.testToken = testToken
-    users.getByEmail.mockResolvedValue({ email: testEmail, isTest: true })
+    users.getByEmailAndSbi.mockResolvedValue({ email: testEmail, isTest: true })
     const getToken = require('../../../../app/lib/auth/get-token')
 
-    const response = await getToken(testEmail)
+    const response = await getToken(testEmail, testSbi)
 
     expect(response).toBe(testToken)
-    expect(users.getByEmail).toHaveBeenCalledTimes(1)
-    expect(users.getByEmail).toHaveBeenCalledWith(testEmail)
+    expect(users.getByEmailAndSbi).toHaveBeenCalledTimes(1)
+    expect(users.getByEmailAndSbi).toHaveBeenCalledWith(testEmail, testSbi)
   })
 
   test('when test token exists and user is not test user, return uuid token', async () => {
     config.notifyConfig.testToken = testToken
-    users.getByEmail.mockResolvedValue({ email: testEmail })
+    users.getByEmailAndSbi.mockResolvedValue({ email: testEmail })
     const getToken = require('../../../../app/lib/auth/get-token')
 
-    const response = await getToken(testEmail)
+    const response = await getToken(testEmail, testSbi)
 
     expect(response).not.toBe(testToken)
-    expect(users.getByEmail).toHaveBeenCalledTimes(1)
-    expect(users.getByEmail).toHaveBeenCalledWith(testEmail)
+    expect(users.getByEmailAndSbi).toHaveBeenCalledTimes(1)
+    expect(users.getByEmailAndSbi).toHaveBeenCalledWith(testEmail, testSbi)
   })
 
   test('when test token does not exist, return uuid token', async () => {
     config.notifyConfig.testToken = null
     const getToken = require('../../../../app/lib/auth/get-token')
-    const response = await getToken('email@test.com')
+    const response = await getToken('email@test.com', '123456789')
 
     expect(response).not.toBe(testToken)
     expect(response).toMatch(new RegExp(uuidRegex))
-    expect(users.getByEmail).toHaveBeenCalledTimes(0)
+    expect(users.getByEmailAndSbi).toHaveBeenCalledTimes(0)
   })
 })

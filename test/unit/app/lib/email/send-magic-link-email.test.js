@@ -28,6 +28,7 @@ const requestGetMock = {
 
 describe('Send Magic Link test', () => {
   const email = 'test@unit-test.com'
+  const sbi = '123456789'
   const sendEmailResponse = true
   const testToken = '644a2a30-7487-4e98-a908-b5ecd82d5225'
 
@@ -42,14 +43,14 @@ describe('Send Magic Link test', () => {
     const token = testToken
     getToken.mockResolvedValue(token)
 
-    const response = await sendMagicLinkEmail.sendFarmerApplyLoginMagicLink(requestGetMock, email)
+    const response = await sendMagicLinkEmail.sendFarmerApplyLoginMagicLink(requestGetMock, email, sbi)
 
     expect(response).toEqual(sendEmailResponse)
     expect(cacheData[email]).toEqual([token])
-    expect(cacheData[token]).toEqual({ email, redirectTo: 'org-review', userType: farmerApply })
+    expect(cacheData[token]).toEqual({ email, redirectTo: 'org-review', userType: farmerApply, data: { sbi } })
     expect(sendEmail).toHaveBeenCalledTimes(1)
     expect(sendEmail).toHaveBeenCalledWith(applyLogin, email, {
-      personalisation: { magiclink: `${serviceUri}/verify-login?token=${token}&email=${email}` },
+      personalisation: { magiclink: `${serviceUri}/verify-login?token=${token}&email=${email}&sbi=${sbi}` },
       reference: token
     })
   })

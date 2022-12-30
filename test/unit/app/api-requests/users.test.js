@@ -32,11 +32,12 @@ describe('Get users', () => {
 
     test('it hits the eligibility api', async () => {
       const emailAddress = 'name@email.com'
+      const sbi = '123456789'
 
-      await users.getByEmail(emailAddress)
+      await users.getByEmailAndSbi(emailAddress, sbi)
 
       expect(mockEligibilityApi.getEligibility).toHaveBeenCalledTimes(1)
-      expect(mockEligibilityApi.getEligibility).toHaveBeenCalledWith(emailAddress)
+      expect(mockEligibilityApi.getEligibility).toHaveBeenCalledWith(emailAddress, sbi)
     })
   })
 
@@ -61,6 +62,7 @@ describe('Get users', () => {
     test('it hits the users file', async () => {
       when(mockUsersFile.getUsers).mockResolvedValue([])
       const emailAddress = 'name@email.com'
+      const sbi = '123456789' 
 
       jest.mock('../../../../app/config', () => ({
         ...mockConfig,
@@ -69,7 +71,7 @@ describe('Get users', () => {
         }
       }))
 
-      await users.getByEmail(emailAddress)
+      await users.getByEmailAndSbi(emailAddress, sbi)
 
       expect(mockUsersFile.getUsers).toHaveBeenCalledTimes(1)
     })

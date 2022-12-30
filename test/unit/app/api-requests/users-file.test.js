@@ -1,9 +1,11 @@
+const { getByEmailAndSbi } = require('../../../../app/api-requests/users')
 const mockConfig = require('../../../../app/config')
 
 describe('Get users from users file', () => {
   let downloadBlobMock
-  let getByEmail
+  let getByEmailAndSbi
   const email = 'hit@email.com'
+  const sbi = '123456789'
 
   beforeEach(() => {
     jest.resetAllMocks()
@@ -20,11 +22,11 @@ describe('Get users from users file', () => {
     jest.mock('../../../../app/lib/storage/download-blob')
 
     const users = require('../../../../app/api-requests/users')
-    getByEmail = users.getByEmail
+    getByEmailAndSbi = users.getByEmailAndSbi
   })
 
   test('makes request to download users blob', async () => {
-    await getByEmail('email')
+    await getByEmailAndSbi('email', 'sbi')
 
     expect(downloadBlobMock).toHaveBeenCalledTimes(1)
     expect(downloadBlobMock).toHaveBeenCalledWith(
@@ -39,7 +41,7 @@ describe('Get users from users file', () => {
   ])('return undefined when blob content is $fileContent', async ({ fileContent }) => {
     downloadBlobMock.mockResolvedValue(fileContent)
 
-    const res = await getByEmail('email')
+    const res = await getByEmailAndSbi('email', 'sbi')
 
     expect(res).toEqual(undefined)
   })
@@ -48,7 +50,7 @@ describe('Get users from users file', () => {
     const fileContent = '[{ "email": "a@b.com" }]'
     downloadBlobMock.mockResolvedValue(fileContent)
 
-    const res = await getByEmail('miss@email.com')
+    const res = await await getByEmailAndSbi('email', 'sbi')
 
     expect(res).toEqual(undefined)
   })
@@ -57,7 +59,7 @@ describe('Get users from users file', () => {
     const fileContent = `[{ "email": "${email}" }]`
     downloadBlobMock.mockResolvedValue(fileContent)
 
-    const res = await getByEmail(email)
+    const res = await getByEmailAndSbi(email, sbi)
 
     expect(res).toEqual(JSON.parse(fileContent)[0])
   })
@@ -68,7 +70,7 @@ describe('Get users from users file', () => {
   ])('return user data when test email is matched but has different casing', async ({ fileContent }) => {
     downloadBlobMock.mockResolvedValue(fileContent)
 
-    const res = await getByEmail(email.toUpperCase())
+    const res = await getByEmailAndSbi(email.toUpperCase(), sbi)
 
     expect(res).toEqual(JSON.parse(fileContent)[0])
     expect(res.isTest).toEqual(JSON.parse(fileContent)[0].isTest)

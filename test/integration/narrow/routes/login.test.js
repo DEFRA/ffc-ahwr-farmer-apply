@@ -4,17 +4,16 @@ const getCrumbs = require('../../../utils/get-crumbs')
 const expectLoginPage = require('../../../utils/login-page-expect')
 const pageExpects = require('../../../utils/page-expects')
 const expectPhaseBanner = require('../../../utils/phase-banner-expect')
-const { serviceUri } = require('../../../../app/config')
+const { serviceUri, urlPrefix } = require('../../../../app/config')
 const { applyLogin } = require('../../../../app/config').notifyConfig.emailTemplates
 const { farmerApply } = require('../../../../app/constants/user-types')
 const uuidRegex = require('../../../../app/config/uuid-regex')
-const { urlPrefix } = require('../../../../app/config')
 
 jest.mock('ffc-ahwr-event-publisher')
 
 describe('FarmerApply application login page test', () => {
   let sendEmail
-  let getByEmail
+  let getByEmailAndSbi
   const org = { name: 'my-org' }
 
   beforeAll(async () => {
@@ -23,12 +22,13 @@ describe('FarmerApply application login page test', () => {
     sendEmail = require('../../../../app/lib/email/send-email')
     jest.mock('../../../../app/lib/email/send-email')
     const orgs = require('../../../../app/api-requests/users')
-    getByEmail = orgs.getByEmail
+    getByEmailAndSbi = orgs.getByEmailAndSbi
     jest.mock('../../../../app/api-requests/users')
   })
 
   const url = `${urlPrefix}/login`
   const validEmail = 'dairy@ltd.com'
+  const validSbi = '123456789'
 
   describe(`GET requests to '${url}'`, () => {
     test('returns 200', async () => {
@@ -61,17 +61,17 @@ describe('FarmerApply application login page test', () => {
 
   describe(`POST requests to '${url}' route`, () => {
     test.each([
-      { email: 'not-an-email', errorMessage: 'Enter an email address in the correct format, like name@example.com' },
-      { email: '', errorMessage: 'Enter an email address' },
-      { email: null, errorMessage: 'Enter an email address' },
-      { email: undefined, errorMessage: 'Enter an email address' },
-      { email: 'missing@email.com', errorMessage: 'No user found with email address "missing@email.com"' }
-    ])('returns 400 when request contains incorrect email - %p', async ({ email, errorMessage }) => {
+      { email: 'not-an-email', sbi: validSbi, errorMessage: 'Enter an email address in the correct format, like name@example.com' },
+      { email: '', sbi: validSbi, errorMessage: 'Enter an email address' },
+      { email: null, sbi: validSbi, errorMessage: 'Enter an email address' },
+      { email: undefined, sbi: validSbi, errorMessage: 'Enter an email address' },
+      { email: 'missing@email.com', sbi: validSbi, errorMessage: 'No user found with email address "missing@email.com" and sbi "123456789"' }
+    ])('returns 400 when request contains incorrect email - %p', async ({ email, errorMessage, sbi }) => {
       const crumb = await getCrumbs(global.__SERVER__)
       const options = {
         method: 'POST',
         url,
-        payload: { crumb, email },
+        payload: { crumb, email, sbi },
         headers: { cookie: `crumb=${crumb}` }
       }
 
@@ -107,13 +107,13 @@ describe('FarmerApply application login page test', () => {
       { desc: 'with known email for the first time redirects to email sent page with form filled with email and adds token to cache with redirectTo for farmer', existingToken: false },
       { desc: 'with known email with an existing token redirects to email sent page and adds token to cache with redirectTo for farmer', existingToken: true }
     ])('$desc', async ({ existingToken }) => {
-      getByEmail.mockResolvedValue(org)
+      getByEmailAndSbi.mockResolvedValue(org)
       sendEmail.mockResolvedValue(true)
       const crumb = await getCrumbs(global.__SERVER__)
       const options = {
         method: 'POST',
         url,
-        payload: { crumb, email: validEmail },
+        payload: { crumb, email: validEmail, sbi: validSbi },
         headers: { cookie: `crumb=${crumb}` }
       }
       let token
@@ -135,7 +135,7 @@ describe('FarmerApply application login page test', () => {
       } else {
         expect(cacheSetSpy).toHaveBeenNthCalledWith(1, validEmail, [expect.stringMatching(new RegExp(uuidRegex))])
       }
-      expect(cacheSetSpy).toHaveBeenNthCalledWith(2, expect.stringMatching(new RegExp(uuidRegex)), { email: validEmail, redirectTo: 'org-review', userType: farmerApply })
+      expect(cacheSetSpy).toHaveBeenNthCalledWith(2, expect.stringMatching(new RegExp(uuidRegex)), { email: validEmail, redirectTo: 'org-review', userType: farmerApply, data: { sbi: validSbi} })
       expect(res.statusCode).toBe(200)
       const $ = cheerio.load(res.payload)
       expect($('h1').text()).toEqual('Check your email')
@@ -147,16 +147,16 @@ describe('FarmerApply application login page test', () => {
     })
 
     test.each([
-      { email: validEmail },
-      { email: `  ${validEmail}  ` }
-    ])('with known email sends email (email = $email)', async ({ email }) => {
-      getByEmail.mockResolvedValue(org)
+      { email: validEmail, sbi: validSbi },
+      { email: `  ${validEmail}  `, sbi: validSbi }
+    ])('with known email sends email (email = $email)', async ({ email, sbi }) => {
+      getByEmailAndSbi.mockResolvedValue(org)
       sendEmail.mockResolvedValue(true)
       const crumb = await getCrumbs(global.__SERVER__)
       const options = {
         method: 'POST',
         url,
-        payload: { crumb, email },
+        payload: { crumb, email, sbi },
         headers: { cookie: `crumb=${crumb}` }
       }
 
@@ -167,18 +167,18 @@ describe('FarmerApply application login page test', () => {
         applyLogin,
         validEmail,
         expect.objectContaining(
-          { personalisation: { magiclink: expect.stringMatching(new RegExp(`${serviceUri}/verify-login\\?token=${uuidRegex}&email=${validEmail}`)) }, reference: expect.stringMatching(new RegExp(uuidRegex)) })
+          { personalisation: { magiclink: expect.stringMatching(new RegExp(`${serviceUri}/verify-login\\?token=${uuidRegex}&email=${validEmail}&sbi=${validSbi}`)) }, reference: expect.stringMatching(new RegExp(uuidRegex)) })
       )
     })
 
     test('with known email returns error when problem sending email', async () => {
-      getByEmail.mockResolvedValue(org)
+      getByEmailAndSbi.mockResolvedValue(org)
       sendEmail.mockResolvedValue(false)
       const crumb = await getCrumbs(global.__SERVER__)
       const options = {
         method: 'POST',
         url,
-        payload: { crumb, email: validEmail },
+        payload: { crumb, email: validEmail, sbi: validSbi },
         headers: { cookie: `crumb=${crumb}` }
       }
 

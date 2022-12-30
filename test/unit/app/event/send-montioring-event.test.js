@@ -1,7 +1,7 @@
 jest.mock('../../../../app/event/raise-event')
 const raiseEvent = require('../../../../app/event/raise-event')
 
-const sendMonitorindEvent = require('../../../../app/event/send-monitoring-event')
+const sendMonitoringEvent = require('../../../../app/event/send-monitoring-event')
 
 let event
 const sessionId = '9e016c50-046b-4597-b79a-ebe4f0bf8505'
@@ -24,7 +24,7 @@ describe('Send event on session set', () => {
   })
 
   test('should call raiseEvent when a valid event is received', async () => {
-    await sendMonitorindEvent(sessionId, 'monitoring test event raised.', email)
+    await sendMonitoringEvent(sessionId, 'monitoring test event raised.', email)
     expect(raiseEvent).toHaveBeenCalled()
   })
 
@@ -36,7 +36,7 @@ describe('Send event on session set', () => {
       data: { alert: 'monitoring test event raised.' }
     }
 
-    await sendMonitorindEvent(sessionId, 'monitoring test event raised.', email)
+    await sendMonitoringEvent(sessionId, 'monitoring test event raised.', email)
     expect(raiseEvent).toHaveBeenCalledWith(event, status)
   })
 
@@ -48,12 +48,12 @@ describe('Send event on session set', () => {
       data: { alert: 'monitoring test event raised.' }
     }
 
-    await sendMonitorindEvent(sessionId, 'monitoring test event raised.', null)
+    await sendMonitoringEvent(sessionId, 'monitoring test event raised.', null)
     expect(raiseEvent).toHaveBeenCalledWith(event, status)
   })
 
   test('should not call raiseEvent when an event with a null sessionId is received', async () => {
-    await sendMonitorindEvent(null, 'monitoring test event raised.', email)
+    await sendMonitoringEvent(null, 'monitoring test event raised.', email)
     expect(raiseEvent).not.toHaveBeenCalled()
   })
 })

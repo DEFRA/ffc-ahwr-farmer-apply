@@ -46,8 +46,8 @@ module.exports = [{
       failAction: async (request, h, error) => {
         const { email, sbi } = request.payload
         const errorMessages = error
-        .details
-        .reduce((acc, e) => ({ ...acc, [e.context.label]: { text: e.message } }), {})
+          .details
+          .reduce((acc, e) => ({ ...acc, [e.context.label]: { text: e.message } }), {})
         sendMonitoringEvent(request.yar.id, error.details[0].message, email, sbi)
         return h.view('login', { ...request.payload, errorMessages, hintText }).code(400).takeover()
       }
@@ -57,8 +57,8 @@ module.exports = [{
       const organisation = await getByEmailAndSbi(email, sbi)
 
       if (!organisation) {
-        sendMonitoringEvent(request.yar.id, `No user found with email address and sbi "${email}", "${sbi}"`, email, sbi)
-        return h.view('login', { ...request.payload, errorMessage: { text: `No user found with email address "${email}" and sbi "${sbi}"` }, hintText }).code(400).takeover()
+        sendMonitoringEvent(request.yar.id, `No user found with email address "${email}" and sbi "${sbi}"`, email, sbi)
+        return h.view('login', { ...request.payload, errorMessages: { email: { text: `No user found with email address "${email}" and sbi "${sbi}"` } }, hintText }).code(400).takeover()
       }
 
       clear(request)

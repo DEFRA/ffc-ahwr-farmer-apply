@@ -4,7 +4,7 @@ const { cookie: { ttl }, urlPrefix } = require('../../../../app/config')
 const { farmerApplyData: { organisation: organisationKey } } = require('../../../../app/session/keys')
 
 describe('Auth plugin test', () => {
-  let getByEmail
+  let getByEmailAndSbi
   let session
   const organisation = { name: 'my-org' }
 
@@ -14,7 +14,7 @@ describe('Auth plugin test', () => {
     session = require('../../../../app/session')
     jest.mock('../../../../app/session')
     const orgs = require('../../../../app/api-requests/users')
-    getByEmail = orgs.getByEmail
+    getByEmailAndSbi = orgs.getByEmailAndSbi
     jest.mock('../../../../app/api-requests/users')
   })
   beforeEach(() => {
@@ -22,6 +22,7 @@ describe('Auth plugin test', () => {
   })
 
   const validEmail = 'dairy@ltd.com'
+  const validSbi = '123456789'
 
   describe('GET requests to /login', () => {
     const url = `${urlPrefix}/login`
@@ -30,13 +31,14 @@ describe('Auth plugin test', () => {
     async function login () {
       const email = uuid() + validEmail
       const token = uuid()
+      const sbi = uuid() + validSbi
       const options = {
         method: 'GET',
-        url: `${urlPrefix}/verify-login?email=${email}&token=${token}`
+        url: `${urlPrefix}/verify-login?email=${email}&token=${token}&sbi=${sbi}`
       }
 
       await global.__SERVER__.app.magiclinkCache.set(email, [token])
-      await global.__SERVER__.app.magiclinkCache.set(token, { email, redirectTo, userType: farmerApply })
+      await global.__SERVER__.app.magiclinkCache.set(token, { email, redirectTo, userType: farmerApply, data: { sbi } })
 
       return global.__SERVER__.inject(options)
     }
@@ -51,7 +53,7 @@ describe('Auth plugin test', () => {
         url,
         headers: { cookie: cookieHeaders }
       }
-      getByEmail.mockResolvedValue(organisation)
+      getByEmailAndSbi.mockResolvedValue(organisation)
 
       const res = await global.__SERVER__.inject(options)
       const cookieHeader = res.headers['set-cookie']
