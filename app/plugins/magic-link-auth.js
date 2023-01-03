@@ -1,7 +1,7 @@
 const { getByEmail } = require('../api-requests/users')
 const { cookie: cookieConfig, cookiePolicy } = require('../config')
-const { getFarmerApplyData, setFarmerApplyData } = require('../session')
-const { farmerApplyData: { organisation: organisationKey } } = require('../session/keys')
+const { getFarmerApplyData, setFarmerApplyData, setOrganisations } = require('../session')
+const { farmerApplyData: { organisation: organisationKey }, organisations: organisationsKey } = require('../session/keys')
 
 module.exports = {
   plugin: {
@@ -26,9 +26,13 @@ module.exports = {
           if (getFarmerApplyData(request, organisationKey)) {
             result.valid = true
           } else {
-            const organisation = (await getByEmail(session.email)) ?? {}
-            setFarmerApplyData(request, organisationKey, organisation)
-            result.valid = !!organisation
+            const organisations = (await getByEmail(session.email)) ?? {}
+            if (organisations.length === 1) {
+              setFarmerApplyData(request, organisationKey, organisations[0])
+            } else {
+              setOrganisations(request, organisationsKey, organisations)
+            }
+            result.valid = !!organisations
           }
 
           return result

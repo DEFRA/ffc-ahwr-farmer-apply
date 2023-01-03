@@ -4,7 +4,7 @@ const eligibilityApi = require('./eligibility-api')
 
 async function getByEmail (emailAddress) {
   if (config.eligibilityApi.enabled) {
-    return await eligibilityApi.getEligibility(emailAddress.toLowerCase())
+    return await eligibilityApi.getEligibleBusiness(emailAddress.toLowerCase())
   } else {
     return (await usersFile.getUsers()).find(x => x.email.toLowerCase() === emailAddress.toLowerCase())
   }

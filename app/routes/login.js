@@ -5,6 +5,8 @@ const { email: emailValidation } = require('../lib/validation/email')
 const { sendFarmerApplyLoginMagicLink } = require('../lib/email/send-magic-link-email')
 const { clear } = require('../session')
 const { sendMonitoringEvent } = require('../event')
+const { getFarmerApplyData } = require('../session')
+const { farmerApplyData: { organisation: organisationKey } } = require('../session/keys')
 
 const hintText = 'We\'ll use this to send you a link to apply for a review'
 const urlPrefix = require('../config/index').urlPrefix
@@ -23,7 +25,11 @@ module.exports = [{
     },
     handler: async (request, h) => {
       if (request.auth.isAuthenticated) {
-        return h.redirect(request.query?.next || `${urlPrefix}/org-review`)
+        if (getFarmerApplyData(request, organisationKey)) {
+          return h.redirect(request.query?.next || `${urlPrefix}/org-review`)
+        } else {
+          return h.redirect(request.query?.next || `${urlPrefix}/org-select`)
+        }
       }
 
       return h.view('login', { hintText })
@@ -49,9 +55,9 @@ module.exports = [{
     },
     handler: async (request, h) => {
       const { email } = request.payload
-      const organisation = await getByEmail(email)
+      const organisations = await getByEmail(email)
 
-      if (!organisation) {
+      if (!organisations) {
         sendMonitoringEvent(request.yar.id, `No user found with email address "${email}"`, email)
         return h.view('login', { ...request.payload, errorMessage: { text: `No user found with email address "${email}"` }, hintText }).code(400).takeover()
       }
