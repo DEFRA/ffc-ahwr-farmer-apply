@@ -10,20 +10,23 @@ const getOrganisations = (request, organisation, errorText) => {
     }
   })
   return {
-    name: 'select-organisation',
-    hint: {
-      text: 'Select one option.'
-    },
-    fieldset: {
-      legend: {
-        text: 'Please select one of organisation?',
-        isPageHeading: true,
-        classes: 'govuk-fieldset__legend--l'
+    data:
+    {
+      name: 'select-organisation',
+      hint: {
+        text: 'Select one option.'
+      },
+      fieldset: {
+        legend: {
+          text: 'Please select one of organisation?',
+          isPageHeading: true,
+          classes: 'govuk-fieldset__legend--l'
+        }
+      },
+      items: organisations,
+      errorMessage: {
+        text: errorText ?? ''
       }
-    },
-    items: organisations,
-    errorMessage: {
-      text: errorText ?? ''
     }
   }
 }
