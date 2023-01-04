@@ -75,7 +75,12 @@ module.exports = [
             .reduce((acc, e) => ({ ...acc, [e.context.label]: { text: e.message } }), {})
           return h.view(
             'register-your-interest/enter-your-sbi',
-            { ...request.payload, errorMessages }
+            {
+              ...request.payload,
+              callChargesUri,
+              ruralPaymentsEmail,
+              errorMessages
+            }
           ).code(400).takeover()
         }
       },
