@@ -63,7 +63,13 @@ module.exports = [
           const errorMessages = error
             .details
             .reduce((acc, e) => ({ ...acc, [e.context.label]: { text: e.message } }), {})
-          return h.view('register-your-interest/enter-your-crn', { ...request.payload, errorMessages }).code(400).takeover()
+          return h.view('register-your-interest/enter-your-crn', {
+            callChargesUri,
+            ruralPaymentsEmail,
+            ...request.payload,
+            errorMessages
+          }
+          ).code(400).takeover()
         }
       },
       handler: async (request, h) => {
