@@ -64,9 +64,9 @@ module.exports = [
             .details
             .reduce((acc, e) => ({ ...acc, [e.context.label]: { text: e.message } }), {})
           return h.view('register-your-interest/enter-your-crn', {
+            ...request.payload,
             callChargesUri,
             ruralPaymentsEmail,
-            ...request.payload,
             errorMessages
           }
           ).code(400).takeover()

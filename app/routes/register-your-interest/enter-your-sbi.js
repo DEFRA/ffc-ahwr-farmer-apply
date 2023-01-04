@@ -76,9 +76,9 @@ module.exports = [
           return h.view(
             'register-your-interest/enter-your-sbi',
             {
+              ...request.payload,
               callChargesUri,
               ruralPaymentsEmail,
-              ...request.payload,
               errorMessages
             }
           ).code(400).takeover()

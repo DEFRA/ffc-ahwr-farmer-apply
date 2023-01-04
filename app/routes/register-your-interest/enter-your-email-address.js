@@ -78,9 +78,9 @@ module.exports = [
           return h.view(
             'register-your-interest/enter-your-email-address',
             {
+              ...request.payload,
               callChargesUri,
               ruralPaymentsEmail,
-              ...request.payload,
               errorMessages
             }
           ).code(400).takeover()
