@@ -9,6 +9,11 @@ const { sendMonitoringEvent } = require('../event')
 const hintText = 'We\'ll use this to send you a link to apply for a review'
 const urlPrefix = require('../config/index').urlPrefix
 
+const getIp = (request) => {
+  const xForwardedForHeader = request.headers['x-forwarded-for']
+  return xForwardedForHeader ? xForwardedForHeader.split(',')[0] : request.info.remoteAddress
+}
+
 module.exports = [{
   method: 'GET',
   path: `${urlPrefix}/login`,
@@ -43,7 +48,7 @@ module.exports = [{
       }),
       failAction: async (request, h, error) => {
         const { email } = request.payload
-        sendMonitoringEvent(request.yar.id, error.details[0].message, email)
+        sendMonitoringEvent(request.yar.id, error.details[0].message, email, getIp(request))
         return h.view('login', { ...request.payload, errorMessage: { text: error.details[0].message }, hintText }).code(400).takeover()
       }
     },
@@ -52,7 +57,7 @@ module.exports = [{
       const organisation = await getByEmail(email)
 
       if (!organisation) {
-        sendMonitoringEvent(request.yar.id, `No user found with email address "${email}"`, email)
+        sendMonitoringEvent(request.yar.id, `No user found with email address "${email}"`, email, getIp(request))
         return h.view('login', { ...request.payload, errorMessage: { text: `No user found with email address "${email}"` }, hintText }).code(400).takeover()
       }
 

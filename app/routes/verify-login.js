@@ -15,6 +15,11 @@ async function cacheFarmerApplyData (request, email) {
   setFarmerApplyData(request, organisationKey, organisation)
 }
 
+const getIp = (request) => {
+  const xForwardedForHeader = request.headers['x-forwarded-for']
+  return xForwardedForHeader ? xForwardedForHeader.split(',')[0] : request.info.remoteAddress
+}
+
 module.exports = [{
   method: 'GET',
   path: `${urlPrefix}/verify-login`,
@@ -27,7 +32,7 @@ module.exports = [{
       }),
       failAction: async (request, h, error) => {
         console.error(error)
-        sendMonitoringEvent(request.yar.id, error.details[0].message, '')
+        sendMonitoringEvent(request.yar.id, error.details[0].message, '', getIp(request))
         return h.view('verify-login-failed').code(400).takeover()
       }
     },
@@ -36,7 +41,7 @@ module.exports = [{
 
       const { email: cachedEmail, redirectTo, userType } = await lookupToken(request, token)
       if (isRequestInvalid(cachedEmail, email)) {
-        sendMonitoringEvent(request.yar.id, 'Invalid token', email)
+        sendMonitoringEvent(request.yar.id, 'Invalid token', email, getIp(request))
         return h.view('verify-login-failed').code(400)
       }
 
