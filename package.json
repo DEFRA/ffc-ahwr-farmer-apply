@@ -35,6 +35,7 @@
     "@hapi/wreck": "^18.0.0",
     "@hapi/yar": "^10.1.1",
     "applicationinsights": "^2.1.6",
+    "expect-webdriverio": "^3.4.0",
     "ffc-ahwr-event-publisher": "1.0.0",
     "ffc-messaging": "^2.6.2",
     "govuk-frontend": "4.0.1",
