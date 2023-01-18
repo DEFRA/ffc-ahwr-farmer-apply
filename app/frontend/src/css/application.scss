@@ -145,5 +145,5 @@ $govuk-global-styles: true; // https://frontend.design-system.service.gov.uk/sas
 }
 
 .govuk-panel--blue {
-  background: #1d70b8 !important;
+  background: $govuk-brand-colour !important;
 }
