@@ -46,7 +46,7 @@ describe('Vet technical guidance pages', () => {
     expect(res.statusCode).toBe(200)
     const $ = cheerio.load(res.payload)
     expect($('.govuk-panel__title').text()).toEqual(
-      'Vet: test for the effectiveness of worming treatments in sheep'
+      'Vets: test for the effectiveness of worming treatments in sheep'
     )
     expect($('title').text()).toEqual(`Guidance for vets - ${serviceName}`)
     expectPhaseBanner.ok($)
