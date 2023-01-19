@@ -6,7 +6,8 @@ const { sendFarmerApplyLoginMagicLink } = require('../lib/email/send-magic-link-
 const { clear } = require('../session')
 const { sendMonitoringEvent } = require('../event')
 
-const hintText = 'We\'ll use this to send you a link to apply for a review'
+const hintText = 'We\'ll use this to send you a link to apply for a review. This must be the business email address linked to the business applying for a review.'
+
 const urlPrefix = require('../config/index').urlPrefix
 
 const getIp = (request) => {
