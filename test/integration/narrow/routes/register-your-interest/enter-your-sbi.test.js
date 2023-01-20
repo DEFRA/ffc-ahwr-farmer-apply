@@ -21,11 +21,11 @@ describe('Farmer apply "Enter your SBI" page', () => {
         method: 'GET',
         url: `${urlPrefix}/register-your-interest/enter-your-sbi`
       }
-      const EXPECTED_SBI = '123456789'
+      const EXPECTED_SBI = '105000000'
       when(session.getRegisterYourInterestData)
         .calledWith(expect.anything(), 'sbi')
         .mockReturnValue(EXPECTED_SBI)
-      const EXPECTED_CONFIRM_SBI = '012345678'
+      const EXPECTED_CONFIRM_SBI = '105000000'
       when(session.getRegisterYourInterestData)
         .calledWith(expect.anything(), 'confirmSbi')
         .mockReturnValue(EXPECTED_CONFIRM_SBI)
@@ -52,8 +52,8 @@ describe('Farmer apply "Enter your SBI" page', () => {
     test.each([
       {
         payload: {
-          sbi: '123456789',
-          confirmSbi: '123456789'
+          sbi: '105000000',
+          confirmSbi: '105000000'
         }
       }
     ])('when proper $payload then expect 302 and redirect to "Enter your email address" page', async (testCase) => {
@@ -126,7 +126,25 @@ describe('Farmer apply "Enter your SBI" page', () => {
       },
       {
         payload: {
-          sbi: '123456789'
+          sbi: '012345678'
+        },
+        expectedErrors: {
+          sbi: 'Error: The SBI number is out of range',
+          confirmSbi: 'Error: Confirm your SBI number'
+        }
+      },
+      {
+        payload: {
+          sbi: '87654321'
+        },
+        expectedErrors: {
+          sbi: 'Error: The SBI number is out of range',
+          confirmSbi: 'Error: Confirm your SBI number'
+        }
+      },
+      {
+        payload: {
+          sbi: '105000000'
         },
         expectedErrors: {
           sbi: '',
@@ -135,7 +153,7 @@ describe('Farmer apply "Enter your SBI" page', () => {
       },
       {
         payload: {
-          sbi: '123456789',
+          sbi: '105000000',
           confirmSbi: ''
         },
         expectedErrors: {
@@ -145,7 +163,7 @@ describe('Farmer apply "Enter your SBI" page', () => {
       },
       {
         payload: {
-          sbi: '123456789',
+          sbi: '105000000',
           confirmSbi: 1
         },
         expectedErrors: {
@@ -155,7 +173,7 @@ describe('Farmer apply "Enter your SBI" page', () => {
       },
       {
         payload: {
-          sbi: '123456789',
+          sbi: '105000000',
           confirmSbi: '987654321'
         },
         expectedErrors: {

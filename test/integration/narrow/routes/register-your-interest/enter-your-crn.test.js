@@ -23,11 +23,11 @@ describe('Farmer apply "Enter your CRN" page', () => {
         method: 'GET',
         url: URL
       }
-      const EXPECTED_CRN = '0123456789'
+      const EXPECTED_CRN = '1100000000'
       when(session.getRegisterYourInterestData)
         .calledWith(expect.anything(), 'crn')
         .mockReturnValue(EXPECTED_CRN)
-      const EXPECTED_CONFIRM_CRN = '1234567890'
+      const EXPECTED_CONFIRM_CRN = '1100000000'
       when(session.getRegisterYourInterestData)
         .calledWith(expect.anything(), 'confirmCrn')
         .mockReturnValue(EXPECTED_CONFIRM_CRN)
@@ -54,8 +54,8 @@ describe('Farmer apply "Enter your CRN" page', () => {
     test.each([
       {
         payload: {
-          crn: '0123456789',
-          confirmCrn: '0123456789'
+          crn: '1100000000',
+          confirmCrn: '1100000000'
         }
       }
     ])('when proper $payload then expect 302 and redirect to "Enter your email address" page', async (testCase) => {
@@ -131,13 +131,31 @@ describe('Farmer apply "Enter your CRN" page', () => {
           crn: '0123456789'
         },
         expectedErrors: {
+          crn: 'Error: The CRN is out of range',
+          confirmCrn: 'Error: Confirm your CRN'
+        }
+      },
+      {
+        payload: {
+          crn: '9876543210'
+        },
+        expectedErrors: {
+          crn: 'Error: The CRN is out of range',
+          confirmCrn: 'Error: Confirm your CRN'
+        }
+      },
+      {
+        payload: {
+          crn: '1100000000'
+        },
+        expectedErrors: {
           crn: '',
           confirmCrn: 'Error: Confirm your CRN'
         }
       },
       {
         payload: {
-          crn: '0123456789',
+          crn: '1100000000',
           confirmCrn: ''
         },
         expectedErrors: {
@@ -147,7 +165,7 @@ describe('Farmer apply "Enter your CRN" page', () => {
       },
       {
         payload: {
-          crn: '0123456789',
+          crn: '1100000000',
           confirmCrn: 1
         },
         expectedErrors: {
@@ -157,7 +175,7 @@ describe('Farmer apply "Enter your CRN" page', () => {
       },
       {
         payload: {
-          crn: '0123456789',
+          crn: '1100000000',
           confirmCrn: '9876543210'
         },
         expectedErrors: {

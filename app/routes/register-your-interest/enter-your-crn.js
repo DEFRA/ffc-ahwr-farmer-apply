@@ -9,8 +9,11 @@ const ERROR_MESSAGE = {
   enterYourCrnNumber: 'Enter a CRN',
   enterCrnNumberThatHas10Digits: 'Enter a CRN that has 10 digits',
   confirmYourCrnNumber: 'Confirm your CRN',
-  crnNumbersDoNotMatch: 'The CRNs do not match'
+  crnNumbersDoNotMatch: 'The CRNs do not match',
+  crnNumberOutOfRange: 'The CRN is out of range'
 }
+const MIN_CRN_NUMBER = 1100000000
+const MAX_CRN_NUMBER = 1110000000
 
 const PATH = `${urlPrefix}/register-your-interest/enter-your-crn`
 
@@ -45,11 +48,16 @@ module.exports = [
             .trim()
             .regex(/^\d{10}$/)
             .required()
+            .number()
+            .min(MIN_CRN_NUMBER)
+            .max(MAX_CRN_NUMBER)
             .messages({
               'any.required': ERROR_MESSAGE.enterYourCrnNumber,
               'string.base': ERROR_MESSAGE.enterYourCrnNumber,
               'string.empty': ERROR_MESSAGE.enterYourCrnNumber,
-              'string.pattern.base': ERROR_MESSAGE.enterCrnNumberThatHas10Digits
+              'string.pattern.base': ERROR_MESSAGE.enterCrnNumberThatHas10Digits,
+              'number.min': ERROR_MESSAGE.crnNumberOutOfRange,
+              'number.max': ERROR_MESSAGE.crnNumberOutOfRange
             }),
           confirmCrn: Joi.alternatives().conditional('confirmCrn', { is: Joi.string().trim().required(), then: Joi.equal(Joi.ref('crn')), otherwise: Joi.string().trim().required() })
             .messages({

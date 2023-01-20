@@ -9,8 +9,11 @@ const ERROR_MESSAGE = {
   enterYourSbiNumber: 'Enter your SBI number',
   enterSbiNumberThatHas9Digits: 'Enter an SBI number that has 9 digits',
   confirmYourSbiNumber: 'Confirm your SBI number',
-  sbiNumbersDoNotMatch: 'SBI numbers do not match'
+  sbiNumbersDoNotMatch: 'SBI numbers do not match',
+  sbiNumberOutOfRange: 'The SBI number is out of range'
 }
+const MIN_SBI_NUMBER = 105000000
+const MAX_SBI_NUMBER = 210000000
 
 module.exports = [
   {
@@ -49,11 +52,16 @@ module.exports = [
             .trim()
             .regex(/^\d{9}$/)
             .required()
+            .number()
+            .min(MIN_SBI_NUMBER)
+            .max(MAX_SBI_NUMBER)
             .messages({
               'any.required': ERROR_MESSAGE.enterYourSbiNumber,
               'string.base': ERROR_MESSAGE.enterYourSbiNumber,
               'string.empty': ERROR_MESSAGE.enterYourSbiNumber,
-              'string.pattern.base': ERROR_MESSAGE.enterSbiNumberThatHas9Digits
+              'string.pattern.base': ERROR_MESSAGE.enterSbiNumberThatHas9Digits,
+              'number.min': ERROR_MESSAGE.sbiNumberOutOfRange,
+              'number.max': ERROR_MESSAGE.sbiNumberOutOfRange
             }),
           confirmSbi: Joi
             .alternatives()
