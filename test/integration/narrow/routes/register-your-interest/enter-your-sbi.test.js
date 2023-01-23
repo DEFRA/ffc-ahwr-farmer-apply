@@ -108,6 +108,15 @@ describe('Farmer apply "Enter your SBI" page', () => {
       },
       {
         payload: {
+          sbi: '9999999999'
+        },
+        expectedErrors: {
+          sbi: 'Error: Enter an SBI number that has 9 digits',
+          confirmSbi: 'Error: Confirm your SBI number'
+        }
+      },
+      {
+        payload: {
           sbi: 'ABCDEFGHI'
         },
         expectedErrors: {
