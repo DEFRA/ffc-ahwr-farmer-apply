@@ -4,6 +4,7 @@ const Joi = require('joi')
 const urlPrefix = require('../../config/index').urlPrefix
 const callChargesUri = require('../../config/index').callChargesUri
 const ruralPaymentsEmail = require('../../config/index').ruralPaymentsEmail
+const CRN_SCHEMA = require('./crn.schema.js')
 
 const ERROR_MESSAGE = {
   enterYourCrnNumber: 'Enter a CRN',
@@ -12,8 +13,6 @@ const ERROR_MESSAGE = {
   crnNumbersDoNotMatch: 'The CRNs do not match',
   crnNumberOutOfRange: 'The CRN is out of range'
 }
-const MIN_CRN_NUMBER = 1100000000
-const MAX_CRN_NUMBER = 1110000000
 
 const PATH = `${urlPrefix}/register-your-interest/enter-your-crn`
 
@@ -43,14 +42,7 @@ module.exports = [
       auth: false,
       validate: {
         payload: Joi.object({
-          crn: Joi
-            .number()
-            .required()
-            .integer()
-            .min(MIN_CRN_NUMBER)
-            .max(MAX_CRN_NUMBER)
-            .less(10000000000)
-            .greater(999999999.9)
+          crn: CRN_SCHEMA
             .messages({
               'any.required': ERROR_MESSAGE.enterYourCrnNumber,
               'number.base': ERROR_MESSAGE.enterCrnNumberThatHas10Digits,
