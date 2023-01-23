@@ -54,6 +54,7 @@ module.exports = [
             .messages({
               'any.required': ERROR_MESSAGE.enterYourCrnNumber,
               'number.base': ERROR_MESSAGE.enterCrnNumberThatHas10Digits,
+              'number.integer': ERROR_MESSAGE.enterCrnNumberThatHas10Digits,
               'number.less': ERROR_MESSAGE.enterCrnNumberThatHas10Digits,
               'number.greater': ERROR_MESSAGE.enterCrnNumberThatHas10Digits,
               'number.min': ERROR_MESSAGE.crnNumberOutOfRange,

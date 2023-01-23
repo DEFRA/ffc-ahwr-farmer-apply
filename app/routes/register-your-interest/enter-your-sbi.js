@@ -50,6 +50,7 @@ module.exports = [
             .messages({
               'any.required': ERROR_MESSAGE.enterYourSbiNumber,
               'number.base': ERROR_MESSAGE.enterSbiNumberThatHas9Digits,
+              'number.integer': ERROR_MESSAGE.enterSbiNumberThatHas9Digits,
               'number.less': ERROR_MESSAGE.enterSbiNumberThatHas9Digits,
               'number.greater': ERROR_MESSAGE.enterSbiNumberThatHas9Digits,
               'number.min': ERROR_MESSAGE.sbiNumberOutOfRange,
