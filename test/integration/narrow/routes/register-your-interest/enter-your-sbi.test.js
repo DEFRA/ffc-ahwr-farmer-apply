@@ -71,12 +71,12 @@ describe('Farmer apply "Enter your SBI" page', () => {
       expect(session.setRegisterYourInterestData).toHaveBeenCalledWith(
         expect.anything(),
         'sbi',
-        testCase.payload.sbi
+        Number(testCase.payload.sbi)
       )
       expect(session.setRegisterYourInterestData).toHaveBeenCalledWith(
         expect.anything(),
         'confirmSbi',
-        testCase.payload.confirmSbi
+        Number(testCase.payload.confirmSbi)
       )
     })
 
@@ -93,22 +93,13 @@ describe('Farmer apply "Enter your SBI" page', () => {
           sbi: ''
         },
         expectedErrors: {
-          sbi: 'Error: Enter your SBI number',
+          sbi: 'Error: Enter an SBI number that has 9 digits',
           confirmSbi: 'Error: Confirm your SBI number'
         }
       },
       {
         payload: {
-          sbi: 1
-        },
-        expectedErrors: {
-          sbi: 'Error: Enter your SBI number',
-          confirmSbi: 'Error: Confirm your SBI number'
-        }
-      },
-      {
-        payload: {
-          sbi: '12345'
+          sbi: '99999999'
         },
         expectedErrors: {
           sbi: 'Error: Enter an SBI number that has 9 digits',
@@ -126,7 +117,7 @@ describe('Farmer apply "Enter your SBI" page', () => {
       },
       {
         payload: {
-          sbi: '012345678'
+          sbi: '104999999'
         },
         expectedErrors: {
           sbi: 'Error: The SBI number is out of range',
@@ -135,7 +126,7 @@ describe('Farmer apply "Enter your SBI" page', () => {
       },
       {
         payload: {
-          sbi: '87654321'
+          sbi: '210000001'
         },
         expectedErrors: {
           sbi: 'Error: The SBI number is out of range',

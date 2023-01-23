@@ -73,12 +73,12 @@ describe('Farmer apply "Enter your CRN" page', () => {
       expect(session.setRegisterYourInterestData).toHaveBeenCalledWith(
         expect.anything(),
         'crn',
-        testCase.payload.crn
+        Number(testCase.payload.crn)
       )
       expect(session.setRegisterYourInterestData).toHaveBeenCalledWith(
         expect.anything(),
         'confirmCrn',
-        testCase.payload.confirmCrn
+        Number(testCase.payload.confirmCrn)
       )
     })
 
@@ -95,22 +95,13 @@ describe('Farmer apply "Enter your CRN" page', () => {
           crn: ''
         },
         expectedErrors: {
-          crn: 'Error: Enter a CRN',
+          crn: 'Error: Enter a CRN that has 10 digits',
           confirmCrn: 'Error: Confirm your CRN'
         }
       },
       {
         payload: {
-          crn: 1
-        },
-        expectedErrors: {
-          crn: 'Error: Enter a CRN',
-          confirmCrn: 'Error: Confirm your CRN'
-        }
-      },
-      {
-        payload: {
-          crn: '12345'
+          crn: '999999999'
         },
         expectedErrors: {
           crn: 'Error: Enter a CRN that has 10 digits',
@@ -128,7 +119,7 @@ describe('Farmer apply "Enter your CRN" page', () => {
       },
       {
         payload: {
-          crn: '0123456789'
+          crn: '1099999999'
         },
         expectedErrors: {
           crn: 'Error: The CRN is out of range',
@@ -137,7 +128,7 @@ describe('Farmer apply "Enter your CRN" page', () => {
       },
       {
         payload: {
-          crn: '9876543210'
+          crn: '1110000001'
         },
         expectedErrors: {
           crn: 'Error: The CRN is out of range',

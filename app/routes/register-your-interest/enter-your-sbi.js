@@ -48,18 +48,18 @@ module.exports = [
       validate: {
         payload: Joi.object({
           sbi: Joi
-            .string()
-            .trim()
-            .regex(/^\d{9}$/)
-            .required()
             .number()
+            .required()
+            .integer()
             .min(MIN_SBI_NUMBER)
             .max(MAX_SBI_NUMBER)
+            .less(1000000000)
+            .greater(99999999.9)
             .messages({
               'any.required': ERROR_MESSAGE.enterYourSbiNumber,
-              'string.base': ERROR_MESSAGE.enterYourSbiNumber,
-              'string.empty': ERROR_MESSAGE.enterYourSbiNumber,
-              'string.pattern.base': ERROR_MESSAGE.enterSbiNumberThatHas9Digits,
+              'number.base': ERROR_MESSAGE.enterSbiNumberThatHas9Digits,
+              'number.less': ERROR_MESSAGE.enterSbiNumberThatHas9Digits,
+              'number.greater': ERROR_MESSAGE.enterSbiNumberThatHas9Digits,
               'number.min': ERROR_MESSAGE.sbiNumberOutOfRange,
               'number.max': ERROR_MESSAGE.sbiNumberOutOfRange
             }),
@@ -67,12 +67,13 @@ module.exports = [
             .alternatives()
             .conditional('confirmSbi', {
               is: Joi.string().trim().required(),
-              then: Joi.equal(Joi.ref('sbi')),
+              then: Joi.number().equal(Joi.ref('sbi')),
               otherwise: Joi.string().trim().required()
             })
             .messages({
               'any.required': ERROR_MESSAGE.confirmYourSbiNumber,
               'string.base': ERROR_MESSAGE.confirmYourSbiNumber,
+              'number.base': ERROR_MESSAGE.confirmYourSbiNumber,
               'string.empty': ERROR_MESSAGE.confirmYourSbiNumber,
               'any.only': ERROR_MESSAGE.sbiNumbersDoNotMatch
             })

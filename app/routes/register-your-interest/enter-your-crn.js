@@ -44,25 +44,26 @@ module.exports = [
       validate: {
         payload: Joi.object({
           crn: Joi
-            .string()
-            .trim()
-            .regex(/^\d{10}$/)
-            .required()
             .number()
+            .required()
+            .integer()
             .min(MIN_CRN_NUMBER)
             .max(MAX_CRN_NUMBER)
+            .less(10000000000)
+            .greater(999999999.9)
             .messages({
               'any.required': ERROR_MESSAGE.enterYourCrnNumber,
-              'string.base': ERROR_MESSAGE.enterYourCrnNumber,
-              'string.empty': ERROR_MESSAGE.enterYourCrnNumber,
-              'string.pattern.base': ERROR_MESSAGE.enterCrnNumberThatHas10Digits,
+              'number.base': ERROR_MESSAGE.enterCrnNumberThatHas10Digits,
+              'number.less': ERROR_MESSAGE.enterCrnNumberThatHas10Digits,
+              'number.greater': ERROR_MESSAGE.enterCrnNumberThatHas10Digits,
               'number.min': ERROR_MESSAGE.crnNumberOutOfRange,
               'number.max': ERROR_MESSAGE.crnNumberOutOfRange
             }),
-          confirmCrn: Joi.alternatives().conditional('confirmCrn', { is: Joi.string().trim().required(), then: Joi.equal(Joi.ref('crn')), otherwise: Joi.string().trim().required() })
+          confirmCrn: Joi.alternatives().conditional('confirmCrn', { is: Joi.string().trim().required(), then: Joi.number().equal(Joi.ref('crn')), otherwise: Joi.string().trim().required() })
             .messages({
               'any.required': ERROR_MESSAGE.confirmYourCrnNumber,
               'string.base': ERROR_MESSAGE.confirmYourCrnNumber,
+              'number.base': ERROR_MESSAGE.confirmYourCrnNumber,
               'string.empty': ERROR_MESSAGE.confirmYourCrnNumber,
               'any.only': ERROR_MESSAGE.crnNumbersDoNotMatch
             })
