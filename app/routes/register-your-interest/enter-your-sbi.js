@@ -4,6 +4,7 @@ const sessionKeys = require('../../session/keys')
 const urlPrefix = require('../../config/index').urlPrefix
 const callChargesUri = require('../../config/index').callChargesUri
 const ruralPaymentsEmail = require('../../config/index').ruralPaymentsEmail
+const SBI_SCHEMA = require('./sbi.schema.js')
 
 const ERROR_MESSAGE = {
   enterYourSbiNumber: 'Enter your SBI number',
@@ -12,8 +13,6 @@ const ERROR_MESSAGE = {
   sbiNumbersDoNotMatch: 'SBI numbers do not match',
   sbiNumberOutOfRange: 'The SBI number is out of range'
 }
-const MIN_SBI_NUMBER = 105000000
-const MAX_SBI_NUMBER = 210000000
 
 module.exports = [
   {
@@ -47,14 +46,7 @@ module.exports = [
       auth: false,
       validate: {
         payload: Joi.object({
-          sbi: Joi
-            .number()
-            .required()
-            .integer()
-            .min(MIN_SBI_NUMBER)
-            .max(MAX_SBI_NUMBER)
-            .less(1000000000)
-            .greater(99999999.9)
+          sbi: SBI_SCHEMA
             .messages({
               'any.required': ERROR_MESSAGE.enterYourSbiNumber,
               'number.base': ERROR_MESSAGE.enterSbiNumberThatHas9Digits,
