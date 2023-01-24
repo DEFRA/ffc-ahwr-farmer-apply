@@ -57,6 +57,12 @@ describe('Farmer apply "Enter your CRN" page', () => {
           crn: '1100000000',
           confirmCrn: '1100000000'
         }
+      },
+      {
+        payload: {
+          crn: '1110000000',
+          confirmCrn: '1110000000'
+        }
       }
     ])('when proper $payload then expect 302 and redirect to "Enter your email address" page', async (testCase) => {
       const options = {

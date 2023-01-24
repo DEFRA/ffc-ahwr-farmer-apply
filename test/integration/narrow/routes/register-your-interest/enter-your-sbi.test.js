@@ -55,6 +55,12 @@ describe('Farmer apply "Enter your SBI" page', () => {
           sbi: '105000000',
           confirmSbi: '105000000'
         }
+      },
+      {
+        payload: {
+          sbi: '210000000',
+          confirmSbi: '210000000'
+        }
       }
     ])('when proper $payload then expect 302 and redirect to "Enter your email address" page', async (testCase) => {
       const options = {
