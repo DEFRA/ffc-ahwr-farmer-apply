@@ -92,7 +92,7 @@ describe('Farmer apply "Enter your CRN" page', () => {
       {
         payload: {},
         expectedErrors: {
-          crn: 'Error: Enter a CRN',
+          crn: 'Error: Enter your CRN',
           confirmCrn: 'Error: Confirm your CRN'
         }
       },
