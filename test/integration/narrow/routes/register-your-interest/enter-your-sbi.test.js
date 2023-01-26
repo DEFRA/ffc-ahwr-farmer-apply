@@ -135,7 +135,7 @@ describe('Farmer apply "Enter your SBI" page', () => {
           sbi: '104999999'
         },
         expectedErrors: {
-          sbi: 'Error: The SBI number is out of range',
+          sbi: 'Error: The single business identifier (SBI) number is not recognised',
           confirmSbi: 'Error: Confirm your SBI number'
         }
       },
@@ -144,7 +144,7 @@ describe('Farmer apply "Enter your SBI" page', () => {
           sbi: '210000001'
         },
         expectedErrors: {
-          sbi: 'Error: The SBI number is out of range',
+          sbi: 'Error: The single business identifier (SBI) number is not recognised',
           confirmSbi: 'Error: Confirm your SBI number'
         }
       },

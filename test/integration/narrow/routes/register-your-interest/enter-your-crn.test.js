@@ -137,7 +137,7 @@ describe('Farmer apply "Enter your CRN" page', () => {
           crn: '1099999999'
         },
         expectedErrors: {
-          crn: 'Error: The CRN is out of range',
+          crn: 'Error: The customer reference number (CRN) is not recognised',
           confirmCrn: 'Error: Confirm your CRN'
         }
       },
@@ -146,7 +146,7 @@ describe('Farmer apply "Enter your CRN" page', () => {
           crn: '1110000001'
         },
         expectedErrors: {
-          crn: 'Error: The CRN is out of range',
+          crn: 'Error: The customer reference number (CRN) is not recognised',
           confirmCrn: 'Error: Confirm your CRN'
         }
       },
