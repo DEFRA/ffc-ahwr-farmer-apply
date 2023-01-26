@@ -11,7 +11,7 @@ const ERROR_MESSAGE = {
   enterSbiNumberThatHas9Digits: 'Enter an SBI number that has 9 digits',
   confirmYourSbiNumber: 'Confirm your SBI number',
   sbiNumbersDoNotMatch: 'SBI numbers do not match',
-  sbiNumberOutOfRange: 'The SBI number is out of range'
+  sbiNumberOutOfRange: 'The single business identifier (SBI) number is not recognised'
 }
 
 module.exports = [

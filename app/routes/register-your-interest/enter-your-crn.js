@@ -7,11 +7,11 @@ const ruralPaymentsEmail = require('../../config/index').ruralPaymentsEmail
 const CRN_SCHEMA = require('./crn.schema.js')
 
 const ERROR_MESSAGE = {
-  enterYourCrnNumber: 'Enter a CRN',
+  enterYourCrnNumber: 'Enter your CRN',
   enterCrnNumberThatHas10Digits: 'Enter a CRN that has 10 digits',
   confirmYourCrnNumber: 'Confirm your CRN',
   crnNumbersDoNotMatch: 'The CRNs do not match',
-  crnNumberOutOfRange: 'The CRN is out of range'
+  crnNumberOutOfRange: 'The customer reference number (CRN) is not recognised'
 }
 
 const PATH = `${urlPrefix}/register-your-interest/enter-your-crn`
