@@ -23,11 +23,11 @@ describe('Farmer apply "Enter your CRN" page', () => {
         method: 'GET',
         url: URL
       }
-      const EXPECTED_CRN = '0123456789'
+      const EXPECTED_CRN = '1100000000'
       when(session.getRegisterYourInterestData)
         .calledWith(expect.anything(), 'crn')
         .mockReturnValue(EXPECTED_CRN)
-      const EXPECTED_CONFIRM_CRN = '1234567890'
+      const EXPECTED_CONFIRM_CRN = '1100000000'
       when(session.getRegisterYourInterestData)
         .calledWith(expect.anything(), 'confirmCrn')
         .mockReturnValue(EXPECTED_CONFIRM_CRN)
@@ -54,8 +54,14 @@ describe('Farmer apply "Enter your CRN" page', () => {
     test.each([
       {
         payload: {
-          crn: '0123456789',
-          confirmCrn: '0123456789'
+          crn: '1100000000',
+          confirmCrn: '1100000000'
+        }
+      },
+      {
+        payload: {
+          crn: '1110000000',
+          confirmCrn: '1110000000'
         }
       }
     ])('when proper $payload then expect 302 and redirect to "Enter your email address" page', async (testCase) => {
@@ -73,12 +79,12 @@ describe('Farmer apply "Enter your CRN" page', () => {
       expect(session.setRegisterYourInterestData).toHaveBeenCalledWith(
         expect.anything(),
         'crn',
-        testCase.payload.crn
+        Number(testCase.payload.crn)
       )
       expect(session.setRegisterYourInterestData).toHaveBeenCalledWith(
         expect.anything(),
         'confirmCrn',
-        testCase.payload.confirmCrn
+        Number(testCase.payload.confirmCrn)
       )
     })
 
@@ -86,7 +92,7 @@ describe('Farmer apply "Enter your CRN" page', () => {
       {
         payload: {},
         expectedErrors: {
-          crn: 'Error: Enter a CRN',
+          crn: 'Error: Enter your CRN',
           confirmCrn: 'Error: Confirm your CRN'
         }
       },
@@ -95,22 +101,22 @@ describe('Farmer apply "Enter your CRN" page', () => {
           crn: ''
         },
         expectedErrors: {
-          crn: 'Error: Enter a CRN',
+          crn: 'Error: Enter a CRN that has 10 digits',
           confirmCrn: 'Error: Confirm your CRN'
         }
       },
       {
         payload: {
-          crn: 1
+          crn: '999999999'
         },
         expectedErrors: {
-          crn: 'Error: Enter a CRN',
+          crn: 'Error: Enter a CRN that has 10 digits',
           confirmCrn: 'Error: Confirm your CRN'
         }
       },
       {
         payload: {
-          crn: '12345'
+          crn: '10000000000'
         },
         expectedErrors: {
           crn: 'Error: Enter a CRN that has 10 digits',
@@ -128,7 +134,25 @@ describe('Farmer apply "Enter your CRN" page', () => {
       },
       {
         payload: {
-          crn: '0123456789'
+          crn: '1099999999'
+        },
+        expectedErrors: {
+          crn: 'Error: The customer reference number (CRN) is not recognised',
+          confirmCrn: 'Error: Confirm your CRN'
+        }
+      },
+      {
+        payload: {
+          crn: '1110000001'
+        },
+        expectedErrors: {
+          crn: 'Error: The customer reference number (CRN) is not recognised',
+          confirmCrn: 'Error: Confirm your CRN'
+        }
+      },
+      {
+        payload: {
+          crn: '1100000000'
         },
         expectedErrors: {
           crn: '',
@@ -137,7 +161,7 @@ describe('Farmer apply "Enter your CRN" page', () => {
       },
       {
         payload: {
-          crn: '0123456789',
+          crn: '1100000000',
           confirmCrn: ''
         },
         expectedErrors: {
@@ -147,7 +171,7 @@ describe('Farmer apply "Enter your CRN" page', () => {
       },
       {
         payload: {
-          crn: '0123456789',
+          crn: '1100000000',
           confirmCrn: 1
         },
         expectedErrors: {
@@ -157,7 +181,16 @@ describe('Farmer apply "Enter your CRN" page', () => {
       },
       {
         payload: {
-          crn: '0123456789',
+          crn: '1100000000.1'
+        },
+        expectedErrors: {
+          crn: 'Error: Enter a CRN that has 10 digits',
+          confirmCrn: 'Error: Confirm your CRN'
+        }
+      },
+      {
+        payload: {
+          crn: '1100000000',
           confirmCrn: '9876543210'
         },
         expectedErrors: {

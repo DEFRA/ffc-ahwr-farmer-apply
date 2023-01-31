@@ -4,12 +4,14 @@ const Joi = require('joi')
 const urlPrefix = require('../../config/index').urlPrefix
 const callChargesUri = require('../../config/index').callChargesUri
 const ruralPaymentsEmail = require('../../config/index').ruralPaymentsEmail
+const CRN_SCHEMA = require('./crn.schema.js')
 
 const ERROR_MESSAGE = {
-  enterYourCrnNumber: 'Enter a CRN',
+  enterYourCrnNumber: 'Enter your CRN',
   enterCrnNumberThatHas10Digits: 'Enter a CRN that has 10 digits',
   confirmYourCrnNumber: 'Confirm your CRN',
-  crnNumbersDoNotMatch: 'The CRNs do not match'
+  crnNumbersDoNotMatch: 'The CRNs do not match',
+  crnNumberOutOfRange: 'The customer reference number (CRN) is not recognised'
 }
 
 const PATH = `${urlPrefix}/register-your-interest/enter-your-crn`
@@ -40,21 +42,21 @@ module.exports = [
       auth: false,
       validate: {
         payload: Joi.object({
-          crn: Joi
-            .string()
-            .trim()
-            .regex(/^\d{10}$/)
-            .required()
+          crn: CRN_SCHEMA
             .messages({
               'any.required': ERROR_MESSAGE.enterYourCrnNumber,
-              'string.base': ERROR_MESSAGE.enterYourCrnNumber,
-              'string.empty': ERROR_MESSAGE.enterYourCrnNumber,
-              'string.pattern.base': ERROR_MESSAGE.enterCrnNumberThatHas10Digits
+              'number.base': ERROR_MESSAGE.enterCrnNumberThatHas10Digits,
+              'number.integer': ERROR_MESSAGE.enterCrnNumberThatHas10Digits,
+              'number.less': ERROR_MESSAGE.enterCrnNumberThatHas10Digits,
+              'number.greater': ERROR_MESSAGE.enterCrnNumberThatHas10Digits,
+              'number.min': ERROR_MESSAGE.crnNumberOutOfRange,
+              'number.max': ERROR_MESSAGE.crnNumberOutOfRange
             }),
-          confirmCrn: Joi.alternatives().conditional('confirmCrn', { is: Joi.string().trim().required(), then: Joi.equal(Joi.ref('crn')), otherwise: Joi.string().trim().required() })
+          confirmCrn: Joi.alternatives().conditional('confirmCrn', { is: Joi.string().trim().required(), then: Joi.number().equal(Joi.ref('crn')), otherwise: Joi.string().trim().required() })
             .messages({
               'any.required': ERROR_MESSAGE.confirmYourCrnNumber,
               'string.base': ERROR_MESSAGE.confirmYourCrnNumber,
+              'number.base': ERROR_MESSAGE.confirmYourCrnNumber,
               'string.empty': ERROR_MESSAGE.confirmYourCrnNumber,
               'any.only': ERROR_MESSAGE.crnNumbersDoNotMatch
             })
