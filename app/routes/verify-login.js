@@ -4,7 +4,7 @@ const { setFarmerApplyData } = require('../session')
 const { organisation: organisationKey } = require('../session/keys').farmerApplyData
 const { lookupToken, setAuthCookie } = require('../auth')
 const { sendMonitoringEvent } = require('../event')
-const urlPrefix = require('../config/index').urlPrefix
+const { urlPrefix, selectYourBusiness } = require('../config')
 
 function isRequestInvalid (cachedEmail, email) {
   return !cachedEmail || email !== cachedEmail
@@ -46,7 +46,10 @@ module.exports = [{
       }
 
       setAuthCookie(request, email, userType)
-      await cacheFarmerApplyData(request, email)
+
+      if (selectYourBusiness.enabled === false) {
+        await cacheFarmerApplyData(request, email)
+      }
 
       return h.redirect(redirectTo)
     }

@@ -18,7 +18,8 @@ const routes = [].concat(
   require('../routes/declaration'),
   require('../routes/terms'),
   require('../routes/verify-login'),
-  require('../routes/vet-technical')
+  require('../routes/vet-technical'),
+  require('../routes/select-your-business')
 )
 
 const registerYourInterestRoutes = [].concat(
