@@ -9,6 +9,8 @@ module.exports = {
     eligibleSpecies: 'eligibleSpecies',
     declaration: 'declaration',
     organisation: 'organisation',
+    eligbleBusinesses: 'eligbleBusinesses',
+    whichBusiness: 'whichBusiness',
     whichReview: 'whichReview',
     confirmCheckDetails: 'confirmCheckDetails',
     reference: 'reference',
