@@ -35,7 +35,7 @@ module.exports = [
         const rows = [
           {
             key: { text: 'Customer reference number' },
-            value: { html: session.getRegisterYourInterestData(request, sessionKeys.registerYourInterestData.crn) },
+            value: { html: `${session.getRegisterYourInterestData(request, sessionKeys.registerYourInterestData.crn)}` },
             actions: {
               items: [
                 {
@@ -48,7 +48,7 @@ module.exports = [
           },
           {
             key: { text: 'Single business identifier number' },
-            value: { html: session.getRegisterYourInterestData(request, sessionKeys.registerYourInterestData.sbi) },
+            value: { html: `${session.getRegisterYourInterestData(request, sessionKeys.registerYourInterestData.sbi)}` },
             actions: {
               items: [
                 {

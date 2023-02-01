@@ -4,12 +4,14 @@ const sessionKeys = require('../../session/keys')
 const urlPrefix = require('../../config/index').urlPrefix
 const callChargesUri = require('../../config/index').callChargesUri
 const ruralPaymentsEmail = require('../../config/index').ruralPaymentsEmail
+const SBI_SCHEMA = require('./sbi.schema.js')
 
 const ERROR_MESSAGE = {
   enterYourSbiNumber: 'Enter your SBI number',
   enterSbiNumberThatHas9Digits: 'Enter an SBI number that has 9 digits',
   confirmYourSbiNumber: 'Confirm your SBI number',
-  sbiNumbersDoNotMatch: 'SBI numbers do not match'
+  sbiNumbersDoNotMatch: 'SBI numbers do not match',
+  sbiNumberOutOfRange: 'The single business identifier (SBI) number is not recognised'
 }
 
 module.exports = [
@@ -44,27 +46,27 @@ module.exports = [
       auth: false,
       validate: {
         payload: Joi.object({
-          sbi: Joi
-            .string()
-            .trim()
-            .regex(/^\d{9}$/)
-            .required()
+          sbi: SBI_SCHEMA
             .messages({
               'any.required': ERROR_MESSAGE.enterYourSbiNumber,
-              'string.base': ERROR_MESSAGE.enterYourSbiNumber,
-              'string.empty': ERROR_MESSAGE.enterYourSbiNumber,
-              'string.pattern.base': ERROR_MESSAGE.enterSbiNumberThatHas9Digits
+              'number.base': ERROR_MESSAGE.enterSbiNumberThatHas9Digits,
+              'number.integer': ERROR_MESSAGE.enterSbiNumberThatHas9Digits,
+              'number.less': ERROR_MESSAGE.enterSbiNumberThatHas9Digits,
+              'number.greater': ERROR_MESSAGE.enterSbiNumberThatHas9Digits,
+              'number.min': ERROR_MESSAGE.sbiNumberOutOfRange,
+              'number.max': ERROR_MESSAGE.sbiNumberOutOfRange
             }),
           confirmSbi: Joi
             .alternatives()
             .conditional('confirmSbi', {
               is: Joi.string().trim().required(),
-              then: Joi.equal(Joi.ref('sbi')),
+              then: Joi.number().equal(Joi.ref('sbi')),
               otherwise: Joi.string().trim().required()
             })
             .messages({
               'any.required': ERROR_MESSAGE.confirmYourSbiNumber,
               'string.base': ERROR_MESSAGE.confirmYourSbiNumber,
+              'number.base': ERROR_MESSAGE.confirmYourSbiNumber,
               'string.empty': ERROR_MESSAGE.confirmYourSbiNumber,
               'any.only': ERROR_MESSAGE.sbiNumbersDoNotMatch
             })

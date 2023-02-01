@@ -15,6 +15,8 @@ services:
     volumes:
       - ./app:/home/node/app
       - ./package.json:/home/node/package.json
+    environment:
+      NODE_TLS_REJECT_UNAUTHORIZED: 0        
 
   ffc-ahwr-farmer-apply-azurite:
     image: mcr.microsoft.com/azure-storage/azurite:3.16.0
