@@ -45,7 +45,7 @@ describe('API select-your-business', () => {
   describe('GET', () => {
     test.each([
       {
-        toString: () => '200',
+        toString: () => 'HTTP 200',
         given: {
         },
         when: {
@@ -74,10 +74,27 @@ describe('API select-your-business', () => {
       expect(session.setSelectYourBusiness).toHaveBeenCalledWith(
         expect.anything(),
         sessionKeys.selectYourBusiness.eligbleBusinesses,
-        expect.anything()
+        [
+          {
+            sbi: '122333',
+            crn: '112222',
+            email: 'liam.wilson@kainos.com',
+            farmerName: 'Mr Farmer',
+            name: 'My Amazing Farm',
+            address: '1 Some Road'
+          },
+          {
+            sbi: '122334',
+            crn: '112224',
+            email: 'liam.wilson@kainos.com',
+            farmerName: 'Mr Farmer',
+            name: 'My Amazing Farm 2',
+            address: '2 Some Road'
+          }
+        ]
       )
-      // expect($('.govuk-heading-l').first().text()).toEqual('')
       expect($('title').text()).toEqual(config.serviceName)
+      expect($('.govuk-fieldset__heading').first().text().trim()).toEqual('Choose the SBI you would like to apply for:')
       /*
         testCase.expect.consoleLogs.forEach(
           (consoleLog, idx) => expect(logSpy).toHaveBeenNthCalledWith(idx + 1, consoleLog)
@@ -95,7 +112,7 @@ describe('API select-your-business', () => {
 
     test.each([
       {
-        toString: () => '200',
+        toString: () => 'HTTP 200',
         given: {
           payload: {
             whichBusiness: '123'
@@ -140,6 +157,40 @@ describe('API select-your-business', () => {
       testCase.expect.consoleLogs.forEach(
         (consoleLog, idx) => expect(logSpy).toHaveBeenNthCalledWith(idx + 1, consoleLog)
       )
+    })
+
+    test.each([
+      {
+        toString: () => 'HTTP 400 - empty payload',
+        given: {
+          payload: {}
+        }
+      }
+    ])('%s', async (testCase) => {
+      const options = {
+        method: 'POST',
+        url: `${API_URL}`,
+        payload: { crumb, ...testCase.given.payload },
+        headers: { cookie: `crumb=${crumb}` },
+        auth: {
+          credentials: { reference: '1111', sbi: '111111111' },
+          strategy: 'cookie'
+        }
+      }
+      when(session.getSelectYourBusiness)
+        .calledWith(
+          expect.anything(),
+          sessionKeys.selectYourBusiness.eligbleBusinesses
+        )
+        .mockReturnValue([])
+
+      const response = await global.__SERVER__.inject(options)
+      const $ = cheerio.load(response.payload)
+
+      expect(response.statusCode).toBe(400)
+      expect(response.statusMessage).toEqual('Bad Request')
+      expect($('title').text()).toEqual(config.serviceName)
+      expect($('.govuk-fieldset__heading').first().text().trim()).toEqual('Choose the SBI you would like to apply for:')
     })
   })
 })

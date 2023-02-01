@@ -51,9 +51,22 @@ module.exports = [{
         [whichBusiness]: Joi.string().required()
       }),
       failAction: (request, h, _err) => {
-        return h.view('select-your-business',
-          { ...selectYourBusinessRadioOptions(legendText, whichBusiness, getSelectYourBusiness(request, whichBusiness), errorText, radioOptions) }
-        ).code(400).takeover()
+        return h
+          .view(
+            'select-your-business',
+            {
+              ...selectYourBusinessRadioOptions(
+                getSelectYourBusiness(request, eligbleBusinesses),
+                legendText,
+                whichBusiness,
+                getSelectYourBusiness(request, whichBusiness),
+                errorText,
+                radioOptions
+              )
+            }
+          )
+          .code(400)
+          .takeover()
       }
     },
     handler: async (request, h) => {
