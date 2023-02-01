@@ -32,12 +32,12 @@ module.exports = [{
       ]
       // todo get business from eligibility and layer on top new application API call and logic
       setSelectYourBusiness(request, eligbleBusinesses, businesses)
-      if(businesses && businesses.length > 0) {
+      if (businesses && businesses.length > 0) {
         return h.view('select-your-business',
           { ...selectYourBusinessRadioOptions(businesses, legendText, whichBusiness, getSelectYourBusiness(request, whichBusiness), undefined, radioOptions) }
         )
       } else {
-        return h.redirect('no-eligible-businesses');
+        return h.redirect('no-eligible-businesses')
       }
     }
   }

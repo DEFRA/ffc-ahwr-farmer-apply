@@ -5,7 +5,7 @@ module.exports = {
   path: `${urlPrefix}/no-eligible-businesses`,
   options: {
     handler: async (request, h) => {
-        return h.view('no-eligible-businesses');
-      }
+      return h.view('no-eligible-businesses')
+    }
   }
 }
