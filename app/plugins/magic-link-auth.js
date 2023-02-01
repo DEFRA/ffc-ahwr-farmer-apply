@@ -27,7 +27,6 @@ module.exports = {
             result.valid = true
           } else {
             const organisation = (await getByEmail(session.email)) ?? {}
-            console.log(`selectYourBusiness.enabled is - ${selectYourBusiness.enabled}`)
             if (selectYourBusiness.enabled === false) {
               setFarmerApplyData(request, organisationKey, organisation)
             }

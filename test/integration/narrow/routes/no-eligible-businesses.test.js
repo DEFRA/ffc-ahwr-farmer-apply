@@ -1,9 +1,24 @@
 const cheerio = require('cheerio')
 const expectPhaseBanner = require('../../../utils/phase-banner-expect')
-const { serviceName, urlPrefix } = require('../../../../app/config')
 
 describe('No Eligible Businesses page test', () => {
-  const url = `${urlPrefix}/no-eligible-businesses`
+  let url
+  const serviceName = 'Annual health and welfare review of livestock'
+  beforeAll(async () => {
+    jest.resetAllMocks()
+    jest.resetModules()
+    jest.mock('ffc-ahwr-event-publisher')
+    jest.mock('../../../../app/config', () => ({
+      ...jest.requireActual('../../../../app/config'),
+      serviceName: 'Annual health and welfare review of livestock',
+      selectYourBusiness: {
+        enabled: true
+      }
+    }))
+    const config = require('../../../../app/config')
+    const urlPrefix = config.urlPrefix
+    url = `${urlPrefix}/no-eligible-businesses`
+  })
 
   describe(`GET ${url} route`, () => {
     test('when logged in returns 200', async () => {
