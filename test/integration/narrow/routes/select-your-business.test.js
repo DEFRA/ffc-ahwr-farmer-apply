@@ -7,11 +7,11 @@ const MOCK_NOW = new Date()
 const API_URL = `${config.urlPrefix}/select-your-business`
 
 describe('API select-your-business', () => {
-  //let logSpy
+  // let logSpy
   let session
 
   beforeAll(() => {
-    //logSpy = jest.spyOn(console, 'log')
+    // logSpy = jest.spyOn(console, 'log')
 
     session = require('../../../../app/session')
     jest.mock('../../../../app/session')
@@ -20,7 +20,7 @@ describe('API select-your-business', () => {
   afterEach(() => {
     jest.clearAllMocks()
     jest.resetModules()
-    //resetAllWhenMocks()
+    // resetAllWhenMocks()
   })
 
   test.each([
