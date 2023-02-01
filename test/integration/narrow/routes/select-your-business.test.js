@@ -1,4 +1,4 @@
-//const { when, resetAllWhenMocks } = require('jest-when')
+// const { when, resetAllWhenMocks } = require('jest-when')
 const cheerio = require('cheerio')
 const config = require('../../../../app/config')
 
@@ -23,45 +23,96 @@ describe('API select-your-business', () => {
     // resetAllWhenMocks()
   })
 
-  test.each([
-    {
-      toString: () => 'GET 200',
-      given: {
-      },
-      when: {
-      },
-      expect: {
-        consoleLogs: [
-          `${MOCK_NOW.toISOString()} Log message: ${JSON.stringify({})}`
-        ]
+  describe('GET', () => {
+    test.each([
+      {
+        toString: () => '200',
+        given: {
+        },
+        when: {
+        },
+        expect: {
+          consoleLogs: [
+            `${MOCK_NOW.toISOString()} Log message: ${JSON.stringify({})}`
+          ]
+        }
       }
-    }
-  ])('%s', async (testCase) => {
-    const options = {
-      method: 'GET',
-      url: `${API_URL}`,
-      auth: {
-        credentials: { reference: '1111', sbi: '111111111' },
-        strategy: 'cookie'
+    ])('%s', async (testCase) => {
+      const options = {
+        method: 'GET',
+        url: `${API_URL}`,
+        auth: {
+          credentials: { reference: '1111', sbi: '111111111' },
+          strategy: 'cookie'
+        }
       }
-    }
 
-    const response = await global.__SERVER__.inject(options)
-    const $ = cheerio.load(response.payload)
+      const response = await global.__SERVER__.inject(options)
+      const $ = cheerio.load(response.payload)
 
-    expect(response.statusCode).toBe(200)
-    expect(session.setFarmerApplyData).toHaveBeenCalledTimes(1)
-    expect(session.setFarmerApplyData).toHaveBeenCalledWith(
-      expect.anything(),
-      expect.anything(),
-      expect.anything()
-    )
-    // expect($('.govuk-heading-l').first().text()).toEqual('')
-    expect($('title').text()).toEqual(config.serviceName)
-    /*
-    testCase.expect.consoleLogs.forEach(
-      (consoleLog, idx) => expect(logSpy).toHaveBeenNthCalledWith(idx + 1, consoleLog)
-    )
-    */
+      expect(response.statusCode).toBe(200)
+      expect(session.setFarmerApplyData).toHaveBeenCalledTimes(1)
+      expect(session.setFarmerApplyData).toHaveBeenCalledWith(
+        expect.anything(),
+        expect.anything(),
+        expect.anything()
+      )
+      // expect($('.govuk-heading-l').first().text()).toEqual('')
+      expect($('title').text()).toEqual(config.serviceName)
+      /*
+        testCase.expect.consoleLogs.forEach(
+          (consoleLog, idx) => expect(logSpy).toHaveBeenNthCalledWith(idx + 1, consoleLog)
+        )
+        */
+    })
+  })
+
+  describe('POST', () => {
+    test.each([
+      {
+        toString: () => '200',
+        given: {
+          payload: {
+
+          }
+        },
+        when: {
+        },
+        expect: {
+          consoleLogs: [
+            `${MOCK_NOW.toISOString()} Log message: ${JSON.stringify({})}`
+          ]
+        }
+      }
+    ])('%s', async (testCase) => {
+      const options = {
+        method: 'POST',
+        url: `${API_URL}`,
+        payload: { crumb, ...testCase.given.payload },
+        headers: { cookie: `crumb=${crumb}` },
+        auth: {
+          credentials: { reference: '1111', sbi: '111111111' },
+          strategy: 'cookie'
+        }
+      }
+
+      const response = await global.__SERVER__.inject(options)
+      const $ = cheerio.load(response.payload)
+
+      expect(response.statusCode).toBe(200)
+      expect(session.setFarmerApplyData).toHaveBeenCalledTimes(1)
+      expect(session.setFarmerApplyData).toHaveBeenCalledWith(
+        expect.anything(),
+        expect.anything(),
+        expect.anything()
+      )
+      // expect($('.govuk-heading-l').first().text()).toEqual('')
+      expect($('title').text()).toEqual(config.serviceName)
+      /*
+          testCase.expect.consoleLogs.forEach(
+            (consoleLog, idx) => expect(logSpy).toHaveBeenNthCalledWith(idx + 1, consoleLog)
+          )
+          */
+    })
   })
 })
