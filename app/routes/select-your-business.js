@@ -57,16 +57,20 @@ module.exports = [{
       }
     },
     handler: async (request, h) => {
-      setSelectYourBusiness(request, whichBusiness, request.payload[whichBusiness])
-      const businesses = getSelectYourBusiness(request, eligbleBusinesses)
-      const selectedBusiness = businesses.find(business => {
-        return business.sbi === request.payload[whichBusiness]
-      })
-      console.log(`Selected business: ${JSON.stringify({
-          ...selectedBusiness
-        })}`)
-      setFarmerApplyData(request, organisationKey, selectedBusiness)
-      return h.redirect(`${urlPrefix}/org-review`)
+      try {
+        setSelectYourBusiness(request, whichBusiness, request.payload[whichBusiness])
+        const businesses = getSelectYourBusiness(request, eligbleBusinesses)
+        const selectedBusiness = businesses.find(business => {
+          return business.sbi === request.payload[whichBusiness]
+        })
+        console.log(`${new Date().toISOString()} Selected business: ${JSON.stringify({
+            ...selectedBusiness
+          })}`)
+        setFarmerApplyData(request, organisationKey, selectedBusiness)
+        return h.redirect(`${urlPrefix}/org-review`)
+      } catch (error) {
+        console.log(error)
+      }
     }
   }
 }]
