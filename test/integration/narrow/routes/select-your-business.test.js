@@ -68,6 +68,8 @@ describe('API select-your-business', () => {
   })
 
   describe('POST', () => {
+    let crumb
+
     test.each([
       {
         toString: () => '200',
