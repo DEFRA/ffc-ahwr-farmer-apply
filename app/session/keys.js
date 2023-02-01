@@ -9,8 +9,6 @@ module.exports = {
     eligibleSpecies: 'eligibleSpecies',
     declaration: 'declaration',
     organisation: 'organisation',
-    eligbleBusinesses: 'eligbleBusinesses',
-    whichBusiness: 'whichBusiness',
     whichReview: 'whichReview',
     confirmCheckDetails: 'confirmCheckDetails',
     reference: 'reference',
@@ -23,5 +21,9 @@ module.exports = {
     confirmSbi: 'confirmSbi',
     emailAddress: 'emailAddress',
     confirmEmailAddress: 'confirmEmailAddress'
+  },
+  selectYourBusiness: {
+    eligbleBusinesses: 'eligbleBusinesses',
+    whichBusiness: 'whichBusiness'
   }
 }

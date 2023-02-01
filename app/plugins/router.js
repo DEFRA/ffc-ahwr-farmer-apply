@@ -18,8 +18,7 @@ const routes = [].concat(
   require('../routes/declaration'),
   require('../routes/terms'),
   require('../routes/verify-login'),
-  require('../routes/vet-technical'),
-  require('../routes/select-your-business')
+  require('../routes/vet-technical')
 )
 
 const registerYourInterestRoutes = [].concat(
@@ -38,6 +37,9 @@ module.exports = {
       server.route(routes)
       if (config.registerYourInterest.enabled === true) {
         server.route(registerYourInterestRoutes)
+      }
+      if (config.selectYourBusiness.enabled === true) {
+        server.route(require('../routes/select-your-business'))
       }
     }
   }

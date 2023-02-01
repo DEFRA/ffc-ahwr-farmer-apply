@@ -3,6 +3,7 @@ const { sendSessionEvent } = require('../event')
 const entries = {
   application: 'application',
   farmerApplyData: 'farmerApplyData',
+  selectYourBusiness: 'selectYourBusiness',
   organisation: 'organisation',
   answers: 'answers',
   registerYourInterestData: 'registerYourInterestData'
@@ -38,6 +39,7 @@ function clear (request) {
   request.yar.clear(entries.organisation)
   request.yar.clear(entries.answers)
   request.yar.clear(entries.registerYourInterestData)
+  request.yar.clear(entries.selectYourBusiness)
 }
 
 function setApplication (request, key, value) {
@@ -46,6 +48,14 @@ function setApplication (request, key, value) {
 
 function setFarmerApplyData (request, key, value) {
   set(request, entries.farmerApplyData, key, value)
+}
+
+function setSelectYourBusiness (request, key, value) {
+  set(request, entries.selectYourBusiness, key, value)
+}
+
+function getSelectYourBusiness (request, key) {
+  return get(request, entries.selectYourBusiness, key)
 }
 
 function getApplication (request, key) {
@@ -73,5 +83,7 @@ module.exports = {
   setApplication,
   setFarmerApplyData,
   getRegisterYourInterestData,
-  setRegisterYourInterestData
+  setRegisterYourInterestData,
+  getSelectYourBusiness,
+  setSelectYourBusiness
 }
