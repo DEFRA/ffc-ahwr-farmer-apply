@@ -53,7 +53,7 @@ const schema = Joi.object({
   },
   eligibilityApi: require('../api-requests/eligibility-api.config.schema'),
   selectYourBusiness: {
-    enabled: Joi.bool().default(true)
+    enabled: Joi.bool().default(false)
   }
 })
 

@@ -1,6 +1,6 @@
 const getToken = require('../auth/get-token')
 const sendEmail = require('./send-email')
-const { serviceUri, selectYourBusiness} = require('../../config')
+const { serviceUri, selectYourBusiness } = require('../../config')
 const { emailTemplates } = require('../../config').notifyConfig
 const { farmerApply } = require('../../constants/user-types')
 

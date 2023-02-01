@@ -1,5 +1,14 @@
-function selectYourBusinessRadioOptions (legendText, id, previousAnswer, errorText = undefined, options = {}) {
+function selectYourBusinessRadioOptions (businesses, legendText, id, previousAnswer, errorText = undefined, options = {}) {
   const { isPageHeading = true, legendClasses = 'govuk-fieldset__legend--l', inline = false, hintHtml = '' } = options
+  const items = []
+  businesses.forEach(business => {
+    const item = {
+      value: business.sbi,
+      text: `${business.sbi} - ${business.name}`,
+      checked: previousAnswer === business.sbi
+    }
+    items.push(item)
+  })
   return {
     radios: {
       classes: inline ? 'govuk-radios--inline' : undefined,
@@ -15,18 +24,7 @@ function selectYourBusinessRadioOptions (legendText, id, previousAnswer, errorTe
       hint: {
         html: hintHtml
       },
-      items: [
-        {
-          value: '122333',
-          text: 'Business One',
-          checked: previousAnswer === '122333'
-        },
-        {
-          value: '122334',
-          text: 'Business Two',
-          checked: previousAnswer === '122334'
-        }
-      ],
+      items,
       ...(errorText ? { errorMessage: { text: errorText } } : {})
     }
   }
