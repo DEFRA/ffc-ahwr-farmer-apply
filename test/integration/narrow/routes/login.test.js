@@ -8,7 +8,15 @@ const { serviceUri } = require('../../../../app/config')
 const { applyLogin } = require('../../../../app/config').notifyConfig.emailTemplates
 const { farmerApply } = require('../../../../app/constants/user-types')
 const uuidRegex = require('../../../../app/config/uuid-regex')
-const { urlPrefix } = require('../../../../app/config')
+
+jest.mock('../../../../app/config', () => ({
+  ...jest.requireActual('../../../../app/config'),
+  selectYourBusiness: {
+    enabled: false
+  }
+}))
+const config = require('../../../../app/config')
+const urlPrefix = config.urlPrefix
 
 jest.mock('ffc-ahwr-event-publisher')
 

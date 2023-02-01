@@ -41,6 +41,7 @@ module.exports = [{
 
       const { email: cachedEmail, redirectTo, userType } = await lookupToken(request, token)
       if (isRequestInvalid(cachedEmail, email)) {
+        console.error('Email in the verify login link does not match the cached email.')
         sendMonitoringEvent(request.yar.id, 'Invalid token', email, getIp(request))
         return h.view('verify-login-failed').code(400)
       }

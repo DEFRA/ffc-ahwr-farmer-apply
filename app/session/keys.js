@@ -23,7 +23,7 @@ module.exports = {
     confirmEmailAddress: 'confirmEmailAddress'
   },
   selectYourBusiness: {
-    eligbleBusinesses: 'eligbleBusinesses',
+    eligibleBusinesses: 'eligibleBusinesses',
     whichBusiness: 'whichBusiness'
   }
 }

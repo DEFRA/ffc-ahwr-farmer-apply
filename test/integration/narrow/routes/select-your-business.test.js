@@ -61,7 +61,7 @@ describe('API select-your-business', () => {
         method: 'GET',
         url: `${API_URL}`,
         auth: {
-          credentials: { reference: '1111', sbi: '111111111' },
+          credentials: { reference: '1111', sbi: '122333' },
           strategy: 'cookie'
         }
       }
@@ -73,7 +73,7 @@ describe('API select-your-business', () => {
       expect(session.setSelectYourBusiness).toHaveBeenCalledTimes(1)
       expect(session.setSelectYourBusiness).toHaveBeenCalledWith(
         expect.anything(),
-        sessionKeys.selectYourBusiness.eligbleBusinesses,
+        sessionKeys.selectYourBusiness.eligibleBusinesses,
         [
           {
             sbi: '122333',
@@ -115,14 +115,21 @@ describe('API select-your-business', () => {
         toString: () => 'HTTP 200',
         given: {
           payload: {
-            whichBusiness: '123'
+            whichBusiness: '122333'
           }
         },
         when: {
         },
         expect: {
           consoleLogs: [
-            `${MOCK_NOW.toISOString()} Selected business: ${JSON.stringify({})}`
+            `${MOCK_NOW.toISOString()} Selected business: ${JSON.stringify({
+              sbi: '122333',
+              crn: '112222',
+              email: 'liam.wilson@kainos.com',
+              farmerName: 'Mr Farmer',
+              name: 'My Amazing Farm',
+              address: '1 Some Road'
+            })}`
           ]
         }
       }
@@ -133,16 +140,34 @@ describe('API select-your-business', () => {
         payload: { crumb, ...testCase.given.payload },
         headers: { cookie: `crumb=${crumb}` },
         auth: {
-          credentials: { reference: '1111', sbi: '111111111' },
+          credentials: { reference: '1111', sbi: '122333' },
           strategy: 'cookie'
         }
       }
+      const businesses = [
+        {
+          sbi: '122333',
+          crn: '112222',
+          email: 'liam.wilson@kainos.com',
+          farmerName: 'Mr Farmer',
+          name: 'My Amazing Farm',
+          address: '1 Some Road'
+        },
+        {
+          sbi: '122334',
+          crn: '112224',
+          email: 'liam.wilson@kainos.com',
+          farmerName: 'Mr Farmer',
+          name: 'My Amazing Farm 2',
+          address: '2 Some Road'
+        }
+      ]
       when(session.getSelectYourBusiness)
         .calledWith(
           expect.anything(),
-          sessionKeys.selectYourBusiness.eligbleBusinesses
+          sessionKeys.selectYourBusiness.eligibleBusinesses
         )
-        .mockReturnValue([])
+        .mockReturnValue(businesses)
 
       const response = await global.__SERVER__.inject(options)
 
@@ -151,8 +176,13 @@ describe('API select-your-business', () => {
       expect(session.setSelectYourBusiness).toHaveBeenCalledTimes(2)
       expect(session.setSelectYourBusiness).toHaveBeenCalledWith(
         expect.anything(),
+        sessionKeys.selectYourBusiness.eligibleBusinesses,
+        businesses
+      )
+      expect(session.setSelectYourBusiness).toHaveBeenCalledWith(
         expect.anything(),
-        expect.anything()
+        sessionKeys.selectYourBusiness.whichBusiness,
+        '122333'
       )
       testCase.expect.consoleLogs.forEach(
         (consoleLog, idx) => expect(logSpy).toHaveBeenNthCalledWith(idx + 1, consoleLog)
@@ -180,7 +210,7 @@ describe('API select-your-business', () => {
       when(session.getSelectYourBusiness)
         .calledWith(
           expect.anything(),
-          sessionKeys.selectYourBusiness.eligbleBusinesses
+          sessionKeys.selectYourBusiness.eligibleBusinesses
         )
         .mockReturnValue([])
 

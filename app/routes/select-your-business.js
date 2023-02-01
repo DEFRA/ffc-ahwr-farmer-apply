@@ -1,6 +1,6 @@
 const Joi = require('joi')
 const urlPrefix = require('../config/index').urlPrefix
-const { selectYourBusiness: { whichBusiness, eligbleBusinesses }, farmerApplyData: { organisation: organisationKey } } = require('../session/keys')
+const { selectYourBusiness: { whichBusiness, eligibleBusinesses }, farmerApplyData: { organisation: organisationKey } } = require('../session/keys')
 const { selectYourBusinessRadioOptions } = require('./models/form-component/select-your-business-radio')
 const { setFarmerApplyData, setSelectYourBusiness, getSelectYourBusiness } = require('../session')
 const radioOptions = { isPageHeading: true, legendClasses: 'govuk-fieldset__legend--l', inline: false, undefined }
@@ -31,7 +31,7 @@ module.exports = [{
         }
       ]
       // todo get business from eligibility and layer on top new application API call and logic
-      setSelectYourBusiness(request, eligbleBusinesses, businesses)
+      setSelectYourBusiness(request, eligibleBusinesses, businesses)
       if (businesses && businesses.length > 0) {
         return h.view('select-your-business',
           { ...selectYourBusinessRadioOptions(businesses, legendText, whichBusiness, getSelectYourBusiness(request, whichBusiness), undefined, radioOptions) }
@@ -56,7 +56,7 @@ module.exports = [{
             'select-your-business',
             {
               ...selectYourBusinessRadioOptions(
-                getSelectYourBusiness(request, eligbleBusinesses),
+                getSelectYourBusiness(request, eligibleBusinesses),
                 legendText,
                 whichBusiness,
                 getSelectYourBusiness(request, whichBusiness),
@@ -72,7 +72,7 @@ module.exports = [{
     handler: async (request, h) => {
       try {
         setSelectYourBusiness(request, whichBusiness, request.payload[whichBusiness])
-        const businesses = getSelectYourBusiness(request, eligbleBusinesses)
+        const businesses = getSelectYourBusiness(request, eligibleBusinesses)
         const selectedBusiness = businesses.find(business => {
           return business.sbi === request.payload[whichBusiness]
         })
