@@ -40,6 +40,7 @@ module.exports = {
       }
       if (config.selectYourBusiness.enabled === true) {
         server.route(require('../routes/select-your-business'))
+        server.route(require('../routes/no-eligible-businesses'))
       }
     }
   }

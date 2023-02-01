@@ -32,10 +32,13 @@ module.exports = [{
       ]
       // todo get business from eligibility and layer on top new application API call and logic
       setSelectYourBusiness(request, eligbleBusinesses, businesses)
-      // todo if eligbleBusinesses is empty show an excpetion route
-      return h.view('select-your-business',
-        { ...selectYourBusinessRadioOptions(businesses, legendText, whichBusiness, getSelectYourBusiness(request, whichBusiness), undefined, radioOptions) }
-      )
+      if(businesses && businesses.length > 0) {
+        return h.view('select-your-business',
+          { ...selectYourBusinessRadioOptions(businesses, legendText, whichBusiness, getSelectYourBusiness(request, whichBusiness), undefined, radioOptions) }
+        )
+      } else {
+        return h.redirect('no-eligible-businesses');
+      }
     }
   }
 },
