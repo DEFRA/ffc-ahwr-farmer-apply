@@ -1,9 +1,14 @@
 const Joi = require('joi')
+const Boom = require('@hapi/boom')
 const eligibilityApi = require('../api-requests/eligibility-api')
 const urlPrefix = require('../config/index').urlPrefix
 const { selectYourBusiness: { whichBusiness, eligibleBusinesses }, farmerApplyData: { organisation: organisationKey } } = require('../session/keys')
+
+const session = require('../session')
+
 const { selectYourBusinessRadioOptions } = require('./models/form-component/select-your-business-radio')
 const { setFarmerApplyData, setSelectYourBusiness, getSelectYourBusiness } = require('../session')
+
 const radioOptions = { isPageHeading: true, legendClasses: 'govuk-fieldset__legend--l', inline: false, undefined }
 const errorText = 'Select the business you want reviewed'
 const legendText = 'Choose the SBI you would like to apply for:'
@@ -12,8 +17,23 @@ module.exports = [{
   method: 'GET',
   path: `${urlPrefix}/select-your-business`,
   options: {
+    validate: {
+      query: Joi.object({
+        businessEmail: Joi
+          .string()
+          .trim()
+          .lowercase()
+          .required()
+          .email()
+      }).options({
+        stripUnknown: true
+      }),
+      failAction (request, h, err) {
+        throw Boom.badRequest('"businessEmail" param is missing or the value is empty')
+      }
+    },
     handler: async (request, h) => {
-      const businesses = await eligibilityApi.getBusinesses('marcinmo@kainos.com')
+      const businesses = await eligibilityApi.getBusinesses(request.query.businessEmail)
       // todo get business from eligibility and layer on top new application API call and logic
       setSelectYourBusiness(request, eligibleBusinesses, businesses)
       if (businesses && businesses.length > 0) {

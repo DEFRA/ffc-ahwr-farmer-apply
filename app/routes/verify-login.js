@@ -52,7 +52,7 @@ module.exports = [{
         await cacheFarmerApplyData(request, email)
       }
 
-      return h.redirect(redirectTo)
+      return h.redirect(`${redirectTo}${selectYourBusiness.enabled ? (`?businessEmail=${email}`) : ''}`)
     }
   }
 }]

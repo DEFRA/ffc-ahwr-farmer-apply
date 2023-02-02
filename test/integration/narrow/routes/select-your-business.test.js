@@ -41,10 +41,13 @@ describe('API select-your-business', () => {
   })
 
   afterAll(() => {
-    jest.clearAllMocks()
     jest.resetModules()
     resetAllWhenMocks()
     dateSpy.mockRestore()
+  })
+
+  afterEach(() => {
+    jest.clearAllMocks()
   })
 
   describe('GET', () => {
@@ -52,6 +55,7 @@ describe('API select-your-business', () => {
       {
         toString: () => 'HTTP 200',
         given: {
+          businessEmail: 'business@email.com'
         },
         when: {
           eligibilityApi: {
@@ -59,7 +63,7 @@ describe('API select-your-business', () => {
               {
                 sbi: '122333',
                 crn: '112222',
-                email: 'liam.wilson@kainos.com',
+                email: 'business@email.com',
                 farmerName: 'Mr Farmer',
                 name: 'My Amazing Farm',
                 address: '1 Some Road'
@@ -67,7 +71,7 @@ describe('API select-your-business', () => {
               {
                 sbi: '122334',
                 crn: '112224',
-                email: 'liam.wilson@kainos.com',
+                email: 'business@email.com',
                 farmerName: 'Mr Farmer',
                 name: 'My Amazing Farm 2',
                 address: '2 Some Road'
@@ -84,14 +88,14 @@ describe('API select-your-business', () => {
     ])('%s', async (testCase) => {
       const options = {
         method: 'GET',
-        url: `${API_URL}`,
+        url: `${API_URL}?businessEmail=${testCase.given.businessEmail}`,
         auth: {
           credentials: { reference: '1111', sbi: '122333' },
           strategy: 'cookie'
         }
       }
       when(eligibilityApi.getBusinesses)
-        .calledWith('marcinmo@kainos.com')
+        .calledWith(testCase.given.businessEmail)
         .mockResolvedValue(testCase.when.eligibilityApi.businesses)
 
       const response = await global.__SERVER__.inject(options)
@@ -184,16 +188,24 @@ describe('API select-your-business', () => {
 
       expect(response.statusCode).toBe(302)
       expect(response.headers.location).toEqual(`${config.urlPrefix}/org-review`)
-      expect(session.setSelectYourBusiness).toHaveBeenCalledTimes(2)
-      expect(session.setSelectYourBusiness).toHaveBeenCalledWith(
-        expect.anything(),
-        sessionKeys.selectYourBusiness.eligibleBusinesses,
-        businesses
-      )
+      expect(session.setSelectYourBusiness).toHaveBeenCalledTimes(1)
       expect(session.setSelectYourBusiness).toHaveBeenCalledWith(
         expect.anything(),
         sessionKeys.selectYourBusiness.whichBusiness,
         '122333'
+      )
+      expect(session.setFarmerApplyData).toHaveBeenCalledTimes(1)
+      expect(session.setFarmerApplyData).toHaveBeenCalledWith(
+        expect.anything(),
+        sessionKeys.farmerApplyData.organisation,
+        {
+          sbi: '122333',
+          crn: '112222',
+          email: 'liam.wilson@kainos.com',
+          farmerName: 'Mr Farmer',
+          name: 'My Amazing Farm',
+          address: '1 Some Road'
+        }
       )
       testCase.expect.consoleLogs.forEach(
         (consoleLog, idx) => expect(logSpy).toHaveBeenNthCalledWith(idx + 1, consoleLog)
