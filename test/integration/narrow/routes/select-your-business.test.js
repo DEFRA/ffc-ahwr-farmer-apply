@@ -137,9 +137,7 @@ describe('API select-your-business', () => {
         sessionKeys.selectYourBusiness.eligibleBusinesses,
         testCase.when.eligibilityApi.businesses
       )
-      if (testCase.expect.http.headers.location) {
-
-      } else {
+      if (!testCase.expect.http.headers.location) {
         expect($('title').text()).toEqual(config.serviceName)
         expect($('.govuk-fieldset__heading').first().text().trim()).toEqual('Choose the SBI you would like to apply for:')
       }
