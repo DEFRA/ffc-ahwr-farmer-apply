@@ -1,21 +1,17 @@
 const Joi = require('joi')
 const Boom = require('@hapi/boom')
 const eligibilityApi = require('../api-requests/eligibility-api')
-const urlPrefix = require('../config/index').urlPrefix
-const { selectYourBusiness: { whichBusiness, eligibleBusinesses }, farmerApplyData: { organisation: organisationKey } } = require('../session/keys')
-
+const config = require('../config/index')
 const session = require('../session')
-
+const { selectYourBusiness: { whichBusiness, eligibleBusinesses }, farmerApplyData: { organisation: organisationKey } } = require('../session/keys')
 const { selectYourBusinessRadioOptions } = require('./models/form-component/select-your-business-radio')
-const { setFarmerApplyData, setSelectYourBusiness, getSelectYourBusiness } = require('../session')
-
 const radioOptions = { isPageHeading: true, legendClasses: 'govuk-fieldset__legend--l', inline: false, undefined }
 const errorText = 'Select the business you want reviewed'
 const legendText = 'Choose the SBI you would like to apply for:'
 
 module.exports = [{
   method: 'GET',
-  path: `${urlPrefix}/select-your-business`,
+  path: `${config.urlPrefix}/select-your-business`,
   options: {
     validate: {
       query: Joi.object({
@@ -34,11 +30,19 @@ module.exports = [{
     },
     handler: async (request, h) => {
       const businesses = await eligibilityApi.getBusinesses(request.query.businessEmail)
-      // todo get business from eligibility and layer on top new application API call and logic
-      setSelectYourBusiness(request, eligibleBusinesses, businesses)
+      session.setSelectYourBusiness(request, eligibleBusinesses, businesses)
       if (businesses && businesses.length > 0) {
         return h.view('select-your-business',
-          { ...selectYourBusinessRadioOptions(businesses, legendText, whichBusiness, getSelectYourBusiness(request, whichBusiness), undefined, radioOptions) }
+          {
+            ...selectYourBusinessRadioOptions(
+              businesses,
+              legendText,
+              whichBusiness,
+              session.getSelectYourBusiness(request, whichBusiness),
+              undefined,
+              radioOptions
+            )
+          }
         )
       } else {
         return h.redirect('no-eligible-businesses')
@@ -48,7 +52,7 @@ module.exports = [{
 },
 {
   method: 'POST',
-  path: `${urlPrefix}/select-your-business`,
+  path: `${config.urlPrefix}/select-your-business`,
   options: {
     validate: {
       payload: Joi.object({
@@ -60,10 +64,10 @@ module.exports = [{
             'select-your-business',
             {
               ...selectYourBusinessRadioOptions(
-                getSelectYourBusiness(request, eligibleBusinesses),
+                session.getSelectYourBusiness(request, eligibleBusinesses),
                 legendText,
                 whichBusiness,
-                getSelectYourBusiness(request, whichBusiness),
+                session.getSelectYourBusiness(request, whichBusiness),
                 errorText,
                 radioOptions
               )
@@ -74,16 +78,13 @@ module.exports = [{
       }
     },
     handler: async (request, h) => {
-      setSelectYourBusiness(request, whichBusiness, request.payload[whichBusiness])
-      const businesses = getSelectYourBusiness(request, eligibleBusinesses)
-      const selectedBusiness = businesses.find(business => {
-        return business.sbi === request.payload[whichBusiness]
-      })
-      console.log(`${new Date().toISOString()} Selected business: ${JSON.stringify({
-        ...selectedBusiness
-      })}`)
-      setFarmerApplyData(request, organisationKey, selectedBusiness)
-      return h.redirect(`${urlPrefix}/org-review`)
+      session.setSelectYourBusiness(request, whichBusiness, request.payload[whichBusiness])
+      const selectedBusiness = session
+        .getSelectYourBusiness(request, eligibleBusinesses)
+        .find(business => business.sbi === request.payload[whichBusiness])
+      session.setFarmerApplyData(request, organisationKey, selectedBusiness)
+      console.log(`${new Date().toISOString()} Selected business: ${JSON.stringify(selectedBusiness)}`)
+      return h.redirect(`${config.urlPrefix}/org-review`)
     }
   }
 }]
