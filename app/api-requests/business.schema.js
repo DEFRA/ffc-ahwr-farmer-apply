@@ -1,6 +1,6 @@
 const Joi = require('joi')
 
-const userSchema = Joi.object({
+const businessSchema = Joi.object({
   farmerName: Joi
     .string()
     .trim()
@@ -30,4 +30,4 @@ const userSchema = Joi.object({
     .required()
 })
 
-module.exports = userSchema
+module.exports = businessSchema

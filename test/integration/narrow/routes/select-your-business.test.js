@@ -6,12 +6,15 @@ const sessionKeys = require('../../../../app/session/keys')
 
 const MOCK_NOW = new Date()
 
+jest.mock('../../../../app/api-requests/eligibility-api')
+
 const API_URL = `${config.urlPrefix}/select-your-business`
 
 describe('API select-your-business', () => {
   let dateSpy
   let logSpy
   let session
+  let eligibilityApi
 
   beforeAll(() => {
     dateSpy = jest
@@ -33,6 +36,8 @@ describe('API select-your-business', () => {
         }
       }
     })
+
+    eligibilityApi = require('../../../../app/api-requests/eligibility-api')
   })
 
   afterAll(() => {
@@ -49,6 +54,26 @@ describe('API select-your-business', () => {
         given: {
         },
         when: {
+          eligibilityApi: {
+            businesses: [
+              {
+                sbi: '122333',
+                crn: '112222',
+                email: 'liam.wilson@kainos.com',
+                farmerName: 'Mr Farmer',
+                name: 'My Amazing Farm',
+                address: '1 Some Road'
+              },
+              {
+                sbi: '122334',
+                crn: '112224',
+                email: 'liam.wilson@kainos.com',
+                farmerName: 'Mr Farmer',
+                name: 'My Amazing Farm 2',
+                address: '2 Some Road'
+              }
+            ]
+          }
         },
         expect: {
           consoleLogs: [
@@ -65,6 +90,9 @@ describe('API select-your-business', () => {
           strategy: 'cookie'
         }
       }
+      when(eligibilityApi.getBusinesses)
+        .calledWith('marcinmo@kainos.com')
+        .mockResolvedValue(testCase.when.eligibilityApi.businesses)
 
       const response = await global.__SERVER__.inject(options)
       const $ = cheerio.load(response.payload)
@@ -74,24 +102,7 @@ describe('API select-your-business', () => {
       expect(session.setSelectYourBusiness).toHaveBeenCalledWith(
         expect.anything(),
         sessionKeys.selectYourBusiness.eligibleBusinesses,
-        [
-          {
-            sbi: '122333',
-            crn: '112222',
-            email: 'liam.wilson@kainos.com',
-            farmerName: 'Mr Farmer',
-            name: 'My Amazing Farm',
-            address: '1 Some Road'
-          },
-          {
-            sbi: '122334',
-            crn: '112224',
-            email: 'liam.wilson@kainos.com',
-            farmerName: 'Mr Farmer',
-            name: 'My Amazing Farm 2',
-            address: '2 Some Road'
-          }
-        ]
+        testCase.when.eligibilityApi.businesses
       )
       expect($('title').text()).toEqual(config.serviceName)
       expect($('.govuk-fieldset__heading').first().text().trim()).toEqual('Choose the SBI you would like to apply for:')

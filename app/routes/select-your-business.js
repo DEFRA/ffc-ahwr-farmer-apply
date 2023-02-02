@@ -1,4 +1,5 @@
 const Joi = require('joi')
+const eligibilityApi = require('../api-requests/eligibility-api')
 const urlPrefix = require('../config/index').urlPrefix
 const { selectYourBusiness: { whichBusiness, eligibleBusinesses }, farmerApplyData: { organisation: organisationKey } } = require('../session/keys')
 const { selectYourBusinessRadioOptions } = require('./models/form-component/select-your-business-radio')
@@ -12,24 +13,7 @@ module.exports = [{
   path: `${urlPrefix}/select-your-business`,
   options: {
     handler: async (request, h) => {
-      const businesses = [
-        {
-          sbi: '122333',
-          crn: '112222',
-          email: 'liam.wilson@kainos.com',
-          farmerName: 'Mr Farmer',
-          name: 'My Amazing Farm',
-          address: '1 Some Road'
-        },
-        {
-          sbi: '122334',
-          crn: '112224',
-          email: 'liam.wilson@kainos.com',
-          farmerName: 'Mr Farmer',
-          name: 'My Amazing Farm 2',
-          address: '2 Some Road'
-        }
-      ]
+      const businesses = await eligibilityApi.getBusinesses('marcinmo@kainos.com')
       // todo get business from eligibility and layer on top new application API call and logic
       setSelectYourBusiness(request, eligibleBusinesses, businesses)
       if (businesses && businesses.length > 0) {
