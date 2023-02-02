@@ -3,7 +3,7 @@ const radios = require('../../../../../../app/routes/models/form-component/radio
 describe('radios', () => {
   test.each([
     {
-      toString: () => 'Test name',
+      toString: () => 'errorText and inline=false and options',
       given: {
         legendText: 'Legend Text',
         id: 'ID',
@@ -46,7 +46,7 @@ describe('radios', () => {
       }
     },
     {
-      toString: () => 'Test name',
+      toString: () => 'inline=true and options',
       given: {
         legendText: 'Legend Text',
         id: 'ID',
@@ -85,7 +85,7 @@ describe('radios', () => {
       }
     },
     {
-      toString: () => 'Test name',
+      toString: () => 'legendText and id only',
       given: {
         legendText: 'Legend Text',
         id: 'ID'
