@@ -8,7 +8,7 @@ const { sendMonitoringEvent } = require('../event')
 
 const hintText = 'We\'ll use this to send you a link to apply for a review. This must be the business email address linked to the business applying for a review.'
 
-const urlPrefix = require('../config/index').urlPrefix
+const config = require('../config')
 
 const getIp = (request) => {
   const xForwardedForHeader = request.headers['x-forwarded-for']
@@ -17,7 +17,7 @@ const getIp = (request) => {
 
 module.exports = [{
   method: 'GET',
-  path: `${urlPrefix}/login`,
+  path: `${config.urlPrefix}/login`,
   options: {
     auth: {
       mode: 'try'
@@ -29,7 +29,7 @@ module.exports = [{
     },
     handler: async (request, h) => {
       if (request.auth.isAuthenticated) {
-        return h.redirect(request.query?.next || `${urlPrefix}/org-review`)
+        return h.redirect(request.query?.next || config.selectYourBusiness.enabled ? `${config.urlPrefix}/select-your-business` : `${config.urlPrefix}/org-review`)
       }
 
       return h.view('login', { hintText })
@@ -38,7 +38,7 @@ module.exports = [{
 },
 {
   method: 'POST',
-  path: `${urlPrefix}/login`,
+  path: `${config.urlPrefix}/login`,
   options: {
     auth: {
       mode: 'try'

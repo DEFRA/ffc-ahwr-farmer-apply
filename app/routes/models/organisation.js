@@ -24,7 +24,7 @@ const getOrganisation = (request, organisation, errorText) => {
     backLink: {
       href: config.selectYourBusiness.enabled
         ? `/apply/select-your-business?businessEmail=${organisation.email}`
-        : "/apply/start"
+        : '/apply/start'
     },
     organisation,
     listData: { rows },
