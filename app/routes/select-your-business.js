@@ -3,11 +3,12 @@ const Boom = require('@hapi/boom')
 const eligibilityApi = require('../api-requests/eligibility-api')
 const config = require('../config/index')
 const session = require('../session')
-const { selectYourBusiness: { whichBusiness, eligibleBusinesses }, farmerApplyData: { organisation: organisationKey } } = require('../session/keys')
-const { selectYourBusinessRadioOptions } = require('./models/form-component/select-your-business-radio')
-const radioOptions = { isPageHeading: true, legendClasses: 'govuk-fieldset__legend--l', inline: false, undefined }
-const errorText = 'Select the business you want reviewed'
-const legendText = 'Choose the SBI you would like to apply for:'
+const sessionKeys = require('../session/keys')
+const radios = require('./models/form-component/radios')
+
+const ERROR_TEXT = 'Select the business you want reviewed'
+const LEGEND_TEXT = 'Choose the SBI you would like to apply for:'
+const RADIO_OPTIONS = { isPageHeading: true, legendClasses: 'govuk-fieldset__legend--l', inline: false, undefined }
 
 module.exports = [{
   method: 'GET',
@@ -30,23 +31,31 @@ module.exports = [{
     },
     handler: async (request, h) => {
       const businesses = await eligibilityApi.getBusinesses(request.query.businessEmail)
-      session.setSelectYourBusiness(request, eligibleBusinesses, businesses)
-      if (businesses && businesses.length > 0) {
-        return h.view('select-your-business',
-          {
-            ...selectYourBusinessRadioOptions(
-              businesses,
-              legendText,
-              whichBusiness,
-              session.getSelectYourBusiness(request, whichBusiness),
-              undefined,
-              radioOptions
-            )
-          }
-        )
-      } else {
+      if (!Array.isArray(businesses) || businesses.length === 0) {
         return h.redirect('no-eligible-businesses')
       }
+      const checkedBusiness = session.getSelectYourBusiness(
+        request,
+        sessionKeys.selectYourBusiness.whichBusiness
+      )
+      session.setSelectYourBusiness(
+        request,
+        sessionKeys.selectYourBusiness.eligibleBusinesses,
+        businesses
+      )
+      return h
+        .view('select-your-business',
+          radios(
+            LEGEND_TEXT,
+            sessionKeys.selectYourBusiness.whichBusiness,
+            undefined,
+            RADIO_OPTIONS
+          )(businesses.map(business => ({
+            value: business.sbi,
+            text: `${business.sbi} - ${business.name}`,
+            checked: checkedBusiness === business.sbi
+          })))
+        )
     }
   }
 },
@@ -56,33 +65,51 @@ module.exports = [{
   options: {
     validate: {
       payload: Joi.object({
-        [whichBusiness]: Joi.string().required()
+        [sessionKeys.selectYourBusiness.whichBusiness]: Joi.string().required()
       }),
       failAction: (request, h, _err) => {
+        const businesses = session.getSelectYourBusiness(
+          request,
+          sessionKeys.selectYourBusiness.eligibleBusinesses
+        )
+        const checkedBusiness = session.getSelectYourBusiness(
+          request,
+          sessionKeys.selectYourBusiness.whichBusiness
+        )
         return h
-          .view(
-            'select-your-business',
-            {
-              ...selectYourBusinessRadioOptions(
-                session.getSelectYourBusiness(request, eligibleBusinesses),
-                legendText,
-                whichBusiness,
-                session.getSelectYourBusiness(request, whichBusiness),
-                errorText,
-                radioOptions
-              )
-            }
+          .view('select-your-business',
+            radios(
+              LEGEND_TEXT,
+              sessionKeys.selectYourBusiness.whichBusiness,
+              ERROR_TEXT,
+              RADIO_OPTIONS
+            )(businesses.map(business => ({
+              value: business.sbi,
+              text: `${business.sbi} - ${business.name}`,
+              checked: checkedBusiness === business.sbi
+            })))
           )
           .code(400)
           .takeover()
       }
     },
     handler: async (request, h) => {
-      session.setSelectYourBusiness(request, whichBusiness, request.payload[whichBusiness])
+      session.setSelectYourBusiness(
+        request,
+        sessionKeys.selectYourBusiness.whichBusiness,
+        request.payload[sessionKeys.selectYourBusiness.whichBusiness]
+      )
       const selectedBusiness = session
-        .getSelectYourBusiness(request, eligibleBusinesses)
-        .find(business => business.sbi === request.payload[whichBusiness])
-      session.setFarmerApplyData(request, organisationKey, selectedBusiness)
+        .getSelectYourBusiness(
+          request,
+          sessionKeys.selectYourBusiness.eligibleBusinesses
+        )
+        .find(business => business.sbi === request.payload[sessionKeys.selectYourBusiness.whichBusiness])
+      session.setFarmerApplyData(
+        request,
+        sessionKeys.farmerApplyData.organisation,
+        selectedBusiness
+      )
       console.log(`${new Date().toISOString()} Selected business: ${JSON.stringify(selectedBusiness)}`)
       return h.redirect(`${config.urlPrefix}/org-review`)
     }

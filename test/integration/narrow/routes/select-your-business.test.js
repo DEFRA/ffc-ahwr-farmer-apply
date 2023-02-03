@@ -53,7 +53,7 @@ describe('API select-your-business', () => {
   describe('GET', () => {
     test.each([
       {
-        toString: () => 'HTTP 200',
+        toString: () => 'HTTP 200 - businesses were found',
         given: {
           businessEmail: 'business@email.com'
         },
@@ -92,7 +92,7 @@ describe('API select-your-business', () => {
         }
       },
       {
-        toString: () => 'HTTP 200',
+        toString: () => 'HTTP 200 - no businesses found',
         given: {
           businessEmail: 'business@email.com'
         },
@@ -131,12 +131,16 @@ describe('API select-your-business', () => {
 
       expect(response.statusCode).toBe(testCase.expect.http.statusCode)
       expect(response.headers.location).toEqual(testCase.expect.http.headers.location)
-      expect(session.setSelectYourBusiness).toHaveBeenCalledTimes(1)
-      expect(session.setSelectYourBusiness).toHaveBeenCalledWith(
-        expect.anything(),
-        sessionKeys.selectYourBusiness.eligibleBusinesses,
-        testCase.when.eligibilityApi.businesses
+      expect(session.setSelectYourBusiness).toHaveBeenCalledTimes(
+        testCase.when.eligibilityApi.businesses.length > 0 ? 1 : 0
       )
+      if (testCase.when.eligibilityApi.businesses.length > 0) {
+        expect(session.setSelectYourBusiness).toHaveBeenCalledWith(
+          expect.anything(),
+          sessionKeys.selectYourBusiness.eligibleBusinesses,
+          testCase.when.eligibilityApi.businesses
+        )
+      }
       if (!testCase.expect.http.headers.location) {
         expect($('title').text()).toEqual(config.serviceName)
         expect($('.govuk-fieldset__heading').first().text().trim()).toEqual('Choose the SBI you would like to apply for:')
@@ -150,7 +154,7 @@ describe('API select-your-business', () => {
 
     test.each([
       {
-        toString: () => 'HTTP 400',
+        toString: () => 'HTTP 400 - "businessEmail" param is missing',
         given: {
           queryString: ''
         }
@@ -181,7 +185,7 @@ describe('API select-your-business', () => {
 
     test.each([
       {
-        toString: () => 'HTTP 200',
+        toString: () => 'HTTP 200 - business selected',
         given: {
           payload: {
             whichBusiness: '122333'
