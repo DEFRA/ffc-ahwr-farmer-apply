@@ -192,24 +192,26 @@ describe('API select-your-business', () => {
           }
         },
         when: {
-          businesses: [
-            {
-              sbi: '122333',
-              crn: '112222',
-              email: 'liam.wilson@kainos.com',
-              farmerName: 'Mr Farmer',
-              name: 'My Amazing Farm',
-              address: '1 Some Road'
-            },
-            {
-              sbi: '122334',
-              crn: '112224',
-              email: 'liam.wilson@kainos.com',
-              farmerName: 'Mr Farmer',
-              name: 'My Amazing Farm 2',
-              address: '2 Some Road'
-            }
-          ]
+          session: {
+            businesses: [
+              {
+                sbi: '122333',
+                crn: '112222',
+                email: 'liam.wilson@kainos.com',
+                farmerName: 'Mr Farmer',
+                name: 'My Amazing Farm',
+                address: '1 Some Road'
+              },
+              {
+                sbi: '122334',
+                crn: '112224',
+                email: 'liam.wilson@kainos.com',
+                farmerName: 'Mr Farmer',
+                name: 'My Amazing Farm 2',
+                address: '2 Some Road'
+              }
+            ]
+          }
         },
         expect: {
           consoleLogs: [
@@ -240,7 +242,7 @@ describe('API select-your-business', () => {
           expect.anything(),
           sessionKeys.selectYourBusiness.eligibleBusinesses
         )
-        .mockReturnValue(testCase.when.businesses)
+        .mockReturnValue(testCase.when.session.businesses)
 
       const response = await global.__SERVER__.inject(options)
 
@@ -275,6 +277,28 @@ describe('API select-your-business', () => {
         toString: () => 'HTTP 400 - empty payload',
         given: {
           payload: {}
+        },
+        when: {
+          session: {
+            businesses: [
+              {
+                sbi: '122333',
+                crn: '112222',
+                email: 'liam.wilson@kainos.com',
+                farmerName: 'Mr Farmer',
+                name: 'My Amazing Farm',
+                address: '1 Some Road'
+              },
+              {
+                sbi: '122334',
+                crn: '112224',
+                email: 'liam.wilson@kainos.com',
+                farmerName: 'Mr Farmer',
+                name: 'My Amazing Farm 2',
+                address: '2 Some Road'
+              }
+            ]
+          }
         }
       }
     ])('%s', async (testCase) => {
@@ -293,7 +317,7 @@ describe('API select-your-business', () => {
           expect.anything(),
           sessionKeys.selectYourBusiness.eligibleBusinesses
         )
-        .mockReturnValue([])
+        .mockReturnValue(testCase.when.session.businesses)
 
       const response = await global.__SERVER__.inject(options)
       const $ = cheerio.load(response.payload)
