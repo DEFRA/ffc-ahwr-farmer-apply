@@ -61,6 +61,7 @@ container:
   urlPrefix: /apply
   eligibilityApiEnabled:
   eligibilityApiUri:
+  applicationApiUri:
   registerYourInterestEnabled:
   registerYourInterestRequestQueueAddress: ffc-ahwr-register-your-interest-request
   selectYourBusinessEnabled:

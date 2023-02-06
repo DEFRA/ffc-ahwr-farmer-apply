@@ -23,8 +23,8 @@ async function getEligibility (emailAddress) {
   }
 }
 
-async function getBusinesses (businessEmail) {
-  console.log(`${new Date().toISOString()} Getting businesses: ${JSON.stringify({ businessEmail })}`)
+async function getEligibleBusinesses (businessEmail) {
+  console.log(`${new Date().toISOString()} Getting eligible businesses: ${JSON.stringify({ businessEmail })}`)
   try {
     const response = await Wreck.get(
       `${config.eligibilityApi.uri}/businesses?emailAddress=${businessEmail}`,
@@ -39,12 +39,14 @@ async function getBusinesses (businessEmail) {
     }
     return payload.value
   } catch (error) {
-    console.error(`${new Date().toISOString()} Getting businesses failed: ${JSON.stringify({ businessEmail })}`, error)
+    console.error(`${new Date().toISOString()} Getting eligible businesses failed: ${JSON.stringify({
+      businessEmail
+    })}`, error)
     return null
   }
 }
 
 module.exports = {
   getEligibility,
-  getBusinesses
+  getEligibleBusinesses
 }

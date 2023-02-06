@@ -7,6 +7,7 @@ const sessionKeys = require('../../../../app/session/keys')
 const MOCK_NOW = new Date()
 
 jest.mock('../../../../app/api-requests/eligibility-api')
+jest.mock('../../../../app/api-requests/application-api')
 
 const API_URL = `${config.urlPrefix}/select-your-business`
 
@@ -15,6 +16,7 @@ describe('API select-your-business', () => {
   let logSpy
   let session
   let eligibilityApi
+  let applicationApi
 
   beforeAll(() => {
     dateSpy = jest
@@ -38,6 +40,7 @@ describe('API select-your-business', () => {
     })
 
     eligibilityApi = require('../../../../app/api-requests/eligibility-api')
+    applicationApi = require('../../../../app/api-requests/application-api')
   })
 
   afterAll(() => {
@@ -77,6 +80,36 @@ describe('API select-your-business', () => {
                 address: '2 Some Road'
               }
             ]
+          },
+          applicationApi: {
+            latestApplications: [
+              {
+                id: 'eaf9b180-9993-4f3f-a1ec-4422d48edf92',
+                reference: 'AHWR-AAAA-AAAA',
+                data: {
+                  reference: 'string',
+                  declaration: true,
+                  offerStatus: 'accepted',
+                  whichReview: 'sheep',
+                  organisation: {
+                    crn: 112224,
+                    sbi: 122334,
+                    name: 'My Amazing Farm',
+                    email: 'business@email.com',
+                    address: '1 Example Road',
+                    farmerName: 'Mr Farmer'
+                  },
+                  eligibleSpecies: 'yes',
+                  confirmCheckDetails: 'yes'
+                },
+                claimed: false,
+                createdAt: '2023-01-17 13:55:20',
+                updatedAt: '2023-01-17 13:55:20',
+                createdBy: 'David Jones',
+                updatedBy: 'David Jones',
+                statusId: 7
+              }
+            ]
           }
         },
         expect: {
@@ -99,6 +132,9 @@ describe('API select-your-business', () => {
         when: {
           eligibilityApi: {
             businesses: []
+          },
+          applicationApi: {
+            latestApplications: []
           }
         },
         expect: {
@@ -122,9 +158,12 @@ describe('API select-your-business', () => {
           strategy: 'cookie'
         }
       }
-      when(eligibilityApi.getBusinesses)
+      when(eligibilityApi.getEligibleBusinesses)
         .calledWith(testCase.given.businessEmail)
         .mockResolvedValue(testCase.when.eligibilityApi.businesses)
+      when(applicationApi.getLatestApplicationsBy)
+        .calledWith(testCase.given.businessEmail)
+        .mockResolvedValue(testCase.when.applicationApi.latestApplications)
 
       const response = await global.__SERVER__.inject(options)
       const $ = cheerio.load(response.payload)

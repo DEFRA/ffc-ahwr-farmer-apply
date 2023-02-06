@@ -1,6 +1,7 @@
 const Joi = require('joi')
 const Boom = require('@hapi/boom')
 const eligibilityApi = require('../api-requests/eligibility-api')
+const applicationApi = require('../api-requests/application-api')
 const config = require('../config/index')
 const session = require('../session')
 const sessionKeys = require('../session/keys')
@@ -9,6 +10,23 @@ const radios = require('./models/form-component/radios')
 const ERROR_TEXT = 'Select the business you want reviewed'
 const LEGEND_TEXT = 'Choose the SBI you would like to apply for:'
 const RADIO_OPTIONS = { isPageHeading: true, legendClasses: 'govuk-fieldset__legend--l', inline: false, undefined }
+
+const getAppliableBusinesses = async (businessEmail) => {
+  const applicationStatus = {
+    WITHDRAWN: 2,
+    NOT_AGREED: 7
+  }
+  const latestApplications = await applicationApi.getLatestApplicationsBy(businessEmail)
+  const eligibleBusinesses = await eligibilityApi.getEligibleBusinesses(businessEmail)
+  return eligibleBusinesses.filter(business => {
+    const index = latestApplications.findIndex(
+      application => application.data.organisation.sbi.toString() === business.sbi.toString()
+    )
+    return index === -1 ||
+      latestApplications[index].statusId === applicationStatus.WITHDRAWN ||
+      latestApplications[index].statusId === applicationStatus.NOT_AGREED
+  })
+}
 
 module.exports = [{
   method: 'GET',
@@ -30,18 +48,18 @@ module.exports = [{
       }
     },
     handler: async (request, h) => {
-      const businesses = await eligibilityApi.getBusinesses(request.query.businessEmail)
-      if (!Array.isArray(businesses) || businesses.length === 0) {
+      const appliableBusinesses = await getAppliableBusinesses(request.query.businessEmail)
+      if (!Array.isArray(appliableBusinesses) || appliableBusinesses.length === 0) {
         return h.redirect('no-eligible-businesses')
       }
-      const checkedBusiness = session.getSelectYourBusiness(
-        request,
-        sessionKeys.selectYourBusiness.whichBusiness
-      )
       session.setSelectYourBusiness(
         request,
         sessionKeys.selectYourBusiness.eligibleBusinesses,
-        businesses
+        appliableBusinesses
+      )
+      const selectedBusiness = session.getSelectYourBusiness(
+        request,
+        sessionKeys.selectYourBusiness.whichBusiness
       )
       return h
         .view('select-your-business',
@@ -50,10 +68,10 @@ module.exports = [{
             sessionKeys.selectYourBusiness.whichBusiness,
             undefined,
             RADIO_OPTIONS
-          )(businesses.map(business => ({
+          )(appliableBusinesses.map(business => ({
             value: business.sbi,
             text: `${business.sbi} - ${business.name}`,
-            checked: checkedBusiness === business.sbi
+            checked: selectedBusiness === business.sbi
           })))
         )
     }

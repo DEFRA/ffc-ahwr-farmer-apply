@@ -196,7 +196,7 @@ describe('Eligibility API', () => {
         )
         .mockResolvedValue(expectedResponse)
 
-      const response = await eligibilityApi.getBusinesses(BUSINESS_EMAIL_ADDRESS)
+      const response = await eligibilityApi.getEligibleBusinesses(BUSINESS_EMAIL_ADDRESS)
 
       expect(response).not.toBeNull()
       expect(response.farmerName).toStrictEqual(expectedResponse.payload.farmerName)
@@ -239,10 +239,10 @@ describe('Eligibility API', () => {
         )
         .mockResolvedValue(expectedResponse)
 
-      const response = await eligibilityApi.getBusinesses(BUSINESS_EMAIL_ADDRESS)
+      const response = await eligibilityApi.getEligibleBusinesses(BUSINESS_EMAIL_ADDRESS)
 
       expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
-      expect(consoleErrorSpy).toHaveBeenCalledWith(`${MOCK_NOW.toISOString()} Getting businesses failed: ${JSON.stringify({
+      expect(consoleErrorSpy).toHaveBeenCalledWith(`${MOCK_NOW.toISOString()} Getting eligible businesses failed: ${JSON.stringify({
         businessEmail: BUSINESS_EMAIL_ADDRESS
       })}`, expect.anything())
       expect(response).toBeNull()
@@ -278,10 +278,10 @@ describe('Eligibility API', () => {
         )
         .mockResolvedValue(expectedResponse)
 
-      const response = await eligibilityApi.getBusinesses(businessEmailAddress)
+      const response = await eligibilityApi.getEligibleBusinesses(businessEmailAddress)
 
       expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
-      expect(consoleErrorSpy).toHaveBeenCalledWith(`${MOCK_NOW.toISOString()} Getting businesses failed: ${JSON.stringify({
+      expect(consoleErrorSpy).toHaveBeenCalledWith(`${MOCK_NOW.toISOString()} Getting eligible businesses failed: ${JSON.stringify({
         businessEmail: businessEmailAddress
       })}`, expect.anything())
       expect(response).toBeNull()
@@ -300,10 +300,10 @@ describe('Eligibility API', () => {
         )
         .mockRejectedValue(expectedError)
 
-      const response = await eligibilityApi.getBusinesses(BUSINESS_EMAIL_ADDRESS)
+      const response = await eligibilityApi.getEligibleBusinesses(BUSINESS_EMAIL_ADDRESS)
 
       expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
-      expect(consoleErrorSpy).toHaveBeenCalledWith(`${MOCK_NOW.toISOString()} Getting businesses failed: ${JSON.stringify({
+      expect(consoleErrorSpy).toHaveBeenCalledWith(`${MOCK_NOW.toISOString()} Getting eligible businesses failed: ${JSON.stringify({
         businessEmail: BUSINESS_EMAIL_ADDRESS
       })}`, expectedError)
       expect(response).toBeNull()
