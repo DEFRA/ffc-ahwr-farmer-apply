@@ -18,7 +18,7 @@ describe('Application API', () => {
       ...mockConfig,
       applicationApi: {
         uri: mockApplicationApiUri
-      } 
+      }
     }))
     applicationApi = require('../../../../app/api-requests/application-api')
   })
