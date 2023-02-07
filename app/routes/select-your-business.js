@@ -6,6 +6,7 @@ const config = require('../config/index')
 const session = require('../session')
 const sessionKeys = require('../session/keys')
 const radios = require('./models/form-component/radios')
+const BUSINESS_EMAIL_SCHEMA = require('../schemas/business-email.schema')
 
 const ERROR_TEXT = 'Select the business you want reviewed'
 const LEGEND_TEXT = 'Choose the SBI you would like to apply for:'
@@ -34,12 +35,7 @@ module.exports = [{
   options: {
     validate: {
       query: Joi.object({
-        businessEmail: Joi
-          .string()
-          .trim()
-          .lowercase()
-          .required()
-          .email()
+        businessEmail: BUSINESS_EMAIL_SCHEMA
       }).options({
         stripUnknown: true
       }),

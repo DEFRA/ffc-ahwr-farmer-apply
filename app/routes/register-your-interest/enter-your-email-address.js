@@ -4,7 +4,7 @@ const sessionKeys = require('../../session/keys')
 const urlPrefix = require('../../config/index').urlPrefix
 const callChargesUri = require('../../config/index').callChargesUri
 const ruralPaymentsEmail = require('../../config/index').ruralPaymentsEmail
-const EMAIL_SCHEMA = require('./email.schema.js')
+const EMAIL_SCHEMA = require('../../schemas/business-email.schema.js')
 
 const ERROR_MESSAGE = {
   enterYourEmailAddress: 'Enter your business email address',
