@@ -19,10 +19,10 @@ const getAppliableBusinesses = async (businessEmail) => {
   }
   console.log(`${new Date().toISOString()} Getting latest applications for ${businessEmail}`)
   const latestApplications = await applicationApi.getLatestApplicationsBy(businessEmail)
-  console.log(`${new Date().toISOString()} Latest Applications: ${JSON.stringify(latestApplications)}`)
+  console.log(`${new Date().toISOString()} Latest Applications: ${JSON.stringify(latestApplications.map(({ id, reference, data: { organisation: { sbi, email } } }) => ({ id, reference, data: { organisation: { sbi, email } } })))}`)
   console.log(`${new Date().toISOString()} Getting eligible businesses for ${businessEmail}`)
   const eligibleBusinesses = await eligibilityApi.getEligibleBusinesses(businessEmail)
-  console.log(`${new Date().toISOString()} Eligible Businesses: ${JSON.stringify(eligibleBusinesses)}`)
+  console.log(`${new Date().toISOString()} Eligible Businesses: ${JSON.stringify(eligibleBusinesses.map(({ sbi, email }) => ({ sbi, email })))}`)
   return eligibleBusinesses.filter(business => {
     const index = latestApplications.findIndex(
       application => application.data.organisation.sbi.toString() === business.sbi.toString()
@@ -62,7 +62,7 @@ module.exports = [{
         request,
         sessionKeys.selectYourBusiness.whichBusiness
       )
-      console.log(`${new Date().toISOString()} Appliable businesses: ${JSON.stringify(appliableBusinesses.map(business => business.sbi))}`)
+      console.log(`${new Date().toISOString()} Appliable businesses: ${JSON.stringify(appliableBusinesses.map(({ sbi, email }) => ({ sbi, email })))}`)
       return h
         .view('select-your-business',
           radios(

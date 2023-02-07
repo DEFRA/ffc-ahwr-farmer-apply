@@ -121,33 +121,17 @@ describe('API select-your-business', () => {
           },
           consoleLogs: [
             `${MOCK_NOW.toISOString()} Getting latest applications for business@email.com`,
-            `${new Date().toISOString()} Latest Applications: ${JSON.stringify(
+            `${MOCK_NOW.toISOString()} Latest Applications: ${JSON.stringify(
               [
                 {
                   id: 'eaf9b180-9993-4f3f-a1ec-4422d48edf92',
                   reference: 'AHWR-AAAA-AAAA',
                   data: {
-                    reference: 'string',
-                    declaration: true,
-                    offerStatus: 'accepted',
-                    whichReview: 'sheep',
                     organisation: {
-                      crn: 112224,
                       sbi: 122334,
-                      name: 'My Amazing Farm',
-                      email: 'business@email.com',
-                      address: '1 Example Road',
-                      farmerName: 'Mr Farmer'
-                    },
-                    eligibleSpecies: 'yes',
-                    confirmCheckDetails: 'yes'
-                  },
-                  claimed: false,
-                  createdAt: '2023-01-17 13:55:20',
-                  updatedAt: '2023-01-17 13:55:20',
-                  createdBy: 'David Jones',
-                  updatedBy: 'David Jones',
-                  statusId: 7
+                      email: 'business@email.com'
+                    }
+                  }
                 }
               ]
             )}`,
@@ -156,26 +140,24 @@ describe('API select-your-business', () => {
               [
                 {
                   sbi: '122333',
-                  crn: '112222',
-                  email: 'business@email.com',
-                  farmerName: 'Mr Farmer',
-                  name: 'My Amazing Farm',
-                  address: '1 Some Road'
+                  email: 'business@email.com'
                 },
                 {
                   sbi: '122334',
-                  crn: '112224',
-                  email: 'business@email.com',
-                  farmerName: 'Mr Farmer',
-                  name: 'My Amazing Farm 2',
-                  address: '2 Some Road'
+                  email: 'business@email.com'
                 }
               ]
             )}`,
             `${MOCK_NOW.toISOString()} Appliable businesses: ${JSON.stringify(
               [
-                '122333',
-                '122334'
+                {
+                  sbi: '122333',
+                  email: 'business@email.com'
+                },
+                {
+                  sbi: '122334',
+                  email: 'business@email.com'
+                }
               ]
             )}`
           ]
