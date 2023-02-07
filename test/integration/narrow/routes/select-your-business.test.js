@@ -121,7 +121,7 @@ describe('API select-your-business', () => {
           },
           consoleLogs: [
             `${MOCK_NOW.toISOString()} Getting latest applications for business@email.com`,
-            JSON.stringify(
+            `${new Date().toISOString()} Latest Applications: ${JSON.stringify(
               [
                 {
                   id: 'eaf9b180-9993-4f3f-a1ec-4422d48edf92',
@@ -150,9 +150,9 @@ describe('API select-your-business', () => {
                   statusId: 7
                 }
               ]
-            ),
+            )}`,
             `${MOCK_NOW.toISOString()} Getting eligible businesses for business@email.com`,
-            JSON.stringify(
+            `${MOCK_NOW.toISOString()} Eligible Businesses: ${JSON.stringify(
               [
                 {
                   sbi: '122333',
@@ -171,8 +171,13 @@ describe('API select-your-business', () => {
                   address: '2 Some Road'
                 }
               ]
-            ),
-            `${MOCK_NOW.toISOString()} Appliable businesses: [{"sbi":"122333","crn":"112222","email":"business@email.com","farmerName":"Mr Farmer","name":"My Amazing Farm","address":"1 Some Road"},{"sbi":"122334","crn":"112224","email":"business@email.com","farmerName":"Mr Farmer","name":"My Amazing Farm 2","address":"2 Some Road"}]`
+            )}`,
+            `${MOCK_NOW.toISOString()} Appliable businesses: ${JSON.stringify(
+              [
+                '122333',
+                '122334'
+              ]
+            )}`
           ]
         }
       },
@@ -198,9 +203,9 @@ describe('API select-your-business', () => {
           },
           consoleLogs: [
             `${MOCK_NOW.toISOString()} Getting latest applications for business@email.com`,
-            '[]',
+            `${MOCK_NOW.toISOString()} Latest Applications: []`,
             `${MOCK_NOW.toISOString()} Getting eligible businesses for business@email.com`,
-            '[]',
+            `${MOCK_NOW.toISOString()} Eligible Businesses: []`,
             `${MOCK_NOW.toISOString()} No eligible business found`
           ]
         }
