@@ -1,10 +1,5 @@
-const Joi = require('Joi')
-const schema = require('../../../../app/schemas/business-email.schema')
-
 describe('business-email.schema', () => {
-  afterEach(() => {
-    jest.clearAllMocks()
-  })
+  const BUSINESS_EMAIL_SCHEMA = require('../../../../app/schemas/business-email.schema')
 
   test.each([
     {
@@ -83,7 +78,7 @@ describe('business-email.schema', () => {
       }
     }
   ])('%s', async (testCase) => {
-    const result = schema.validate(testCase.given.businessEmail)
+    const result = BUSINESS_EMAIL_SCHEMA.validate(testCase.given.businessEmail)
     expect(result.value).toEqual(testCase.expect.result.value)
     if (typeof result.error === 'undefined') {
       expect(result.error).toBeUndefined()

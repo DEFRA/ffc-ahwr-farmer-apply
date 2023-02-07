@@ -4,7 +4,7 @@ const sessionKeys = require('../../session/keys')
 const urlPrefix = require('../../config/index').urlPrefix
 const callChargesUri = require('../../config/index').callChargesUri
 const ruralPaymentsEmail = require('../../config/index').ruralPaymentsEmail
-const EMAIL_SCHEMA = require('../../schemas/business-email.schema.js')
+const BUSINESS_EMAIL_SCHEMA = require('../../schemas/business-email.schema.js')
 
 const ERROR_MESSAGE = {
   enterYourEmailAddress: 'Enter your business email address',
@@ -47,7 +47,7 @@ module.exports = [
       auth: false,
       validate: {
         payload: Joi.object({
-          emailAddress: EMAIL_SCHEMA
+          emailAddress: BUSINESS_EMAIL_SCHEMA
             .messages({
               'any.required': ERROR_MESSAGE.enterYourEmailAddress,
               'string.base': ERROR_MESSAGE.enterYourEmailAddress,
