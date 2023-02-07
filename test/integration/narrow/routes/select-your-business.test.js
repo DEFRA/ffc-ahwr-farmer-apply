@@ -120,7 +120,59 @@ describe('API select-your-business', () => {
             }
           },
           consoleLogs: [
-            `${MOCK_NOW.toISOString()} Log message: ${JSON.stringify({})}`
+            `${MOCK_NOW.toISOString()} Getting latest applications for business@email.com`,
+            JSON.stringify(
+              [
+                {
+                  id: 'eaf9b180-9993-4f3f-a1ec-4422d48edf92',
+                  reference: 'AHWR-AAAA-AAAA',
+                  data: {
+                    reference: 'string',
+                    declaration: true,
+                    offerStatus: 'accepted',
+                    whichReview: 'sheep',
+                    organisation: {
+                      crn: 112224,
+                      sbi: 122334,
+                      name: 'My Amazing Farm',
+                      email: 'business@email.com',
+                      address: '1 Example Road',
+                      farmerName: 'Mr Farmer'
+                    },
+                    eligibleSpecies: 'yes',
+                    confirmCheckDetails: 'yes'
+                  },
+                  claimed: false,
+                  createdAt: '2023-01-17 13:55:20',
+                  updatedAt: '2023-01-17 13:55:20',
+                  createdBy: 'David Jones',
+                  updatedBy: 'David Jones',
+                  statusId: 7
+                }
+              ]
+            ),
+            `${MOCK_NOW.toISOString()} Getting eligible businesses for business@email.com`,
+            JSON.stringify(
+              [
+                {
+                  sbi: '122333',
+                  crn: '112222',
+                  email: 'business@email.com',
+                  farmerName: 'Mr Farmer',
+                  name: 'My Amazing Farm',
+                  address: '1 Some Road'
+                },
+                {
+                  sbi: '122334',
+                  crn: '112224',
+                  email: 'business@email.com',
+                  farmerName: 'Mr Farmer',
+                  name: 'My Amazing Farm 2',
+                  address: '2 Some Road'
+                }
+              ]
+            ),
+            `${MOCK_NOW.toISOString()} Appliable businesses: [{"sbi":"122333","crn":"112222","email":"business@email.com","farmerName":"Mr Farmer","name":"My Amazing Farm","address":"1 Some Road"},{"sbi":"122334","crn":"112224","email":"business@email.com","farmerName":"Mr Farmer","name":"My Amazing Farm 2","address":"2 Some Road"}]`
           ]
         }
       },
@@ -145,7 +197,11 @@ describe('API select-your-business', () => {
             }
           },
           consoleLogs: [
-            `${MOCK_NOW.toISOString()} Log message: ${JSON.stringify({})}`
+            `${MOCK_NOW.toISOString()} Getting latest applications for business@email.com`,
+            '[]',
+            `${MOCK_NOW.toISOString()} Getting eligible businesses for business@email.com`,
+            '[]',
+            `${MOCK_NOW.toISOString()} No eligible business found`
           ]
         }
       }
@@ -184,11 +240,9 @@ describe('API select-your-business', () => {
         expect($('title').text()).toEqual(config.serviceName)
         expect($('.govuk-fieldset__heading').first().text().trim()).toEqual('Choose the SBI you would like to apply for:')
       }
-      /*
-        testCase.expect.consoleLogs.forEach(
-          (consoleLog, idx) => expect(logSpy).toHaveBeenNthCalledWith(idx + 1, consoleLog)
-        )
-      */
+      testCase.expect.consoleLogs.forEach(
+        (consoleLog, idx) => expect(logSpy).toHaveBeenNthCalledWith(idx + 1, consoleLog)
+      )
     })
 
     test.each([
@@ -338,6 +392,11 @@ describe('API select-your-business', () => {
               }
             ]
           }
+        },
+        expect: {
+          consoleLogs: [
+            `${MOCK_NOW.toISOString()} Error on post request to /apply/select-your-business: ValidationError: "whichBusiness" is required`
+          ]
         }
       }
     ])('%s', async (testCase) => {
@@ -365,6 +424,9 @@ describe('API select-your-business', () => {
       expect(response.statusMessage).toEqual('Bad Request')
       expect($('title').text()).toEqual(config.serviceName)
       expect($('.govuk-fieldset__heading').first().text().trim()).toEqual('Choose the SBI you would like to apply for:')
+      testCase.expect.consoleLogs.forEach(
+        (consoleLog, idx) => expect(logSpy).toHaveBeenNthCalledWith(idx + 1, consoleLog)
+      )
     })
   })
 })
