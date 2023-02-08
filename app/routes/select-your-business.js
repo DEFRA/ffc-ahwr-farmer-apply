@@ -60,7 +60,10 @@ module.exports = [{
         request,
         sessionKeys.selectYourBusiness.whichBusiness
       )
-      console.log(`${new Date().toISOString()} Appliable businesses: ${JSON.stringify(appliableBusinesses.map(({ sbi, email }) => ({ sbi, email })))}`)
+      console.log(`${new Date().toISOString()} Appliable businesses: ${JSON.stringify({
+        businessEmail: request.query.businessEmail,
+        sbiNumbers: appliableBusinesses.map(business => business.sbi)
+      })}`)
       return h
         .view('select-your-business',
           radios(

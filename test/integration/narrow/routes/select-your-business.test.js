@@ -14,6 +14,10 @@ jest.mock('@hapi/wreck')
 
 const API_URL = `${config.urlPrefix}/select-your-business`
 
+AGREED = 1
+WITHDRAWN = 2
+NOT_AGREED = 7
+
 describe('API select-your-business', () => {
   let dateSpy
   let logSpy
@@ -121,7 +125,7 @@ describe('API select-your-business', () => {
                 updatedAt: '2023-01-17 13:55:20',
                 createdBy: 'David Jones',
                 updatedBy: 'David Jones',
-                statusId: 7
+                statusId: NOT_AGREED
               },
               {
                 id: 'eaf9b180-9993-4f3f-a1ec-4422d48edf92',
@@ -147,7 +151,7 @@ describe('API select-your-business', () => {
                 updatedAt: '2023-01-17 13:55:20',
                 createdBy: 'David Jones',
                 updatedBy: 'David Jones',
-                statusId: 2
+                statusId: WITHDRAWN
               },
               {
                 id: 'eaf9b180-9993-4f3f-a1ec-4422d48edf92',
@@ -173,7 +177,7 @@ describe('API select-your-business', () => {
                 updatedAt: '2023-01-17 13:55:20',
                 createdBy: 'David Jones',
                 updatedBy: 'David Jones',
-                statusId: 1
+                statusId: AGREED
               }
             ]
           }
@@ -198,7 +202,7 @@ describe('API select-your-business', () => {
                       email: 'business@email.com'
                     }
                   },
-                  statusId: 7
+                  statusId: NOT_AGREED
                 },
                 {
                   id: 'eaf9b180-9993-4f3f-a1ec-4422d48edf92',
@@ -209,7 +213,7 @@ describe('API select-your-business', () => {
                       email: 'business@email.com'
                     }
                   },
-                  statusId: 2
+                  statusId: WITHDRAWN
                 },
                 {
                   id: 'eaf9b180-9993-4f3f-a1ec-4422d48edf92',
@@ -220,7 +224,7 @@ describe('API select-your-business', () => {
                       email: 'business@email.com'
                     }
                   },
-                  statusId: 1
+                  statusId: AGREED
                 }
               ]
             )}`,
@@ -245,22 +249,14 @@ describe('API select-your-business', () => {
                 }
               ]
             )}`,
-            `${MOCK_NOW.toISOString()} Appliable businesses: ${JSON.stringify(
-              [
-                {
-                  sbi: '111222333',
-                  email: 'business@email.com'
-                },
-                {
-                  sbi: '111222334',
-                  email: 'business@email.com'
-                },
-                {
-                  sbi: '111222335',
-                  email: 'business@email.com'
-                }
+            `${MOCK_NOW.toISOString()} Appliable businesses: ${JSON.stringify({
+              businessEmail: 'business@email.com',
+              sbiNumbers: [
+                '111222333',
+                '111222334',
+                '111222335'
               ]
-            )}`
+            })}`
           ],
           appliableBusinesses: [
             {
