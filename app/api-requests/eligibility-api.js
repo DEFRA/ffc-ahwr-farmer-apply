@@ -19,7 +19,7 @@ async function getEligibility (emailAddress) {
     return payload.value
   } catch (err) {
     console.error(`Get eligibility failed: ${err.message}`)
-    return null
+    return []
   }
 }
 
