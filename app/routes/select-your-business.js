@@ -13,21 +13,22 @@ const LEGEND_TEXT = 'Choose the SBI you would like to apply for:'
 const RADIO_OPTIONS = { isPageHeading: true, legendClasses: 'govuk-fieldset__legend--l', inline: false, undefined }
 
 const getAppliableBusinesses = async (businessEmail) => {
-  const applicationStatus = {
-    WITHDRAWN: 2,
-    NOT_AGREED: 7
-  }
-  const latestApplications = await applicationApi.getLatestApplicationsBy(businessEmail)
-  const eligibleBusinesses = await eligibilityApi.getEligibleBusinesses(businessEmail)
-  const isAppliable = business => {
-    const linkedApplication = latestApplications.find(
-      application => application.data.organisation.sbi.toString() === business.sbi.toString()
-    )
-    return typeof linkedApplication === 'undefined' ||
-    linkedApplication.statusId === applicationStatus.WITHDRAWN ||
-    linkedApplication.statusId === applicationStatus.NOT_AGREED
-  }
-  return eligibleBusinesses.filter(business => isAppliable(business))
+  const isAppliable = await (async (businessEmail) => {
+    const WITHDRAWN = 2
+    const NOT_AGREED = 7
+    const latestApplications = await applicationApi.getLatestApplicationsBy(businessEmail)
+    return eligibleBusiness =>
+    // has not been applied before
+      latestApplications
+        .filter(application => application.data.organisation.sbi.toString() === eligibleBusiness.sbi.toString()).length === 0 ||
+    // its latest application has been WITHDRAWN or is NOT_AGREED
+    latestApplications
+      .filter(application => application.data.organisation.sbi.toString() === eligibleBusiness.sbi.toString())
+      .some(application => [WITHDRAWN, NOT_AGREED].includes(application.statusId))
+  })(businessEmail)
+  return (await eligibilityApi
+    .getEligibleBusinesses(businessEmail))
+    .filter(eligibleBusiness => isAppliable(eligibleBusiness))
 }
 
 module.exports = [{

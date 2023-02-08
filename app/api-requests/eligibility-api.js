@@ -30,7 +30,7 @@ async function getEligibleBusinesses (businessEmail) {
       `${config.eligibilityApi.uri}/businesses?emailAddress=${businessEmail}`,
       { json: true }
     )
-    if (response.res.statusCode !== 200) {
+    if (response.res.statusCode !== 200 && response.res.statusCode !== 302) {
       throw new Error(`HTTP ${response.res.statusCode} (${response.res.statusMessage})`)
     }
     const payload = Joi.array().items(businessSchema).validate(response.payload)

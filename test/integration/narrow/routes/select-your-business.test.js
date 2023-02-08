@@ -10,8 +10,6 @@ const eligibilityConfig = require('../../../../app/api-requests/eligibility-api.
 
 const MOCK_NOW = new Date()
 
-jest.mock('../../../../app/api-requests/eligibility-api')
-jest.mock('../../../../app/api-requests/application-api')
 jest.mock('@hapi/wreck')
 
 const API_URL = `${config.urlPrefix}/select-your-business`
@@ -64,16 +62,16 @@ describe('API select-your-business', () => {
           eligibilityApi: {
             businesses: [
               {
-                sbi: '122333',
-                crn: '112222',
+                sbi: '111222333',
+                crn: '1112223333',
                 email: 'business@email.com',
                 farmerName: 'Mr Farmer',
                 name: 'My Amazing Farm',
                 address: '1 Some Road'
               },
               {
-                sbi: '122334',
-                crn: '112224',
+                sbi: '111222334',
+                crn: '1112223334',
                 email: 'business@email.com',
                 farmerName: 'Mr Farmer',
                 name: 'My Amazing Farm 2',
@@ -92,8 +90,8 @@ describe('API select-your-business', () => {
                   offerStatus: 'accepted',
                   whichReview: 'sheep',
                   organisation: {
-                    crn: 112224,
-                    sbi: 122334,
+                    crn: 1112223334,
+                    sbi: 111222334,
                     name: 'My Amazing Farm',
                     email: 'business@email.com',
                     address: '1 Example Road',
@@ -120,6 +118,7 @@ describe('API select-your-business', () => {
             }
           },
           consoleLogs: [
+            `${MOCK_NOW.toISOString()} Getting latest applications by: ${JSON.stringify({ businessEmail: 'business@email.com' })}`,
             `${MOCK_NOW.toISOString()} Latest Applications: ${JSON.stringify(
               [
                 {
@@ -127,21 +126,22 @@ describe('API select-your-business', () => {
                   reference: 'AHWR-AAAA-AAAA',
                   data: {
                     organisation: {
-                      sbi: 122334,
+                      sbi: 111222334,
                       email: 'business@email.com'
                     }
                   }
                 }
               ]
             )}`,
+            `${MOCK_NOW.toISOString()} Getting eligible businesses: ${JSON.stringify({ businessEmail: 'business@email.com' })}`,
             `${MOCK_NOW.toISOString()} Eligible Businesses: ${JSON.stringify(
               [
                 {
-                  sbi: '122333',
+                  sbi: '111222333',
                   email: 'business@email.com'
                 },
                 {
-                  sbi: '122334',
+                  sbi: '111222334',
                   email: 'business@email.com'
                 }
               ]
@@ -149,11 +149,11 @@ describe('API select-your-business', () => {
             `${MOCK_NOW.toISOString()} Appliable businesses: ${JSON.stringify(
               [
                 {
-                  sbi: '122333',
+                  sbi: '111222333',
                   email: 'business@email.com'
                 },
                 {
-                  sbi: '122334',
+                  sbi: '111222334',
                   email: 'business@email.com'
                 }
               ]
@@ -182,33 +182,44 @@ describe('API select-your-business', () => {
             }
           },
           consoleLogs: [
+            `${MOCK_NOW.toISOString()} Getting latest applications by: ${JSON.stringify({ businessEmail: 'business@email.com' })}`,
             `${MOCK_NOW.toISOString()} Latest Applications: []`,
+            `${MOCK_NOW.toISOString()} Getting eligible businesses: ${JSON.stringify({ businessEmail: 'business@email.com' })}`,
             `${MOCK_NOW.toISOString()} Eligible Businesses: []`,
             `${MOCK_NOW.toISOString()} No eligible business found`
           ]
         }
       }
     ])('%s', async (testCase) => {
+      const statusCode = testCase.expect.http.statusCode
       const options = {
         method: 'GET',
         url: `${API_URL}?businessEmail=${testCase.given.businessEmail}`,
         auth: {
-          credentials: { reference: '1111', sbi: '122333' },
+          credentials: { reference: '1111', sbi: '111222333' },
           strategy: 'cookie'
         }
+      }
+      const applicationExpectedResponse = {
+        payload: testCase.when.applicationApi.latestApplications,
+        res: { statusCode }
+      }
+      const eligibilityExpectedResponse = {
+        payload: testCase.when.eligibilityApi.businesses,
+        res: { statusCode }
       }
       when(Wreck.get)
         .calledWith(
           `${applicationConfig.uri}/applications/latest?businessEmail=${testCase.given.businessEmail}`,
           { json: true }
         )
-        .mockResolvedValue(testCase.when.applicationApi.latestApplications)
+        .mockResolvedValue(applicationExpectedResponse)
       when(Wreck.get)
         .calledWith(
           `${eligibilityConfig.uri}/businesses?emailAddress=${testCase.given.businessEmail}`,
           { json: true }
         )
-        .mockResolvedValue(testCase.when.eligibilityApi.businesses)
+        .mockResolvedValue(eligibilityExpectedResponse)
 
       const response = await global.__SERVER__.inject(options)
       const $ = cheerio.load(response.payload)
@@ -246,7 +257,7 @@ describe('API select-your-business', () => {
         method: 'GET',
         url: `${API_URL}${testCase.given.queryString}`,
         auth: {
-          credentials: { reference: '1111', sbi: '122333' },
+          credentials: { reference: '1111', sbi: '111222333' },
           strategy: 'cookie'
         }
       }
@@ -270,23 +281,23 @@ describe('API select-your-business', () => {
         toString: () => 'HTTP 200 - business selected',
         given: {
           payload: {
-            whichBusiness: '122333'
+            whichBusiness: '111222333'
           }
         },
         when: {
           session: {
             businesses: [
               {
-                sbi: '122333',
-                crn: '112222',
+                sbi: '111222333',
+                crn: '1112223333',
                 email: 'liam.wilson@kainos.com',
                 farmerName: 'Mr Farmer',
                 name: 'My Amazing Farm',
                 address: '1 Some Road'
               },
               {
-                sbi: '122334',
-                crn: '112224',
+                sbi: '111222334',
+                crn: '1112223334',
                 email: 'liam.wilson@kainos.com',
                 farmerName: 'Mr Farmer',
                 name: 'My Amazing Farm 2',
@@ -298,8 +309,8 @@ describe('API select-your-business', () => {
         expect: {
           consoleLogs: [
             `${MOCK_NOW.toISOString()} Selected business: ${JSON.stringify({
-              sbi: '122333',
-              crn: '112222',
+              sbi: '111222333',
+              crn: '1112223333',
               email: 'liam.wilson@kainos.com',
               farmerName: 'Mr Farmer',
               name: 'My Amazing Farm',
@@ -315,7 +326,7 @@ describe('API select-your-business', () => {
         payload: { crumb, ...testCase.given.payload },
         headers: { cookie: `crumb=${crumb}` },
         auth: {
-          credentials: { reference: '1111', sbi: '122333' },
+          credentials: { reference: '1111', sbi: '111222333' },
           strategy: 'cookie'
         }
       }
@@ -334,15 +345,15 @@ describe('API select-your-business', () => {
       expect(session.setSelectYourBusiness).toHaveBeenCalledWith(
         expect.anything(),
         sessionKeys.selectYourBusiness.whichBusiness,
-        '122333'
+        '111222333'
       )
       expect(session.setFarmerApplyData).toHaveBeenCalledTimes(1)
       expect(session.setFarmerApplyData).toHaveBeenCalledWith(
         expect.anything(),
         sessionKeys.farmerApplyData.organisation,
         {
-          sbi: '122333',
-          crn: '112222',
+          sbi: '111222333',
+          crn: '1112223333',
           email: 'liam.wilson@kainos.com',
           farmerName: 'Mr Farmer',
           name: 'My Amazing Farm',
@@ -364,16 +375,16 @@ describe('API select-your-business', () => {
           session: {
             businesses: [
               {
-                sbi: '122333',
-                crn: '112222',
+                sbi: '111222333',
+                crn: '1112223333',
                 email: 'liam.wilson@kainos.com',
                 farmerName: 'Mr Farmer',
                 name: 'My Amazing Farm',
                 address: '1 Some Road'
               },
               {
-                sbi: '122334',
-                crn: '112224',
+                sbi: '111222334',
+                crn: '1112223334',
                 email: 'liam.wilson@kainos.com',
                 farmerName: 'Mr Farmer',
                 name: 'My Amazing Farm 2',
