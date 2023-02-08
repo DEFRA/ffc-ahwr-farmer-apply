@@ -17,7 +17,7 @@ async function getLatestApplicationsBy (businessEmail) {
     console.error(`${new Date().toISOString()} Getting latest applications failed: ${JSON.stringify({
       businessEmail
     })}`, error)
-    return null
+    return []
   }
 }
 

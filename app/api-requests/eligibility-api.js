@@ -19,7 +19,7 @@ async function getEligibility (emailAddress) {
     return payload.value
   } catch (err) {
     console.error(`Get eligibility failed: ${err.message}`)
-    return null
+    return []
   }
 }
 
@@ -43,7 +43,7 @@ async function getEligibleBusinesses (businessEmail) {
     console.error(`${new Date().toISOString()} Getting eligible businesses failed: ${JSON.stringify({
       businessEmail
     })}`, error)
-    return null
+    return []
   }
 }
 
