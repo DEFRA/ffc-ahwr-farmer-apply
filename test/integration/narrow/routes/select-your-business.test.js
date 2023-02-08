@@ -202,13 +202,13 @@ describe('API select-your-business', () => {
           `${applicationConfig.uri}/applications/latest?businessEmail=${testCase.given.businessEmail}`,
           { json: true }
         )
-        .mockResolvedValue(testCase.when.eligibilityApi.businesses)
+        .mockResolvedValue(testCase.when.applicationApi.latestApplications)
       when(Wreck.get)
         .calledWith(
           `${eligibilityConfig.uri}/businesses?emailAddress=${testCase.given.businessEmail}`,
           { json: true }
         )
-        .mockResolvedValue(testCase.when.applicationApi.latestApplications)
+        .mockResolvedValue(testCase.when.eligibilityApi.businesses)
 
       const response = await global.__SERVER__.inject(options)
       const $ = cheerio.load(response.payload)
