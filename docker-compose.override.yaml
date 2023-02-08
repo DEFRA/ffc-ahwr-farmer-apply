@@ -14,7 +14,7 @@ services:
       - "9229:9229"
     volumes:
       - ./app:/home/node/app
-      - ./package.json:/home/node/package.json
+      - ./package.json:/home/node/package.json    
 
   ffc-ahwr-farmer-apply-azurite:
     image: mcr.microsoft.com/azure-storage/azurite:3.16.0

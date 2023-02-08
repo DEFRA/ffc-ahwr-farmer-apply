@@ -21,5 +21,9 @@ module.exports = {
     confirmSbi: 'confirmSbi',
     emailAddress: 'emailAddress',
     confirmEmailAddress: 'confirmEmailAddress'
+  },
+  selectYourBusiness: {
+    eligibleBusinesses: 'eligibleBusinesses',
+    whichBusiness: 'whichBusiness'
   }
 }

@@ -4,6 +4,7 @@ describe('session', () => {
   const applicationSectionKey = 'application'
   const farmerApplyDataSectionKey = 'farmerApplyData'
   const registerYourInterestDataSectionKey = session.entries.registerYourInterestData
+  const selectYourBusinessSectionKey = 'selectYourBusiness'
 
   const value = 'value'
   const objectValue = { key: value }
@@ -11,13 +12,15 @@ describe('session', () => {
   const getFunctionsToTest = [
     { func: 'getApplication', expectedSectionKey: applicationSectionKey },
     { func: 'getFarmerApplyData', expectedSectionKey: farmerApplyDataSectionKey },
-    { func: 'getRegisterYourInterestData', expectedSectionKey: registerYourInterestDataSectionKey }
+    { func: 'getRegisterYourInterestData', expectedSectionKey: registerYourInterestDataSectionKey },
+    { func: 'getSelectYourBusiness', expectedSectionKey: selectYourBusinessSectionKey }
   ]
 
   const setFunctionsToTest = [
     { func: 'setApplication', expectedSectionKey: applicationSectionKey },
     { func: 'setFarmerApplyData', expectedSectionKey: farmerApplyDataSectionKey },
-    { func: 'setRegisterYourInterestData', expectedSectionKey: registerYourInterestDataSectionKey }
+    { func: 'setRegisterYourInterestData', expectedSectionKey: registerYourInterestDataSectionKey },
+    { func: 'setSelectYourBusiness', expectedSectionKey: selectYourBusinessSectionKey }
   ]
 
   const keysAndValuesToTest = [

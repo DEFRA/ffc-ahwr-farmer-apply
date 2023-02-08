@@ -1,9 +1,9 @@
-const userSchema = require('../../../../app/api-requests/user.schema')
+const businessSchema = require('../../../../app/api-requests/business.schema')
 
-describe('User schema', () => {
+describe('Business schema', () => {
   test.each([
     {
-      validUser: {
+      validBusiness: {
         farmerName: 'David Smith',
         name: 'David\'s Farm',
         sbi: '441111114',
@@ -12,16 +12,16 @@ describe('User schema', () => {
         email: 'name@email.com'
       }
     }
-  ])('validate($validUser) => no errors', (testCase) => {
-    const result = userSchema.validate(testCase.validUser)
+  ])('validate($validBusiness) => no errors', (testCase) => {
+    const result = businessSchema.validate(testCase.validBusiness)
 
-    expect(result.value).toEqual(testCase.validUser)
+    expect(result.value).toEqual(testCase.validBusiness)
     expect(result.error).toBeUndefined()
   })
 
   test.each([
     {
-      invalidUser: {
+      invalidBusiness: {
         name: 'David\'s Farm',
         sbi: '441111114',
         crn: '4411111144',
@@ -31,7 +31,7 @@ describe('User schema', () => {
       errorMessage: '"farmerName" is required'
     },
     {
-      invalidUser: {
+      invalidBusiness: {
         farmerName: 'David Smith',
         sbi: '441111114',
         crn: '4411111144',
@@ -41,7 +41,7 @@ describe('User schema', () => {
       errorMessage: '"name" is required'
     },
     {
-      invalidUser: {
+      invalidBusiness: {
         farmerName: 'David Smith',
         name: 'David\'s Farm',
         crn: '4411111144',
@@ -51,7 +51,7 @@ describe('User schema', () => {
       errorMessage: '"sbi" is required'
     },
     {
-      invalidUser: {
+      invalidBusiness: {
         farmerName: 'David Smith',
         name: 'David\'s Farm',
         sbi: '44111111',
@@ -62,7 +62,7 @@ describe('User schema', () => {
       errorMessage: '"sbi" with value "44111111" fails to match the required pattern: /^\\d{9}$/'
     },
     {
-      invalidUser: {
+      invalidBusiness: {
         farmerName: 'David Smith',
         name: 'David\'s Farm',
         sbi: '441111114',
@@ -72,7 +72,7 @@ describe('User schema', () => {
       errorMessage: '"crn" is required'
     },
     {
-      invalidUser: {
+      invalidBusiness: {
         farmerName: 'David Smith',
         name: 'David\'s Farm',
         sbi: '441111114',
@@ -83,7 +83,7 @@ describe('User schema', () => {
       errorMessage: '"crn" with value "441111114" fails to match the required pattern: /^\\d{10}$/'
     },
     {
-      invalidUser: {
+      invalidBusiness: {
         farmerName: 'David Smith',
         name: 'David\'s Farm',
         sbi: '441111114',
@@ -93,7 +93,7 @@ describe('User schema', () => {
       errorMessage: '"address" is required'
     },
     {
-      invalidUser: {
+      invalidBusiness: {
         farmerName: 'David Smith',
         name: 'David\'s Farm',
         sbi: '441111114',
@@ -102,10 +102,10 @@ describe('User schema', () => {
       },
       errorMessage: '"email" is required'
     }
-  ])('validate($invalidUser) => $errorMessage', (testCase) => {
-    const result = userSchema.validate(testCase.invalidUser)
+  ])('validate($invalidBusiness) => $errorMessage', (testCase) => {
+    const result = businessSchema.validate(testCase.invalidBusiness)
 
-    expect(result.value).toEqual(testCase.invalidUser)
+    expect(result.value).toEqual(testCase.invalidBusiness)
     expect(result.error.message).toEqual(testCase.errorMessage)
   })
 })

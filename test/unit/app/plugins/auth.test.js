@@ -1,31 +1,43 @@
 const { v4: uuid } = require('uuid')
 const { farmerApply } = require('../../../../app/constants/user-types')
-const { cookie: { ttl }, urlPrefix } = require('../../../../app/config')
 const { farmerApplyData: { organisation: organisationKey } } = require('../../../../app/session/keys')
 
 describe('Auth plugin test', () => {
-  let getByEmail
-  let session
-  const organisation = { name: 'my-org' }
-
-  beforeAll(async () => {
-    jest.resetAllMocks()
-
-    session = require('../../../../app/session')
-    jest.mock('../../../../app/session')
-    const orgs = require('../../../../app/api-requests/users')
-    getByEmail = orgs.getByEmail
-    jest.mock('../../../../app/api-requests/users')
-  })
-  beforeEach(() => {
-    jest.clearAllMocks()
-  })
-
-  const validEmail = 'dairy@ltd.com'
-
   describe('GET requests to /login', () => {
-    const url = `${urlPrefix}/login`
-    const redirectTo = `${urlPrefix}/org-review`
+    let getByEmail
+    let session
+    let ttl
+    let urlPrefix
+    let url
+    let redirectTo
+
+    const validEmail = 'dairy@ltd.com'
+    const organisation = { name: 'my-org' }
+
+    beforeAll(async () => {
+      jest.resetAllMocks()
+      jest.mock('../../../../app/session')
+      session = require('../../../../app/session')
+      jest.mock('../../../../app/api-requests/users')
+      const orgs = require('../../../../app/api-requests/users')
+      getByEmail = orgs.getByEmail
+      jest.mock('../../../../app/config', () => ({
+        ...jest.requireActual('../../../../app/config'),
+        selectYourBusiness: {
+          enabled: false
+        }
+      }))
+      const config = require('../../../../app/config')
+
+      ttl = config.cookie.ttl
+      urlPrefix = config.urlPrefix
+      url = `${urlPrefix}/login`
+      redirectTo = `${urlPrefix}/org-review`
+    })
+
+    beforeEach(() => {
+      jest.resetAllMocks()
+    })
 
     async function login () {
       const email = uuid() + validEmail
@@ -82,6 +94,72 @@ describe('Auth plugin test', () => {
       expect(res.statusCode).toBe(302)
       expect(res.headers.location).toEqual(redirectTo)
       expect(session.setFarmerApplyData).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  describe('GET requests to /login with business selected true', () => {
+    let getByEmail
+    let session
+    let urlPrefix
+    let url
+    let redirectTo
+
+    const validEmail = 'dairy@ltd.com'
+    const organisation = { name: 'my-org' }
+
+    beforeAll(async () => {
+      jest.resetAllMocks()
+      jest.resetModules()
+      jest.mock('../../../../app/session')
+      session = require('../../../../app/session')
+      jest.mock('../../../../app/api-requests/users')
+      const orgs = require('../../../../app/api-requests/users')
+      getByEmail = orgs.getByEmail
+      jest.mock('../../../../app/config', () => ({
+        ...jest.requireActual('../../../../app/config'),
+        selectYourBusiness: {
+          enabled: true
+        }
+      }))
+      const config = require('../../../../app/config')
+
+      urlPrefix = config.urlPrefix
+      url = `${urlPrefix}/login`
+      redirectTo = `${urlPrefix}/org-review`
+    })
+
+    beforeEach(() => {
+      jest.resetAllMocks()
+    })
+
+    async function login () {
+      const email = uuid() + validEmail
+      const token = uuid()
+      const options = {
+        method: 'GET',
+        url: `${urlPrefix}/verify-login?email=${email}&token=${token}`
+      }
+
+      await global.__SERVER__.app.magiclinkCache.set(email, [token])
+      await global.__SERVER__.app.magiclinkCache.set(token, { email, redirectTo, userType: farmerApply })
+
+      return global.__SERVER__.inject(options)
+    }
+
+    test('when select business on session not set', async () => {
+      const loginResponse = await login()
+
+      const cookieHeaders = loginResponse.headers['set-cookie'].map(x => x.split('; ')[0]).join('; ')
+
+      const options = {
+        method: 'GET',
+        url,
+        headers: { cookie: cookieHeaders }
+      }
+      getByEmail.mockResolvedValue(organisation)
+
+      const res = await global.__SERVER__.inject(options)
+      expect(session.setFarmerApplyData).not.toHaveBeenCalledWith(res.request, organisationKey, organisation)
     })
   })
 })

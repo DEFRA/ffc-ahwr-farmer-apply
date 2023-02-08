@@ -29,4 +29,6 @@ data:
   REGISTER_YOUR_INTEREST_REQUEST_QUEUE_ADDRESS: {{ quote .Values.container.registerYourInterestRequestQueueAddress }}
   ELIGIBILITY_API_ENABLED: {{ quote .Values.container.eligibilityApiEnabled }}
   ELIGIBILITY_API_URI: {{ quote .Values.container.eligibilityApiUri }}
+  APPLICATION_API_URI: {{ quote .Values.container.applicationApiUri }}
+  SELECT_YOUR_BUSINESS_ENABLED: {{ quote .Values.container.selectYourBusinessEnabled }}
 {{- end -}}

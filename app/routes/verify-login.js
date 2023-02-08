@@ -4,7 +4,7 @@ const { setFarmerApplyData } = require('../session')
 const { organisation: organisationKey } = require('../session/keys').farmerApplyData
 const { lookupToken, setAuthCookie } = require('../auth')
 const { sendMonitoringEvent } = require('../event')
-const urlPrefix = require('../config/index').urlPrefix
+const { urlPrefix, selectYourBusiness } = require('../config')
 
 function isRequestInvalid (cachedEmail, email) {
   return !cachedEmail || email !== cachedEmail
@@ -41,14 +41,18 @@ module.exports = [{
 
       const { email: cachedEmail, redirectTo, userType } = await lookupToken(request, token)
       if (isRequestInvalid(cachedEmail, email)) {
+        console.error('Email in the verify login link does not match the cached email.')
         sendMonitoringEvent(request.yar.id, 'Invalid token', email, getIp(request))
         return h.view('verify-login-failed').code(400)
       }
 
       setAuthCookie(request, email, userType)
-      await cacheFarmerApplyData(request, email)
 
-      return h.redirect(redirectTo)
+      if (selectYourBusiness.enabled === false) {
+        await cacheFarmerApplyData(request, email)
+      }
+
+      return h.redirect(`${redirectTo}${selectYourBusiness.enabled ? (`?businessEmail=${email}`) : ''}`)
     }
   }
 }]
