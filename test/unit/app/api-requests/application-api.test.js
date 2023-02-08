@@ -133,7 +133,7 @@ describe('Application API', () => {
           options
       )
     })
-    test('given Wreck.get returns 400 it logs the issue and returns null', async () => {
+    test('given Wreck.get returns 400 it logs the issue and returns empty array', async () => {
       const statusCode = 400
       const statusMessage = 'A valid email address must be specified.'
       const expectedResponse = {
@@ -157,13 +157,13 @@ describe('Application API', () => {
       expect(consoleLogSpy).toHaveBeenCalledWith(`${MOCK_NOW.toISOString()} Getting latest applications by: ${JSON.stringify({
         businessEmail: BUSINESS_EMAIL_ADDRESS
       })}`)
-      expect(response).toBeNull()
+      expect(response).toStrictEqual([])
       expect(Wreck.get).toHaveBeenCalledWith(
         `${mockApplicationApiUri}/applications/latest?businessEmail=${BUSINESS_EMAIL_ADDRESS}`,
         options
       )
     })
-    test('given Wreck.get throws an error it logs the error and returns null', async () => {
+    test('given Wreck.get throws an error it logs the error and returns empty array', async () => {
       const expectedError = new Error('msg')
       const options = {
         json: true
@@ -175,7 +175,7 @@ describe('Application API', () => {
       expect(consoleErrorSpy).toHaveBeenCalledWith(`${MOCK_NOW.toISOString()} Getting latest applications failed: ${JSON.stringify({
         businessEmail: BUSINESS_EMAIL_ADDRESS
       })}`, expectedError)
-      expect(response).toBeNull()
+      expect(response).toStrictEqual([])
       expect(Wreck.get).toHaveBeenCalledWith(
         `${mockApplicationApiUri}/applications/latest?businessEmail=${BUSINESS_EMAIL_ADDRESS}`,
         options

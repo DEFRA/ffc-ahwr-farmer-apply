@@ -43,7 +43,7 @@ async function getEligibleBusinesses (businessEmail) {
     console.error(`${new Date().toISOString()} Getting eligible businesses failed: ${JSON.stringify({
       businessEmail
     })}`, error)
-    return null
+    return []
   }
 }
 
