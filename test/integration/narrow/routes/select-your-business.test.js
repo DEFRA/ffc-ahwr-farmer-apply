@@ -261,6 +261,32 @@ describe('API select-your-business', () => {
                 }
               ]
             )}`
+          ],
+          appliableBusinesses: [
+            {
+              sbi: '111222333',
+              crn: '1112223333',
+              email: 'business@email.com',
+              farmerName: 'Mr Farmer',
+              name: 'My Amazing Farm',
+              address: '1 Some Road'
+            },
+            {
+              sbi: '111222334',
+              crn: '1112223334',
+              email: 'business@email.com',
+              farmerName: 'Mr Farmer',
+              name: 'My Amazing Farm 2',
+              address: '2 Some Road'
+            },
+            {
+              sbi: '111222335',
+              crn: '1112223335',
+              email: 'business@email.com',
+              farmerName: 'Mr Farmer',
+              name: 'My Amazing Farm 3',
+              address: '3 Some Road'
+            }
           ]
         }
       },
@@ -290,7 +316,8 @@ describe('API select-your-business', () => {
             `${MOCK_NOW.toISOString()} Getting eligible businesses: ${JSON.stringify({ businessEmail: 'business@email.com' })}`,
             `${MOCK_NOW.toISOString()} Eligible Businesses: []`,
             `${MOCK_NOW.toISOString()} No eligible business found`
-          ]
+          ],
+          appliableBusinesses: []
         }
       }
     ])('%s', async (testCase) => {
@@ -336,7 +363,7 @@ describe('API select-your-business', () => {
         expect(session.setSelectYourBusiness).toHaveBeenCalledWith(
           expect.anything(),
           sessionKeys.selectYourBusiness.eligibleBusinesses,
-          testCase.when.eligibilityApi.businesses
+          testCase.expect.appliableBusinesses
         )
       }
       if (!testCase.expect.http.headers.location) {
