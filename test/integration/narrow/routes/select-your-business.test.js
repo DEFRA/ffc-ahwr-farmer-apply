@@ -199,6 +199,28 @@ describe('API select-your-business', () => {
                     }
                   },
                   statusId: 7
+                },
+                {
+                  id: 'eaf9b180-9993-4f3f-a1ec-4422d48edf92',
+                  reference: 'AHWR-AAAA-AAAA',
+                  data: {
+                    organisation: {
+                      sbi: 111222335,
+                      email: 'business@email.com'
+                    }
+                  },
+                  statusId: 2
+                },
+                {
+                  id: 'eaf9b180-9993-4f3f-a1ec-4422d48edf92',
+                  reference: 'AHWR-AAAA-AAAA',
+                  data: {
+                    organisation: {
+                      sbi: 111222336,
+                      email: 'business@email.com'
+                    }
+                  },
+                  statusId: 1
                 }
               ]
             )}`,
@@ -212,6 +234,14 @@ describe('API select-your-business', () => {
                 {
                   sbi: '111222334',
                   email: 'business@email.com'
+                },
+                {
+                  sbi: '111222335',
+                  email: 'business@email.com'
+                },
+                {
+                  sbi: '111222336',
+                  email: 'business@email.com'
                 }
               ]
             )}`,
@@ -223,6 +253,10 @@ describe('API select-your-business', () => {
                 },
                 {
                   sbi: '111222334',
+                  email: 'business@email.com'
+                },
+                {
+                  sbi: '111222335',
                   email: 'business@email.com'
                 }
               ]
