@@ -120,7 +120,6 @@ describe('API select-your-business', () => {
             }
           },
           consoleLogs: [
-            `${MOCK_NOW.toISOString()} Getting latest applications for business@email.com`,
             `${MOCK_NOW.toISOString()} Latest Applications: ${JSON.stringify(
               [
                 {
@@ -135,7 +134,6 @@ describe('API select-your-business', () => {
                 }
               ]
             )}`,
-            `${MOCK_NOW.toISOString()} Getting eligible businesses for business@email.com`,
             `${MOCK_NOW.toISOString()} Eligible Businesses: ${JSON.stringify(
               [
                 {
@@ -184,9 +182,7 @@ describe('API select-your-business', () => {
             }
           },
           consoleLogs: [
-            `${MOCK_NOW.toISOString()} Getting latest applications for business@email.com`,
             `${MOCK_NOW.toISOString()} Latest Applications: []`,
-            `${MOCK_NOW.toISOString()} Getting eligible businesses for business@email.com`,
             `${MOCK_NOW.toISOString()} Eligible Businesses: []`,
             `${MOCK_NOW.toISOString()} No eligible business found`
           ]

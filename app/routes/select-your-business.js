@@ -17,10 +17,8 @@ const getAppliableBusinesses = async (businessEmail) => {
     WITHDRAWN: 2,
     NOT_AGREED: 7
   }
-  console.log(`${new Date().toISOString()} Getting latest applications for ${businessEmail}`)
   const latestApplications = await applicationApi.getLatestApplicationsBy(businessEmail)
   console.log(`${new Date().toISOString()} Latest Applications: ${JSON.stringify(latestApplications.map(({ id, reference, data: { organisation: { sbi, email } } }) => ({ id, reference, data: { organisation: { sbi, email } } })))}`)
-  console.log(`${new Date().toISOString()} Getting eligible businesses for ${businessEmail}`)
   const eligibleBusinesses = await eligibilityApi.getEligibleBusinesses(businessEmail)
   console.log(`${new Date().toISOString()} Eligible Businesses: ${JSON.stringify(eligibleBusinesses.map(({ sbi, email }) => ({ sbi, email })))}`)
   return eligibleBusinesses.filter(business => {
