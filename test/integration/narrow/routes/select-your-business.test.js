@@ -76,6 +76,22 @@ describe('API select-your-business', () => {
                 farmerName: 'Mr Farmer',
                 name: 'My Amazing Farm 2',
                 address: '2 Some Road'
+              },
+              {
+                sbi: '111222335',
+                crn: '1112223335',
+                email: 'business@email.com',
+                farmerName: 'Mr Farmer',
+                name: 'My Amazing Farm 3',
+                address: '3 Some Road'
+              },
+              {
+                sbi: '111222336',
+                crn: '1112223336',
+                email: 'business@email.com',
+                farmerName: 'Mr Farmer',
+                name: 'My Amazing Farm 4',
+                address: '4 Some Road'
               }
             ]
           },
@@ -106,6 +122,58 @@ describe('API select-your-business', () => {
                 createdBy: 'David Jones',
                 updatedBy: 'David Jones',
                 statusId: 7
+              },
+              {
+                id: 'eaf9b180-9993-4f3f-a1ec-4422d48edf92',
+                reference: 'AHWR-AAAA-AAAA',
+                data: {
+                  reference: 'string',
+                  declaration: true,
+                  offerStatus: 'accepted',
+                  whichReview: 'sheep',
+                  organisation: {
+                    crn: 1112223335,
+                    sbi: 111222335,
+                    name: 'My Amazing Farm',
+                    email: 'business@email.com',
+                    address: '3 Some Road',
+                    farmerName: 'Mr Farmer'
+                  },
+                  eligibleSpecies: 'yes',
+                  confirmCheckDetails: 'yes'
+                },
+                claimed: false,
+                createdAt: '2023-01-17 13:55:20',
+                updatedAt: '2023-01-17 13:55:20',
+                createdBy: 'David Jones',
+                updatedBy: 'David Jones',
+                statusId: 2
+              },
+              {
+                id: 'eaf9b180-9993-4f3f-a1ec-4422d48edf92',
+                reference: 'AHWR-AAAA-AAAA',
+                data: {
+                  reference: 'string',
+                  declaration: true,
+                  offerStatus: 'accepted',
+                  whichReview: 'sheep',
+                  organisation: {
+                    crn: 1112223336,
+                    sbi: 111222336,
+                    name: 'My Amazing Farm',
+                    email: 'business@email.com',
+                    address: '4 Some Road',
+                    farmerName: 'Mr Farmer'
+                  },
+                  eligibleSpecies: 'yes',
+                  confirmCheckDetails: 'yes'
+                },
+                claimed: false,
+                createdAt: '2023-01-17 13:55:20',
+                updatedAt: '2023-01-17 13:55:20',
+                createdBy: 'David Jones',
+                updatedBy: 'David Jones',
+                statusId: 1
               }
             ]
           }
