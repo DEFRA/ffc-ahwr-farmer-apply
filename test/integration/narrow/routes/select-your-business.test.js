@@ -1,13 +1,18 @@
 const { when, resetAllWhenMocks } = require('jest-when')
 const cheerio = require('cheerio')
+const Wreck = require('@hapi/wreck')
 const getCrumbs = require('../../../utils/get-crumbs')
 const config = require('../../../../app/config')
 const sessionKeys = require('../../../../app/session/keys')
+
+const applicationConfig = require('../../../../app/api-requests/application-api.config')
+const eligibilityConfig = require('../../../../app/api-requests/eligibility-api.config')
 
 const MOCK_NOW = new Date()
 
 jest.mock('../../../../app/api-requests/eligibility-api')
 jest.mock('../../../../app/api-requests/application-api')
+jest.mock('@hapi/wreck')
 
 const API_URL = `${config.urlPrefix}/select-your-business`
 
@@ -15,8 +20,6 @@ describe('API select-your-business', () => {
   let dateSpy
   let logSpy
   let session
-  let eligibilityApi
-  let applicationApi
 
   beforeAll(() => {
     dateSpy = jest
@@ -38,9 +41,6 @@ describe('API select-your-business', () => {
         }
       }
     })
-
-    eligibilityApi = require('../../../../app/api-requests/eligibility-api')
-    applicationApi = require('../../../../app/api-requests/application-api')
   })
 
   afterAll(() => {
@@ -197,11 +197,17 @@ describe('API select-your-business', () => {
           strategy: 'cookie'
         }
       }
-      when(eligibilityApi.getEligibleBusinesses)
-        .calledWith(testCase.given.businessEmail)
+      when(Wreck.get)
+        .calledWith(
+          `${applicationConfig.uri}/applications/latest?businessEmail=${testCase.given.businessEmail}`,
+          { json: true }
+        )
         .mockResolvedValue(testCase.when.eligibilityApi.businesses)
-      when(applicationApi.getLatestApplicationsBy)
-        .calledWith(testCase.given.businessEmail)
+      when(Wreck.get)
+        .calledWith(
+          `${eligibilityConfig.uri}/businesses?emailAddress=${testCase.given.businessEmail}`,
+          { json: true }
+        )
         .mockResolvedValue(testCase.when.applicationApi.latestApplications)
 
       const response = await global.__SERVER__.inject(options)

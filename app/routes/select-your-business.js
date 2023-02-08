@@ -18,17 +18,16 @@ const getAppliableBusinesses = async (businessEmail) => {
     NOT_AGREED: 7
   }
   const latestApplications = await applicationApi.getLatestApplicationsBy(businessEmail)
-  console.log(`${new Date().toISOString()} Latest Applications: ${JSON.stringify(latestApplications.map(({ id, reference, data: { organisation: { sbi, email } } }) => ({ id, reference, data: { organisation: { sbi, email } } })))}`)
   const eligibleBusinesses = await eligibilityApi.getEligibleBusinesses(businessEmail)
-  console.log(`${new Date().toISOString()} Eligible Businesses: ${JSON.stringify(eligibleBusinesses.map(({ sbi, email }) => ({ sbi, email })))}`)
-  return eligibleBusinesses.filter(business => {
-    const index = latestApplications.findIndex(
+  const isAppliable = business => {
+    const linkedApplication = latestApplications.find(
       application => application.data.organisation.sbi.toString() === business.sbi.toString()
     )
-    return index === -1 ||
-      latestApplications[index].statusId === applicationStatus.WITHDRAWN ||
-      latestApplications[index].statusId === applicationStatus.NOT_AGREED
-  })
+    return typeof linkedApplication === 'undefined' ||
+    linkedApplication.statusId === applicationStatus.WITHDRAWN ||
+    linkedApplication.statusId === applicationStatus.NOT_AGREED
+  }
+  return eligibleBusinesses.filter(business => isAppliable(business))
 }
 
 module.exports = [{

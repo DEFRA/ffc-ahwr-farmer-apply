@@ -37,6 +37,7 @@ async function getEligibleBusinesses (businessEmail) {
     if (payload.error) {
       throw new Error(JSON.stringify(payload.error))
     }
+    console.log(`${new Date().toISOString()} Eligible Businesses: ${JSON.stringify(payload.value.map(({ sbi, email }) => ({ sbi, email })))}`)
     return payload.value
   } catch (error) {
     console.error(`${new Date().toISOString()} Getting eligible businesses failed: ${JSON.stringify({

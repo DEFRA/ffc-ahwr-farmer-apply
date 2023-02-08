@@ -11,6 +11,7 @@ async function getLatestApplicationsBy (businessEmail) {
     if (response.res.statusCode !== 200) {
       throw new Error(`HTTP ${response.res.statusCode} (${response.res.statusMessage})`)
     }
+    console.log(`${new Date().toISOString()} Latest Applications: ${JSON.stringify(response.payload.map(({ id, reference, data: { organisation: { sbi, email } } }) => ({ id, reference, data: { organisation: { sbi, email } } })))}`)
     return response.payload
   } catch (error) {
     console.error(`${new Date().toISOString()} Getting latest applications failed: ${JSON.stringify({
