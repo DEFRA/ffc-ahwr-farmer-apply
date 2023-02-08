@@ -129,7 +129,8 @@ describe('API select-your-business', () => {
                       sbi: 111222334,
                       email: 'business@email.com'
                     }
-                  }
+                  },
+                  statusId: 7
                 }
               ]
             )}`,
@@ -162,7 +163,7 @@ describe('API select-your-business', () => {
         }
       },
       {
-        toString: () => 'HTTP 200 - no businesses found',
+        toString: () => 'HTTP 302 - no businesses found',
         given: {
           businessEmail: 'business@email.com'
         },
