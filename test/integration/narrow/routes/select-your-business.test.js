@@ -14,9 +14,9 @@ jest.mock('@hapi/wreck')
 
 const API_URL = `${config.urlPrefix}/select-your-business`
 
-AGREED = 1
-WITHDRAWN = 2
-NOT_AGREED = 7
+const AGREED = 1
+const WITHDRAWN = 2
+const NOT_AGREED = 7
 
 describe('API select-your-business', () => {
   let dateSpy
