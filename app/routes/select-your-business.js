@@ -28,6 +28,7 @@ const getAppliableBusinesses = async (businessEmail) => {
   return (await eligibilityApi
     .getEligibleBusinesses(businessEmail))
     .filter(eligibleBusiness => isAppliable(eligibleBusiness))
+    .sort((a, b) => a.name.localeCompare(b.name))
 }
 
 module.exports = [{
