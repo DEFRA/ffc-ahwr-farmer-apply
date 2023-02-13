@@ -46,7 +46,7 @@ module.exports = [{
       }
     },
     handler: async (request, h) => {
-      if (request.state[config.cookie.cookieNameAuth] && (request.query.businessEmail !== request.state[config.cookie.cookieNameAuth].email)) { //NOSONAR
+      if (request.state[config.cookie.cookieNameAuth] && (request.query.businessEmail !== request.state[config.cookie.cookieNameAuth].email)) { // NOSONAR
         throw Boom.internal()
       }
 
