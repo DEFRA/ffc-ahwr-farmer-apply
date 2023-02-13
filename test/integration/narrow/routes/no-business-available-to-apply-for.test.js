@@ -1,7 +1,7 @@
 const cheerio = require('cheerio')
 const expectPhaseBanner = require('../../../utils/phase-banner-expect')
 
-describe('No Eligible Businesses page test', () => {
+describe('no-business-available-to-apply-for page test', () => {
   let url
   const serviceName = 'Annual health and welfare review of livestock'
   beforeAll(async () => {
@@ -17,7 +17,7 @@ describe('No Eligible Businesses page test', () => {
     }))
     const config = require('../../../../app/config')
     const urlPrefix = config.urlPrefix
-    url = `${urlPrefix}/no-eligible-businesses`
+    url = `${urlPrefix}/no-business-available-to-apply-for`
   })
 
   describe(`GET ${url} route`, () => {
@@ -32,8 +32,8 @@ describe('No Eligible Businesses page test', () => {
 
       expect(res.statusCode).toBe(200)
       const $ = cheerio.load(res.payload)
-      expect($('.govuk-heading-l').text()).toEqual('No Eligible Businesses')
-      expect($('title').text()).toEqual(`No Eligible Businesses - ${serviceName}`)
+      expect($('.govuk-heading-l').text()).toEqual('No business available to apply for')
+      expect($('title').text()).toEqual(`No business available to apply for - ${serviceName}`)
       expectPhaseBanner.ok($)
     })
   })

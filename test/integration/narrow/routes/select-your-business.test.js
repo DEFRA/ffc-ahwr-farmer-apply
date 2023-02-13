@@ -303,7 +303,7 @@ describe('API select-your-business', () => {
           http: {
             statusCode: 302,
             headers: {
-              location: 'no-eligible-businesses'
+              location: 'no-business-available-to-apply-for'
             }
           },
           consoleLogs: [
@@ -364,7 +364,7 @@ describe('API select-your-business', () => {
       }
       if (!testCase.expect.http.headers.location) {
         expect($('title').text()).toEqual(config.serviceName)
-        expect($('.govuk-fieldset__heading').first().text().trim()).toEqual('Choose the SBI you would like to apply for:')
+        expect($('.govuk-heading-l').first().text().trim()).toEqual('Which business are you applying for?')
       }
       testCase.expect.consoleLogs.forEach(
         (consoleLog, idx) => expect(logSpy).toHaveBeenNthCalledWith(idx + 1, consoleLog)
@@ -549,7 +549,7 @@ describe('API select-your-business', () => {
       expect(response.statusCode).toBe(400)
       expect(response.statusMessage).toEqual('Bad Request')
       expect($('title').text()).toEqual(config.serviceName)
-      expect($('.govuk-fieldset__heading').first().text().trim()).toEqual('Choose the SBI you would like to apply for:')
+      expect($('.govuk-heading-l').first().text().trim()).toEqual('Which business are you applying for?')
       testCase.expect.consoleLogs.forEach(
         (consoleLog, idx) => expect(logSpy).toHaveBeenNthCalledWith(idx + 1, consoleLog)
       )
