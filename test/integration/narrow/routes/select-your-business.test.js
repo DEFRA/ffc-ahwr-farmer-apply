@@ -322,7 +322,7 @@ describe('API select-your-business', () => {
         method: 'GET',
         url: `${API_URL}?businessEmail=${testCase.given.businessEmail}`,
         auth: {
-          credentials: { reference: '1111', sbi: '111222333' },
+          credentials: { email: testCase.given.businessEmail },
           strategy: 'cookie'
         }
       }
@@ -392,6 +392,20 @@ describe('API select-your-business', () => {
 
       expect(response.statusCode).toBe(400)
       expect(response.statusMessage).toEqual('Bad Request')
+    })
+
+    test('Test business email query param does not match credentials throws 500', async () => {
+      const options = {
+        method: 'GET',
+        url: `${API_URL}?businessEmail=wrongemail@email.com`,
+        auth: {
+          credentials: { email: 'correctemail@email.com' },
+          strategy: 'cookie'
+        }
+      }
+
+      const response = await global.__SERVER__.inject(options)
+      expect(response.statusCode).toEqual(500)
     })
   })
 
