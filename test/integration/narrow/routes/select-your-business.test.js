@@ -324,9 +324,6 @@ describe('API select-your-business', () => {
         auth: {
           credentials: { reference: '1111', sbi: '111222333' },
           strategy: 'cookie'
-        },
-        headers: {
-          'set-cookie': 'ffc_ahwr_auth=Fe26.2**95e5b0a23daa5b9f97b03c1620727c959e43fc0289d2eb258b9e031a45c6659e*PFArkj2WE8m7ESR4Q4K9nQ*X5aLD2f-Lm267-GqN4PDJ9lzDj0SrClqvmP4Vrh8KdfSuxEnnffVl6QrO7fm3YU9u6lcxMmugscnxmiS9UQpFg**2bf73d7a1b6972f561c2300a7ff4975bdddc9e018ba6b80469750f96a809e3e8*GYxiNLF-wFPOCbpUhEjuHV2eMl1IVXwjJJwO8nNZhvE; Max-Age=259200; Expires=Thu, 16 Feb 2023 17:38:48 GMT; HttpOnly; SameSite=Lax; Path=/'
         }
       }
       const applicationExpectedResponse = {
