@@ -1,4 +1,4 @@
-jest.setTimeout(20000)
+jest.setTimeout(10000)
 
 describe('verify-login route', () => {
   let urlPrefix
