@@ -1,3 +1,5 @@
+jest.setTimeout(20000)
+
 describe('verify-login route', () => {
   let urlPrefix
   let setFarmerApplyData
@@ -64,7 +66,6 @@ describe('verify-login route', () => {
   })
 
   test('GET /verify-login returns 302', async () => {
-    jest.setTimeout(20000)
     const options = {
       method: 'GET',
       url: `${urlPrefix}/verify-login?email=someemail@email.com&token=0c8f9708-453b-11ed-b878-0242ac120002`
