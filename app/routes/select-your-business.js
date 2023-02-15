@@ -9,7 +9,6 @@ const radios = require('./models/form-component/radios')
 const BUSINESS_EMAIL_SCHEMA = require('../schemas/business-email.schema')
 
 const ERROR_TEXT = 'Select the business you want reviewed'
-const LEGEND_TEXT = 'Choose the SBI you would like to apply for:'
 const RADIO_OPTIONS = { isPageHeading: true, legendClasses: 'govuk-fieldset__legend--l', inline: false, undefined }
 
 const getAppliableBusinesses = async (businessEmail) => {
@@ -29,6 +28,7 @@ const getAppliableBusinesses = async (businessEmail) => {
   return (await eligibilityApi
     .getEligibleBusinesses(businessEmail))
     .filter(eligibleBusiness => isAppliable(eligibleBusiness))
+    .sort((a, b) => a.name.localeCompare(b.name))
 }
 
 module.exports = [{
@@ -46,10 +46,14 @@ module.exports = [{
       }
     },
     handler: async (request, h) => {
+      if (request.auth.credentials && (request.query.businessEmail !== request.auth.credentials.email)) {
+        throw Boom.internal()
+      }
+
       const appliableBusinesses = await getAppliableBusinesses(request.query.businessEmail)
       if (!Array.isArray(appliableBusinesses) || appliableBusinesses.length === 0) {
         console.log(`${new Date().toISOString()} No eligible business found`)
-        return h.redirect('no-eligible-businesses')
+        return h.redirect('no-business-available-to-apply-for')
       }
       session.setSelectYourBusiness(
         request,
@@ -65,9 +69,9 @@ module.exports = [{
         sbiNumbers: appliableBusinesses.map(business => business.sbi)
       })}`)
       return h
-        .view('select-your-business',
-          radios(
-            LEGEND_TEXT,
+        .view('select-your-business', {
+          radioOptions: radios(
+            undefined,
             sessionKeys.selectYourBusiness.whichBusiness,
             undefined,
             RADIO_OPTIONS
@@ -75,7 +79,10 @@ module.exports = [{
             value: business.sbi,
             text: `${business.sbi} - ${business.name}`,
             checked: selectedBusiness === business.sbi
-          })))
+          }))),
+          callChargesUri: config.callChargesUri,
+          ruralPaymentsEmail: config.ruralPaymentsEmail
+        }
         )
     }
   }
@@ -99,9 +106,9 @@ module.exports = [{
         )
         console.log(`${new Date().toISOString()} Error on post request to ${config.urlPrefix}/select-your-business: ${_err}`)
         return h
-          .view('select-your-business',
-            radios(
-              LEGEND_TEXT,
+          .view('select-your-business', {
+            radioOptions: radios(
+              undefined,
               sessionKeys.selectYourBusiness.whichBusiness,
               ERROR_TEXT,
               RADIO_OPTIONS
@@ -109,7 +116,10 @@ module.exports = [{
               value: business.sbi,
               text: `${business.sbi} - ${business.name}`,
               checked: checkedBusiness === business.sbi
-            })))
+            }))),
+            callChargesUri: config.callChargesUri,
+            ruralPaymentsEmail: config.ruralPaymentsEmail
+          }
           )
           .code(400)
           .takeover()
