@@ -47,7 +47,6 @@ Please ask a developer for an example `.env` file that you can include in the ro
 | AZURE_STORAGE_CREATE_CONTAINERS       | Set true to use connection string, false to connect using azure credentials for blobstorage      |
 | AZURE_STORAGE_ACCOUNT_NAME            | Blob storage account name example strageaccountxyz                                               |
 | REGISTER_YOUR_INTEREST_ENABLED        | Feature flag for the register your interest journey                                              |
-| ELIGIBILITY_API_ENABLED               | Feature flag for using eligibility API in place of a users.json file                             |
 
 ## Running the application
 

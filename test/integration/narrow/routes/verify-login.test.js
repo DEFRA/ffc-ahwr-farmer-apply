@@ -7,7 +7,6 @@ describe('verify-login route', () => {
   beforeAll(async () => {
     jest.resetAllMocks()
     jest.mock('ffc-ahwr-event-publisher')
-    jest.mock('../../../../app/api-requests/users')
     jest.mock('../../../../app/session', () => {
       return {
         setFarmerApplyData: jest.fn().mockImplementation()

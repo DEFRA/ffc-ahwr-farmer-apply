@@ -9,17 +9,14 @@ describe('EligibilityAPI config', () => {
   test.each([
     {
       processEnv: {
-        uri: 'http://host:3333/api',
-        enabled: true
+        uri: 'http://host:3333/api'
       },
       config: {
-        uri: 'http://host:3333/api',
-        enabled: true
+        uri: 'http://host:3333/api'
       }
     }
   ])('GIVEN $processEnv EXPECT $config', (testCase) => {
     process.env.ELIGIBILITY_API_URI = testCase.processEnv.uri
-    process.env.ELIGIBILITY_API_ENABLED = testCase.processEnv.enabled
 
     const config = require('../../../../app/api-requests/eligibility-api.config')
 
@@ -29,21 +26,12 @@ describe('EligibilityAPI config', () => {
   test.each([
     {
       processEnv: {
-        uri: 'uri',
-        enabled: true
+        uri: 'uri'
       },
       errorMessage: 'The config is invalid: "uri" must be a valid uri'
-    },
-    {
-      processEnv: {
-        uri: 'http://host:3333/api',
-        enabled: 'yes'
-      },
-      errorMessage: 'The config is invalid: "enabled" must be a boolean'
     }
   ])('GIVEN $processEnv EXPECT $errorMessage', (testCase) => {
     process.env.ELIGIBILITY_API_URI = testCase.processEnv.uri
-    process.env.ELIGIBILITY_API_ENABLED = testCase.processEnv.enabled
     expect(
       () => require('../../../../app/api-requests/eligibility-api.config')
     ).toThrow(testCase.errorMessage)

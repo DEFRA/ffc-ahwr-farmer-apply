@@ -3,7 +3,6 @@ const Joi = require('joi')
 const storageSchema = Joi.object({
   connectionString: Joi.string().required(),
   usersContainer: Joi.string().default('users'),
-  usersFile: Joi.string().default('users.json'),
   storageAccount: Joi.string().required(),
   useConnectionString: Joi.bool().default(true)
 })
