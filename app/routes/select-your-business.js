@@ -77,7 +77,7 @@ module.exports = [{
             RADIO_OPTIONS
           )(appliableBusinesses.map(business => ({
             value: business.sbi,
-            text: `${business.sbi} - ${business.name}`,
+            text: `${business.name} - SBI ${business.sbi}`,
             checked: selectedBusiness === business.sbi
           }))),
           callChargesUri: config.callChargesUri,
