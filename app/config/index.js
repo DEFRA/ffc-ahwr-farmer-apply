@@ -1,7 +1,6 @@
 const Joi = require('joi')
 const mqConfig = require('./messaging')
 const notifyConfig = require('./notify')
-const storageConfig = require('./storage')
 const urlPrefix = '/apply'
 
 const schema = Joi.object({
@@ -113,7 +112,6 @@ if (result.error) {
 }
 
 const value = result.value
-value.storageConfig = storageConfig
 value.mqConfig = mqConfig
 value.notifyConfig = notifyConfig
 

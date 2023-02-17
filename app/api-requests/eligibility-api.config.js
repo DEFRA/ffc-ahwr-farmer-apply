@@ -1,8 +1,7 @@
 const schema = require('./eligibility-api.config.schema')
 
 const config = {
-  uri: process.env.ELIGIBILITY_API_URI,
-  enabled: process.env.ELIGIBILITY_API_ENABLED
+  uri: process.env.ELIGIBILITY_API_URI
 }
 
 const result = schema.validate(config, {
