@@ -212,7 +212,7 @@ describe('Eligibility API', () => {
       )
     })
 
-    test('when an invalid response is returned it logs the issue and returns null', async () => {
+    test('when an invalid response is returned it logs the issue and returns empty array', async () => {
       const expectedResponse = {
         payload: [{
           farmerName: 'David Smith',
@@ -253,7 +253,7 @@ describe('Eligibility API', () => {
       )
     })
 
-    test('when Wreck.get returns 400 it logs the issue and returns null', async () => {
+    test('when Wreck.get returns 400 it logs the issue and returns empty array', async () => {
       const statusCode = 400
       const statusMessage = 'A valid email address must be specified.'
       const expectedResponse = {
@@ -284,10 +284,10 @@ describe('Eligibility API', () => {
       expect(consoleErrorSpy).toHaveBeenCalledWith(`${MOCK_NOW.toISOString()} Getting eligible businesses failed: ${JSON.stringify({
         businessEmail: businessEmailAddress
       })}`, expect.anything())
-      expect(response).toStrictEqual(null)
+      expect(response).toStrictEqual([])
     })
 
-    test('when Wreck.get throws an error it logs the error and returns null', async () => {
+    test('when Wreck.get throws an error it logs the error and returns empty array', async () => {
       const expectedError = new Error('msg')
       const options = {
         json: true
@@ -306,7 +306,7 @@ describe('Eligibility API', () => {
       expect(consoleErrorSpy).toHaveBeenCalledWith(`${MOCK_NOW.toISOString()} Getting eligible businesses failed: ${JSON.stringify({
         businessEmail: BUSINESS_EMAIL_ADDRESS
       })}`, expectedError)
-      expect(response).toStrictEqual(null)
+      expect(response).toStrictEqual([])
     })
   })
 })
