@@ -78,7 +78,7 @@ describe('Eligibility API', () => {
       )
     })
 
-    test('when an invalid response is returned it logs the issue and returns empty array', async () => {
+    test('when an invalid response is returned it logs the issue and returns null', async () => {
       const expectedResponse = {
         payload: {
           farmerName: 'David Smith',
@@ -109,7 +109,7 @@ describe('Eligibility API', () => {
 
       expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
       expect(consoleErrorSpy).toHaveBeenCalledWith('Get eligibility failed: {"_original":{"farmerName":"David Smith","name":"David\'s Farm","sbi":"441111114","crn":"4411111144","cph":"44/333/1112","address":"Some Road, London, MK55 7ES","email":"name@email.com"},"details":[{"message":"\\"cph\\" is not allowed","path":["cph"],"type":"object.unknown","context":{"child":"cph","label":"cph","value":"44/333/1112","key":"cph"}}]}')
-      expect(response).toStrictEqual([])
+      expect(response).toStrictEqual(null)
       expect(Wreck.get).toHaveBeenCalledTimes(1)
       expect(Wreck.get).toHaveBeenCalledWith(
           `${mockEligibilityApiUri}/eligibility?emailAddress=${BUSINESS_EMAIL_ADDRESS}`,
@@ -117,7 +117,7 @@ describe('Eligibility API', () => {
       )
     })
 
-    test('when Wreck.get returns 400 it logs the issue and returns empty array', async () => {
+    test('when Wreck.get returns 400 it logs the issue and returns null', async () => {
       const statusCode = 400
       const statusMessage = 'A valid email address must be specified.'
       const expectedResponse = {
@@ -146,10 +146,10 @@ describe('Eligibility API', () => {
 
       expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
       expect(consoleErrorSpy).toHaveBeenCalledWith(`Get eligibility failed: HTTP ${statusCode} (${statusMessage})`)
-      expect(response).toStrictEqual([])
+      expect(response).toStrictEqual(null)
     })
 
-    test('when Wreck.get throws an error it logs the error and returns empty array', async () => {
+    test('when Wreck.get throws an error it logs the error and returns null', async () => {
       const expectedError = new Error('msg')
       const options = {
         json: true
@@ -166,7 +166,7 @@ describe('Eligibility API', () => {
 
       expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
       expect(consoleErrorSpy).toHaveBeenCalledWith(`Get eligibility failed: ${expectedError.message}`)
-      expect(response).toStrictEqual([])
+      expect(response).toStrictEqual(null)
     })
   })
 
