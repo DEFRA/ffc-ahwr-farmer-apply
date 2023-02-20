@@ -180,8 +180,8 @@ describe('FarmerApply application login page test', () => {
     })
 
     test('with known email returns error when problem sending email', async () => {
-      getByEmail.mockResolvedValue(org)
-      sendEmail.mockResolvedValue(false)
+      getByEmail.mockResolvedValueOnce(org)
+      sendEmail.mockResolvedValueOnce(false)
       const crumb = await getCrumbs(global.__SERVER__)
       const options = {
         method: 'POST',
@@ -195,6 +195,21 @@ describe('FarmerApply application login page test', () => {
       expect(res.statusCode).toBe(500)
       const $ = cheerio.load(res.payload)
       expect($('h1').text()).toEqual('Sorry, there is a problem with the service')
+    })
+
+    test('getByEmail returns null and not able to login', async () => {
+      getByEmail.mockResolvedValueOnce(null)
+      const crumb = await getCrumbs(global.__SERVER__)
+      const options = {
+        method: 'POST',
+        url,
+        payload: { crumb, email: validEmail },
+        headers: { cookie: `crumb=${crumb}` }
+      }
+
+      const res = await global.__SERVER__.inject(options)
+
+      expect(res.statusCode).toBe(400)
     })
   })
 })
