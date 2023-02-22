@@ -84,7 +84,7 @@ describe('Farmer apply "Enter your business email address" page', () => {
       expect(session.setRegisterYourInterestData).toHaveBeenCalledWith(
         expect.anything(),
         'confirmEmailAddress',
-        testCase.payload.confirmEmailAddress
+        testCase.payload.confirmEmailAddress.toLowerCase()
       )
     })
 

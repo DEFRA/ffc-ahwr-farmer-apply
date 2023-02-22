@@ -55,10 +55,10 @@ module.exports = [
               'string.email': ERROR_MESSAGE.enterYourEmailAddressInCorrectFormat
             }),
           confirmEmailAddress: Joi
-            .alternatives(BUSINESS_EMAIL_SCHEMA)
+            .alternatives()
             .conditional('confirmEmailAddress', {
               is: BUSINESS_EMAIL_SCHEMA,
-              then: Joi.equal(Joi.ref('emailAddress')),
+              then: BUSINESS_EMAIL_SCHEMA.equal(Joi.ref('emailAddress')),
               otherwise: BUSINESS_EMAIL_SCHEMA
             })
             .messages({
