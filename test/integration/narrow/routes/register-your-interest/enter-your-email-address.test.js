@@ -57,7 +57,8 @@ describe('Farmer apply "Enter your business email address" page', () => {
           emailAddress: 'name@example.com',
           confirmEmailAddress: 'name@example.com'
         }
-      },{
+      },
+      {
         payload: {
           emailAddress: 'name@example.com',
           confirmEmailAddress: 'Name@example.com'
