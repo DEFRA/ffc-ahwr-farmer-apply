@@ -57,6 +57,11 @@ describe('Farmer apply "Enter your business email address" page', () => {
           emailAddress: 'name@example.com',
           confirmEmailAddress: 'name@example.com'
         }
+      },{
+        payload: {
+          emailAddress: 'name@example.com',
+          confirmEmailAddress: 'Name@example.com'
+        }
       }
     ])('when proper $payload then expect 302 and redirect to "Check your answers and register your interest" page', async (testCase) => {
       const options = {

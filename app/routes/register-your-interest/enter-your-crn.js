@@ -4,7 +4,7 @@ const Joi = require('joi')
 const urlPrefix = require('../../config/index').urlPrefix
 const callChargesUri = require('../../config/index').callChargesUri
 const ruralPaymentsEmail = require('../../config/index').ruralPaymentsEmail
-const CRN_SCHEMA = require('./crn.schema.js')
+const CRN_SCHEMA = require('../../schemas/crn.schema.js')
 
 const ERROR_MESSAGE = {
   enterYourCrnNumber: 'Enter your CRN',

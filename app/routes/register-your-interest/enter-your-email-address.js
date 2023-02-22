@@ -55,11 +55,11 @@ module.exports = [
               'string.email': ERROR_MESSAGE.enterYourEmailAddressInCorrectFormat
             }),
           confirmEmailAddress: Joi
-            .alternatives()
+            .alternatives(BUSINESS_EMAIL_SCHEMA)
             .conditional('confirmEmailAddress', {
-              is: Joi.string().trim().required(),
+              is: BUSINESS_EMAIL_SCHEMA,
               then: Joi.equal(Joi.ref('emailAddress')),
-              otherwise: Joi.string().trim().required()
+              otherwise: BUSINESS_EMAIL_SCHEMA
             })
             .messages({
               'any.required': ERROR_MESSAGE.confirmYourEmailAddress,

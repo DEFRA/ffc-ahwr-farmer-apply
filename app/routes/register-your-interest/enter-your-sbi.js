@@ -4,7 +4,7 @@ const sessionKeys = require('../../session/keys')
 const urlPrefix = require('../../config/index').urlPrefix
 const callChargesUri = require('../../config/index').callChargesUri
 const ruralPaymentsEmail = require('../../config/index').ruralPaymentsEmail
-const SBI_SCHEMA = require('./sbi.schema.js')
+const SBI_SCHEMA = require('../../schemas/sbi.schema.js')
 
 const ERROR_MESSAGE = {
   enterYourSbiNumber: 'Enter your SBI number',
