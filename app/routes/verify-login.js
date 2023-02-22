@@ -53,8 +53,8 @@ module.exports = [{
         await cacheFarmerApplyData(request, email)
       }
 
-      await magiclinkCache.set(token, null)
-      await magiclinkCache.set(email, null)
+      await magiclinkCache.drop(email)
+      await magiclinkCache.drop(token)
 
       return h.redirect(`${redirectTo}${selectYourBusiness.enabled ? (`?businessEmail=${email}`) : ''}`)
     }

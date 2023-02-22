@@ -65,6 +65,8 @@ describe('verify-login route', () => {
   })
 
   test('GET /verify-login returns 302', async () => {
+    const cacheDropSpy = jest.spyOn(global.__SERVER__.app.magiclinkCache, 'drop')
+    const magiclinkCache = global.__SERVER__.app.magiclinkCache
     const options = {
       method: 'GET',
       url: `${urlPrefix}/verify-login?email=someemail@email.com&token=0c8f9708-453b-11ed-b878-0242ac120002`
@@ -75,6 +77,12 @@ describe('verify-login route', () => {
     expect(lookupToken).toBeCalledTimes(1)
     expect(setAuthCookie).toBeCalledTimes(1)
     expect(setFarmerApplyData).toBeCalledTimes(1)
+    expect(cacheDropSpy).toBeCalledTimes(2)
+    expect(cacheDropSpy).toHaveBeenNthCalledWith(1, 'someemail@email.com')
+    expect(cacheDropSpy).toHaveBeenNthCalledWith(2, '0c8f9708-453b-11ed-b878-0242ac120002')
+    expect(await magiclinkCache.get('someemail@email.com')).toEqual(null)
+    expect(await magiclinkCache.get('0c8f9708-453b-11ed-b878-0242ac120002')).toEqual(null)
+    cacheDropSpy.mockRestore()
   })
 
   describe('verify-login with select your business feature', () => {
@@ -123,6 +131,8 @@ describe('verify-login route', () => {
     })
 
     test('GET /verify-login returns 302 and does set auth cookie', async () => {
+      const cacheDropSpy = jest.spyOn(global.__SERVER__.app.magiclinkCache, 'drop')
+      const magiclinkCache = global.__SERVER__.app.magiclinkCache
       const options = {
         method: 'GET',
         url: `${urlPrefix}/verify-login?email=someemail@email.com&token=0c8f9708-453b-11ed-b878-0242ac120002`
@@ -132,6 +142,12 @@ describe('verify-login route', () => {
       expect(lookupToken).toBeCalledTimes(1)
       expect(setAuthCookie).toHaveBeenCalledTimes(1)
       expect(setFarmerApplyData).toBeCalledTimes(0)
+      expect(cacheDropSpy).toBeCalledTimes(2)
+      expect(cacheDropSpy).toHaveBeenNthCalledWith(1, 'someemail@email.com')
+      expect(cacheDropSpy).toHaveBeenNthCalledWith(2, '0c8f9708-453b-11ed-b878-0242ac120002')
+      expect(await magiclinkCache.get('someemail@email.com')).toEqual(null)
+      expect(await magiclinkCache.get('0c8f9708-453b-11ed-b878-0242ac120002')).toEqual(null)
+      cacheDropSpy.mockRestore()
     })
   })
 })
