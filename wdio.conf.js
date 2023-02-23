@@ -23,7 +23,7 @@ exports.config = {
   // will be called from there.
   //
   specs: [
-    './test/specs/**/*.js'
+    './test/acceptance/**/*.js'
   ],
   // Patterns to exclude.
   exclude: [
@@ -289,7 +289,4 @@ exports.config = {
     */
   // onReload: function(oldSessionId, newSessionId) {
   // }
-  featureFlags: {
-    specFiltering: true
-  }
 }
