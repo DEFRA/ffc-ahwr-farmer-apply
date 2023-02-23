@@ -16,7 +16,8 @@
     "test:debug": "node --inspect-brk=0.0.0.0 ./node_modules/jest/bin/jest.js --coverage=false --onlyChanged --watch --runInBand --no-cache",
     "start:watch": "npm-run-all --parallel build:watch start:nodemon",
     "start:debug": "nodemon --inspect-brk=0.0.0.0 --ext css,js,njk --legacy-watch app/index.js",
-    "start:nodemon": "nodemon --inspect=0.0.0.0 --ext css,js,njk --legacy-watch app/index.js"
+    "start:nodemon": "nodemon --inspect=0.0.0.0 --ext css,js,njk --legacy-watch app/index.js",
+    "wdio": "wdio run ./wdio.conf.js"
   },
   "author": "Defra",
   "contributors": [
@@ -60,8 +61,13 @@
     "@types/hapi__hapi": "^20.0.10",
     "@types/jest": "^27.4.0",
     "@types/node": "^17.0.19",
+    "@wdio/cli": "^8.3.10",
+    "@wdio/local-runner": "^8.3.10",
+    "@wdio/mocha-framework": "^8.3.0",
+    "@wdio/spec-reporter": "^8.3.0",
     "blipp": "^4.0.2",
     "cheerio": "^1.0.0-rc.10",
+    "chromedriver": "^110.0.0",
     "clean-webpack-plugin": "^4.0.0",
     "css-loader": "^6.6.0",
     "dotenv": "^16.0.3",
@@ -78,6 +84,7 @@
     "sass": "^1.49.7",
     "sass-loader": "^12.4.0",
     "standard": "^16.0.4",
+    "wdio-chromedriver-service": "^8.1.1",
     "webpack": "^5.68.0",
     "webpack-cli": "^4.9.2"
   },
