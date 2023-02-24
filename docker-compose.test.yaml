@@ -11,8 +11,6 @@ services:
       NODE_ENV: test
     image: ffc-ahwr-farmer-apply-development
     container_name: ffc-ahwr-farmer-apply-test
-    command: 
-      npm run test
-      npx wdio run ./wdio.conf.js
+    command: npm run test
     volumes:
       - ./test-output:/home/node/test-output
