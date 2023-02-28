@@ -15,6 +15,10 @@
     "selenium"
   ],
   "scripts": {
+    "open:test:runner": "cypress open",
+    "cypress:test:smoke:local": "NODE_ENV=local ./node_modules/.bin/cypress run -e TAGS='@smoke' --browser=chrome --headed",
+    "cypress:test:smoke:test": "NODE_ENV=test ./node_modules/.bin/cypress run -e TAGS='@smoke' --browser=chrome --headed",
+    "cypress:html:report": "NODE_ENV=snd node cypress/e2e/cucumber-tests/report/cucumber-report.js",
     "test": "wdio wdio.bs.conf.js",
     "test:local": "wdio wdio.local.conf.js",
     "test:browserstack": "wdio wdio.bs.conf.js",
@@ -37,8 +41,13 @@
     "@wdio/config": "^7.16.11",
     "@wdio/cucumber-framework": "^7.16.12",
     "@wdio/spec-reporter": "^7.16.11",
+    "cucumber-html-reporter": "^5.3.0",
+    "cypress": "^12.6.0",
+    "cypress-cucumber-preprocessor": "^4.0.3",
+    "multiple-cucumber-html-reporter": "^2.0.0",
     "chai": "^4.3.6",
     "chromedriver": "^96.0.0",
+    "dotenv": "^16.0.1",
     "eslint": "^7.22.0",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-wdio": "^7.4.2",
@@ -58,5 +67,15 @@
       "browser",
       "expect"
     ]
+  },
+  "cypress-cucumber-preprocessor": {
+    "nonGlobalStepDefinitions": false,
+    "step_definitions": "cypress/e2e/cucumber-tests/step_definitions/",
+    "cucumberJson": {
+      "generate": true,
+      "outputFolder": "cypress/cucumber-report",
+      "filePrefix": "",
+      "fileSuffix": ".cucumber"
+    }
   }
 }
