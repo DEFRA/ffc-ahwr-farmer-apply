@@ -3,8 +3,20 @@ const { sendSessionEvent } = require('../event')
 const entries = {
   application: 'application',
   farmerApplyData: 'farmerApplyData',
+  selectYourBusiness: 'selectYourBusiness',
   organisation: 'organisation',
-  answers: 'answers'
+  answers: 'answers',
+  registerYourInterestData: 'registerYourInterestData'
+}
+
+function lacksAny (request, entryKey, keys) {
+  let result = false
+  keys.forEach(key => {
+    if (!get(request, entryKey, key)) {
+      result = true
+    }
+  })
+  return result
 }
 
 function set (request, entryKey, key, value) {
@@ -12,7 +24,9 @@ function set (request, entryKey, key, value) {
   entryValue[key] = typeof (value) === 'string' ? value.trim() : value
   request.yar.set(entryKey, entryValue)
   const organisation = getFarmerApplyData(request, entries.organisation)
-  sendSessionEvent(organisation, request.yar.id, entryKey, key, value)
+  const xForwardedForHeader = request.headers['x-forwarded-for']
+  const ip = xForwardedForHeader ? xForwardedForHeader.split(',')[0] : request.info.remoteAddress
+  sendSessionEvent(organisation, request.yar.id, entryKey, key, value, ip)
 }
 
 function get (request, entryKey, key) {
@@ -24,6 +38,8 @@ function clear (request) {
   request.yar.clear(entries.application)
   request.yar.clear(entries.organisation)
   request.yar.clear(entries.answers)
+  request.yar.clear(entries.registerYourInterestData)
+  request.yar.clear(entries.selectYourBusiness)
 }
 
 function setApplication (request, key, value) {
@@ -34,6 +50,14 @@ function setFarmerApplyData (request, key, value) {
   set(request, entries.farmerApplyData, key, value)
 }
 
+function setSelectYourBusiness (request, key, value) {
+  set(request, entries.selectYourBusiness, key, value)
+}
+
+function getSelectYourBusiness (request, key) {
+  return get(request, entries.selectYourBusiness, key)
+}
+
 function getApplication (request, key) {
   return get(request, entries.application, key)
 }
@@ -42,10 +66,24 @@ function getFarmerApplyData (request, key) {
   return get(request, entries.farmerApplyData, key)
 }
 
+function getRegisterYourInterestData (request, key) {
+  return get(request, entries.registerYourInterestData, key)
+}
+
+function setRegisterYourInterestData (request, key, value) {
+  set(request, entries.registerYourInterestData, key, value)
+}
+
 module.exports = {
+  entries,
+  lacksAny,
   clear,
   getApplication,
   getFarmerApplyData,
   setApplication,
-  setFarmerApplyData
+  setFarmerApplyData,
+  getRegisterYourInterestData,
+  setRegisterYourInterestData,
+  getSelectYourBusiness,
+  setSelectYourBusiness
 }

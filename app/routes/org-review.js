@@ -5,11 +5,11 @@ const session = require('../session')
 const Joi = require('joi')
 
 const errorMessage = 'Select yes if these details are correct'
-const urlPrefix = require('../config/index').urlPrefix
+const config = require('../config')
 
 module.exports = [{
   method: 'GET',
-  path: `${urlPrefix}/org-review`,
+  path: `${config.urlPrefix}/org-review`,
   options: {
     handler: async (request, h) => {
       const organisation = session.getFarmerApplyData(request, organisationKey)
@@ -22,7 +22,7 @@ module.exports = [{
 },
 {
   method: 'POST',
-  path: `${urlPrefix}/org-review`,
+  path: `${config.urlPrefix}/org-review`,
   options: {
     validate: {
       payload: Joi.object({
@@ -44,7 +44,7 @@ module.exports = [{
           confirmCheckDetails,
           request.payload[confirmCheckDetails]
         )
-        return h.redirect(`${urlPrefix}/which-review`)
+        return h.redirect(`${config.urlPrefix}/which-review`)
       }
       return h.view('details-incorrect')
     }

@@ -1,7 +1,7 @@
 const getToken = require('../auth/get-token')
 const sendEmail = require('./send-email')
-const { serviceUri } = require('../../config')
-const { templateIdFarmerApplyLogin } = require('../../config').notifyConfig
+const { serviceUri, selectYourBusiness } = require('../../config')
+const { emailTemplates } = require('../../config').notifyConfig
 const { farmerApply } = require('../../constants/user-types')
 
 async function createAndCacheToken (request, email, redirectTo, userType, data) {
@@ -25,7 +25,8 @@ async function sendMagicLinkEmail (request, email, templateId, redirectTo, userT
 }
 
 async function sendFarmerApplyLoginMagicLink (request, email) {
-  return sendMagicLinkEmail(request, email, templateIdFarmerApplyLogin, 'org-review', farmerApply)
+  const redirectTo = selectYourBusiness.enabled === true ? 'select-your-business' : 'org-review'
+  return sendMagicLinkEmail(request, email, emailTemplates.applyLogin, redirectTo, farmerApply)
 }
 
 module.exports = {

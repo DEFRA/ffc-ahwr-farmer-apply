@@ -1,7 +1,6 @@
 const Joi = require('joi')
 const mqConfig = require('./messaging')
 const notifyConfig = require('./notify')
-const storageConfig = require('./storage')
 const urlPrefix = '/apply'
 
 const schema = Joi.object({
@@ -44,7 +43,18 @@ const schema = Joi.object({
   claimServiceUri: Joi.string().uri(),
   serviceName: Joi.string().default('Annual health and welfare review of livestock'),
   useRedis: Joi.boolean().default(false),
-  urlPrefix: Joi.string().default(urlPrefix)
+  urlPrefix: Joi.string().default(urlPrefix),
+  ruralPaymentsLoginUri: Joi.string().uri().default('https://www.ruralpayments.service.gov.uk'),
+  callChargesUri: Joi.string().uri().default('https://www.gov.uk/call-charges'),
+  ruralPaymentsEmail: Joi.string().email().default('ruralpayments@defra.gov.uk'),
+  registerYourInterest: {
+    enabled: Joi.bool().default(true)
+  },
+  eligibilityApi: require('../api-requests/eligibility-api.config.schema'),
+  applicationApi: require('../api-requests/application-api.config.schema'),
+  selectYourBusiness: {
+    enabled: Joi.bool().default(false)
+  }
 })
 
 const config = {
@@ -79,7 +89,18 @@ const config = {
   serviceUri: process.env.SERVICE_URI,
   claimServiceUri: process.env.CLAIM_SERVICE_URI,
   useRedis: process.env.NODE_ENV !== 'test',
-  urlPrefix: process.env.URL_PREFIX
+  urlPrefix: process.env.URL_PREFIX,
+  ruralPaymentsLoginUri: 'https://www.ruralpayments.service.gov.uk',
+  callChargesUri: 'https://www.gov.uk/call-charges',
+  ruralPaymentsEmail: 'ruralpayments@defra.gov.uk',
+  registerYourInterest: {
+    enabled: process.env.REGISTER_YOUR_INTEREST_ENABLED
+  },
+  eligibilityApi: require('../api-requests/eligibility-api.config'),
+  applicationApi: require('../api-requests/application-api.config'),
+  selectYourBusiness: {
+    enabled: process.env.SELECT_YOUR_BUSINESS_ENABLED
+  }
 }
 
 const result = schema.validate(config, {
@@ -91,7 +112,6 @@ if (result.error) {
 }
 
 const value = result.value
-value.storageConfig = storageConfig
 value.mqConfig = mqConfig
 value.notifyConfig = notifyConfig
 

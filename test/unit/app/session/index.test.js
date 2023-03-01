@@ -3,18 +3,24 @@ const session = require('../../../../app/session')
 describe('session', () => {
   const applicationSectionKey = 'application'
   const farmerApplyDataSectionKey = 'farmerApplyData'
+  const registerYourInterestDataSectionKey = session.entries.registerYourInterestData
+  const selectYourBusinessSectionKey = 'selectYourBusiness'
 
   const value = 'value'
   const objectValue = { key: value }
 
   const getFunctionsToTest = [
     { func: 'getApplication', expectedSectionKey: applicationSectionKey },
-    { func: 'getFarmerApplyData', expectedSectionKey: farmerApplyDataSectionKey }
+    { func: 'getFarmerApplyData', expectedSectionKey: farmerApplyDataSectionKey },
+    { func: 'getRegisterYourInterestData', expectedSectionKey: registerYourInterestDataSectionKey },
+    { func: 'getSelectYourBusiness', expectedSectionKey: selectYourBusinessSectionKey }
   ]
 
   const setFunctionsToTest = [
     { func: 'setApplication', expectedSectionKey: applicationSectionKey },
-    { func: 'setFarmerApplyData', expectedSectionKey: farmerApplyDataSectionKey }
+    { func: 'setFarmerApplyData', expectedSectionKey: farmerApplyDataSectionKey },
+    { func: 'setRegisterYourInterestData', expectedSectionKey: registerYourInterestDataSectionKey },
+    { func: 'setSelectYourBusiness', expectedSectionKey: selectYourBusinessSectionKey }
   ]
 
   const keysAndValuesToTest = [
@@ -43,7 +49,7 @@ describe('session', () => {
         get: jest.fn(),
         set: jest.fn()
       }
-      const requestSetMock = { yar: yarMock }
+      const requestSetMock = { yar: yarMock, headers: { 'x-forwarded-for': '1.1.1.1' } }
 
       session[func](requestSetMock, key, value)
 
@@ -61,7 +67,7 @@ describe('session', () => {
         get: jest.fn(() => existingValue),
         set: jest.fn()
       }
-      const requestSetMock = { yar: yarMock }
+      const requestSetMock = { yar: yarMock, headers: { 'x-forwarded-for': '1.1.1.1' } }
 
       session[func](requestSetMock, key, value)
 
@@ -79,7 +85,7 @@ describe('session', () => {
       get: jest.fn(),
       set: jest.fn()
     }
-    const requestSetMock = { yar: yarMock }
+    const requestSetMock = { yar: yarMock, headers: { 'x-forwarded-for': '1.1.1.1' } }
 
     session[func](requestSetMock, key, valueToBeTrimmed)
 
@@ -95,7 +101,7 @@ describe('session', () => {
       get: jest.fn(),
       set: jest.fn()
     }
-    const requestSetMock = { yar: yarMock }
+    const requestSetMock = { yar: yarMock, headers: { 'x-forwarded-for': '1.1.1.1' } }
 
     session[func](requestSetMock, key, objectValue)
 
@@ -103,5 +109,31 @@ describe('session', () => {
     expect(requestSetMock.yar.get).toHaveBeenCalledWith(expectedSectionKey)
     expect(requestSetMock.yar.set).toHaveBeenCalledTimes(1)
     expect(requestSetMock.yar.set).toHaveBeenCalledWith(expectedSectionKey, { [key]: objectValue })
+  })
+
+  test.each(setFunctionsToTest)('given some $func keys lacksAny function returns true if the session is lacking any of the given keys', ({ func, expectedSectionKey }) => {
+    const entries = {}
+    const yarMock = {
+      get: jest.fn((key) => {
+        return entries[key]
+      }),
+      set: jest.fn((key, value) => {
+        entries[key] = value
+      })
+    }
+    const requestSetMock = { yar: yarMock, headers: { 'x-forwarded-for': '1.1.1.1' } }
+
+    session[func](requestSetMock, 'key1', 'value1')
+    session[func](requestSetMock, 'key2', 'value2')
+
+    expect(session.lacksAny(requestSetMock, expectedSectionKey, [
+      'key1',
+      'key2'
+    ])).toBeFalsy()
+    expect(session.lacksAny(requestSetMock, expectedSectionKey, [
+      'key1',
+      'key2',
+      'key3'
+    ])).toBeTruthy()
   })
 })

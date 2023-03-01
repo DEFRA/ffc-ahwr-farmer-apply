@@ -4,7 +4,7 @@ const { setFarmerApplyData } = require('../session')
 const { organisation: organisationKey } = require('../session/keys').farmerApplyData
 const { lookupToken, setAuthCookie } = require('../auth')
 const { sendMonitoringEvent } = require('../event')
-const urlPrefix = require('../config/index').urlPrefix
+const { urlPrefix, selectYourBusiness } = require('../config')
 
 function isRequestInvalid (cachedEmail, email) {
   return !cachedEmail || email !== cachedEmail
@@ -13,6 +13,11 @@ function isRequestInvalid (cachedEmail, email) {
 async function cacheFarmerApplyData (request, email) {
   const organisation = await getByEmail(email)
   setFarmerApplyData(request, organisationKey, organisation)
+}
+
+const getIp = (request) => {
+  const xForwardedForHeader = request.headers['x-forwarded-for']
+  return xForwardedForHeader ? xForwardedForHeader.split(',')[0] : request.info.remoteAddress
 }
 
 module.exports = [{
@@ -27,23 +32,31 @@ module.exports = [{
       }),
       failAction: async (request, h, error) => {
         console.error(error)
-        sendMonitoringEvent(request.yar.id, error.details[0].message, '')
+        sendMonitoringEvent(request.yar.id, error.details[0].message, '', getIp(request))
         return h.view('verify-login-failed').code(400).takeover()
       }
     },
     handler: async (request, h) => {
       const { email, token } = request.query
+      const { magiclinkCache } = request.server.app
 
       const { email: cachedEmail, redirectTo, userType } = await lookupToken(request, token)
       if (isRequestInvalid(cachedEmail, email)) {
-        sendMonitoringEvent(request.yar.id, 'Invalid token', email)
+        console.error('Email in the verify login link does not match the cached email.')
+        sendMonitoringEvent(request.yar.id, 'Invalid token', email, getIp(request))
         return h.view('verify-login-failed').code(400)
       }
 
       setAuthCookie(request, email, userType)
-      await cacheFarmerApplyData(request, email)
 
-      return h.redirect(redirectTo)
+      if (selectYourBusiness.enabled === false) {
+        await cacheFarmerApplyData(request, email)
+      }
+
+      await magiclinkCache.drop(email)
+      await magiclinkCache.drop(token)
+
+      return h.redirect(`${redirectTo}${selectYourBusiness.enabled ? (`?businessEmail=${email}`) : ''}`)
     }
   }
 }]

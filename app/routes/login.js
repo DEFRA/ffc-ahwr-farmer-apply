@@ -6,12 +6,18 @@ const { sendFarmerApplyLoginMagicLink } = require('../lib/email/send-magic-link-
 const { clear } = require('../session')
 const { sendMonitoringEvent } = require('../event')
 
-const hintText = 'We\'ll use this to send you a link to apply for a review'
-const urlPrefix = require('../config/index').urlPrefix
+const hintText = 'We\'ll use this to send you a link to apply for a review. This must be the business email address linked to the business applying for a review.'
+
+const config = require('../config')
+
+const getIp = (request) => {
+  const xForwardedForHeader = request.headers['x-forwarded-for']
+  return xForwardedForHeader ? xForwardedForHeader.split(',')[0] : request.info.remoteAddress
+}
 
 module.exports = [{
   method: 'GET',
-  path: `${urlPrefix}/login`,
+  path: `${config.urlPrefix}/login`,
   options: {
     auth: {
       mode: 'try'
@@ -23,7 +29,8 @@ module.exports = [{
     },
     handler: async (request, h) => {
       if (request.auth.isAuthenticated) {
-        return h.redirect(request.query?.next || `${urlPrefix}/org-review`)
+        const email = request.auth.credentials && request.auth.credentials.email
+        return h.redirect(request.query?.next || config.selectYourBusiness.enabled ? `${config.urlPrefix}/select-your-business?businessEmail=${email}` : `${config.urlPrefix}/org-review`)
       }
 
       return h.view('login', { hintText })
@@ -32,7 +39,7 @@ module.exports = [{
 },
 {
   method: 'POST',
-  path: `${urlPrefix}/login`,
+  path: `${config.urlPrefix}/login`,
   options: {
     auth: {
       mode: 'try'
@@ -43,7 +50,7 @@ module.exports = [{
       }),
       failAction: async (request, h, error) => {
         const { email } = request.payload
-        sendMonitoringEvent(request.yar.id, error.details[0].message, email)
+        sendMonitoringEvent(request.yar.id, error.details[0].message, email, getIp(request))
         return h.view('login', { ...request.payload, errorMessage: { text: error.details[0].message }, hintText }).code(400).takeover()
       }
     },
@@ -52,7 +59,8 @@ module.exports = [{
       const organisation = await getByEmail(email)
 
       if (!organisation) {
-        sendMonitoringEvent(request.yar.id, `No user found with email address "${email}"`, email)
+        console.log(`No user found with email address "${email}"`)
+        sendMonitoringEvent(request.yar.id, `No user found with email address "${email}"`, email, getIp(request))
         return h.view('login', { ...request.payload, errorMessage: { text: `No user found with email address "${email}"` }, hintText }).code(400).takeover()
       }
 

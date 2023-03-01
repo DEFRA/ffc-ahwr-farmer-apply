@@ -31,13 +31,14 @@
 
     <p>You may need to:</p>
     <ul class="govuk-list govuk-list--bullet">
-      <li>provide the Rural Payments Agency (RPA) with evidence the review took place such as a review summary</li>
+      <li>provide the RPA with evidence the review took place such as a review summary</li>
     </ul><br>
 
     <p>You confirm that:</p>
     <ul class="govuk-list govuk-list--bullet">
-      <li>your farm or business has a Single Business Identifier (SBI) and an English County Parish Holding (CPH) number</li>
+      <li>your farm or business has a single business identifier (SBI) linked to a county parish holding (CPH) number registered in England - the CPH number can be permanent or temporary not an 8000 or 9000</li>
       <li>you’re the registered keeper</li>
+      <li>you’re applying for a review on a CPH registered in England</li>
       <li>{{ minNumText }}</li>
       <li>you’ve carefully read and accept the <a href="/apply/terms">full terms and conditions</a></li>
     </ul><br>
@@ -50,7 +51,7 @@
         errorMessage: errorMessage,
         items: [{
             value: "agree",
-            text: "I accept the offer of agreement and agree to the terms and conditions"
+            text: "I have read, understood and agree to the terms and conditions."
           }]
       }) }}
 
@@ -58,15 +59,15 @@
           If you wish to accept this offer for funding, you confirm that you are entering into an agreement with the RPA and confirm you have read and accepted the terms and conditions.
       </p>
 
-      <p>If you do not wish to accept the offer, select 'reject offer'.</p>
+      <p>If you do not wish to accept the offer, select ‘Reject’.</p>
 
       {{ govukButton({
-        text: "Accept and send",
+        text: "Accept",
         value: "accepted",
         name: "offerStatus"
       }) }}
       {{ govukButton({
-        text: "Reject offer",
+        text: "Reject",
         classes: "govuk-button--secondary",
         value: "rejected",
         name: "offerStatus"

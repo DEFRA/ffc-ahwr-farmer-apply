@@ -1,6 +1,6 @@
 # FFC AHWR Farmer Apply
 
-> Web frontend for the farmer apply journe
+> Web frontend for the farmer apply journey
 
 ## Prerequisites
 
@@ -26,11 +26,12 @@ Values for development are set in the Docker Compose configuration. Default
 values for production-like deployments are set in the Helm chart and may be
 overridden by build and release pipelines.
 
+Please ask a developer for an example `.env` file that you can include in the root of your project that will contain environment variables overrirdes for local development that are different than the docker-compose file.
+
 | Name                                  | Description                                                                                      |
 | ----                                  | -----------                                                                                      |
 | APPLICATIONREQUEST_QUEUE_ADDRESS      | Name of message queue used to send application requests                                          |
 | APPLICATIONRESPONSE_QUEUE_ADDRESS     | Name of session enabled message queue used to receive application responses                      |
-| AZURE_STORAGE_CONNECTION_STRING       | Azure Storage connection string                                                                  |
 | MESSAGE_QUEUE_HOST                    | Azure Service Bus hostname, e.g. `myservicebus.servicebus.windows.net`                           |
 | MESSAGE_QUEUE_PASSWORD                | Azure Service Bus SAS policy key                                                                 |
 | MESSAGE_QUEUE_SUFFIX                  | Developer initials                                                                               |
@@ -39,10 +40,11 @@ overridden by build and release pipelines.
 | NOTIFY_TEMPLATE_ID_FARMER_APPLY_LOGIN | Id of email template used for farmer apply login email                                           |
 | NOTIFY_TEMPLATE_ID_FARMER_CLAIM_LOGIN | Id of email template used for farmer claim login email                                           |
 | NOTIFY_TEMPLATE_ID_VET_LOGIN          | Id of email template used for vet login email                                                    |
+| NOTIFY_TEMPLATE_ID_FARMER_REGISTER_INTEREST          | Id of email template used for registration of interest                                                 |
 | SERVICE_URI                           | URI of service (used in links, in emails) e.g. `http://localhost:3000` or `https://defra.gov.uk` |
 | TEST_TOKEN                            | Test Token for Magic link for getting access to test access                                      |
 | AZURE_STORAGE_CREATE_CONTAINERS       | Set true to use connection string, false to connect using azure credentials for blobstorage      |
-| AZURE_STORAGE_ACCOUNT_NAME            | Blob storage account name example strageaccountxyz                                               |
+| REGISTER_YOUR_INTEREST_ENABLED        | Feature flag for the register your interest journey                                              |
 
 ## Running the application
 

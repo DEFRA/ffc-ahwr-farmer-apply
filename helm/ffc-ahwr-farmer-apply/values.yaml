@@ -35,9 +35,6 @@ deployment:
 container:
   applicationRequestQueueAddress: ffc-ahwr-application-request
   applicationResponseQueueAddress: ffc-ahwr-application-response
-  azureStorageConnectionString:
-  azureStorageUseConnectionString: true
-  azureStorageAccountName:
   cookiePassword: who-likes-cookies-i-like-cookies-everybody-likes-cookies
   eventQueueAddress: ffc-ahwr-event
   googleTagManagerKey:
@@ -49,6 +46,7 @@ container:
   messageQueueHost: namespace.servicebus.windows.net
   notifyApiKey:
   notifyTemplateIdFarmerApplyLogin:
+  notifyTemplateIdFarmerRegisterYourInterest:
   port: 3000
   redisHostname: redis-hostname.default
   redisPartition: ffc-ahwr-farmer-apply
@@ -58,6 +56,11 @@ container:
   claimServiceUri:
   testToken:
   urlPrefix: /apply
+  eligibilityApiUri:
+  applicationApiUri:
+  registerYourInterestEnabled:
+  registerYourInterestRequestQueueAddress: ffc-ahwr-register-your-interest-request
+  selectYourBusinessEnabled:
 
 ingress:
   class: nginx

@@ -1,0 +1,47 @@
+{% extends './layouts/layout.njk' %}
+
+{% block pageTitle %}{{ serviceName }}{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">Which business are you applying for?</h1>
+    
+    <p>These are the businesses that are:</p>
+    
+    <ul class="govuk-list govuk-list--bullet">
+      <li>listed under your rural payments account</li>
+      <li>have registered an interest in applying for an annual health and welfare review</li>
+    </ul>
+
+    <form method="POST" autocomplete="off" novalidate="novalidate">
+      <input type="hidden" name="crumb" value="{{crumb}}"/>
+
+      {{ govukInsetText({
+        text: "Select the business that’s applying:"
+      }) }}
+
+      {{ govukRadios(radioOptions.radios) }}
+
+      {{ govukButton({
+        text: "Start application",
+        attributes: { id: "btnContinue" }
+      }) }}
+
+      {{ govukDetails({
+        summaryText: "Can’t see the business you’re looking for?",
+        html: "<p>If you have a business that has registered an interest for the review but is not listed, contact the Rural Payments Agency.</p>
+        <ul class='govuk-list'>
+          <li>Rural Payments Agency</li>
+          <li>Telephone: 03000 200 301</li>
+          <li>Monday to Friday, 8:30am to 5pm (except public holidays)</li>
+          <li><a href='mailto:" + ruralPaymentsEmail + "'>" + ruralPaymentsEmail + "</a></li>
+        </ul>
+        <p class='govuk-body'>Find out about <a class='govuk-link' target='_blank' href='" + callChargesUri + "'> call charges</a></p>
+        " 
+      }) }}
+    </form>
+  </div>
+</div>
+
+{% endblock %}

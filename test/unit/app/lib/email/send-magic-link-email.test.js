@@ -1,6 +1,4 @@
-const sendMagicLinkEmail = require('../../../../../app/lib/email/send-magic-link-email')
-const { serviceUri } = require('../../../../../app/config')
-const { templateIdFarmerApplyLogin } = require('../../../../../app/config').notifyConfig
+const config = require('../../../../../app/config')
 const { farmerApply } = require('../../../../../app/constants/user-types')
 
 const getToken = require('../../../../../app/lib/auth/get-token')
@@ -8,6 +6,7 @@ jest.mock('../../../../../app/lib/auth/get-token')
 
 const sendEmail = require('../../../../../app/lib/email/send-email')
 jest.mock('../../../../../app/lib/email/send-email')
+
 let cacheData = { }
 const requestGetMock = {
   server:
@@ -38,19 +37,57 @@ describe('Send Magic Link test', () => {
     sendEmail.mockResolvedValue(sendEmailResponse)
   })
 
-  test('sends email for farmer apply', async () => {
-    const token = testToken
-    getToken.mockResolvedValue(token)
+  test.each([
+    {
+      when: {
+        config: {
+          selectYourBusiness: {
+            enabled: false
+          }
+        }
+      },
+      expect: {
+        redirectTo: 'org-review'
+      }
+    },
+    {
+      when: {
+        config: {
+          selectYourBusiness: {
+            enabled: true
+          }
+        }
+      },
+      expect: {
+        redirectTo: 'select-your-business'
+      }
+    }
+  ])('sends email for farmer apply', async (testCase) => {
+    jest.isolateModules(async () => {
+      const mockEnabled = testCase.when.config.selectYourBusiness.enabled
+      jest.mock('../../../../../app/config', () => {
+        const originalModule = jest.requireActual('../../../../../app/config')
+        return {
+          ...originalModule,
+          selectYourBusiness: {
+            enabled: mockEnabled
+          }
+        }
+      })
+      const token = testToken
+      getToken.mockResolvedValue(token)
 
-    const response = await sendMagicLinkEmail.sendFarmerApplyLoginMagicLink(requestGetMock, email)
+      const sendMagicLinkEmail = require('../../../../../app/lib/email/send-magic-link-email')
+      const response = await sendMagicLinkEmail.sendFarmerApplyLoginMagicLink(requestGetMock, email)
 
-    expect(response).toEqual(sendEmailResponse)
-    expect(cacheData[email]).toEqual([token])
-    expect(cacheData[token]).toEqual({ email, redirectTo: 'org-review', userType: farmerApply })
-    expect(sendEmail).toHaveBeenCalledTimes(1)
-    expect(sendEmail).toHaveBeenCalledWith(templateIdFarmerApplyLogin, email, {
-      personalisation: { magiclink: `${serviceUri}/verify-login?token=${token}&email=${email}` },
-      reference: token
+      expect(response).toEqual(sendEmailResponse)
+      expect(cacheData[email]).toEqual([token])
+      expect(cacheData[token]).toEqual({ email, redirectTo: testCase.expect.redirectTo, userType: farmerApply })
+      expect(sendEmail).toHaveBeenCalledTimes(1)
+      expect(sendEmail).toHaveBeenCalledWith(config.notifyConfig.emailTemplates.applyLogin, email, {
+        personalisation: { magiclink: `${config.serviceUri}/verify-login?token=${token}&email=${email}` },
+        reference: token
+      })
     })
   })
 })

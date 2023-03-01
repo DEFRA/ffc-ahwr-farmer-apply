@@ -1,13 +1,7 @@
-const downloadBlob = require('../lib/storage/download-blob')
-const { usersContainer, usersFile } = require('../config').storageConfig
+const eligibilityApi = require('./eligibility-api')
 
-async function getUsers () {
-  const contents = await downloadBlob(usersContainer, usersFile) ?? '[]'
-  return JSON.parse(contents)
-}
-
-async function getByEmail (email) {
-  return (await getUsers()).find(x => x.email.toLowerCase() === email.toLowerCase())
+async function getByEmail (emailAddress) {
+  return await eligibilityApi.getEligibility(emailAddress.toLowerCase())
 }
 
 module.exports = {

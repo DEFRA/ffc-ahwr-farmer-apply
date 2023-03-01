@@ -5,10 +5,18 @@ const expectLoginPage = require('../../../utils/login-page-expect')
 const pageExpects = require('../../../utils/page-expects')
 const expectPhaseBanner = require('../../../utils/phase-banner-expect')
 const { serviceUri } = require('../../../../app/config')
-const { templateIdFarmerApplyLogin } = require('../../../../app/config').notifyConfig
+const { applyLogin } = require('../../../../app/config').notifyConfig.emailTemplates
 const { farmerApply } = require('../../../../app/constants/user-types')
 const uuidRegex = require('../../../../app/config/uuid-regex')
-const { urlPrefix } = require('../../../../app/config')
+
+jest.mock('../../../../app/config', () => ({
+  ...jest.requireActual('../../../../app/config'),
+  selectYourBusiness: {
+    enabled: false
+  }
+}))
+const config = require('../../../../app/config')
+const urlPrefix = config.urlPrefix
 
 jest.mock('ffc-ahwr-event-publisher')
 
@@ -164,7 +172,7 @@ describe('FarmerApply application login page test', () => {
 
       expect(res.statusCode).toBe(200)
       expect(sendEmail).toHaveBeenCalledWith(
-        templateIdFarmerApplyLogin,
+        applyLogin,
         validEmail,
         expect.objectContaining(
           { personalisation: { magiclink: expect.stringMatching(new RegExp(`${serviceUri}/verify-login\\?token=${uuidRegex}&email=${validEmail}`)) }, reference: expect.stringMatching(new RegExp(uuidRegex)) })
@@ -172,8 +180,8 @@ describe('FarmerApply application login page test', () => {
     })
 
     test('with known email returns error when problem sending email', async () => {
-      getByEmail.mockResolvedValue(org)
-      sendEmail.mockResolvedValue(false)
+      getByEmail.mockResolvedValueOnce(org)
+      sendEmail.mockResolvedValueOnce(false)
       const crumb = await getCrumbs(global.__SERVER__)
       const options = {
         method: 'POST',
@@ -187,6 +195,21 @@ describe('FarmerApply application login page test', () => {
       expect(res.statusCode).toBe(500)
       const $ = cheerio.load(res.payload)
       expect($('h1').text()).toEqual('Sorry, there is a problem with the service')
+    })
+
+    test('getByEmail returns null and not able to login', async () => {
+      getByEmail.mockResolvedValueOnce(null)
+      const crumb = await getCrumbs(global.__SERVER__)
+      const options = {
+        method: 'POST',
+        url,
+        payload: { crumb, email: validEmail },
+        headers: { cookie: `crumb=${crumb}` }
+      }
+
+      const res = await global.__SERVER__.inject(options)
+
+      expect(res.statusCode).toBe(400)
     })
   })
 })

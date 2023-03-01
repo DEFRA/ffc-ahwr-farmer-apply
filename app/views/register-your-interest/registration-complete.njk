@@ -1,0 +1,28 @@
+{% extends './layouts/layout.njk' %}
+
+{% block pageTitle %}{{serviceName}}{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      {{ govukPanel({
+        titleText: "Registration complete"
+      }) }}
+
+      <p class="govuk-body">Thank you for registering your interest in the review.</p>
+
+      <p class="govuk-body">We’ll check the information you’ve provided and send you an email with the next steps as soon as possible.</p>
+
+      <p class="govuk-body">If you have any questions about your application, contact the Rural Payments Agency.</p>
+      
+      <ul class="govuk-list">
+        <li>Rural Payments Agency</li>
+        <li>Telephone: 03000 200 301</li>
+        <li>Monday to Friday, 8:30am to 5pm (except public holidays)</li>
+        <li><a href="mailto:{{ ruralPaymentsEmail }}"> {{ ruralPaymentsEmail }}</a></li>
+      </ul>   
+
+      <p class="govuk-body">Find out about <a class="govuk-link" target="_blank" href="{{ callChargesUri }}"> call charges</a></p>
+    </div>
+  </div>
+{% endblock %}

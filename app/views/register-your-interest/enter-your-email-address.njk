@@ -1,0 +1,82 @@
+{% extends './layouts/layout.njk' %}
+
+{% block pageTitle %}{{serviceName}}{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "/apply/register-your-interest/enter-your-sbi",
+	  attributes: {id: "back"}
+  }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <form method="POST" autocomplete="off" novalidate="novalidate">
+      <input type="hidden" name="crumb" value="{{crumb}}"/>
+
+      {% call govukFieldset({
+        legend: {
+          text: "Enter your business email address",
+          classes: "govuk-fieldset__legend--l",
+          isPageHeading: true
+        }
+      }) %}
+        <p class="govuk-body">Enter the business email address linked to the business registering an interest. This may be different to your personal email address which may also be linked to the business.</p>
+        <p class="govuk-body">We’ll use this to send you confirmation you’ve successfully registered your interest.</p>
+        {{ 
+          govukInput({
+            label: {
+              text: "Enter your email address",
+              classes: "govuk-label",
+              for: "emailAddress"
+            },
+            classes: "govuk-input-!-width-full",
+            id: "emailAddress",
+            name: "emailAddress",
+            value: emailAddress,
+            errorMessage: errorMessages.emailAddress
+          }) 
+        }}
+        {{ 
+          govukInput({
+            label: {
+              text: "Confirm your email address",
+              classes: "govuk-label",
+              for: "confirmEmailAddress"
+            },
+            classes: "govuk-input-!-width-full",
+            id: "confirmEmailAddress",
+            name: "confirmEmailAddress",
+            value: confirmEmailAddress,
+            errorMessage: errorMessages.confirmEmailAddress
+          }) 
+        }}
+      {% endcall %}
+
+      {{ 
+        govukButton({
+          classes: "govuk-!-margin-top-2 govuk-!-margin-bottom-8",
+          text: "Continue"
+        }) 
+      }}
+
+      {{ 
+        govukDetails({
+          summaryText: "Problems with your email",
+          html: "<p>If you’ve lost or forgotten the email address, contact the Rural Payments Agency.</p>
+          <ul class='govuk-list'>
+            <li>Rural Payments Agency</li>
+            <li>Telephone: 03000 200 301</li>
+            <li>Monday to Friday, 8:30am to 5pm (except public holidays)</li>
+            <li><a href='mailto:" + ruralPaymentsEmail + "'>" + ruralPaymentsEmail + "</a></li>
+          </ul>
+          <p class='govuk-body'>Find out about <a class='govuk-link' target='_blank' href='" + callChargesUri + "'> call charges</a></p>
+          " 
+        })  
+      }}
+    </form>
+  </div>
+</div>
+{% endblock %}
