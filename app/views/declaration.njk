@@ -64,13 +64,15 @@
       {{ govukButton({
         text: "Accept",
         value: "accepted",
-        name: "offerStatus"
+        name: "offerStatus",
+        preventDoubleClick: true
       }) }}
       {{ govukButton({
         text: "Reject",
         classes: "govuk-button--secondary",
         value: "rejected",
-        name: "offerStatus"
+        name: "offerStatus",
+        preventDoubleClick: true
       }) }}
     </form>
   </div>
