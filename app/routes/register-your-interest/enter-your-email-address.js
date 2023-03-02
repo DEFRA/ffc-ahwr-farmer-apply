@@ -57,9 +57,9 @@ module.exports = [
           confirmEmailAddress: Joi
             .alternatives()
             .conditional('confirmEmailAddress', {
-              is: Joi.string().trim().required(),
-              then: Joi.equal(Joi.ref('emailAddress')),
-              otherwise: Joi.string().trim().required()
+              is: BUSINESS_EMAIL_SCHEMA,
+              then: BUSINESS_EMAIL_SCHEMA.equal(Joi.ref('emailAddress')),
+              otherwise: BUSINESS_EMAIL_SCHEMA
             })
             .messages({
               'any.required': ERROR_MESSAGE.confirmYourEmailAddress,
