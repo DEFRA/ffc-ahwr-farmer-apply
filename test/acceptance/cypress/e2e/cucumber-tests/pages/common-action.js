@@ -1,11 +1,9 @@
 /// <reference types="cypress" />
-//const TEST_ENV = 'https://ffc-ahwr-farmer-test.azure.defra.cloud/'
-const TEST_ENV = 'http://localhost:3000/'
-//require("dotenv").config({ path: `./.env.${process.env.NODE_ENV}`})
+const baseUrl = Cypress.config().baseUrl
 class CommonAction {
 
   static navigateToPage (page) {
-    cy.visit( process.env.URL+page)
+    cy.visit( baseUrl+page)
   }
 
   static clickOn(element) {

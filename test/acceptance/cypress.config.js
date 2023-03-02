@@ -1,4 +1,7 @@
 const { defineConfig } = require('cypress')
+const cucumber = require("cypress-cucumber-preprocessor").default
+require('dotenv').config({ path: `.env${process.env.E2E_ENV}` })
+
 module.exports = defineConfig({
   video: true,
   defaultCommandTimeout: 15000,
@@ -12,7 +15,10 @@ module.exports = defineConfig({
     // We've imported your old cypress plugins here.
     // You may want to clean this up later by importing these.
     setupNodeEvents (on, config) {
-      return require('./cypress/plugins/index')(on, config)
+      on("file:preprocessor", cucumber())
+      config.baseUrl = process.env.URL
+      config.env.NAME = process.env.NAME
+      return config
     },
     specPattern: 'cypress/e2e/**/**/*.feature',
   },
