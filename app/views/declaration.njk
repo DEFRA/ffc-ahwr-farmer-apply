@@ -43,7 +43,7 @@
       <li>you’ve carefully read and accept the <a href="/apply/terms">full terms and conditions</a></li>
     </ul><br>
 
-    <form method="POST" autocomplete="off" novalidate="novalidate">
+    <form method="POST" autocomplete="off" novalidate="novalidate" id ="submitDeclarationForm">
       <input type="hidden" name="crumb" value="{{crumb}}"/>
       {{ govukCheckboxes({
         idPrefix: "terms",
@@ -61,19 +61,21 @@
 
       <p>If you do not wish to accept the offer, select ‘Reject’.</p>
 
-      {{ govukButton({
-        text: "Accept",
-        value: "accepted",
-        name: "offerStatus",
-        preventDoubleClick: true
-      }) }}
-      {{ govukButton({
-        text: "Reject",
-        classes: "govuk-button--secondary",
-        value: "rejected",
-        name: "offerStatus",
-        preventDoubleClick: true
-      }) }}
+      <div class="govuk-button-group">
+        {{ govukButton({
+          text: "Accept",
+          value: "accepted",
+          name: "offerStatus",
+          preventDoubleClick: true
+        }) }}
+        {{ govukButton({
+          text: "Reject",
+          classes: "govuk-button--secondary",
+          value: "rejected",
+          name: "offerStatus",
+          preventDoubleClick: true
+        }) }}
+      </div>
     </form>
   </div>
 </div>

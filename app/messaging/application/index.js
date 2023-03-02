@@ -7,7 +7,7 @@ async function getApplication (applicationReference, sessionId) {
 }
 
 async function sendApplication (application, sessionId) {
-  console.log(`Sending application ${JSON.stringify(application)} to queue ${applicationRequestQueue} with sessionID ${sessionId}.`)
+  console.log(`Sending application ${JSON.stringify(application)} to queue ${applicationRequestQueue.address} with sessionID ${sessionId}.`)
 
   await sendMessage(
     application,
@@ -21,7 +21,7 @@ async function sendApplication (application, sessionId) {
     applicationResponseQueue
   )
 
-  console.log(`Received response ${JSON.stringify(response)} from queue ${applicationResponseQueue} for sessionID ${sessionId}.`)
+  console.log(`Received response ${JSON.stringify(response)} from queue ${applicationResponseQueue.address} for sessionID ${sessionId}.`)
 
   return response?.applicationReference
 }
