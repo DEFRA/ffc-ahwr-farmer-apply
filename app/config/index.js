@@ -54,7 +54,9 @@ const schema = Joi.object({
   applicationApi: require('../api-requests/application-api.config.schema'),
   selectYourBusiness: {
     enabled: Joi.bool().default(false)
-  }
+  },
+  jwtSecret: Joi.string(),
+  jwtIssuer: Joi.string()
 })
 
 const config = {
@@ -100,7 +102,9 @@ const config = {
   applicationApi: require('../api-requests/application-api.config'),
   selectYourBusiness: {
     enabled: process.env.SELECT_YOUR_BUSINESS_ENABLED
-  }
+  },
+  jwtSecret: process.env.JWT_SECRET,
+  jwtIssuer: process.env.JWT_ISSUER
 }
 
 const result = schema.validate(config, {
