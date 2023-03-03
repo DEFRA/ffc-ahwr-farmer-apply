@@ -14,6 +14,14 @@ const consoleLogSpy = jest.spyOn(console, 'log')
 const MOCK_NOW = new Date()
 const mockServiceUri = 'http://internal:3333/uri'
 
+const options = {
+  headers: {
+    Authorization: 'Bearer signed-jwt',
+    'Content-Type': 'application/json'
+  },
+  json: true
+}
+
 describe('Get Magic Link', () => {
   beforeAll(() => {
     jest.useFakeTimers('modern')
@@ -67,142 +75,89 @@ describe('Get Magic Link', () => {
     expect(response).toBeNull()
   })
 
-  test('with Wreck.get returns 404', async () => {
-    const BUSINESS_EMAIL_ADDRESS = 'email@email.com'
-    const options = {
-      headers: {
-        Authorization: 'Bearer signed-jwt',
-        'Content-Type': 'application/json'
-      },
-      json: true
-    }
-    const wreckExpectedResponse = {
-      res: {
-        statusCode: 403,
-        statusMessage: 'Forbidden'
-      },
-      payload: {
-        errors: [
-          {
-            error: 'AuthError',
-            message: 'Invalid token: make sure your API token matches the example at https://docs.notifications.service.gov.uk/rest-api.html#authorisation-header'
-          }
-        ]
-      }
-    }
-
-    getSignedJwt.mockReturnValue('signed-jwt')
-
-    when(Wreck.get)
-      .calledWith(
-        'https://api.notifications.service.gov.uk/v2/notifications',
-        options
-      )
-      .mockResolvedValue(wreckExpectedResponse)
-
-    const response = await getMagicLink(BUSINESS_EMAIL_ADDRESS)
-
-    expect(getSignedJwt).toHaveBeenCalledTimes(1)
-    expect(Wreck.get).toHaveBeenCalledTimes(1)
-    expect(consoleLogSpy).toHaveBeenCalledTimes(1)
-
-    // TODO error message does not give statusMessage when done through postman
-    expect(consoleLogSpy).toHaveBeenCalledWith(`${MOCK_NOW.toISOString()} Error retrieving magic link: HTTP ${wreckExpectedResponse.res.statusCode} (${wreckExpectedResponse.res.statusMessage}). The response was: ${JSON.stringify(wreckExpectedResponse.payload)}`)
-    expect(response).toBeNull()
-  })
-
-  test('no magic link email found', async () => {
-    // TODO out this in a default variable
-    const BUSINESS_EMAIL_ADDRESS = 'email@email.com'
-    const options = {
-      headers: {
-        Authorization: 'Bearer signed-jwt',
-        'Content-Type': 'application/json'
-      },
-      json: true
-    }
-    const wreckExpectedResponse = {
-      res: {
-        statusCode: 200,
-        statusMessage: 'OK'
-      },
-      payload: {
-        links: {
-          current: 'https://api.notifications.service.gov.uk/v2/notifications'
+  test.each([
+    {
+      scenario: 'with Wreck.get returns 404',
+      wreckExpectedResponse: {
+        res: {
+          statusCode: 403,
+          statusMessage: 'Forbidden'
         },
-        notifications: [
-          {
-            completed_at: '2023-03-02T06:00:04.006080Z',
-            created_at: '2023-03-02T06:00:02.204413Z',
-            reference: null,
-            status: 'delivered',
-            template: {
-              id: '1'
+        payload: {
+          errors: [
+            {
+              error: 'AuthError',
+              message: 'Invalid token: make sure your API token matches the example at https://docs.notifications.service.gov.uk/rest-api.html#authorisation-header'
             }
-          }
-        ]
-      }
-    }
-
-    getSignedJwt.mockReturnValue('signed-jwt')
-
-    when(Wreck.get)
-      .calledWith(
-        'https://api.notifications.service.gov.uk/v2/notifications',
-        options
-      )
-      .mockResolvedValue(wreckExpectedResponse)
-
-    const response = await getMagicLink(BUSINESS_EMAIL_ADDRESS)
-
-    expect(getSignedJwt).toHaveBeenCalledTimes(1)
-    expect(Wreck.get).toHaveBeenCalledTimes(1)
-    expect(consoleLogSpy).toHaveBeenCalledTimes(1)
-    expect(consoleLogSpy).toHaveBeenCalledWith(`${MOCK_NOW.toISOString()} Error retrieving magic link: No magic link email found for ${BUSINESS_EMAIL_ADDRESS}`)
-    expect(response).toBeNull()
-  })
-
-  test('no token found', async () => {
-    const BUSINESS_EMAIL_ADDRESS = 'email@email.com'
-    const options = {
-      headers: {
-        Authorization: 'Bearer signed-jwt',
-        'Content-Type': 'application/json'
+          ]
+        }
       },
-      json: true
-    }
-    const wreckExpectedResponse = {
-      res: {
-        statusCode: 200,
-        statusMessage: 'OK'
-      },
-      payload: {
-        links: {
-          current: 'https://api.notifications.service.gov.uk/v2/notifications'
+      consoleLog: `${MOCK_NOW.toISOString()} Error retrieving magic link: HTTP 403 (Forbidden). The response was: {"errors":[{"error":"AuthError","message":"Invalid token: make sure your API token matches the example at https://docs.notifications.service.gov.uk/rest-api.html#authorisation-header"}]}`
+    },
+    {
+      scenario: 'no magic link email found',
+      wreckExpectedResponse: {
+        res: {
+          statusCode: 200,
+          statusMessage: 'OK'
         },
-        notifications: [
-          {
-            completed_at: '2022-03-02T06:00:04.006080Z',
-            created_at: '2022-03-02T06:00:02.204413Z',
-            email_address: BUSINESS_EMAIL_ADDRESS,
-            reference: '123456789',
-            status: 'delivered',
-            template: {
-              id: mockConfig.notifyConfig.emailTemplates.applyLogin
-            }
+        payload: {
+          links: {
+            current: 'https://api.notifications.service.gov.uk/v2/notifications'
           },
-          {
-            completed_at: '2023-03-02T06:00:04.006080Z',
-            created_at: '2023-03-02T06:00:02.204413Z',
-            email_address: BUSINESS_EMAIL_ADDRESS,
-            status: 'delivered',
-            template: {
-              id: mockConfig.notifyConfig.emailTemplates.applyLogin
+          notifications: [
+            {
+              completed_at: '2023-03-02T06:00:04.006080Z',
+              created_at: '2023-03-02T06:00:02.204413Z',
+              reference: null,
+              status: 'delivered',
+              template: {
+                id: '1'
+              }
             }
-          }
-        ]
-      }
+          ]
+        }
+      },
+      consoleLog: `${MOCK_NOW.toISOString()} Error retrieving magic link: No magic link email found for email@email.com`
+    },
+    {
+      scenario: 'no token found',
+      wreckExpectedResponse: {
+        res: {
+          statusCode: 200,
+          statusMessage: 'OK'
+        },
+        payload: {
+          links: {
+            current: 'https://api.notifications.service.gov.uk/v2/notifications'
+          },
+          notifications: [
+            {
+              completed_at: '2022-03-02T06:00:04.006080Z',
+              created_at: '2022-03-02T06:00:02.204413Z',
+              email_address: 'email@email.com',
+              reference: '123456789',
+              status: 'delivered',
+              template: {
+                id: mockConfig.notifyConfig.emailTemplates.applyLogin
+              }
+            },
+            {
+              completed_at: '2023-03-02T06:00:04.006080Z',
+              created_at: '2023-03-02T06:00:02.204413Z',
+              email_address: 'email@email.com',
+              status: 'delivered',
+              template: {
+                id: mockConfig.notifyConfig.emailTemplates.applyLogin
+              }
+            }
+          ]
+        }
+      },
+      consoleLog: `${MOCK_NOW.toISOString()} Error retrieving magic link: Unable to find token in magic link email for email@email.com`
     }
+  ])('$scenario', async (testCase) => {
+    const BUSINESS_EMAIL_ADDRESS = 'email@email.com'
     getSignedJwt.mockReturnValue('signed-jwt')
 
     when(Wreck.get)
@@ -210,26 +165,21 @@ describe('Get Magic Link', () => {
         'https://api.notifications.service.gov.uk/v2/notifications',
         options
       )
-      .mockResolvedValue(wreckExpectedResponse)
+      .mockResolvedValue(testCase.wreckExpectedResponse)
 
     const response = await getMagicLink(BUSINESS_EMAIL_ADDRESS)
 
     expect(getSignedJwt).toHaveBeenCalledTimes(1)
     expect(Wreck.get).toHaveBeenCalledTimes(1)
     expect(consoleLogSpy).toHaveBeenCalledTimes(1)
-    expect(consoleLogSpy).toHaveBeenCalledWith(`${MOCK_NOW.toISOString()} Error retrieving magic link: Unable to find token in magic link email for ${BUSINESS_EMAIL_ADDRESS}`)
+
+    expect(consoleLogSpy).toHaveBeenCalledWith(testCase.consoleLog)
     expect(response).toBeNull()
   })
 
   test('magic link found', async () => {
     const BUSINESS_EMAIL_ADDRESS = 'email@email.com'
-    const options = {
-      headers: {
-        Authorization: 'Bearer signed-jwt',
-        'Content-Type': 'application/json'
-      },
-      json: true
-    }
+
     const wreckExpectedResponse = {
       res: {
         statusCode: 200,
@@ -287,7 +237,6 @@ describe('Get Magic Link', () => {
     expect(getSignedJwt).toHaveBeenCalledTimes(1)
     expect(Wreck.get).toHaveBeenCalledTimes(1)
     expect(consoleLogSpy).toHaveBeenCalledTimes(1)
-    // mockconfig.serviceUri returning as undefined somehow
     expect(consoleLogSpy).toHaveBeenCalledWith(`${MOCK_NOW.toISOString()} Magic link for ${BUSINESS_EMAIL_ADDRESS} is ${mockConfig.serviceUri}/verify-login?token=latestToken&email=${BUSINESS_EMAIL_ADDRESS}`)
     expect(response).toEqual(`${mockConfig.serviceUri}/verify-login?token=latestToken&email=${BUSINESS_EMAIL_ADDRESS}`)
   })
