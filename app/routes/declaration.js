@@ -4,7 +4,6 @@ const getDeclarationData = require('./models/declaration')
 const session = require('../session')
 const { declaration, reference, offerStatus } = require('../session/keys').farmerApplyData
 const { sendApplication } = require('../messaging/application')
-const { clear } = require('../session')
 const urlPrefix = require('../config/index').urlPrefix
 
 module.exports = [{
@@ -27,7 +26,7 @@ module.exports = [{
   options: {
     validate: {
       payload: Joi.object({
-        offerStatus: Joi.string().valid('accepted', 'rejected'),
+        offerStatus: Joi.string().required().valid('accepted', 'rejected'),
         terms: Joi.string().when('offerStatus', { is: 'accepted', then: Joi.valid('agree').required() })
       }),
       failAction: async (request, h, _) => {
@@ -53,7 +52,7 @@ module.exports = [{
         }
       }
 
-      clear(request)
+      session.clear(request)
       request.cookieAuth.clear()
 
       if (request.payload.offerStatus === 'rejected') {

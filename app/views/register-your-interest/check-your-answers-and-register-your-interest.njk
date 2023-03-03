@@ -28,13 +28,14 @@
 
     <p class="govuk-body">By registering your interest you're confirming the information you've provided is correct.</p>
 
-    <form method="POST" autocomplete="off" novalidate>
+    <form method="POST" autocomplete="off" novalidate id="registrationOfInterestForm">
     <input type="hidden" name="crumb" value="{{crumb}}"/>
 
       {{ 
         govukButton({
           classes: "govuk-!-margin-top-2 govuk-!-margin-bottom-8",
-          text: "Register"
+          text: "Register",
+          preventDoubleClick: true
         }) 
       }}
 
