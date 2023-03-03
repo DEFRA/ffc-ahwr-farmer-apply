@@ -1,7 +1,9 @@
 # Test output
 html-reports
 test-output
-/cypress
+/test/acceptance/cypress/screenshots
+/test/acceptance/cypress/videos
+/test/acceptance/cypress/cucumber-report
 
 # npm stuff
 .npm/

@@ -3,10 +3,10 @@ const { when, resetAllWhenMocks } = require('jest-when')
 const Wreck = require('@hapi/wreck')
 jest.mock('@hapi/wreck')
 
-const getSignedJwt = require('../../../../app/lib/auth/get-signed-jwt')
-jest.mock('../../../../app/lib/auth/get-signed-jwt')
+const getSignedJwt = require('../../../utils/get-signed-jwt')
+jest.mock('../../../utils/get-signed-jwt')
 
-const getMagicLink = require('../../../../app/api-requests/get-magic-link')
+const getMagicLink = require('../../../utils/get-magic-link')
 
 const mockConfig = require('../../../../app/config')
 

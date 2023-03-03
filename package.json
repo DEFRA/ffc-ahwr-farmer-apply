@@ -15,10 +15,6 @@
     "test:lint-fix": "standard --fix",
     "test:debug": "node --inspect-brk=0.0.0.0 ./node_modules/jest/bin/jest.js --coverage=false --onlyChanged --watch --runInBand --no-cache",
     "open:test:runner": "cypress open",
-    "cypress:test:smoke:local": "cross-env E2E_ENV=.local ./node_modules/.bin/cypress run -e TAGS='@smoke' --browser=chrome --headed",
-    "cypress:test:smoke:test": "cross-env E2E_ENV=.test ./node_modules/.bin/cypress run -e TAGS='@smoke' --browser=chrome --headed",
-    "cypress:snd:smoke:test": "cross-env E2E_ENV=.snd ./node_modules/.bin/cypress run -e TAGS='@smoke' --browser=chrome --headed",
-    "cypress:dev:smoke:dev": "cross-env E2E_ENV=.dev ./node_modules/.bin/cypress run -e TAGS='@smoke' --browser=chrome --headed",
     "cypress:html:report": "NODE_ENV=snd node cypress/e2e/cucumber-tests/report/cucumber-report.js",
     "start:watch": "npm-run-all --parallel build:watch start:nodemon",
     "start:debug": "nodemon --inspect-brk=0.0.0.0 --ext css,js,njk --legacy-watch app/index.js",
@@ -109,16 +105,6 @@
       "test/acceptance/**/*.mjs",
       "test/acceptance/**/*.cjs"
     ]
-  },
-  "cypress-cucumber-preprocessor": {
-    "nonGlobalStepDefinitions": false,
-    "step_definitions": "test/acceptance/cypress/e2e/cucumber-tests/step_definitions/",
-    "cucumberJson": {
-      "generate": true,
-      "outputFolder": "cypress/cucumber-report",
-      "filePrefix": "",
-      "fileSuffix": ".cucumber"
-    }
   },
   "nodemonConfig": {
     "ignore": [

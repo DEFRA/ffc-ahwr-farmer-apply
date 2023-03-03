@@ -1,6 +1,6 @@
-const config = require('../config')
-const BUSINESS_EMAIL_SCHEMA = require('../schemas/business-email.schema.js')
-const getSignedJwt = require('../lib/auth/get-signed-jwt')
+const config = require('../../app/config')
+const BUSINESS_EMAIL_SCHEMA = require('../../app/schemas/business-email.schema.js')
+const getSignedJwt = require('./get-signed-jwt')
 const Wreck = require('@hapi/wreck')
 
 async function getMagicLink (businessEmail) {

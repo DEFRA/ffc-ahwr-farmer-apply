@@ -1,5 +1,5 @@
 const CryptoJS = require('crypto-js')
-const { jwtSecret, jwtIssuer } = require('../../config')
+const { jwtSecret, jwtIssuer } = require('../../app/config')
 
 function getSignedJwt () {
   try {
