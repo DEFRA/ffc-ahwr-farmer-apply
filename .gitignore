@@ -1,6 +1,7 @@
 # Test output
 html-reports
 test-output
+/cypress
 
 # npm stuff
 .npm/
@@ -22,3 +23,9 @@ layout.njk
 
 # OS stuff
 .DS_Store
+
+# Cypress acceptance tests
+/test/acceptance/.env.dev
+/test/acceptance/.env.local
+/test/acceptance/.env.snd
+/test/acceptance/.env.test

@@ -14,6 +14,12 @@
     "test:lint": "standard",
     "test:lint-fix": "standard --fix",
     "test:debug": "node --inspect-brk=0.0.0.0 ./node_modules/jest/bin/jest.js --coverage=false --onlyChanged --watch --runInBand --no-cache",
+    "open:test:runner": "cypress open",
+    "cypress:test:smoke:local": "cross-env E2E_ENV=.local ./node_modules/.bin/cypress run -e TAGS='@smoke' --browser=chrome --headed",
+    "cypress:test:smoke:test": "cross-env E2E_ENV=.test ./node_modules/.bin/cypress run -e TAGS='@smoke' --browser=chrome --headed",
+    "cypress:snd:smoke:test": "cross-env E2E_ENV=.snd ./node_modules/.bin/cypress run -e TAGS='@smoke' --browser=chrome --headed",
+    "cypress:dev:smoke:dev": "cross-env E2E_ENV=.dev ./node_modules/.bin/cypress run -e TAGS='@smoke' --browser=chrome --headed",
+    "cypress:html:report": "NODE_ENV=snd node cypress/e2e/cucumber-tests/report/cucumber-report.js",
     "start:watch": "npm-run-all --parallel build:watch start:nodemon",
     "start:debug": "nodemon --inspect-brk=0.0.0.0 --ext css,js,njk --legacy-watch app/index.js",
     "start:nodemon": "nodemon --inspect=0.0.0.0 --ext css,js,njk --legacy-watch app/index.js"
@@ -35,6 +41,13 @@
     "@hapi/vision": "^6.1.0",
     "@hapi/wreck": "^18.0.0",
     "@hapi/yar": "^10.1.1",
+    "crypto-js": "^4.1.1",
+    "cross-env": "^7.0.3",
+    "cucumber-html-reporter": "^5.3.0",
+    "cypress": "^12.6.0",
+    "cypress-cucumber-preprocessor": "^4.0.3",
+    "dotenv": "^16.0.1",
+    "expect-webdriverio": "^3.4.0",
     "applicationinsights": "^2.1.6",
     "ffc-ahwr-event-publisher": "1.0.0",
     "ffc-messaging": "^2.6.2",
@@ -43,6 +56,7 @@
     "joi": "17.6.4",
     "notifications-node-client": "^5.1.1",
     "nunjucks": "^3.2.3",
+    "multiple-cucumber-html-reporter": "^2.0.0",
     "uuid": "^8.3.2"
   },
   "overrides": {
@@ -95,6 +109,16 @@
       "test/acceptance/**/*.mjs",
       "test/acceptance/**/*.cjs"
     ]
+  },
+  "cypress-cucumber-preprocessor": {
+    "nonGlobalStepDefinitions": false,
+    "step_definitions": "cypress/e2e/cucumber-tests/step_definitions/",
+    "cucumberJson": {
+      "generate": true,
+      "outputFolder": "cypress/cucumber-report",
+      "filePrefix": "",
+      "fileSuffix": ".cucumber"
+    }
   },
   "nodemonConfig": {
     "ignore": [
