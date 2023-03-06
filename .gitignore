@@ -27,3 +27,4 @@ layout.njk
 /test/acceptance/.env.local
 /test/acceptance/.env.snd
 /test/acceptance/.env.test
+/test/acceptance/.env.pre
