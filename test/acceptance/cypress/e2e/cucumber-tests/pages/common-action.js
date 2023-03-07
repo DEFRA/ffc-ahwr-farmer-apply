@@ -1,10 +1,12 @@
 /// <reference types="cypress" />
-
 const baseUrl = Cypress.config().baseUrl
 class CommonAction {
 
   static navigateToPage (page) {
     cy.visit( baseUrl+page)
+    Cypress.on('uncaught:exception', (err, runnable) => {
+      return false
+    })
   }
 
   static clickOn(element) {

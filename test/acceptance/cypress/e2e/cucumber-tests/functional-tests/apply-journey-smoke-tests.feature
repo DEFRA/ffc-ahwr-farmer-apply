@@ -17,4 +17,4 @@ Feature: Apply journey smoke tests
     Then magic link is sent to user email
     Examples:
       | valid credential   |
-      | business1@email.com|
+      | ibrahim.adekanmi@kainos.com|

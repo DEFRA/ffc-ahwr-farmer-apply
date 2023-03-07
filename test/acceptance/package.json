@@ -1,78 +1,73 @@
 {
-    "author": "Defra",
-    "license": "OGL-UK-3.0",
-    "name": "ffc-ahwr-farmer-apply-acceptance-tests",
-    "version": "1.0.0",
-    "description": "Web front-end for AHWR",
-    "homepage": "https://github.com/DEFRA/ffc-ahwr-farmer-apply",
-    "contributors": [],
-    "keywords": [
-      "cypress",
-      "cucumber",
-      "test",
-      "selenium"
-    ],
-    "scripts": {
-      "open:test:runner": "cypress open",
-      "cypress:test:smoke:local": "cross-env E2E_ENV=.local ./node_modules/.bin/cypress run -e TAGS='@smoke' --browser=chrome --headed",
-      "cypress:test:smoke:test": "cross-env E2E_ENV=.test ./node_modules/.bin/cypress run -e TAGS='@smoke' --browser=chrome --headed",
-      "cypress:snd:smoke:test": "cross-env E2E_ENV=.snd ./node_modules/.bin/cypress run -e TAGS='@smoke' --browser=chrome --headed",
-      "cypress:dev:smoke:dev": "cross-env E2E_ENV=.dev ./node_modules/.bin/cypress run -e TAGS='@smoke' --browser=chrome --headed",
-      "cypress:html:report": "NODE_ENV=snd node cypress/e2e/cucumber-tests/report/cucumber-report.js",
-      "test": "wdio wdio.bs.conf.js",
-      "test:local": "wdio wdio.local.conf.js",
-      "test:browserstack": "wdio wdio.bs.conf.js",
-      "test:debug": "node --inspect-brk=0.0.0.0 ./node_modules/@wdio/cli/bin/wdio.js wdio.conf.js"
-    },
-    "dependencies": {
-      "@log4js-node/log4js-api": "^1.0.2",
-      "@wdio/cli": "^7.2.3",
-      "@wdio/local-runner": "^7.2.3",
-      "moment": "^2.29.1"
-    },
-    "devDependencies": {
-      "@babel/cli": "^7.16.0",
-      "@babel/core": "^7.16.5",
-      "@babel/plugin-proposal-export-default-from": "^7.16.7",
-      "@babel/plugin-syntax-export-default-from": "^7.8.3",
-      "@babel/preset-env": "^7.16.5",
-      "@babel/register": "^7.16.5",
-      "@wdio/browserstack-service": "^7.16.13",
-      "@wdio/config": "^7.16.11",
-      "@wdio/cucumber-framework": "^7.16.12",
-      "@wdio/spec-reporter": "^7.16.11",
-      "cross-env": "^7.0.3",
-      "cucumber-html-reporter": "^5.3.0",
-      "cypress": "^12.6.0",
-      "cypress-cucumber-preprocessor": "^4.0.3",
-      "multiple-cucumber-html-reporter": "^2.0.0",
-      "chai": "^4.3.6",
-      "chromedriver": "^96.0.0",
-      "dotenv": "^16.0.1",
-      "eslint": "^7.22.0",
-      "eslint-plugin-import": "^2.20.2",
-      "eslint-plugin-wdio": "^7.4.2",
-      "ffc-messaging": "^2.3.3",
-      "npm-run-all": "^4.1.5",
-      "pngjs": "^6.0.0",
-      "standard": "16.0.4"
-    },
-    "standard": {
-      "globals": [
-        "$",
-        "assert",
-        "browser",
-        "expect"
-      ]
-    },
-    "cypress-cucumber-preprocessor": {
-      "nonGlobalStepDefinitions": false,
-      "step_definitions": "cypress/e2e/cucumber-tests/step_definitions/",
-      "cucumberJson": {
-        "generate": true,
-        "outputFolder": "cypress/cucumber-report",
-        "filePrefix": "",
-        "fileSuffix": ".cucumber"
-      }
+  "author": "Defra",
+  "license": "OGL-UK-3.0",
+  "name": "ffc-ahwr-farmer-apply-acceptance-tests",
+  "version": "1.0.0",
+  "description": "Web front-end for AHWR",
+  "homepage": "https://github.com/DEFRA/ffc-ahwr-farmer-apply",
+  "contributors": [],
+  "keywords": [
+    "wdio",
+    "webdriver",
+    "webdriverio",
+    "cucumber",
+    "test",
+    "selenium"
+  ],
+  "scripts": {
+    "open:test:runner": "cypress open",
+    "cypress:local:smoke:local": "cross-env E2E_ENV=.local ./node_modules/.bin/cypress run -e TAGS='@smoke' --browser=chrome --headed",
+    "cypress:test:smoke:test": "cross-env E2E_ENV=.test ./node_modules/.bin/cypress run -e TAGS='@smoke' --browser=chrome --headed",
+    "cypress:snd:smoke:snd": "cross-env E2E_ENV=.snd ./node_modules/.bin/cypress run -e TAGS='@smoke' --browser=chrome --headed",
+    "cypress:dev:smoke:dev": "cross-env E2E_ENV=.dev ./node_modules/.bin/cypress run -e TAGS='@smoke' --browser=chrome --headed",
+    "cypress:pre:smoke:pre": "cross-env E2E_ENV=.pre ./node_modules/.bin/cypress run -e TAGS='@smoke' --browser=chrome --headed",
+    "cypress:html:report": "node cypress/e2e/cucumber-tests/report/cucumber-report.js"
+  },
+  "dependencies": {
+    "@log4js-node/log4js-api": "^1.0.2",
+    "@wdio/cli": "^7.2.3",
+    "@wdio/local-runner": "^7.2.3",
+    "moment": "^2.29.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.16.0",
+    "@babel/core": "^7.16.5",
+    "@babel/plugin-proposal-export-default-from": "^7.16.7",
+    "@babel/plugin-syntax-export-default-from": "^7.8.3",
+    "@babel/preset-env": "^7.16.5",
+    "@babel/register": "^7.16.5",
+    "chai": "^4.3.6",
+    "chalk": "^4.1.2",
+    "cross-env": "^7.0.3",
+    "cypress": "^12.6.0",
+    "cypress-cucumber-preprocessor": "^4.0.3",
+    "dotenv": "^16.0.1",
+    "eslint": "^7.22.0",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-wdio": "^7.4.2",
+    "ffc-messaging": "^2.3.3",
+    "fs-extra": "^11.1.0",
+    "multiple-cucumber-html-reporter": "^2.0.0",
+    "npm-run-all": "^4.1.5",
+    "pngjs": "^6.0.0",
+    "standard": "16.0.4"
+  },
+  "standard": {
+    "globals": [
+      "$",
+      "assert",
+      "browser",
+      "expect"
+    ]
+  },
+  "cypress-cucumber-preprocessor": {
+    "nonGlobalStepDefinitions": false,
+    "step_definitions": "cypress/e2e/cucumber-tests/step_definitions/",
+    "cucumberJson": {
+      "generate": true,
+      "outputFolder": "cypress/cucumber-report",
+      "filePrefix": "",
+      "fileSuffix": ".cucumber"
     }
   }
+}
