@@ -12,14 +12,14 @@ const setAuthCookie = (request, email, userType) => {
   console.log(`Logged in user of type '${userType}' with email '${email}'.`)
 }
 
-// todo move to different directory 
+// todo move to different directory
 const generateNonce = (session, request) => {
   const nonce = uuidv4()
   // session.setToken(request, tokens.nonce, nonce)
   return nonce
 }
 
-// todo move to different directory 
+// todo move to different directory
 const generateState = (session, request) => {
   const state = uuidv4()
   // session.setToken(request, tokens.state, state)
