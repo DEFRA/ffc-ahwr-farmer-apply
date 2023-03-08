@@ -61,6 +61,7 @@ container:
   registerYourInterestEnabled:
   registerYourInterestRequestQueueAddress: ffc-ahwr-register-your-interest-request
   selectYourBusinessEnabled:
+  defraIdEnabled:
 
 ingress:
   class: nginx
