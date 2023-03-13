@@ -10,7 +10,7 @@ describe('Generate authentication url test', () => {
     }
     const result = getAuthenticationUrl(session, undefined)
     const params = new URL(result).searchParams
-    expect(params.get("code_challenge")).not.toBeNull
+    expect(params.get('code_challenge')).not.toBeNull()
   })
 
   test('when getAuthenticationUrl with pkce false no challenge parameter is added', async () => {
@@ -22,6 +22,6 @@ describe('Generate authentication url test', () => {
     }
     const result = getAuthenticationUrl(session, undefined, false)
     const params = new URL(result).searchParams
-    expect(params.get("code_challenge")).toBeNull
+    expect(params.get('code_challenge')).toBeNull()
   })
 })
