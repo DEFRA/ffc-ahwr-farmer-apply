@@ -29,4 +29,9 @@ data:
   APPLICATION_API_URI: {{ quote .Values.container.applicationApiUri }}
   SELECT_YOUR_BUSINESS_ENABLED: {{ quote .Values.container.selectYourBusinessEnabled }}
   DEFRA_ID_ENABLED: {{ quote .Values.container.defraIdEnabled }}
+  DEFRA_ID_TENANT: {{ quote .Values.container.defraIdTenant }}
+  DEFRA_ID_POLICY: {{ quote .Values.container.defraIdPolicy }}
+  DEFRA_ID_REDIRECT_URI: {{ quote .Values.container.defraIdRedirectUri }}
+  DEFRA_ID_CLIENT_ID: {{ quote .Values.container.defraIdClientId }}
+  DEFRA_ID_SERVICE_ID: {{ quote .Values.container.defraIdClientServiceId }}
 {{- end -}}

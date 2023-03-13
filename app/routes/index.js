@@ -7,7 +7,7 @@ module.exports = {
   options: {
     auth: false,
     handler: async (request, h) => {
-      if (config.defraId.enabled) {
+      if (config.authConfig.defraId.enabled) {
         return h.view('defra-id/index', {
           defraIdLogin: getAuthenticationUrl(session, request)
         })

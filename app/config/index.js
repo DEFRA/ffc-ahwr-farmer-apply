@@ -1,6 +1,7 @@
 const Joi = require('joi')
 const mqConfig = require('./messaging')
 const notifyConfig = require('./notify')
+const authConfig = require('./auth')
 const urlPrefix = '/apply'
 
 const schema = Joi.object({
@@ -54,17 +55,6 @@ const schema = Joi.object({
   applicationApi: require('../api-requests/application-api.config.schema'),
   selectYourBusiness: {
     enabled: Joi.bool().default(false)
-  },
-  defraId: {
-    // might be better abstracted into schema file
-    enabled: Joi.bool().default(false),
-    tenant: Joi.string(),
-    oAuthAuthorisePath: Joi.string(),
-    method: Joi.string(),
-    redirectUri: Joi.string().uri(),
-    clientId: Joi.string(),
-    serviceId: Joi.string(),
-    scope: Joi.string()
   }
 })
 
@@ -111,16 +101,6 @@ const config = {
   applicationApi: require('../api-requests/application-api.config'),
   selectYourBusiness: {
     enabled: process.env.SELECT_YOUR_BUSINESS_ENABLED
-  },
-  defraId: {
-    enabled: process.env.DEFRA_ID_ENABLED,
-    tenant: 'https://azdcuspoc5.b2clogin.com/azdcuspoc5.onmicrosoft.com',
-    oAuthAuthorisePath: '/oauth2/v2.0/authorize',
-    method: 'B2C_1A_SIGNUPSIGNINSFI',
-    redirectUri: 'http://localhost:3000/signin-oidc',
-    clientId: '83d2b160-74ce-4356-9709-3f8da7868e35',
-    serviceId: '2a672ee6-7750-ed11-bba3-000d3adf7047',
-    scope: 'openid+83d2b160-74ce-4356-9709-3f8da7868e35+offline_access'
   }
 }
 
@@ -135,5 +115,6 @@ if (result.error) {
 const value = result.value
 value.mqConfig = mqConfig
 value.notifyConfig = notifyConfig
+value.authConfig = authConfig
 
 module.exports = value
