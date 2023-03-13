@@ -13,7 +13,6 @@ const setAuthCookie = (request, email, userType) => {
 }
 
 const getAuthenticationUrl = (session, request, pkce = true) => {
-  console.log(`Generating authorize URL for ${request.yar.id}.`)
   const authUrl = new URL(`${config.authConfig.defraId.hostname}${config.authConfig.defraId.oAuthAuthorisePath}`)
   authUrl.searchParams.append('p', config.authConfig.defraId.policy)
   authUrl.searchParams.append('client_id', config.authConfig.defraId.clientId)

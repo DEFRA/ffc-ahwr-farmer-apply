@@ -3,7 +3,7 @@ const Joi = require('joi')
 const authSchema = Joi.object({
   defraId: {
     enabled: Joi.bool().default(false),
-    hostname: Joi.string(),
+    hostname: Joi.string().uri(),
     oAuthAuthorisePath: Joi.string(),
     policy: Joi.string(),
     redirectUri: Joi.string().uri(),
@@ -31,6 +31,7 @@ const authResult = authSchema.validate(authConfig, {
 })
 
 if (authResult.error) {
+  console.log(authResult.error.message)
   throw new Error(`The auth config is invalid. ${authResult.error.message}`)
 }
 
