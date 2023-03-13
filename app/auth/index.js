@@ -30,8 +30,7 @@ const getAuthenticationUrl = (session, request, pkce = true) => {
     authUrl.searchParams.append('code_challenge', challenge)
     authUrl.searchParams.append('code_challenge_method', 'S256')
   }
-
-  console.log(`Auth URL is ${authUrl}`)
+  
   return authUrl
 }
 
