@@ -1,18 +1,10 @@
 const Joi = require('joi')
-const { getByEmail } = require('../api-requests/users')
-const { setFarmerApplyData } = require('../session')
-const { organisation: organisationKey } = require('../session/keys').farmerApplyData
 const { lookupToken, setAuthCookie } = require('../auth')
 const { sendMonitoringEvent } = require('../event')
-const { urlPrefix, selectYourBusiness } = require('../config')
+const { urlPrefix } = require('../config')
 
 function isRequestInvalid (cachedEmail, email) {
   return !cachedEmail || email !== cachedEmail
-}
-
-async function cacheFarmerApplyData (request, email) {
-  const organisation = await getByEmail(email)
-  setFarmerApplyData(request, organisationKey, organisation)
 }
 
 const getIp = (request) => {
@@ -49,14 +41,10 @@ module.exports = [{
 
       setAuthCookie(request, email, userType)
 
-      if (selectYourBusiness.enabled === false) {
-        await cacheFarmerApplyData(request, email)
-      }
-
       await magiclinkCache.drop(email)
       await magiclinkCache.drop(token)
 
-      return h.redirect(`${redirectTo}${selectYourBusiness.enabled ? (`?businessEmail=${email}`) : ''}`)
+      return h.redirect(`${redirectTo}${(`?businessEmail=${email}`)}`)
     }
   }
 }]
