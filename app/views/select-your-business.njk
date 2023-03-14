@@ -25,7 +25,8 @@
 
       {{ govukButton({
         text: "Start application",
-        attributes: { id: "btnContinue" }
+        attributes: { id: "btnContinue" },
+        preventDoubleClick: true
       }) }}
 
       {{ govukDetails({
