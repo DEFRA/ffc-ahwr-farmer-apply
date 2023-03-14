@@ -22,17 +22,13 @@ describe('Auth plugin test', () => {
       const orgs = require('../../../../app/api-requests/users')
       getByEmail = orgs.getByEmail
       jest.mock('../../../../app/config', () => ({
-        ...jest.requireActual('../../../../app/config'),
-        selectYourBusiness: {
-          enabled: false
-        }
+        ...jest.requireActual('../../../../app/config')
       }))
       const config = require('../../../../app/config')
 
       ttl = config.cookie.ttl
       urlPrefix = config.urlPrefix
       url = `${urlPrefix}/login`
-      redirectTo = `${urlPrefix}/org-review`
     })
 
     beforeEach(() => {
@@ -46,7 +42,7 @@ describe('Auth plugin test', () => {
         method: 'GET',
         url: `${urlPrefix}/verify-login?email=${email}&token=${token}`
       }
-
+      redirectTo = `${urlPrefix}/select-your-business?businessEmail=${email}`
       await global.__SERVER__.app.magiclinkCache.set(email, [token])
       await global.__SERVER__.app.magiclinkCache.set(token, { email, redirectTo, userType: farmerApply })
 
@@ -72,8 +68,7 @@ describe('Auth plugin test', () => {
 
       expect(res.statusCode).toBe(302)
       expect(res.headers.location).toEqual(redirectTo)
-      expect(session.setFarmerApplyData).toHaveBeenCalledTimes(2)
-      expect(session.setFarmerApplyData).toHaveBeenCalledWith(res.request, organisationKey, organisation)
+      expect(session.setFarmerApplyData).not.toHaveBeenCalled()
       expect(parseInt(maxAgeOfCookieInSeconds, 10) * 1000).toEqual(ttl)
     })
 
@@ -93,7 +88,7 @@ describe('Auth plugin test', () => {
 
       expect(res.statusCode).toBe(302)
       expect(res.headers.location).toEqual(redirectTo)
-      expect(session.setFarmerApplyData).toHaveBeenCalledTimes(1)
+      expect(session.setFarmerApplyData).not.toHaveBeenCalled()
     })
   })
 
@@ -116,10 +111,7 @@ describe('Auth plugin test', () => {
       const orgs = require('../../../../app/api-requests/users')
       getByEmail = orgs.getByEmail
       jest.mock('../../../../app/config', () => ({
-        ...jest.requireActual('../../../../app/config'),
-        selectYourBusiness: {
-          enabled: true
-        }
+        ...jest.requireActual('../../../../app/config')
       }))
       const config = require('../../../../app/config')
 
