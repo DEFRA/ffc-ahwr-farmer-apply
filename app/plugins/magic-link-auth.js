@@ -1,6 +1,6 @@
 const { getByEmail } = require('../api-requests/users')
-const { cookie: cookieConfig, cookiePolicy, selectYourBusiness } = require('../config')
-const { getFarmerApplyData, setFarmerApplyData } = require('../session')
+const { cookie: cookieConfig, cookiePolicy } = require('../config')
+const { getFarmerApplyData } = require('../session')
 const { farmerApplyData: { organisation: organisationKey } } = require('../session/keys')
 
 module.exports = {
@@ -27,9 +27,6 @@ module.exports = {
             result.valid = true
           } else {
             const organisation = (await getByEmail(session.email)) ?? {}
-            if (selectYourBusiness.enabled === false) {
-              setFarmerApplyData(request, organisationKey, organisation)
-            }
             result.valid = !!organisation
           }
 

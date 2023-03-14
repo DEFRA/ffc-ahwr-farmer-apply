@@ -30,7 +30,7 @@ module.exports = [{
     handler: async (request, h) => {
       if (request.auth.isAuthenticated) {
         const email = request.auth.credentials && request.auth.credentials.email
-        return h.redirect(request.query?.next || config.selectYourBusiness.enabled ? `${config.urlPrefix}/select-your-business?businessEmail=${email}` : `${config.urlPrefix}/org-review`)
+        return h.redirect(request.query?.next || `${config.urlPrefix}/select-your-business?businessEmail=${email}`)
       }
 
       return h.view('login', { hintText })

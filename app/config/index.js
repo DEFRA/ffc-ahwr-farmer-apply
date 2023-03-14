@@ -52,10 +52,7 @@ const schema = Joi.object({
     enabled: Joi.bool().default(true)
   },
   eligibilityApi: require('../api-requests/eligibility-api.config.schema'),
-  applicationApi: require('../api-requests/application-api.config.schema'),
-  selectYourBusiness: {
-    enabled: Joi.bool().default(false)
-  }
+  applicationApi: require('../api-requests/application-api.config.schema')
 })
 
 const config = {
@@ -98,10 +95,7 @@ const config = {
     enabled: process.env.REGISTER_YOUR_INTEREST_ENABLED
   },
   eligibilityApi: require('../api-requests/eligibility-api.config'),
-  applicationApi: require('../api-requests/application-api.config'),
-  selectYourBusiness: {
-    enabled: process.env.SELECT_YOUR_BUSINESS_ENABLED
-  }
+  applicationApi: require('../api-requests/application-api.config')
 }
 
 const result = schema.validate(config, {

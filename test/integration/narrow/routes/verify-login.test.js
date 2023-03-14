@@ -31,10 +31,7 @@ describe('verify-login route', () => {
     setAuthCookie = auth.lookupToken
 
     jest.mock('../../../../app/config', () => ({
-      ...jest.requireActual('../../../../app/config'),
-      selectYourBusiness: {
-        enabled: false
-      }
+      ...jest.requireActual('../../../../app/config')
     }))
     const config = require('../../../../app/config')
     urlPrefix = config.urlPrefix
@@ -76,7 +73,7 @@ describe('verify-login route', () => {
     expect(result.statusCode).toBe(302)
     expect(lookupToken).toBeCalledTimes(1)
     expect(setAuthCookie).toBeCalledTimes(1)
-    expect(setFarmerApplyData).toBeCalledTimes(1)
+    expect(setFarmerApplyData).not.toBeCalled()
     expect(cacheDropSpy).toBeCalledTimes(2)
     expect(cacheDropSpy).toHaveBeenNthCalledWith(1, 'someemail@email.com')
     expect(cacheDropSpy).toHaveBeenNthCalledWith(2, '0c8f9708-453b-11ed-b878-0242ac120002')
@@ -96,10 +93,7 @@ describe('verify-login route', () => {
       jest.resetModules()
       jest.mock('ffc-ahwr-event-publisher')
       jest.mock('../../../../app/config', () => ({
-        ...jest.requireActual('../../../../app/config'),
-        selectYourBusiness: {
-          enabled: true
-        }
+        ...jest.requireActual('../../../../app/config')
       }))
       const config = require('../../../../app/config')
       urlPrefix = config.urlPrefix
