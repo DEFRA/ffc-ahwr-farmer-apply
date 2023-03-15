@@ -8,7 +8,6 @@ const routes = [].concat(
   require('../routes/healthy'),
   require('../routes/healthz'),
   require('../routes/index'),
-  require('../routes/login'),
   require('../routes/org-review'),
   require('../routes/privacy-policy'),
   require('../routes/which-review'),
@@ -17,8 +16,9 @@ const routes = [].concat(
   require('../routes/check-answers'),
   require('../routes/declaration'),
   require('../routes/terms'),
-  require('../routes/verify-login'),
-  require('../routes/vet-technical')
+  require('../routes/vet-technical'),
+  require('../routes/select-your-business'),
+  require('../routes/no-business-available-to-apply-for')
 )
 
 const registerYourInterestRoutes = [].concat(
@@ -38,8 +38,13 @@ module.exports = {
       if (config.registerYourInterest.enabled === true) {
         server.route(registerYourInterestRoutes)
       }
-      server.route(require('../routes/select-your-business'))
-      server.route(require('../routes/no-business-available-to-apply-for'))
+
+      if (config.authConfig.defraId.enabled === true) {
+        server.route(require('../routes/auth/signin-oidc'))
+      } else {
+        server.route(require('../routes/auth/login'))
+        server.route(require('../routes/auth/verify-login'))
+      }
     }
   }
 }

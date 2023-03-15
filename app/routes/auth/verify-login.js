@@ -1,7 +1,7 @@
 const Joi = require('joi')
-const { lookupToken, setAuthCookie } = require('../auth')
-const { sendMonitoringEvent } = require('../event')
-const { urlPrefix } = require('../config')
+const { lookupToken, setAuthCookie } = require('../../auth')
+const { sendMonitoringEvent } = require('../../event')
+const { urlPrefix } = require('../../config')
 
 function isRequestInvalid (cachedEmail, email) {
   return !cachedEmail || email !== cachedEmail
