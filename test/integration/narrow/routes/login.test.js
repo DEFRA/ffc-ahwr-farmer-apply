@@ -10,10 +10,7 @@ const { farmerApply } = require('../../../../app/constants/user-types')
 const uuidRegex = require('../../../../app/config/uuid-regex')
 
 jest.mock('../../../../app/config', () => ({
-  ...jest.requireActual('../../../../app/config'),
-  selectYourBusiness: {
-    enabled: false
-  }
+  ...jest.requireActual('../../../../app/config')
 }))
 const config = require('../../../../app/config')
 const urlPrefix = config.urlPrefix
@@ -53,7 +50,7 @@ describe('FarmerApply application login page test', () => {
       expectLoginPage.hasCorrectContent($, 'apply')
     })
 
-    test('route when already logged in redirects to org-review', async () => {
+    test('route when already logged in redirects to select-your-business', async () => {
       const options = {
         auth: { credentials: { email: validEmail }, strategy: 'cookie', isAuthenticated: true },
         method: 'GET',
@@ -63,7 +60,7 @@ describe('FarmerApply application login page test', () => {
       const res = await global.__SERVER__.inject(options)
 
       expect(res.statusCode).toBe(302)
-      expect(res.headers.location).toEqual(`${urlPrefix}/org-review`)
+      expect(res.headers.location).toEqual(`${urlPrefix}/select-your-business?businessEmail=${validEmail}`)
     })
   })
 
@@ -143,7 +140,7 @@ describe('FarmerApply application login page test', () => {
       } else {
         expect(cacheSetSpy).toHaveBeenNthCalledWith(1, validEmail, [expect.stringMatching(new RegExp(uuidRegex))])
       }
-      expect(cacheSetSpy).toHaveBeenNthCalledWith(2, expect.stringMatching(new RegExp(uuidRegex)), { email: validEmail, redirectTo: 'org-review', userType: farmerApply })
+      expect(cacheSetSpy).toHaveBeenNthCalledWith(2, expect.stringMatching(new RegExp(uuidRegex)), { email: validEmail, redirectTo: 'select-your-business', userType: farmerApply })
       expect(res.statusCode).toBe(200)
       const $ = cheerio.load(res.payload)
       expect($('h1').text()).toEqual('Check your email')

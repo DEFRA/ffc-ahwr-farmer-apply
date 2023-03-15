@@ -6,7 +6,9 @@ const entries = {
   selectYourBusiness: 'selectYourBusiness',
   organisation: 'organisation',
   answers: 'answers',
-  registerYourInterestData: 'registerYourInterestData'
+  registerYourInterestData: 'registerYourInterestData',
+  pkcecodes: 'pkcecodes',
+  tokens: 'tokens'
 }
 
 function lacksAny (request, entryKey, keys) {
@@ -74,6 +76,22 @@ function setRegisterYourInterestData (request, key, value) {
   set(request, entries.registerYourInterestData, key, value)
 }
 
+function setToken (request, key, value) {
+  set(request, entries.tokens, key, value)
+}
+
+function getToken (request, key) {
+  return get(request, entries.tokens, key)
+}
+
+function setPkcecodes (request, key, value) {
+  set(request, entries.pkcecodes, key, value)
+}
+
+function getPkcecodes (request, key) {
+  return get(request, entries.pkcecodes, key)
+}
+
 module.exports = {
   entries,
   lacksAny,
@@ -85,5 +103,9 @@ module.exports = {
   getRegisterYourInterestData,
   setRegisterYourInterestData,
   getSelectYourBusiness,
-  setSelectYourBusiness
+  setSelectYourBusiness,
+  getToken,
+  setToken,
+  getPkcecodes,
+  setPkcecodes
 }

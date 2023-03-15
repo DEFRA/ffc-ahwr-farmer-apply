@@ -1,7 +1,6 @@
 const session = require('../../session')
 const { confirmCheckDetails } = require('../../session/keys').farmerApplyData
 const { getYesNoRadios } = require('./form-component/yes-no-radios')
-const config = require('../../config')
 
 const labelText = 'Are your details correct?'
 
@@ -22,9 +21,7 @@ const getOrganisation = (request, organisation, errorText) => {
   ]
   return {
     backLink: {
-      href: config.selectYourBusiness.enabled
-        ? `/apply/select-your-business?businessEmail=${organisation.email}`
-        : '/apply/start'
+      href: `/apply/select-your-business?businessEmail=${organisation.email}`
     },
     organisation,
     listData: { rows },

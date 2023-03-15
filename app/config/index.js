@@ -1,6 +1,7 @@
 const Joi = require('joi')
 const mqConfig = require('./messaging')
 const notifyConfig = require('./notify')
+const authConfig = require('./auth')
 const urlPrefix = '/apply'
 
 const schema = Joi.object({
@@ -51,10 +52,7 @@ const schema = Joi.object({
     enabled: Joi.bool().default(true)
   },
   eligibilityApi: require('../api-requests/eligibility-api.config.schema'),
-  applicationApi: require('../api-requests/application-api.config.schema'),
-  selectYourBusiness: {
-    enabled: Joi.bool().default(false)
-  }
+  applicationApi: require('../api-requests/application-api.config.schema')
 })
 
 const config = {
@@ -97,10 +95,7 @@ const config = {
     enabled: process.env.REGISTER_YOUR_INTEREST_ENABLED
   },
   eligibilityApi: require('../api-requests/eligibility-api.config'),
-  applicationApi: require('../api-requests/application-api.config'),
-  selectYourBusiness: {
-    enabled: process.env.SELECT_YOUR_BUSINESS_ENABLED
-  }
+  applicationApi: require('../api-requests/application-api.config')
 }
 
 const result = schema.validate(config, {
@@ -114,5 +109,6 @@ if (result.error) {
 const value = result.value
 value.mqConfig = mqConfig
 value.notifyConfig = notifyConfig
+value.authConfig = authConfig
 
 module.exports = value

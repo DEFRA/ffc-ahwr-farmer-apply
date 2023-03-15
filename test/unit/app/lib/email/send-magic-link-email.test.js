@@ -29,6 +29,7 @@ describe('Send Magic Link test', () => {
   const email = 'test@unit-test.com'
   const sendEmailResponse = true
   const testToken = '644a2a30-7487-4e98-a908-b5ecd82d5225'
+  const redirectTo = 'select-your-business'
 
   beforeEach(() => {
     cacheData = {}
@@ -37,41 +38,12 @@ describe('Send Magic Link test', () => {
     sendEmail.mockResolvedValue(sendEmailResponse)
   })
 
-  test.each([
-    {
-      when: {
-        config: {
-          selectYourBusiness: {
-            enabled: false
-          }
-        }
-      },
-      expect: {
-        redirectTo: 'org-review'
-      }
-    },
-    {
-      when: {
-        config: {
-          selectYourBusiness: {
-            enabled: true
-          }
-        }
-      },
-      expect: {
-        redirectTo: 'select-your-business'
-      }
-    }
-  ])('sends email for farmer apply', async (testCase) => {
+  test('Sends email for farmer apply', async () => {
     jest.isolateModules(async () => {
-      const mockEnabled = testCase.when.config.selectYourBusiness.enabled
       jest.mock('../../../../../app/config', () => {
         const originalModule = jest.requireActual('../../../../../app/config')
         return {
-          ...originalModule,
-          selectYourBusiness: {
-            enabled: mockEnabled
-          }
+          ...originalModule
         }
       })
       const token = testToken
@@ -82,7 +54,7 @@ describe('Send Magic Link test', () => {
 
       expect(response).toEqual(sendEmailResponse)
       expect(cacheData[email]).toEqual([token])
-      expect(cacheData[token]).toEqual({ email, redirectTo: testCase.expect.redirectTo, userType: farmerApply })
+      expect(cacheData[token]).toEqual({ email, redirectTo, userType: farmerApply })
       expect(sendEmail).toHaveBeenCalledTimes(1)
       expect(sendEmail).toHaveBeenCalledWith(config.notifyConfig.emailTemplates.applyLogin, email, {
         personalisation: { magiclink: `${config.serviceUri}/verify-login?token=${token}&email=${email}` },
