@@ -8,8 +8,7 @@ const maxInstances = process.env.MAX_INSTANCES ? Number(process.env.MAX_INSTANCE
 const user = process.env.BROWSERSTACK_USERNAME
 const key = process.env.BROWSERSTACK_ACCESS_KEY
 const parallel = process.env.BROWSERSTACK_PARALLEL_RUNS
-console.log('rayayayay')
-console.log(key, user, parallel)
+
 exports.config = {
   hostname: 'hub-cloud.browserstack.com',
   user,
