@@ -2,16 +2,14 @@ const browserstack = require('browserstack-local')
 const { ReportAggregator, HtmlReporter } = require('@rpii/wdio-html-reporter')
 const log4js = require('@log4js-node/log4js-api')
 const logger = log4js.getLogger('default')
-// const envRoot = (process.env.TEST_ENVIRONMENT_ROOT_URL || 'https://ffc-grants-frontend.ffc.snd.azure.defra.cloud/water/start')
-// const envRoot = (process.env.TEST_ENVIRONMENT_ROOT_URL || 'https://ffc-grants-frontend-test.azure.defra.cloud/water')
 const envRoot = (process.env.TEST_ENVIRONMENT_ROOT_URL || 'http://host.docker.internal:3000')
-// const envRoot = 'http://host.docker.internal:3000'
 const chromeArgs = process.env.CHROME_ARGS ? process.env.CHROME_ARGS.split(' ') : []
 const maxInstances = process.env.MAX_INSTANCES ? Number(process.env.MAX_INSTANCES) : 5
 const user = process.env.BROWSERSTACK_USERNAME
 const key = process.env.BROWSERSTACK_ACCESS_KEY
 const parallel = process.env.BROWSERSTACK_PARALLEL_RUNS
-
+console.log('rayayayay')
+console.log(key, user, parallel)
 exports.config = {
   hostname: 'hub-cloud.browserstack.com',
   user,
@@ -22,12 +20,19 @@ exports.config = {
   maxInstances,
   capabilities: [
     {
+    'bstack:options' : {
+        "os" : "Windows",
+        "osVersion" : "10",
+        "browserVersion" : "87.0",
+        "local" : true,
+        "networkLogs" : true,
+        "seleniumVersion" : "3.14.0",
+        "userName" : user,
+        "accessKey" : key,
+    },
       maxInstances,
       acceptInsecureCerts: true,
       browserName: 'chrome',
-      'browserstack.local': true,
-      'browserstack.networkLogs': true,
-      'browserstack.acceptSslCerts': true,
       'goog:chromeOptions': {
         args: chromeArgs
       }
