@@ -61,7 +61,14 @@ container:
   registerYourInterestEnabled:
   registerYourInterestRequestQueueAddress: ffc-ahwr-register-your-interest-request
   selectYourBusinessEnabled:
-
+  defraIdEnabled:
+  defraIdTenant:
+  defraIdRedirectUri:
+  defraIdClientId:
+  defraIdClientSecret:
+  defraIdServiceId:
+  defraIdPolicy:
+ 
 ingress:
   class: nginx
   endpoint: ffc-ahwr-farmer

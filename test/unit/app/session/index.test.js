@@ -5,6 +5,8 @@ describe('session', () => {
   const farmerApplyDataSectionKey = 'farmerApplyData'
   const registerYourInterestDataSectionKey = session.entries.registerYourInterestData
   const selectYourBusinessSectionKey = 'selectYourBusiness'
+  const tokensSectionKey = 'tokens'
+  const pkcecodesSectionKey = 'pkcecodes'
 
   const value = 'value'
   const objectValue = { key: value }
@@ -13,14 +15,18 @@ describe('session', () => {
     { func: 'getApplication', expectedSectionKey: applicationSectionKey },
     { func: 'getFarmerApplyData', expectedSectionKey: farmerApplyDataSectionKey },
     { func: 'getRegisterYourInterestData', expectedSectionKey: registerYourInterestDataSectionKey },
-    { func: 'getSelectYourBusiness', expectedSectionKey: selectYourBusinessSectionKey }
+    { func: 'getSelectYourBusiness', expectedSectionKey: selectYourBusinessSectionKey },
+    { func: 'getToken', expectedSectionKey: tokensSectionKey },
+    { func: 'getPkcecodes', expectedSectionKey: pkcecodesSectionKey }
   ]
 
   const setFunctionsToTest = [
     { func: 'setApplication', expectedSectionKey: applicationSectionKey },
     { func: 'setFarmerApplyData', expectedSectionKey: farmerApplyDataSectionKey },
     { func: 'setRegisterYourInterestData', expectedSectionKey: registerYourInterestDataSectionKey },
-    { func: 'setSelectYourBusiness', expectedSectionKey: selectYourBusinessSectionKey }
+    { func: 'setSelectYourBusiness', expectedSectionKey: selectYourBusinessSectionKey },
+    { func: 'setToken', expectedSectionKey: tokensSectionKey },
+    { func: 'setPkcecodes', expectedSectionKey: pkcecodesSectionKey }
   ]
 
   const keysAndValuesToTest = [

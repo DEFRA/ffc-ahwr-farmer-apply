@@ -25,5 +25,13 @@ module.exports = {
   selectYourBusiness: {
     eligibleBusinesses: 'eligibleBusinesses',
     whichBusiness: 'whichBusiness'
+  },
+  pkcecodes: {
+    verifier: 'verifier'
+  },
+  tokens: {
+    accessToken: 'accessToken',
+    state: 'state',
+    nonce: 'nonce'
   }
 }
