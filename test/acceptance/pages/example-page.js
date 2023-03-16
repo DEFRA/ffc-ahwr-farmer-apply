@@ -7,30 +7,29 @@ const ERROR_MESSAGE = '#email-error'
 const LINK_MESSAGE = '.govuk-heading-l'
 
 class LandingPage extends CommonActions {
-
-async getHomePage (page) {
+  async getHomePage (page) {
     await this.open(page)
-}
+  }
 
-async clickOnStartButton () {
+  async clickOnStartButton () {
     await this.clickOn(START_BUTTON)
-}
+  }
 
-async clickOnContinueButton () {
+  async clickOnContinueButton () {
     await this.clickOn(CONTINUE_BUTTON)
-}
+  }
 
-async inputCredentials (credential) {
+  async inputCredentials (credential) {
     await this.sendKey(EMAIL_INPUT, credential)
-}
+  }
 
-async verifyErrorMessage () {
-    await this.elementToContainText(ERROR_MESSAGE,"Enter an email address in the correct format")
-}
-async magicLinkMessage(){
-    await this.elementToContainText(LINK_MESSAGE,"Check your email")
-}
+  async verifyErrorMessage () {
+    await this.elementToContainText(ERROR_MESSAGE, 'Enter an email address in the correct format')
+  }
 
+  async magicLinkMessage () {
+    await this.elementToContainText(LINK_MESSAGE, 'Check your email')
+  }
 }
 
 module.exports = LandingPage
