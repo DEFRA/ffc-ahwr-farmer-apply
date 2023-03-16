@@ -9,6 +9,14 @@ describe('FarmerApply defra ID redirection test', () => {
 
   beforeEach(async () => {
     jest.resetAllMocks()
+    jest.mock('../../../../../app/config', () => ({
+      ...jest.requireActual('../../../../../app/config'),
+      authConfig: {
+        defraId: {
+          enabled: true
+        }
+      }
+    }))
   })
 
   describe(`GET requests to '${url}'`, () => {
