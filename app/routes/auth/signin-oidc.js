@@ -13,12 +13,11 @@ module.exports = [{
     validate: {
       query: Joi.object({
         code: Joi.string().required(),
-        state: Joi.string().required()
+        state: Joi.string().uuid().required()
       }).options({
         stripUnknown: true
       }),
       failAction (request, h, err) {
-        console.log(`Failed because ${err}`)
         return h.view('verify-login-failed', {
           backLink: config.authConfig.defraId.enabled ? auth.getAuthenticationUrl(session, request) : `${config.urlPrefix}/login`
         }).code(400).takeover()
