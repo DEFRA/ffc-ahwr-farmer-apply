@@ -19,7 +19,7 @@ module.exports = [{
       }),
       failAction (request, h, err) {
         return h.view('verify-login-failed', {
-          backLink: config.authConfig.defraId.enabled ? auth.getAuthenticationUrl(session, request) : `${config.urlPrefix}/login`
+          backLink: auth.getAuthenticationUrl(session, request)
         }).code(400).takeover()
       }
     },
@@ -44,7 +44,7 @@ module.exports = [{
         return h.redirect(`${config.urlPrefix}/org-review`)
       } catch (e) {
         return h.view('verify-login-failed', {
-          backLink: config.authConfig.defraId.enabled ? auth.getAuthenticationUrl(session, request) : `${config.urlPrefix}/login`
+          backLink: auth.getAuthenticationUrl(session, request)
         }).code(400)
       }
     }
