@@ -22,7 +22,12 @@ describe('Auth plugin test', () => {
       const orgs = require('../../../../app/api-requests/users')
       getByEmail = orgs.getByEmail
       jest.mock('../../../../app/config', () => ({
-        ...jest.requireActual('../../../../app/config')
+        ...jest.requireActual('../../../../app/config'),
+        authConfig: {
+          defraId: {
+            enabled: false
+          }
+        }
       }))
       const config = require('../../../../app/config')
 
@@ -111,7 +116,12 @@ describe('Auth plugin test', () => {
       const orgs = require('../../../../app/api-requests/users')
       getByEmail = orgs.getByEmail
       jest.mock('../../../../app/config', () => ({
-        ...jest.requireActual('../../../../app/config')
+        ...jest.requireActual('../../../../app/config'),
+        authConfig: {
+          defraId: {
+            enabled: false
+          }
+        }
       }))
       const config = require('../../../../app/config')
 

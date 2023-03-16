@@ -1,6 +1,6 @@
 const config = require('../config')
 const { createCryptoProvider } = require('./crypto')
-const { generateNonce, generateState } = require('./verification')
+const { generateNonce, generateState, stateIsValid } = require('./verification')
 
 const lookupToken = async (request, token) => {
   const { magiclinkCache } = request.server.app
@@ -33,8 +33,20 @@ const getAuthenticationUrl = (session, request, pkce = true) => {
   return authUrl
 }
 
+const authenticate = (request, session) => {
+  if (!stateIsValid(request, session)) {
+    console.log(`Unable to verify state for request id ${request.yar.id}.`)
+    throw new Error('Invalid state')
+  } else {
+    // todo get access token from API
+    // todo store access token in session
+    return 'dummy_access_token'
+  }
+}
+
 module.exports = {
   lookupToken,
   setAuthCookie,
-  getAuthenticationUrl
+  getAuthenticationUrl,
+  authenticate
 }

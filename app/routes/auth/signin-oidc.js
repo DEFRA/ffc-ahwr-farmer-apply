@@ -1,4 +1,3 @@
-const boom = require('@hapi/boom')
 const Joi = require('joi')
 const session = require('../../session')
 const auth = require('../../auth')
@@ -13,32 +12,42 @@ module.exports = [{
     auth: false,
     validate: {
       query: Joi.object({
-        code: Joi.string(),
-        state: Joi.string()
+        code: Joi.string().required(),
+        state: Joi.string().required()
       }).options({
         stripUnknown: true
       }),
       failAction (request, h, err) {
-        throw boom.badRequest(err)
+        console.log(`Failed because ${err}`)
+        return h.view('verify-login-failed', {
+          backLink: config.authConfig.defraId.enabled ? auth.getAuthenticationUrl(session, request) : `${config.urlPrefix}/login`
+        }).code(400).takeover()
       }
     },
     handler: async (request, h) => {
-      console.log(`code is ${request.query.code}`)
-      console.log(`state is ${request.query.state}`)
-      const organisation = {
-        sbi: '1133333',
-        farmerName: 'DEFRA ID Placeholder',
-        name: 'DEFRA ID Placeholder',
-        email: 'dummyemail@email.con',
-        address: 'DEFRA ID Placeholder'
+      try {
+        await auth.authenticate(request, session)
+        // todo implement RPA api calls
+        // navigate to exception screen or org review
+        const organisation = {
+          sbi: '113333333',
+          farmerName: 'DEFRA ID Placeholder',
+          name: 'DEFRA ID Placeholder',
+          email: 'dummyemail@email.con',
+          address: 'DEFRA ID Placeholder'
+        }
+        session.setFarmerApplyData(
+          request,
+          sessionKeys.farmerApplyData.organisation,
+          organisation
+        )
+        auth.setAuthCookie(request, organisation.email, farmerApply)
+        return h.redirect(`${config.urlPrefix}/org-review`)
+      } catch (e) {
+        return h.view('verify-login-failed', {
+          backLink: config.authConfig.defraId.enabled ? auth.getAuthenticationUrl(session, request) : `${config.urlPrefix}/login`
+        }).code(400)
       }
-      session.setFarmerApplyData(
-        request,
-        sessionKeys.farmerApplyData.organisation,
-        organisation
-      )
-      auth.setAuthCookie(request, organisation.email, farmerApply)
-      return h.redirect(`${config.urlPrefix}/org-review`)
     }
   }
 }
