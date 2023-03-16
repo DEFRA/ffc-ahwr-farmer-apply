@@ -9,7 +9,6 @@ const LINK_MESSAGE = '.govuk-heading-l'
 class LandingPage extends CommonActions {
 
 async getHomePage (page) {
-    console.log('inside of getHomePage')
     await this.open(page)
 }
 

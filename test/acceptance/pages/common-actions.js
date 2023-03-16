@@ -1,11 +1,9 @@
 const $ = require('webdriverio/build/commands/browser/$')
 const { expect } = require('chai')
-// require('dotenv').config({ path: `.env.${process.env.NODE_ENV}` })
 
 class CommonActions {
 async open (path) {
 const url = process.env.TEST_ENVIRONMENT_ROOT_URL + path
-console.log(`url is ${url}`)
 await browser.url(url)
 }
 
