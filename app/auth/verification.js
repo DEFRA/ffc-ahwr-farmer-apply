@@ -13,7 +13,7 @@ const generateState = (session, request) => {
   return state
 }
 
-const stateIsValid = (request, session) => {
+const stateIsValid = (session, request) => {
   if (!request.query.error) {
     const state = request.query.state
     if (!state) {

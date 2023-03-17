@@ -34,7 +34,7 @@ const getAuthenticationUrl = (session, request, pkce = true) => {
 }
 
 const authenticate = (request, session) => {
-  if (!stateIsValid(request, session)) {
+  if (!stateIsValid(session, request)) {
     console.log(`Unable to verify state for request id ${request.yar.id}.`)
     throw new Error('Invalid state')
   } else {
