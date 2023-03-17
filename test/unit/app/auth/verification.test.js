@@ -80,6 +80,9 @@ describe('Verification functions test', () => {
       getToken: getTokenMock
     }
     const request = {
+      yar: {
+        id: '2232'
+      },
       query: {
         error: 'something'
       }
