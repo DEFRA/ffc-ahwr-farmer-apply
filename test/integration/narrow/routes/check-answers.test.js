@@ -2,13 +2,21 @@ const cheerio = require('cheerio')
 const expectPhaseBanner = require('../../../utils/phase-banner-expect')
 const content = require('../../../../app/constants/species-review-content')
 const sessionMock = require('../../../../app/session')
-const { serviceName, urlPrefix } = require('../../../../app/config')
+jest.mock('../../../../app/config', () => ({
+  ...jest.requireActual('../../../../app/config'),
+  authConfig: {
+    defraId: {
+      enabled: false
+    }
+  }
+}))
 
+const config = require('../../../../app/config')
 jest.mock('../../../../app/session')
 
 describe('Check Answers test', () => {
   const auth = { credentials: { reference: '1111', sbi: '111111111' }, strategy: 'cookie' }
-  const url = `${urlPrefix}/check-answers`
+  const url = `${config.urlPrefix}/check-answers`
 
   afterAll(() => {
     jest.resetAllMocks()
@@ -28,7 +36,7 @@ describe('Check Answers test', () => {
       expect(res.statusCode).toBe(200)
       const $ = cheerio.load(res.payload)
       expect($('h1').text()).toMatch('Check your answers')
-      expect($('title').text()).toEqual(`Check your answers - ${serviceName}`)
+      expect($('title').text()).toEqual(`Check your answers - ${config.serviceName}`)
       expectPhaseBanner.ok($)
     })
 
@@ -43,7 +51,7 @@ describe('Check Answers test', () => {
       const res = await global.__SERVER__.inject(options)
 
       expect(res.statusCode).toBe(302)
-      expect(res.headers.location).toEqual(`${urlPrefix}/not-eligible`)
+      expect(res.headers.location).toEqual(`${config.urlPrefix}/not-eligible`)
     })
 
     test.each([
@@ -79,7 +87,7 @@ describe('Check Answers test', () => {
       const res = await global.__SERVER__.inject(options)
 
       expect(res.statusCode).toBe(302)
-      expect(res.headers.location).toEqual(`${urlPrefix}/login`)
+      expect(res.headers.location).toEqual(`${config.urlPrefix}/login`)
     })
   })
 })

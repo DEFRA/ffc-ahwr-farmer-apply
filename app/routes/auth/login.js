@@ -1,14 +1,14 @@
 const boom = require('@hapi/boom')
 const Joi = require('joi')
-const { getByEmail } = require('../api-requests/users')
-const { email: emailValidation } = require('../lib/validation/email')
-const { sendFarmerApplyLoginMagicLink } = require('../lib/email/send-magic-link-email')
-const { clear } = require('../session')
-const { sendMonitoringEvent } = require('../event')
+const { getByEmail } = require('../../api-requests/users')
+const { email: emailValidation } = require('../../lib/validation/email')
+const { sendFarmerApplyLoginMagicLink } = require('../../lib/email/send-magic-link-email')
+const { clear } = require('../../session')
+const { sendMonitoringEvent } = require('../../event')
 
 const hintText = 'We\'ll use this to send you a link to apply for a review. This must be the business email address linked to the business applying for a review.'
 
-const config = require('../config')
+const config = require('../../config')
 
 const getIp = (request) => {
   const xForwardedForHeader = request.headers['x-forwarded-for']

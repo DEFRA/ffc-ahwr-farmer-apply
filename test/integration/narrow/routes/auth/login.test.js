@@ -1,18 +1,23 @@
 const cheerio = require('cheerio')
 const { v4: uuid } = require('uuid')
-const getCrumbs = require('../../../utils/get-crumbs')
-const expectLoginPage = require('../../../utils/login-page-expect')
-const pageExpects = require('../../../utils/page-expects')
-const expectPhaseBanner = require('../../../utils/phase-banner-expect')
-const { serviceUri } = require('../../../../app/config')
-const { applyLogin } = require('../../../../app/config').notifyConfig.emailTemplates
-const { farmerApply } = require('../../../../app/constants/user-types')
-const uuidRegex = require('../../../../app/config/uuid-regex')
+const getCrumbs = require('../../../../utils/get-crumbs')
+const expectLoginPage = require('../../../../utils/login-page-expect')
+const pageExpects = require('../../../../utils/page-expects')
+const expectPhaseBanner = require('../../../../utils/phase-banner-expect')
+const { serviceUri } = require('../../../../../app/config')
+const { applyLogin } = require('../../../../../app/config').notifyConfig.emailTemplates
+const { farmerApply } = require('../../../../../app/constants/user-types')
+const uuidRegex = require('../../../../../app/config/uuid-regex')
 
-jest.mock('../../../../app/config', () => ({
-  ...jest.requireActual('../../../../app/config')
+jest.mock('../../../../../app/config', () => ({
+  ...jest.requireActual('../../../../../app/config'),
+  authConfig: {
+    defraId: {
+      enabled: false
+    }
+  }
 }))
-const config = require('../../../../app/config')
+const config = require('../../../../../app/config')
 const urlPrefix = config.urlPrefix
 
 jest.mock('ffc-ahwr-event-publisher')
@@ -25,11 +30,11 @@ describe('FarmerApply application login page test', () => {
   beforeAll(async () => {
     jest.resetAllMocks()
 
-    sendEmail = require('../../../../app/lib/email/send-email')
-    jest.mock('../../../../app/lib/email/send-email')
-    const orgs = require('../../../../app/api-requests/users')
+    sendEmail = require('../../../../../app/lib/email/send-email')
+    jest.mock('../../../../../app/lib/email/send-email')
+    const orgs = require('../../../../../app/api-requests/users')
     getByEmail = orgs.getByEmail
-    jest.mock('../../../../app/api-requests/users')
+    jest.mock('../../../../../app/api-requests/users')
   })
 
   const url = `${urlPrefix}/login`
