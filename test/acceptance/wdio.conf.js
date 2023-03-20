@@ -11,8 +11,8 @@ const parallel = process.env.BROWSERSTACK_PARALLEL_RUNS
 
 exports.config = {
   hostname: 'hub-cloud.browserstack.com',
-  user,
-  key,
+  user: process.env.BROWSERSTACK_USERNAME,
+  key: process.env.BROWSERSTACK_ACCESS_KEY,
   specs: ['./features/**/*.feature'],
   exclude: ['./scratch/**'],
   parallel,
@@ -106,7 +106,7 @@ exports.config = {
   connectionRetryCount: 1,
   services: ['browserstack'],
   framework: 'cucumber',
-  specFileRetries: 2,
+  specFileRetries: 0,
   specFileRetriesDelay: 30,
   reporters: ['spec',
     [HtmlReporter, {
