@@ -60,7 +60,7 @@ module.exports = [
             }
           },
           {
-            key: { text: 'Email address' },
+            key: { text: 'Main Rural Payments business email address' },
             value: { html: session.getRegisterYourInterestData(request, sessionKeys.registerYourInterestData.emailAddress) },
             actions: {
               items: [
