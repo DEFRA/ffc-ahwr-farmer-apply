@@ -1,6 +1,0 @@
-"Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
-"passed","Fri Mar 17 14:53:18 GMT 2023","Fri Mar 17 14:53:20 GMT 2023","1793","","Apply journey smoke tests","","Apply journey smoke tests","Apply with valid cred","Apply with valid cred",""
-"passed","Fri Mar 17 14:53:24 GMT 2023","Fri Mar 17 14:53:26 GMT 2023","1186","","select business","","select business","user business is listed","user business is listed",""
-"passed","Fri Mar 17 14:53:24 GMT 2023","Fri Mar 17 14:53:24 GMT 2023","459","","select business","","select business","user business not listed","user business not listed",""
-"passed","Fri Mar 17 14:53:26 GMT 2023","Fri Mar 17 14:53:27 GMT 2023","1052","","select business","","select business","user reject the terms and conditions","user reject the terms and conditions",""
-"passed","Fri Mar 17 14:53:16 GMT 2023","Fri Mar 17 14:53:18 GMT 2023","1615","","Apply journey smoke tests","","Apply journey smoke tests","Apply with invalid cred","Apply with invalid cred",""
