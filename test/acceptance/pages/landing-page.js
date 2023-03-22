@@ -1,4 +1,5 @@
 const CommonActions = require('./common-actions')
+const getMagicLink = require('../utils/get-magic-link')
 // Page elements
 const START_BUTTON = 'a[role="button"]'
 const EMAIL_INPUT = '#email'
@@ -26,6 +27,10 @@ class LandingPageActions extends CommonActions {
   }
   async magicLinkMessage(){
     await this.elementToContainText(LINK_MESSAGE,"Check your email")
+  }
+  async openMagicLink(){
+    const magicLink = await getMagicLink('ibrahim.adekanmi@kainos.com')
+    await browser.url(magicLink)
   }
 
 }

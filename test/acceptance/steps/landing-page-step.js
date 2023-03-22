@@ -4,7 +4,6 @@ const landingPage = new LandingPage()
 
 Given(/^the user is on the (.*) page$/, async function (page) {
   await landingPage.getHomePage(page)
-
 })
 When(/^user start the application$/, async function () {
   await landingPage.clickOnStartButton()
@@ -20,3 +19,7 @@ Then(/^an email error is displayed$/, async function () {
 Then(/^magic link is sent to user email$/, async function () {
 await landingPage.magicLinkMessage()
 })
+
+Given(/^user navigate to the magic link$/, async function () {
+  await landingPage.openMagicLink()
+});
