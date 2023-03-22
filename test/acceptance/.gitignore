@@ -1,1 +1,6 @@
 browserstack.err
+allure-results
+allure-report
+node_modules
+html-reports
+reporter

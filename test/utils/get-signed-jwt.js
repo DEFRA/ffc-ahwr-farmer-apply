@@ -1,6 +1,4 @@
 const CryptoJS = require('crypto-js')
-const { jwtSecret, jwtIssuer } = require('../../app/config')
-
 function getSignedJwt () {
   try {
     const header = {
@@ -11,7 +9,7 @@ function getSignedJwt () {
     const currentTimestamp = Math.floor(Date.now() / 1000)
 
     const data = {
-      iss: jwtIssuer,
+      iss: process.env.JWT_ISSUER,
       iat: currentTimestamp,
       exp: currentTimestamp + 3000, // expiry time is 30 seconds from time of creation
       jti: 'jwt_nonce'
@@ -35,7 +33,7 @@ function getSignedJwt () {
 
     const token = `${encodedHeader}.${encodedData}`
 
-    let signature = CryptoJS.HmacSHA256(token, jwtSecret)
+    let signature = CryptoJS.HmacSHA256(token, process.env.JWT_SECRET)
     signature = base64url(signature)
     const signedToken = `${token}.${signature}`
 
