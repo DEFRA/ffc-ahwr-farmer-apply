@@ -14,6 +14,7 @@ describe('Auth config', () => {
         policy: 'testpolicy',
         redirectUri: 'http://localhost:3000/apply/signin-oidc',
         clientId: 'dummyclientid',
+        clientSecret: 'dummyclientsecret',
         serviceId: 'dummyserviceid'
       },
       config: {
@@ -24,6 +25,7 @@ describe('Auth config', () => {
           policy: 'testpolicy',
           redirectUri: 'http://localhost:3000/apply/signin-oidc',
           clientId: 'dummyclientid',
+          clientSecret: 'dummyclientsecret',
           serviceId: 'dummyserviceid',
           scope: 'openid dummyclientid offline_access'
         }
@@ -35,6 +37,7 @@ describe('Auth config', () => {
     process.env.DEFRA_ID_POLICY = testCase.processEnv.policy
     process.env.DEFRA_ID_REDIRECT_URI = testCase.processEnv.redirectUri
     process.env.DEFRA_ID_CLIENT_ID = testCase.processEnv.clientId
+    process.env.DEFRA_ID_CLIENT_SECRET = testCase.processEnv.clientSecret
     process.env.DEFRA_ID_SERVICE_ID = testCase.processEnv.serviceId
 
     const config = require('../../../../app/config/auth')
