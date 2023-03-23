@@ -10,7 +10,8 @@ function getSignedJwt () {
     }
 
     const currentTimestamp = Math.floor(Date.now() / 1000)
-
+    console.log(jwtIssuer)
+    console.log(jwtSecret)
     const data = {
       iss: jwtIssuer,
       iat: currentTimestamp,
@@ -39,7 +40,7 @@ function getSignedJwt () {
     let signature = CryptoJS.HmacSHA256(token, jwtSecret)
     signature = base64url(signature)
     const signedToken = `${token}.${signature}`
-
+    console.log('signature', signature)
     console.log('Signed and encoded JWT', signedToken)
     return signedToken
   } catch (error) {
