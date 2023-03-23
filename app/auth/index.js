@@ -1,6 +1,7 @@
 const config = require('../config')
 const crypto = require('./crypto')
 const verification = require('./verification')
+const retrieveToken = require('./access-token/retrieve-token')
 
 const lookupToken = async (request, token) => {
   const { magiclinkCache } = request.server.app
@@ -39,6 +40,15 @@ const authenticate = async (request, session) => {
     throw new Error('Invalid state')
   } else {
     // todo get access token from API
+    console.log('RETRIEVE TOKEN:')
+    try {
+      const accessToken = await retrieveToken(request, false)
+      console.log('END')
+      console.log(accessToken)
+    } catch (error) {
+      console.log('ERR')
+      console.log(error)
+    }
     // todo store access token in session
     return 'dummy_access_token'
   }

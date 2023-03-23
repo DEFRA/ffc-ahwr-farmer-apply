@@ -8,6 +8,7 @@ const authSchema = Joi.object({
     policy: Joi.string(),
     redirectUri: Joi.string().uri(),
     clientId: Joi.string(),
+    clientSecret: Joi.string(),
     serviceId: Joi.string(),
     scope: Joi.string()
   }
@@ -21,6 +22,7 @@ const authConfig = {
     policy: process.env.DEFRA_ID_POLICY,
     redirectUri: process.env.DEFRA_ID_REDIRECT_URI,
     clientId: process.env.DEFRA_ID_CLIENT_ID,
+    clientSecret: process.env.DEFRA_ID_CLIENT_SECRET,
     serviceId: process.env.DEFRA_ID_SERVICE_ID,
     scope: `openid ${process.env.DEFRA_ID_CLIENT_ID} offline_access`
   }
