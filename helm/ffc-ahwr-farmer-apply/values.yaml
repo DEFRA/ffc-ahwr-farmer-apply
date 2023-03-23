@@ -68,7 +68,9 @@ container:
   defraIdClientSecret:
   defraIdServiceId:
   defraIdPolicy:
- 
+  jwtSecret:
+  jwtIssuer:
+
 ingress:
   class: nginx
   endpoint: ffc-ahwr-farmer

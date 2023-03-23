@@ -31,4 +31,6 @@ data:
   DEFRA_ID_TENANT: {{ quote .Values.container.defraIdTenant }}
   DEFRA_ID_POLICY: {{ quote .Values.container.defraIdPolicy }}
   DEFRA_ID_REDIRECT_URI: {{ quote .Values.container.defraIdRedirectUri }}
+  JWT_SECRET: {{ quote .Values.container.jwtSecret }}
+  JWT_ISSUER: {{ quote .Values.container.jwtIssuer }}
 {{- end -}}
