@@ -1,0 +1,36 @@
+{{- include "ffc-helm-library.container-config-map" (list . "ffc-ahwr-farmer-apply.config-map") -}}
+{{- define "ffc-ahwr-farmer-apply.config-map" -}}
+data:
+  NODE_ENV: {{ quote .Values.environment }}
+  PORT: {{ quote .Values.container.port }}
+  APPINSIGHTS_CLOUDROLE: {{ quote .Values.name }}
+  APPLICATIONREQUEST_QUEUE_ADDRESS: {{ quote .Values.container.applicationRequestQueueAddress }}
+  APPLICATIONRESPONSE_QUEUE_ADDRESS: {{ quote .Values.container.applicationResponseQueueAddress }}
+  EVENT_QUEUE_ADDRESS: {{ .Values.container.eventQueueAddress }}
+  GOOGLE_TAG_MANAGER_KEY: {{ quote .Values.container.googleTagManagerKey}}
+  MESSAGE_QUEUE_HOST: {{ quote .Values.container.messageQueueHost }}
+  NOTIFY_TEMPLATE_ID_FARMER_APPLY_LOGIN: {{ quote .Values.container.notifyTemplateIdFarmerApplyLogin }}
+  NOTIFY_TEMPLATE_ID_FARMER_REGISTER_INTEREST: {{ quote .Values.container.notifyTemplateIdFarmerRegisterYourInterest }}
+  {{- if .Values.container.redisHostname }}
+  REDIS_HOSTNAME: {{ quote .Values.container.redisHostname }}
+  {{- end }}
+  {{- if .Values.pr }}
+  REDIS_PARTITION: {{ .Values.container.redisPartition }}-{{ .Values.pr }}
+  {{ else }}
+  REDIS_PARTITION: {{ quote .Values.container.redisPartition }}
+  {{- end }}
+  REDIS_PORT: {{ quote .Values.container.redisPort }}
+  SERVICE_URI: {{ quote .Values.container.serviceUri }}
+  CLAIM_SERVICE_URI: {{ quote .Values.container.claimServiceUri }}
+  URL_PREFIX: {{ quote .Values.container.urlPrefix }}
+  REGISTER_YOUR_INTEREST_ENABLED: {{ quote .Values.container.registerYourInterestEnabled }}
+  REGISTER_YOUR_INTEREST_REQUEST_QUEUE_ADDRESS: {{ quote .Values.container.registerYourInterestRequestQueueAddress }}
+  ELIGIBILITY_API_URI: {{ quote .Values.container.eligibilityApiUri }}
+  APPLICATION_API_URI: {{ quote .Values.container.applicationApiUri }}
+  DEFRA_ID_ENABLED: {{ quote .Values.container.defraIdEnabled }}
+  DEFRA_ID_TENANT: {{ quote .Values.container.defraIdTenant }}
+  DEFRA_ID_POLICY: {{ quote .Values.container.defraIdPolicy }}
+  DEFRA_ID_REDIRECT_URI: {{ quote .Values.container.defraIdRedirectUri }}
+  JWT_SECRET: {{ quote .Values.container.jwtSecret }}
+  JWT_ISSUER: {{ quote .Values.container.jwtIssuer }}
+{{- end -}}
