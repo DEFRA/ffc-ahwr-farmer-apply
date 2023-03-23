@@ -10,8 +10,8 @@ function getSignedJwt () {
     }
 
     const currentTimestamp = Math.floor(Date.now() / 1000)
-    console.log(jwtIssuer)
-    console.log(jwtSecret)
+    console.log(jwtIssuer, 'issuer')
+    console.log(jwtSecret, 'secret')
     const data = {
       iss: jwtIssuer,
       iat: currentTimestamp,
