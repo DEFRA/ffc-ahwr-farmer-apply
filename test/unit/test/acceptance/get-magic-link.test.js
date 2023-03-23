@@ -4,7 +4,7 @@ const Wreck = require('@hapi/wreck')
 jest.mock('@hapi/wreck')
 
 const getSignedJwt = require('../../../acceptance/utils/get-signed-jwt')
-jest.mock('../../../utils/get-signed-jwt')
+jest.mock('../../../acceptance/utils/get-signed-jwt')
 
 const getMagicLink = require('../../../acceptance/utils/get-magic-link')
 
