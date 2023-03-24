@@ -23,10 +23,6 @@ const buildAuthFormData = (request, pkce = true) => {
   if (pkce) {
     data.append('code_verifier', getVerifier(session, request))
   }
-
-  console.log(config.defraId)
-  console.log(redirectCode)
-
   return data
 }
 
