@@ -12,7 +12,7 @@
         "selenium"
     ],
     "scripts": {
-        "test:ci:bs": "wdio wdio.bs.conf.js",
+        "test": "wdio wdio.bs.conf.js",
         "test:local": "wdio wdio.local.config.js",
         "generate-report:allure": "allure generate allure-results --clean",
         "generate-report:cucumber-html": "node reporter/cucumber-html-report.js",
@@ -39,6 +39,7 @@
         "dotenv": "^16.0.3",
         "ecstatic": "^4.1.4",
         "hosted-git-info": "^4.0.2",
+        "joi": "^17.9.1",
         "moment": "^2.29.4",
         "selenium": "^2.20.0",
         "selenium-server": "^3.141.59",

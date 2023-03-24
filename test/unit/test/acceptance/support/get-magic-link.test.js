@@ -3,12 +3,12 @@ const { when, resetAllWhenMocks } = require('jest-when')
 const Wreck = require('@hapi/wreck')
 jest.mock('@hapi/wreck')
 
-const getSignedJwt = require('../../../utils/get-signed-jwt')
-jest.mock('../../../utils/get-signed-jwt')
+const getSignedJwt = require('../../../../acceptance/support/get-signed-jwt')
+jest.mock('../../../../acceptance/support/get-signed-jwt')
 
-const getMagicLink = require('../../../utils/get-magic-link')
+const getMagicLink = require('../../../../acceptance/support/get-magic-link')
 
-const mockConfig = require('../../../../app/config')
+const mockConfig = require('../../../../../app/config')
 
 const consoleLogSpy = jest.spyOn(console, 'log')
 const MOCK_NOW = new Date()
@@ -27,7 +27,7 @@ describe('Get Magic Link', () => {
     jest.useFakeTimers('modern')
     jest.setSystemTime(MOCK_NOW)
 
-    jest.mock('../../../../app/config', () => ({
+    jest.mock('../../../../../app/config', () => ({
       ...mockConfig,
       notifyConfig: {
         emailTemplates: {

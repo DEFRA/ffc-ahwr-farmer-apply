@@ -1,4 +1,4 @@
-const getMagicLink = require('../../utils/get-magic-link')
+const getMagicLink = require('../support/get-magic-link')
 const { Given } = require('@cucumber/cucumber')
 //const CommonActions = require('./common-actions')
 //const GetMagicLink = new getMagicLink()

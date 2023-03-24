@@ -1,5 +1,4 @@
-const config = require('../../app/config')
-const BUSINESS_EMAIL_SCHEMA = require('../../app/schemas/business-email.schema.js')
+const BUSINESS_EMAIL_SCHEMA = require('./business-email.schema')
 const getSignedJwt = require('./get-signed-jwt')
 const Wreck = require('@hapi/wreck')
 
@@ -10,7 +9,7 @@ async function getMagicLink (businessEmail) {
       throw new Error(`Invalid business email: ${businessEmail.value} returned an error: ${businessEmail.error}`)
     }
 
-    const templateId = config.notifyConfig.emailTemplates.applyLogin
+    const templateId = process.env.NOTIFY_TEMPLATE_ID_FARMER_APPLY_LOGIN
     const signedJwt = getSignedJwt()
 
     if (signedJwt === null) {
@@ -43,7 +42,7 @@ async function getMagicLink (businessEmail) {
       throw new Error(`Unable to find token in magic link email for ${businessEmail.value}`)
     }
 
-    const magicLink = `${config.serviceUri}/verify-login?token=${token}&email=${businessEmail.value}`
+    const magicLink = `${process.env.SERVICE_URI}/verify-login?token=${token}&email=${businessEmail.value}`
 
     console.log(`${new Date().toISOString()} Magic link for ${businessEmail.value} is ${magicLink}`)
     return magicLink
