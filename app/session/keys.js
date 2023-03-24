@@ -36,5 +36,10 @@ module.exports = {
     refreshToken: 'refreshToken',
     state: 'state',
     nonce: 'nonce'
+  },
+  person: {
+    id: 'id',
+    crn: 'crn',
+    organisationId: 'organisationId'
   }
 }

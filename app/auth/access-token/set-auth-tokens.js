@@ -3,6 +3,7 @@ const { tokens } = require('../../session/keys')
 const validateJwt = require('./jwt/validate-jwt')
 const { nonceIsValid } = require('../verification')
 const { expiryToISODate } = require('./token-expiry')
+const setCookieAuth = require('./set-cookie-auth')
 
 const setAuthTokens = async (request, response) => {
   try {
@@ -27,7 +28,7 @@ const setAuthTokens = async (request, response) => {
       const refreshToken = response.data.refresh_token
       session.setToken(request, tokens.refreshToken, refreshToken)
 
-      // setCookieAuth(request, accessToken)
+      setCookieAuth(request, accessToken)
 
       console.log('Authentication successful.')
 
