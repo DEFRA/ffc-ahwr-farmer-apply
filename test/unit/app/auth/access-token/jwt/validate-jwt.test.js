@@ -1,7 +1,11 @@
 const Wreck = require('@hapi/wreck')
+const jwktopem = require('jwk-to-pem')
+const jwt = require('jsonwebtoken')
 const { when, resetAllWhenMocks } = require('jest-when')
 
 jest.mock('@hapi/wreck')
+jest.mock('jwk-to-pem')
+jest.mock('jsonwebtoken')
 
 describe('validateJwt', () => {
   let validateJwt
@@ -12,7 +16,7 @@ describe('validateJwt', () => {
       authConfig: {
         defraId: {
           hostname: 'hostname',
-          tenantName: 'azdcuspoc5'
+          tenantName: 'tenant'
         }
       }
     }))
@@ -26,15 +30,37 @@ describe('validateJwt', () => {
         payload: {
           keys: [
             {
-              kid: 'xlefxE6JUu71Sm4d2p484HtEf82b8h58xto47x82dH8',
+              kid: 'xle...',
               use: 'sig',
               kty: 'RSA',
               e: 'AQAB',
-              n: '311vB5yxY-Ena-fKDzxBPz_Q3F1xY-L_3GX6a8piFYpFtag_7asO_6gSq51AWH6asHGPH7y5bFb5b0P4BsDOpxLRQNhOgUGW3uPRfSqLUIvTEYd_oeRAqWBIMZApm-7YQwX0ZLjn-7jwI85NsKvP3CGIAf6EVVN51mz4OI3LOKP3lPnftTHn8FXCFSg1iLmdsto12k7eIQ13kAjq9jjBtunAHkbHYEpWV-AYpz4qFkDqScVwfUs6UsgvGREv3luXWiWK3pVpxlroV8A4VYvBpELKJnM51psDmp2InKZaz1LpDSY55hEwI_Z8-1oKe39O1PVUkRD7z4Yz8ukEo30LLQ'
+              n: '311v...'
             }
           ]
         }
       })
+
+    when(jwktopem)
+      .calledWith({
+        kid: 'xle...',
+        use: 'sig',
+        kty: 'RSA',
+        e: 'AQAB',
+        n: '311v...'
+      })
+      .mockReturnValue('-----BEGIN PUBLIC KEY-----')
+
+    when(jwt.decode)
+      .calledWith(expect.anything(), expect.anything())
+      .mockReturnValue({
+        payload: {
+          iss: 'https://tenant.b2clogin.com/64c9d4f5-a560-4b65-9004-6d1e5ccee51d/v2.0/'
+        }
+      })
+
+    when(jwt.verify)
+      .calledWith(expect.anything(), expect.anything(), expect.anything())
+      .mockResolvedValue({})
 
     validateJwt = require('../../../../../../app/auth/access-token/jwt/validate-jwt')
   })
@@ -48,7 +74,7 @@ describe('validateJwt', () => {
     {
       toString: () => 'validateJwt',
       given: {
-        token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6InhsZWZ4RTZKVXU3MVNtNGQycDQ4NEh0RWY4MmI4aDU4eHRvNDd4ODJkSDgifQ.eyJpc3MiOiJodHRwczovL2F6ZGN1c3BvYzUuYjJjbG9naW4uY29tLzY0YzlkNGY1LWE1NjAtNGI2NS05MDA0LTZkMWU1Y2NlZTUxZC92Mi4wLyIsImV4cCI6MTY3OTY2ODMzNCwibmJmIjoxNjc5NjY0NzM0LCJhdWQiOiI4M2QyYjE2MC03NGNlLTQzNTYtOTcwOS0zZjhkYTc4NjhlMzUiLCJhYWwiOiIxIiwic2VydmljZUlkIjoiMmE2NzJlZTYtNzc1MC1lZDExLWJiYTMtMDAwZDNhZGY3MDQ3IiwiY29ycmVsYXRpb25JZCI6IjE2NzZlZTFiLTZmYjktNGYxMi1iMDYwLTIwYmUzMGEwNTgzZSIsImN1cnJlbnRSZWxhdGlvbnNoaXBJZCI6IjUzODQ3NjkiLCJzZXNzaW9uSWQiOiJkNmM2OGE1NS0wMjk3LTQzOGYtOGU1Yi0xNThjNTM1M2MxYzgiLCJzdWIiOiIwN2ZmNzQ2Ny02YTEyLTRmOGItYTg0ZS0yNDllMzY5YjBmODEiLCJlbWFpbCI6InN0ZXBoZW5jcmF3Zm9yZGRAZHJvZndhcmNuZWhwZXRzYi5jb20udGVzdCIsImNvbnRhY3RJZCI6IjExMDQ1NTMwOTAiLCJmaXJzdE5hbWUiOiJTdGVwaGVuIiwibGFzdE5hbWUiOiJDcmF3Zm9yZCIsImxvYSI6MSwiZW5yb2xtZW50Q291bnQiOjUwNSwiZW5yb2xtZW50UmVxdWVzdENvdW50IjowLCJyZWxhdGlvbnNoaXBzIjpbIjUzODQ3Njk6MTA3MTY2NjU1OkEgRSBTIEpBUlJFVFQ6MTpFeHRlcm5hbDowIl0sInJvbGVzIjpbIjUzODQ3Njk6QWdlbnQ6MyJdLCJub25jZSI6IjRmMmY4YjZmLTcxMTktNDk5Zi05ZjUyLWE4OTg3Mzg2ZmVhNCIsImF6cCI6IjgzZDJiMTYwLTc0Y2UtNDM1Ni05NzA5LTNmOGRhNzg2OGUzNSIsInZlciI6IjEuMCIsImlhdCI6MTY3OTY2NDczNH0.W0JADbZdrtDqz1IC0n4kCjFj7HXvDXYTPuRX3dojr9x5EsBuIhIRqzpGrOI-xBLXc63S-bvu9f1EjYq5fhAkShOQXE2yzNyRYWWq2qvVD0K2W156l_tjVwTeI0LeeW_CAbBtzPjaw-2l4Ad4Q09dZccj5vETJC3MypCpYjoVGrAuod4b9mt6w4049HfPcfsNikvcqplC58fVQ9mhwwX1LOsFhZ8sNfkXQfMExG7WzlkEIH8LSUW2L6L2kAREpe0qbLQ-xDJVYVOLW_Mj2E01GurZjNb2sVxtF66Tfo08KyGKfZTk3mobi6hRzVJKaIeefohvuKH0c9jpUUvoaIhcqA'
+        token: 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMiwiaXNzIjoiaHR0cHM6Ly90ZW5hbnQuYjJjbG9naW4uY29tLzY0YzlkNGY1LWE1NjAtNGI2NS05MDA0LTZkMWU1Y2NlZTUxZC92Mi4wLyJ9.ebMgCus6xlprrdmamM0CpfqXwnxzASh8O2r8u-OXG3eakHYIdy4sd-HSyQlLlvJv3qkCk5gV2Tg3x-j918Fm1RaYEslGt6xNffcgg9wazB1JNF3_AmAwi5m0N11htwlFuVylvlGrYMyzO16oNZTANCKEj12br-_flWvgKUt9CsuWeLTPsc_8rhnXX1Nzd1nWvzfn8kahmNvjiAmJ4Ywp295gvhOGoJDa2M-fme_sGWGhAW9T4mWvG8PhgMsf3jQ67h2h261mWZvt6mrHzm5U2ey3fIMa2KkB71Jkv3q7f9wsKOBIJNd131TnW56qji-M4L0Pt4N3Ld8xqmhriJBWfA'
       },
       expect: {
         result: true
