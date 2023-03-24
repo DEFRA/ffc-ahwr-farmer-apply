@@ -1,3 +1,5 @@
+const { when, resetAllWhenMocks } = require('jest-when')
+
 let auth
 
 describe('Generate authentication url test', () => {
@@ -7,17 +9,37 @@ describe('Generate authentication url test', () => {
   beforeAll(() => {
     jest.resetModules()
 
+    jest.mock('../../../../app/config', () => ({
+      ...jest.requireActual('../../../../app/config'),
+      authConfig: {
+        defraId: {
+          hostname: 'https://localhost',
+          oAuthAuthorisePath: '/',
+          clientId: 'clientId',
+          clientSecret: 'clientSecret',
+          scope: 'scope',
+          redirectUri: 'redirectUri'
+        }
+      }
+    }))
+
     sessionMock = require('../../../../app/session')
     jest.mock('../../../../app/session')
 
     verificationMock = require('../../../../app/auth/verification')
     jest.mock('../../../../app/auth/verification')
 
+    jest.mock('axios')
+
     auth = require('../../../../app/auth')
   })
 
   beforeEach(() => {
     jest.resetAllMocks()
+  })
+
+  afterAll(() => {
+    resetAllWhenMocks()
   })
 
   test('when getAuthenticationUrl with pkce true challenge parameter added', async () => {
@@ -45,8 +67,15 @@ describe('Generate authentication url test', () => {
   })
 
   test('when authenticate successfull returns access token', async () => {
+    when(sessionMock.getPkcecodes)
+      .calledWith(expect.anything(), expect.anything())
+      .mockReturnValue('verifier')
     verificationMock.stateIsValid.mockReturnValueOnce(true)
-    const result = await auth.authenticate({}, sessionMock)
+    const result = await auth.authenticate({
+      query: {
+        code: 'code'
+      }
+    }, sessionMock)
     expect(result).toEqual('dummy_access_token')
   })
 
