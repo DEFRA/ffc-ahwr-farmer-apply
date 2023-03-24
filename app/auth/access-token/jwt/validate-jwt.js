@@ -1,4 +1,4 @@
-const axios = require('axios')
+const Wreck = require('@hapi/wreck')
 const jwktopem = require('jwk-to-pem')
 const jwt = require('jsonwebtoken')
 const decodeToken = require('./decode-jwt')
@@ -6,8 +6,11 @@ const trustedIssuers = require('../trusted-issuers/trusted-issuers')
 const config = require('../../../config').authConfig
 
 const retrieveKey = async () => {
-  const response = await axios.get(`${config.defraId.hostname}/discovery/v2.0/keys?p=b2c_1a_signupsignin`)
-  return response.data.keys[0]
+  const response = await Wreck.get(
+    `${config.defraId.hostname}/discovery/v2.0/keys?p=b2c_1a_signupsignin`,
+    { json: true }
+  )
+  return response.payload.keys[0]
 }
 
 const verifyToken = async (token) => {
