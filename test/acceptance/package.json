@@ -14,6 +14,7 @@
     "scripts": {
         "test": "wdio wdio.bs.conf.js",
         "test:local": "wdio wdio.local.config.js",
+        "test:smoke:local": "wdio wdio.local.config.js  --cucumberOpts.tagExpression='@smoke'",
         "generate-report:allure": "allure generate allure-results --clean",
         "generate-report:cucumber-html": "node reporter/cucumber-html-report.js",
         "test:debug": "node --inspect-brk=0.0.0.0 ./node_modules/@wdio/cli/bin/wdio.js wdio.bs.conf.js"

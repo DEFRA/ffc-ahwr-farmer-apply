@@ -1,4 +1,4 @@
-@wip
+@smoke
 Feature: Apply journey smoke tests
 
   Scenario Outline: Apply with invalid cred
