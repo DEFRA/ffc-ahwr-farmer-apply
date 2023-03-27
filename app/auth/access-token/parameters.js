@@ -31,7 +31,7 @@ const buildRefreshFormData = (request) => {
   const data = buildFormData()
   data.append('refresh_token', refreshToken)
   data.append('grant_type', 'refresh_token')
-  data.append('redirect_uri', config.defraId.redirectUrl)
+  data.append('redirect_uri', config.defraId.redirectUri)
 
   return data
 }
