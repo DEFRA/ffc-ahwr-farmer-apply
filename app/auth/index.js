@@ -40,12 +40,16 @@ const authenticate = async (request, session) => {
     console.log(`Unable to verify state for request id ${request.yar.id}.`)
     throw new Error('Invalid state')
   } else {
-    // todo get access token from API
     const refresh = false
     const response = await retrieveToken(request, refresh)
-    await setAuthTokens(request, response)
-    // todo store access token in session
-    return 'dummy_access_token'
+    if (typeof response === 'undefined') {
+      throw new Error('Unretrieved token')
+    }
+    const authSuccessful = await setAuthTokens(request, response)
+    if (!authSuccessful) {
+      throw new Error('Invalid token')
+    }
+    return response.access_token
   }
 }
 

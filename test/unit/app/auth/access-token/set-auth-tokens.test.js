@@ -41,12 +41,10 @@ describe('setAuthTokens', () => {
           }
         },
         response: {
-          data: {
-            access_token: 'access_token...',
-            id_token: 'id_token...',
-            refresh_token: 'refresh_token...',
-            expires_in: 10
-          }
+          access_token: 'access_token...',
+          id_token: 'id_token...',
+          refresh_token: 'refresh_token...',
+          expires_in: 10
         }
       },
       when: {
@@ -81,10 +79,8 @@ describe('setAuthTokens', () => {
         request: {
         },
         response: {
-          data: {
-            access_token: 'access_token...',
-            id_token: 'id_token...'
-          }
+          access_token: 'access_token...',
+          id_token: 'id_token...'
         }
       },
       when: {
@@ -106,10 +102,8 @@ describe('setAuthTokens', () => {
         request: {
         },
         response: {
-          data: {
-            access_token: 'access_token...',
-            id_token: 'id_token...'
-          }
+          access_token: 'access_token...',
+          id_token: 'id_token...'
         }
       },
       when: {
@@ -134,9 +128,7 @@ describe('setAuthTokens', () => {
         request: {
         },
         response: {
-          data: {
-            access_token: 'ey...'
-          }
+          access_token: 'ey...'
         }
       },
       when: {
@@ -152,7 +144,7 @@ describe('setAuthTokens', () => {
     }
   ])('%s', async (testCase) => {
     when(validateJwt)
-      .calledWith(testCase.given.response.data.access_token)
+      .calledWith(testCase.given.response.access_token)
       .mockReturnValue(testCase.when.isAccessTokenValid)
 
     when(session.getToken)
@@ -163,11 +155,11 @@ describe('setAuthTokens', () => {
       .mockReturnValue(testCase.when.session.nonce)
 
     when(decodeJwt)
-      .calledWith(testCase.given.response.data.id_token)
+      .calledWith(testCase.given.response.id_token)
       .mockReturnValue(testCase.when.decodedNonce)
 
     when(decodeJwt)
-      .calledWith(testCase.given.response.data.access_token)
+      .calledWith(testCase.given.response.access_token)
       .mockReturnValue(testCase.when.decodedAccessToken)
 
     const authSuccessful = await setAuthTokens(testCase.given.request, testCase.given.response)
@@ -181,7 +173,7 @@ describe('setAuthTokens', () => {
       expect(session.setToken).toHaveBeenNthCalledWith(1,
         testCase.given.request,
         tokens.accessToken,
-        testCase.given.response.data.access_token
+        testCase.given.response.access_token
       )
       expect(session.setToken).toHaveBeenNthCalledWith(2,
         testCase.given.request,
@@ -191,12 +183,12 @@ describe('setAuthTokens', () => {
       expect(session.setToken).toHaveBeenNthCalledWith(3,
         testCase.given.request,
         tokens.idToken,
-        testCase.given.response.data.id_token
+        testCase.given.response.id_token
       )
       expect(session.setToken).toHaveBeenNthCalledWith(4,
         testCase.given.request,
         tokens.refreshToken,
-        testCase.given.response.data.refresh_token
+        testCase.given.response.refresh_token
       )
       expect(session.setPerson).toHaveBeenNthCalledWith(1,
         testCase.given.request,
@@ -226,9 +218,7 @@ describe('setAuthTokens', () => {
       toString: () => 'setAuthTokens - when validateJwt fails',
       given: {
         response: {
-          data: {
-            access_token: 'access_token...'
-          }
+          access_token: 'access_token...'
         }
       },
       when: {
@@ -243,7 +233,7 @@ describe('setAuthTokens', () => {
     }
   ])('%s', async (testCase) => {
     when(validateJwt)
-      .calledWith(testCase.given.response.data.access_token)
+      .calledWith(testCase.given.response.access_token)
       .mockRejectedValue(testCase.when.error)
 
     const authSuccessful = await setAuthTokens(testCase.given.request, testCase.given.response)
