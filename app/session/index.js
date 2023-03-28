@@ -9,7 +9,7 @@ const entries = {
   registerYourInterestData: 'registerYourInterestData',
   pkcecodes: 'pkcecodes',
   tokens: 'tokens',
-  person: 'person'
+  customer: 'customer'
 }
 
 function lacksAny (request, entryKey, keys) {
@@ -43,7 +43,7 @@ function clear (request) {
   request.yar.clear(entries.answers)
   request.yar.clear(entries.registerYourInterestData)
   request.yar.clear(entries.selectYourBusiness)
-  request.yar.clear(entries.person)
+  request.yar.clear(entries.customer)
 }
 
 function setApplication (request, key, value) {
@@ -94,12 +94,12 @@ function getPkcecodes (request, key) {
   return get(request, entries.pkcecodes, key)
 }
 
-const setPerson = (request, key, value) => {
-  set(request, entries.person, key, value)
+const setCustomer = (request, key, value) => {
+  set(request, entries.customer, key, value)
 }
 
-const getPerson = (request, key) => {
-  return get(request, entries.person, key)
+const getCustomer = (request, key) => {
+  return get(request, entries.customer, key)
 }
 
 module.exports = {
@@ -118,6 +118,6 @@ module.exports = {
   setToken,
   getPkcecodes,
   setPkcecodes,
-  setPerson,
-  getPerson
+  setCustomer,
+  getCustomer
 }

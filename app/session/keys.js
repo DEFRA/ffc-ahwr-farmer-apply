@@ -37,7 +37,7 @@ module.exports = {
     state: 'state',
     nonce: 'nonce'
   },
-  person: {
+  customer: {
     id: 'id',
     crn: 'crn',
     organisationId: 'organisationId'

@@ -3,7 +3,7 @@ const validateJwt = require('../../../../../app/auth/access-token/jwt/validate-j
 const decodeJwt = require('../../../../../app/auth/access-token/jwt/decode-jwt')
 const setAuthTokens = require('../../../../../app/auth/access-token/set-auth-tokens')
 const session = require('../../../../../app/session')
-const { tokens, person } = require('../../../../../app/session/keys')
+const { tokens, customer } = require('../../../../../app/session/keys')
 
 jest.mock('../../../../../app/auth/access-token/jwt/validate-jwt')
 jest.mock('../../../../../app/auth/access-token/jwt/decode-jwt')
@@ -190,14 +190,14 @@ describe('setAuthTokens', () => {
         tokens.refreshToken,
         testCase.given.response.refresh_token
       )
-      expect(session.setPerson).toHaveBeenNthCalledWith(1,
+      expect(session.setCustomer).toHaveBeenNthCalledWith(1,
         testCase.given.request,
-        person.crn,
+        customer.crn,
         testCase.when.decodedAccessToken.contactId
       )
-      expect(session.setPerson).toHaveBeenNthCalledWith(2,
+      expect(session.setCustomer).toHaveBeenNthCalledWith(2,
         testCase.given.request,
-        person.organisationId,
+        customer.organisationId,
         testCase.when.decodedAccessToken.currentRelationshipId
       )
       expect(COOKIE_AUTH_SET).toHaveBeenCalledTimes(1)
