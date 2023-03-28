@@ -11,7 +11,7 @@ Given('user navigate to the magic link containing the businessEmail', async func
 
 });
 When(/^user check the page url$/, async function () {
-       await expect(browser).toHaveUrlContaining('ibrahim.adekanmi@kainos.com')
+        expect(await browser.getUrl()).to.contain('ibrahim.adekanmi@kainos.com')
 });
 //When(/^user check the business page title$/, async function (text) {
  //     await landingPage.elementToContainText()
