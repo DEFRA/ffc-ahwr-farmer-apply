@@ -1,4 +1,3 @@
-const $ = require('webdriverio/build/commands/browser/$')
 const { expect } = require('chai')
 
 class CommonActions {
@@ -14,14 +13,17 @@ class CommonActions {
 
   async sendKey (element, text) {
     const locator = browser.$(element)
-    await locator.sendKeys(text)
+    await locator.setValue(text)
   }
 
   async elementToContainText (element, text) {
-    const locator = await $(element)
-    await locator.waitForExist({ timeout: 5000 })
-    expect(locator).to.include(text)
+    const locator = await browser.$(element)
+    expect(await locator.getText()).to.include(text)
+  }
+
+  async elementTextShouldBe (element, text) {
+    const locator = await browser.$(element)
+    expect(await locator.getText()).to.equal(text)
   }
 }
-
 module.exports = CommonActions
