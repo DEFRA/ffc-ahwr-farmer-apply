@@ -7,7 +7,7 @@ const chromeArgs = process.env.CHROME_ARGS ? process.env.CHROME_ARGS.split(' ') 
 const maxInstances = process.env.MAX_INSTANCES ? Number(process.env.MAX_INSTANCES) : 5
 const user = process.env.BROWSERSTACK_USERNAME
 const key = process.env.BROWSERSTACK_ACCESS_KEY
-const parallel = process.env.BROWSERSTACK_PARALLEL_RUNS
+const parallel = process.env.BROWSERSTACK_PARALLEL_RUNS ? Number(process.env.BROWSERSTACK_PARALLEL_RUNS) : 1
 
 exports.config = {
   hostname: 'hub-cloud.browserstack.com',
