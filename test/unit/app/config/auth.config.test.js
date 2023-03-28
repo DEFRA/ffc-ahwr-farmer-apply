@@ -13,6 +13,7 @@ describe('Auth config', () => {
         tenant: 'testtenant',
         policy: 'testpolicy',
         redirectUri: 'http://localhost:3000/apply/signin-oidc',
+        jwtIssuerId: 'dummy_jwt_issuer_id',
         clientId: 'dummyclientid',
         clientSecret: 'dummyclientsecret',
         serviceId: 'dummyserviceid'
@@ -25,6 +26,7 @@ describe('Auth config', () => {
           policy: 'testpolicy',
           redirectUri: 'http://localhost:3000/apply/signin-oidc',
           tenantName: 'testtenant',
+          jwtIssuerId: 'dummy_jwt_issuer_id',
           clientId: 'dummyclientid',
           clientSecret: 'dummyclientsecret',
           serviceId: 'dummyserviceid',
@@ -37,6 +39,7 @@ describe('Auth config', () => {
     process.env.DEFRA_ID_TENANT = testCase.processEnv.tenant
     process.env.DEFRA_ID_POLICY = testCase.processEnv.policy
     process.env.DEFRA_ID_REDIRECT_URI = testCase.processEnv.redirectUri
+    process.env.DEFRA_ID_JWT_ISSUER_ID = testCase.processEnv.jwtIssuerId
     process.env.DEFRA_ID_CLIENT_ID = testCase.processEnv.clientId
     process.env.DEFRA_ID_CLIENT_SECRET = testCase.processEnv.clientSecret
     process.env.DEFRA_ID_SERVICE_ID = testCase.processEnv.serviceId
