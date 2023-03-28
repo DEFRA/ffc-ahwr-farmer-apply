@@ -1,9 +1,9 @@
-@wip
-Feature: click on magik link sent to notification email
+@smoke
+Feature: click on magic link sent to notification email
 
   Scenario: user navigate to business email to fetch magic link
     Given user navigate to the magic link containing the businessEmail
-    When user check the page url
-
-
-
+    Then url should contain <email>
+    Examples:
+      | email |
+      | ibrahim.adekanmi@kainos.com|

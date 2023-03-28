@@ -3,7 +3,6 @@ const { expect } = require('chai')
 class CommonActions {
   async open (path) {
     const url = process.env.TEST_ENVIRONMENT_ROOT_URL + path
-    // console.log('url', url)
     await browser.url(url)
   }
 
