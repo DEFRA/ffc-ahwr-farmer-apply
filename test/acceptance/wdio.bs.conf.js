@@ -19,16 +19,16 @@ exports.config = {
   maxInstances,
   capabilities: [
     {
-    'bstack:options' : {
-        "os" : "Windows",
-        "osVersion" : "10",
-        "browserVersion" : "87.0",
-        "local" : true,
-        "networkLogs" : true,
-        "seleniumVersion" : "3.14.0",
-        "userName" : user,
-        "accessKey" : key,
-    },
+      'bstack:options': {
+        os: 'Windows',
+        osVersion: '10',
+        browserVersion: '87.0',
+        local: true,
+        networkLogs: true,
+        seleniumVersion: '3.14.0',
+        userName: user,
+        accessKey: key
+      },
       maxInstances,
       acceptInsecureCerts: true,
       browserName: 'chrome',

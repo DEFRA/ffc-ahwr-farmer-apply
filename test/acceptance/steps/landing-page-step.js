@@ -4,7 +4,6 @@ const landingPage = new LandingPage()
 
 Given(/^the user is on the (.*) page$/, async function (page) {
   await landingPage.getHomePage(page)
-
 })
 When(/^user start the application$/, async function () {
   await landingPage.clickOnStartButton()
