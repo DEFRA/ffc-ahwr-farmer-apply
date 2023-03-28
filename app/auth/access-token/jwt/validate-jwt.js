@@ -2,7 +2,7 @@ const Wreck = require('@hapi/wreck')
 const jwktopem = require('jwk-to-pem')
 const jwt = require('jsonwebtoken')
 const decodeToken = require('./decode-jwt')
-const trustedIssuers = require('../trusted-issuers/trusted-issuers')
+const trustedIssuers = require('./jwt-trusted-issuers')
 const config = require('../../../config').authConfig
 
 const retrieveKey = async () => {

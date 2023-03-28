@@ -16,7 +16,8 @@ describe('validateJwt', () => {
       authConfig: {
         defraId: {
           hostname: 'hostname',
-          tenantName: 'tenant'
+          tenantName: 'tenantName',
+          jwtIssuerId: 'issuerId'
         }
       }
     }))
@@ -54,7 +55,7 @@ describe('validateJwt', () => {
       .calledWith(expect.anything(), expect.anything())
       .mockReturnValue({
         payload: {
-          iss: 'https://tenant.b2clogin.com/64c9d4f5-a560-4b65-9004-6d1e5ccee51d/v2.0/'
+          iss: 'https://tenantName.b2clogin.com/issuerId/v2.0/'
         }
       })
 
