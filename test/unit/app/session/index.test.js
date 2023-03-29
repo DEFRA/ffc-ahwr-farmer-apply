@@ -6,7 +6,7 @@ describe('session', () => {
   const registerYourInterestDataSectionKey = session.entries.registerYourInterestData
   const selectYourBusinessSectionKey = 'selectYourBusiness'
   const tokensSectionKey = 'tokens'
-  const personSectionKey = 'person'
+  const customerSectionKey = 'customer'
   const pkcecodesSectionKey = 'pkcecodes'
 
   const value = 'value'
@@ -18,7 +18,7 @@ describe('session', () => {
     { func: 'getRegisterYourInterestData', expectedSectionKey: registerYourInterestDataSectionKey },
     { func: 'getSelectYourBusiness', expectedSectionKey: selectYourBusinessSectionKey },
     { func: 'getToken', expectedSectionKey: tokensSectionKey },
-    { func: 'getPerson', expectedSectionKey: personSectionKey },
+    { func: 'getCustomer', expectedSectionKey: customerSectionKey },
     { func: 'getPkcecodes', expectedSectionKey: pkcecodesSectionKey }
   ]
 
@@ -28,7 +28,7 @@ describe('session', () => {
     { func: 'setRegisterYourInterestData', expectedSectionKey: registerYourInterestDataSectionKey },
     { func: 'setSelectYourBusiness', expectedSectionKey: selectYourBusinessSectionKey },
     { func: 'setToken', expectedSectionKey: tokensSectionKey },
-    { func: 'setPerson', expectedSectionKey: personSectionKey },
+    { func: 'setCustomer', expectedSectionKey: customerSectionKey },
     { func: 'setPkcecodes', expectedSectionKey: pkcecodesSectionKey }
   ]
 
