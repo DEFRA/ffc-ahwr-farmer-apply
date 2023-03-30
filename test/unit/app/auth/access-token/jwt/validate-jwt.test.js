@@ -63,7 +63,7 @@ describe('validateJwt', () => {
       .calledWith(expect.anything(), expect.anything(), expect.anything())
       .mockResolvedValue({})
 
-    validateJwt = require('../../../../../../app/auth/access-token/jwt/validate-jwt')
+    validateJwt = require('../../../../../../app/auth/auth-code-grant/jwt/validate-jwt')
   })
 
   afterEach(() => {

@@ -1,7 +1,7 @@
 const { when, resetAllWhenMocks } = require('jest-when')
-const validateJwt = require('../../../../../app/auth/access-token/jwt/validate-jwt')
-const decodeJwt = require('../../../../../app/auth/access-token/jwt/decode-jwt')
-const setAuthTokens = require('../../../../../app/auth/access-token/set-auth-tokens')
+const validateJwt = require('../../../../../app/auth/auth-code-grant/jwt/validate-jwt')
+const decodeJwt = require('../../../../../app/auth/token-verify/decode-jwt')
+const setAuthTokens = require('../../../../../app/auth/auth-code-grant/set-auth-tokens')
 const session = require('../../../../../app/session')
 const { tokens, customer } = require('../../../../../app/session/keys')
 

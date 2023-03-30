@@ -1,12 +1,6 @@
 const session = require('../../session')
 const { tokens } = require('../../session/keys')
 
-const expiryToISODate = (expiresIn) => {
-  const now = new Date()
-  now.setSeconds(now.getSeconds() + expiresIn)
-  return now.toISOString()
-}
-
 const hasExpired = (request) => {
   const tokenExpiry = session.getToken(request, tokens.tokenExpiry)
   if (tokenExpiry) {
@@ -19,6 +13,5 @@ const hasExpired = (request) => {
 }
 
 module.exports = {
-  expiryToISODate,
   hasExpired
 }

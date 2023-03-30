@@ -1,4 +1,4 @@
-const parseRole = require('../../../../../app/auth/access-token/parse-role')
+const parseRole = require('../../../../../app/auth/cookie-auth/parse-roles')
 
 describe('parseRole', () => {
   afterEach(() => {

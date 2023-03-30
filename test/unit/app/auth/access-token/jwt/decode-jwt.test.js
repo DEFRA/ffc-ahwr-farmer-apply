@@ -5,7 +5,7 @@ describe('decodeJwt', () => {
   beforeAll(() => {
     logSpy = jest.spyOn(console, 'log')
 
-    decodeJwt = require('../../../../../../app/auth/access-token/jwt/decode-jwt')
+    decodeJwt = require('../../../../../../app/auth/token-verify/decode-jwt')
   })
 
   afterEach(() => {

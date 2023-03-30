@@ -32,7 +32,7 @@ describe('parameters', () => {
       }
     }))
 
-    parameters = require('../../../../../app/auth/access-token/parameters')
+    parameters = require('../../../../../app/auth/auth-code-grant/redeem-authorization-code-for-access-token')
   })
 
   afterEach(() => {

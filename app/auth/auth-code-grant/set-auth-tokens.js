@@ -1,7 +1,7 @@
 const session = require('../../session')
 const { tokens } = require('../../session/keys')
 const validateJwt = require('./jwt/validate-jwt')
-const { nonceIsValid } = require('../verification')
+const { nonceIsValid } = require('./state')
 const { expiryToISODate } = require('./token-expiry')
 const setCookieAuth = require('./set-cookie-auth')
 

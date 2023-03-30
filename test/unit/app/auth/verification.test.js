@@ -1,4 +1,4 @@
-const { generateNonce, generateState, stateIsValid } = require('../../../../app/auth/verification')
+const { generateNonce, generateState, stateIsValid } = require('../../../../app/auth/auth-code-grant/state')
 
 describe('Verification functions test', () => {
   jest.mock('uuid', () => ({ v4: () => '123456789' }))

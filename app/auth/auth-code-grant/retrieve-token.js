@@ -1,6 +1,6 @@
 const Wreck = require('@hapi/wreck')
 const config = require('../../config').authConfig
-const { buildRefreshFormData, buildAuthFormData } = require('./parameters')
+const { buildRefreshFormData, buildAuthFormData } = require('./redeem-authorization-code-for-access-token')
 
 const retrieveToken = async (request, refresh = false) => {
   console.log(`${new Date().toISOString()} Retrieving the access token: ${JSON.stringify({ refresh })}`)

@@ -1,7 +1,7 @@
 const session = require('../../session')
 const { customer } = require('../../session/keys')
-const decodeJwt = require('./jwt/decode-jwt')
-const parseRole = require('./parse-role')
+const decodeJwt = require('../token-verify/decode-jwt')
+const parseRole = require('../cookie-auth/parse-roles')
 
 const setCookieAuth = (request, accessToken) => {
   const cookieAuth = request.cookieAuth

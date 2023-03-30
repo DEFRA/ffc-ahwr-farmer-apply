@@ -1,5 +1,5 @@
 const { when, resetAllWhenMocks } = require('jest-when')
-const tokenExpiry = require('../../../../../app/auth/access-token/token-expiry')
+const tokenExpiry = require('../../../../../app/auth/auth-code-grant/token-expiry')
 const session = require('../../../../../app/session')
 const { tokens } = require('../../../../../app/session/keys')
 

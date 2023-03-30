@@ -1,5 +1,5 @@
 const crypto = require('crypto')
-const { pkcecodes } = require('../session/keys')
+const { pkcecodes } = require('../../session/keys')
 
 const base64URLEncode = (str) => {
   return str.toString('base64')
@@ -8,11 +8,11 @@ const base64URLEncode = (str) => {
     .replace(/=/g, '')
 }
 
-const createCryptoProvider = (session, request) => {
+const generateCodeChallenge = (session, request) => {
   const verifier = base64URLEncode(crypto.randomBytes(32))
-  const challenge = base64URLEncode(sha256(verifier))
+  const codeChallenge = base64URLEncode(sha256(verifier))
   session.setPkcecodes(request, pkcecodes.verifier, verifier)
-  return challenge
+  return codeChallenge
 }
 
 const sha256 = (buffer) => {
@@ -24,6 +24,6 @@ const getVerifier = (session, request) => {
 }
 
 module.exports = {
-  createCryptoProvider,
+  generateCodeChallenge,
   getVerifier
 }

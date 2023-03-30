@@ -34,7 +34,7 @@ describe('retrieveToken', () => {
       }
     }))
 
-    retrieveToken = require('../../../../../app/auth/access-token/retrieve-token')
+    retrieveToken = require('../../../../../app/auth/auth-code-grant/retrieve-token')
   })
 
   afterEach(() => {
