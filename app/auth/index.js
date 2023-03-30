@@ -5,5 +5,5 @@ module.exports = {
   authenticate: require('./authenticate'),
   setAuthCookie: cookieAuth.setAuthCookie,
   clearAuthCookie: cookieAuth.clear,
-  lookupToken: require('./magic-link-cache/lookupToken')
+  lookupToken: require('./magic-link-cache/lookup-Token')
 }
