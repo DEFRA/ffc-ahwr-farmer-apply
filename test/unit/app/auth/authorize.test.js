@@ -1,11 +1,29 @@
+const { when, resetAllWhenMocks } = require('jest-when')
+
 let auth
 
 describe('Generate authentication url test', () => {
   let sessionMock
   let verificationMock
+  let retrieveToken
+  let setAuthTokens
 
   beforeAll(() => {
     jest.resetModules()
+
+    jest.mock('../../../../app/config', () => ({
+      ...jest.requireActual('../../../../app/config'),
+      authConfig: {
+        defraId: {
+          hostname: 'https://localhost',
+          oAuthAuthorisePath: '/',
+          clientId: 'clientId',
+          clientSecret: 'clientSecret',
+          scope: 'scope',
+          redirectUri: 'redirectUri'
+        }
+      }
+    }))
 
     sessionMock = require('../../../../app/session')
     jest.mock('../../../../app/session')
@@ -13,11 +31,23 @@ describe('Generate authentication url test', () => {
     verificationMock = require('../../../../app/auth/verification')
     jest.mock('../../../../app/auth/verification')
 
+    retrieveToken = require('../../../../app/auth/access-token/retrieve-token')
+    jest.mock('../../../../app/auth/access-token/retrieve-token')
+
+    setAuthTokens = require('../../../../app/auth/access-token/set-auth-tokens')
+    jest.mock('../../../../app/auth/access-token/set-auth-tokens')
+
+    jest.mock('axios')
+
     auth = require('../../../../app/auth')
   })
 
   beforeEach(() => {
     jest.resetAllMocks()
+  })
+
+  afterAll(() => {
+    resetAllWhenMocks()
   })
 
   test('when getAuthenticationUrl with pkce true challenge parameter added', async () => {
@@ -45,9 +75,20 @@ describe('Generate authentication url test', () => {
   })
 
   test('when authenticate successfull returns access token', async () => {
+    when(sessionMock.getPkcecodes)
+      .calledWith(expect.anything(), expect.anything())
+      .mockReturnValue('verifier')
     verificationMock.stateIsValid.mockReturnValueOnce(true)
-    const result = await auth.authenticate({}, sessionMock)
-    expect(result).toEqual('dummy_access_token')
+    retrieveToken.mockReturnValue({
+      access_token: 'access_token'
+    })
+    setAuthTokens.mockReturnValue(true)
+    const result = await auth.authenticate({
+      query: {
+        code: 'code'
+      }
+    }, sessionMock)
+    expect(result).toEqual('access_token')
   })
 
   test('when invalid state error is thrown', async () => {

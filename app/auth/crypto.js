@@ -19,6 +19,11 @@ const sha256 = (buffer) => {
   return crypto.createHash('sha256').update(buffer).digest()
 }
 
+const getVerifier = (session, request) => {
+  return session.getPkcecodes(request, pkcecodes.verifier)
+}
+
 module.exports = {
-  createCryptoProvider
+  createCryptoProvider,
+  getVerifier
 }

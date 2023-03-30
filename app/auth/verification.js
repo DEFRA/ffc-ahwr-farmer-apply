@@ -1,10 +1,22 @@
 const { v4: uuidv4 } = require('uuid')
 const { tokens } = require('../session/keys')
+const session = require('../session')
+const decodeJwt = require('./access-token/jwt/decode-jwt')
 
 const generateNonce = (session, request) => {
   const nonce = uuidv4()
   session.setToken(request, tokens.nonce, nonce)
   return nonce
+}
+
+const nonceIsValid = (request, idToken) => {
+  const nonce = session.getToken(request, tokens.nonce)
+
+  if (!nonce) {
+    return false
+  }
+  const savedNonce = decodeJwt(idToken)
+  return nonce === savedNonce.nonce
 }
 
 const generateState = (session, request) => {
@@ -29,6 +41,7 @@ const stateIsValid = (session, request) => {
 
 module.exports = {
   generateNonce,
+  nonceIsValid,
   generateState,
   stateIsValid
 }

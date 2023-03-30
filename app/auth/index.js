@@ -1,6 +1,8 @@
 const config = require('../config')
 const crypto = require('./crypto')
 const verification = require('./verification')
+const retrieveToken = require('./access-token/retrieve-token')
+const setAuthTokens = require('./access-token/set-auth-tokens')
 
 const lookupToken = async (request, token) => {
   const { magiclinkCache } = request.server.app
@@ -38,9 +40,16 @@ const authenticate = async (request, session) => {
     console.log(`Unable to verify state for request id ${request.yar.id}.`)
     throw new Error('Invalid state')
   } else {
-    // todo get access token from API
-    // todo store access token in session
-    return 'dummy_access_token'
+    const refresh = false
+    const response = await retrieveToken(request, refresh)
+    if (typeof response === 'undefined') {
+      throw new Error('Unretrieved token')
+    }
+    const authSuccessful = await setAuthTokens(request, response)
+    if (!authSuccessful) {
+      throw new Error('Invalid token')
+    }
+    return response.access_token
   }
 }
 
