@@ -3,6 +3,10 @@ const sessionMock = require('../../../../../app/session')
 jest.mock('../../../../../app/session')
 const authMock = require('../../../../../app/auth')
 jest.mock('../../../../../app/auth')
+const personMock = require('../../../../../app/api-requests/third-party-api/person')
+jest.mock('../../../../../app/api-requests/third-party-api/person')
+const organisationMock = require('../../../../../app/api-requests/third-party-api/organisation')
+jest.mock('../../../../../app/api-requests/third-party-api/organisation')
 
 describe('FarmerApply defra ID redirection test', () => {
   jest.mock('../../../../../app/config', () => ({
@@ -10,6 +14,12 @@ describe('FarmerApply defra ID redirection test', () => {
     authConfig: {
       defraId: {
         enabled: true
+      },
+      ruralPaymentsAgency: {
+        hostname: 'dummy-host-name',
+        getPersonSummaryUrl: 'dummy-get-person-summary-url',
+        getOrganisationPermissionsUrl: 'dummy-get-organisation-permissions-url',
+        getOrganisationUrl: 'dummy-get-organisation-url'
       }
     }
   }))
@@ -96,12 +106,44 @@ describe('FarmerApply defra ID redirection test', () => {
       }
 
       authMock.authenticate.mockResolvedValueOnce({ accessToken: '2323' })
+      personMock.getPersonSummary.mockResolvedValueOnce({
+        _data: {
+          firstName: 'Bill',
+          middleName: null,
+          lastName: 'Smith',
+          email: 'billsmith@testemail.com',
+          id: 1234567,
+          customerReferenceNumber: '1103452436'
+        }
+      })
+      organisationMock.organisationIsEligible.mockResolvedValueOnce({
+        organisation: {
+          id: 7654321,
+          name: 'Mrs Gill Black',
+          sbi: 101122201,
+          address: {
+            address1: 'The Test House',
+            address2: 'Test road',
+            address3: 'Wicklewood',
+            buildingNumberRange: '11',
+            buildingName: 'TestHouse',
+            street: 'Test ROAD',
+            city: 'Test City',
+            postalCode: 'TS1 1TS',
+            country: 'United Kingdom',
+            dependentLocality: 'Test Local'
+          },
+          email: 'org1@testemail.com'
+        }
+      })
 
       const res = await global.__SERVER__.inject(options)
       expect(res.statusCode).toBe(302)
       expect(res.headers.location).toEqual('/apply/org-review')
       expect(sessionMock.setFarmerApplyData).toBeCalledTimes(1)
       expect(authMock.authenticate).toBeCalledTimes(1)
+      expect(personMock.getPersonSummary).toBeCalledTimes(1)
+      expect(organisationMock.organisationIsEligible).toBeCalledTimes(1)
       expect(authMock.setAuthCookie).toBeCalledTimes(1)
     })
   })

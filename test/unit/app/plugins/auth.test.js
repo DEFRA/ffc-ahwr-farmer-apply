@@ -112,6 +112,9 @@ describe('Auth plugin test', () => {
         authConfig: {
           defraId: {
             enabled: true
+          },
+          ruralPaymentsAgency: {
+            hostname: 'dummy-host-name'
           }
         }
       }))
