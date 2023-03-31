@@ -127,7 +127,7 @@ describe('Auth plugin test', () => {
         url
       }
 
-      authMock.getAuthenticationUrl.mockReturnValueOnce(defraIdLogin)
+      authMock.requestAuthorizationCodeUrl.mockReturnValueOnce(defraIdLogin)
 
       const res = await global.__SERVER__.inject(options)
 
