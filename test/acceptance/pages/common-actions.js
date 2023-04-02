@@ -1,6 +1,7 @@
 const $ = require('webdriverio/build/commands/browser/$')
 const { expect } = require('chai')
-
+const exp = require('constants')
+require("dotenv").config({path:`.env.${process.env.ENV}`})
 
 class CommonActions {
   async open (path) {
@@ -19,14 +20,27 @@ class CommonActions {
     const locator = browser.$(element)
     await locator.setValue(text)
   }
+
   async elementToContainText (element, text) {
-    const locator = await browser.$(element);
-    expect(await locator.getText()).to.include(text);
+    const locator = await browser.$(element)
+    expect(await locator.getText()).to.include(text)
   }
+
   async elementTextShouldBe (element, text) {
-    const locator = await browser.$(element);
-    expect(await locator.getText()).to.equal(text);
+    const locator = await browser.$(element)
+    expect(await locator.getText()).to.equal(text)
+  }
+
+  async getPageTitle (expectedTitle) {
+    const actualTitle = await browser.getTitle()
+    expect(actualTitle).to.be.equal(expectedTitle)
+  }
+
+  async urlContain (expectedUrl) {
+    const actualUrl = await browser.getUrl()
+    expect(actualUrl).to.include(expectedUrl)
   }
 
 }
+
 module.exports = CommonActions

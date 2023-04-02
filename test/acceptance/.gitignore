@@ -1,3 +1,7 @@
 browserstack.err
 allure*
 reporter
+/.env.local
+/.env.snd
+/.env.dev
+/.env.test

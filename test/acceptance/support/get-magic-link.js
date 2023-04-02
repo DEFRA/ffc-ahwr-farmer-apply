@@ -1,6 +1,7 @@
 const BUSINESS_EMAIL_SCHEMA = require('./business-email.schema')
 const getSignedJwt = require('./get-signed-jwt')
 const Wreck = require('@hapi/wreck')
+require("dotenv").config({path:`.env.${process.env.ENV}`})
 
 async function getMagicLink (businessEmail) {
   try {

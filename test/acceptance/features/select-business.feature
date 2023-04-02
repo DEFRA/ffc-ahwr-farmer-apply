@@ -1,50 +1,50 @@
-@wip
+@smoke
 Feature: select business
 
-  Background: business page
-    Given the user is on select business page
-    When user select the business that's applying
+  Scenario: : user navigate to business email to fetch magic link
+    Given user navigate to the magic link containing the businessEmail
+    When user confirm the magic link page
 
-  Scenario: user business not listed
-    When user confirm the business page
-    And user business is not listed
-    Then user should see the Rural Payment Agency contact
-
-  Scenario: user business is listed
-    When user confirm the business is listed
+  Scenario: user business is listed in select your business page
+    When user is on the business page
+    And user business is listed
     And user select the business
-    And user click on start application
-    And user confirm the business details and continue
-    And user select the livestock to review
-    And user confirm to have the minimum number of livestock required
-    And user confirm the answers
-    And user accept the terms and conditions
-    Then user application should be accepted
-    And application number should be printed
+    And user click on the rpa support tab
+    Then user should see the rpa contact details
+    Then user start application
 
-  Scenario: user reject the terms and conditions
-    When user confirm the business is listed
-    And user select the business
+  Scenario: org-review page
+    When user check the business details
+    And user confirm the org-review page
+    And user agreed the business details is correct
+    Then user continue to next page
+
+  Scenario: user select the livestock to apply
+    When user is on the livestock page
+    And user check if livestock are listed
+    And user choose the livestock to review
+    Then User continue the application
+
+  Scenario: users animal eligibility
+    When user check the minimum number of livestock required to qualify for the review
+    And user confirm to meet the requirement
     And user continue the application
-    And user confirm the business details and continue
-    And user select the livestock to review
-    And user confirm to have the minimum number of livestock required
-    And user confirm the answers
-    And user reject the terms and conditions
-    Then application should be rejected
+    And user check the answer
+
+  Scenario: user accept terms and condition to complete the journey
+    When user is on the declaration page
+    When user view the page title
+    And user read through the full terms and conditions
+    And user accept the terms and conditions
+    Then user complete the application
+    Then user should see successful message
 
 
 
+#  Scenario: user reject the terms and conditions
+#    When user review the agreement
+#    And user check through the terms and conditions
+#    And user accept the terms and conditions
+#    Then application should be accepted
 
 
-
-
-
-
-#
-#    Given user is on the business page
-#    When user select the business that's applying
-#    And user confirm the credentials are correct
-#    And user select the livestock to review
-#    And user confirm the numbers of livestock
-#    Then user accept the terms and condition

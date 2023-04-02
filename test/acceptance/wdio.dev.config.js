@@ -1,6 +1,6 @@
 import allureReporter from '@wdio/allure-reporter'
 import cucumberJson from 'wdio-cucumberjs-json-reporter';
-require('dotenv').config()
+require("dotenv").config({path:`.env.${process.env.ENV}`})
 const envRoot = (process.env.TEST_ENVIRONMENT_ROOT_URL)
 
 
