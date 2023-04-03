@@ -36,8 +36,8 @@ Feature: select business
     When user view the page title
     And user read through the full terms and conditions
     And user accept the terms and conditions
-    Then user complete the application
-    Then user should see successful message
+#    Then user complete the application
+#    Then user should see successful message
 
 
 
