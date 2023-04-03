@@ -64,6 +64,7 @@ container:
   defraIdEnabled:
   defraIdTenant:
   defraIdRedirectUri:
+  defraIdJwtIssuerId:
   defraIdClientId:
   defraIdClientSecret:
   defraIdServiceId:

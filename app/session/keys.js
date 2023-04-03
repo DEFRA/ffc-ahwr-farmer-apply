@@ -30,8 +30,16 @@ module.exports = {
     verifier: 'verifier'
   },
   tokens: {
+    idToken: 'idToken',
     accessToken: 'accessToken',
+    tokenExpiry: 'tokenExpiry',
+    refreshToken: 'refreshToken',
     state: 'state',
     nonce: 'nonce'
+  },
+  customer: {
+    id: 'id',
+    crn: 'crn',
+    organisationId: 'organisationId'
   }
 }
