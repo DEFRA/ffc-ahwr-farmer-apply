@@ -12,8 +12,7 @@
         "selenium"
     ],
     "scripts": {
-        "test": "ENV=local wdio wdio.bs.conf.js",
-        "test:local": "wdio wdio.snd.config.js",
+        "test": "wdio wdio.bs.conf.js",
         "test:smoke:snd": "ENV=snd wdio wdio.snd.config.js  --cucumberOpts.tagExpression='@smoke'",
         "test:smoke:test": "ENV=test wdio wdio.snd.config.js  --cucumberOpts.tagExpression='@smoke'",
         "test:smoke:dev": "ENV=dev wdio wdio.snd.config.js  --cucumberOpts.tagExpression='@smoke'",
