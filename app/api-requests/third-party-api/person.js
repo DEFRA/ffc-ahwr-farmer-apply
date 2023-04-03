@@ -2,20 +2,17 @@ const { get } = require('./base')
 const session = require('../../session')
 const { tokens } = require('../../session/keys')
 const config = require('../../config')
-const decodeJwt = require('../../auth/access-token/jwt/decode-jwt')
+const jwtDecode = require('../../auth/token-verify/jwt-decode')
 const hostname = config.authConfig.ruralPaymentsAgency.hostname
 const getPersonSummaryUrl = config.authConfig.ruralPaymentsAgency.getPersonSummaryUrl
 
 function getPersonName (personSummary) {
-  const fFirstName = personSummary.firstName != null ? personSummary.firstName : ''
-  const middleName = personSummary.middleName != null ? personSummary.middleName : ''
-  const lastName = personSummary.lastName != null ? personSummary.lastName : ''
-  return fFirstName.concat(' ', middleName, ' ', lastName).trim().replaceAll(/ +/g, ' ')
+  return [personSummary.firstName, personSummary.middleName, personSummary.lastName].filter(Boolean).join(' ')
 }
 
 function parsedAccessToken (request) {
   const accessToken = session.getToken(request, tokens.accessToken)
-  return decodeJwt(accessToken)
+  return jwtDecode(accessToken)
 }
 
 const getPersonSummary = async (request) => {

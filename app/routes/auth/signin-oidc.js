@@ -48,8 +48,6 @@ module.exports = [{
     handler: async (request, h) => {
       try {
         await auth.authenticate(request, session)
-        // todo implement RPA api calls
-        // navigate to exception screen or org review
         const personSummary = await getPersonSummary(request)
         const organisationSummary = await organisationIsEligible(request, personSummary.id)
         setCustomerSessionData(request, personSummary, organisationSummary)

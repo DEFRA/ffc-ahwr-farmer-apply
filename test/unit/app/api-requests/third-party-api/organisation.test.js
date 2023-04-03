@@ -1,9 +1,9 @@
 let mockSession
-let mockDecodeJwt
+let mockJwtDecode
 let mockBase
 let organisation
 jest.mock('../../../../../app/session/index')
-jest.mock('../../../../../app/auth/access-token/jwt/decode-jwt')
+jest.mock('../../../../../app/auth/token-verify/jwt-decode')
 jest.mock('../../../../../app/api-requests/third-party-api/base')
 
 describe('Organisation', () => {
@@ -27,7 +27,7 @@ describe('Organisation', () => {
       }
     }))
     mockSession = require('../../../../../app/session/index')
-    mockDecodeJwt = require('../../../../../app/auth/access-token/jwt/decode-jwt')
+    mockJwtDecode = require('../../../../../app/auth/token-verify/jwt-decode')
     mockBase = require('../../../../../app/api-requests/third-party-api/base')
     organisation = require('../../../../../app/api-requests/third-party-api/organisation')
   })
@@ -42,7 +42,7 @@ describe('Organisation', () => {
   test('when organisationIsEligible called and has valid permissions - returns valid organisation', async () => {
     const personId = 1234567
     mockSession.getToken.mockResolvedValueOnce({ access_token: 1234567 })
-    mockDecodeJwt.mockResolvedValue({ currentRelationshipId: 1234567 })
+    mockJwtDecode.mockResolvedValue({ currentRelationshipId: 1234567 })
     mockBase.get.mockResolvedValueOnce({
       data: {
         personRoles: [
@@ -100,7 +100,7 @@ describe('Organisation', () => {
     const result = await organisation.organisationIsEligible(expect.anything(), personId)
 
     expect(mockSession.getToken).toHaveBeenCalledTimes(1)
-    expect(mockDecodeJwt).toHaveBeenCalledTimes(1)
+    expect(mockJwtDecode).toHaveBeenCalledTimes(1)
     expect(mockBase.get).toHaveBeenCalledTimes(2)
     expect(result.organisationPermission).toBeTruthy()
     expect(result.organisation.id).toEqual(1234567)
@@ -116,7 +116,7 @@ describe('Organisation', () => {
     const personId = 7654321
     const organisationId = 1234567
     mockSession.getToken.mockResolvedValueOnce({ access_token: organisationId })
-    mockDecodeJwt.mockImplementation(() => {
+    mockJwtDecode.mockImplementation(() => {
       return {
         currentRelationshipId: organisationId
       }
@@ -147,15 +147,15 @@ describe('Organisation', () => {
       expect(error).toHaveProperty('message', `Person id ${personId} does not have the required permissions for organisation id ${organisationId}`)
     }
     expect(mockSession.getToken).toHaveBeenCalledTimes(1)
-    expect(mockDecodeJwt).toHaveBeenCalledTimes(1)
+    expect(mockJwtDecode).toHaveBeenCalledTimes(1)
     expect(mockBase.get).toHaveBeenCalledTimes(1)
   })
 
   test.each([
-    { address1: '1 Test House', city: 'Test City', county: 'Test County', postalCode: 'Test Postcode', expectedResult: '1 Test House Test City Test County Test Postcode' },
-    { address1: '1 Test House', city: '', county: 'Test County', postalCode: 'Test Postcode', expectedResult: '1 Test House Test County Test Postcode' },
-    { address1: '1 Test House', city: 'Test City', county: '', postalCode: 'Test Postcode', expectedResult: '1 Test House Test City Test Postcode' },
-    { address1: '1 Test House', city: 'Test City', county: 'Test County', postalCode: '', expectedResult: '1 Test House Test City Test County' },
+    { address1: '1 Test House', city: 'Test City', county: 'Test County', postalCode: 'Test Postcode', expectedResult: '1 Test House,Test City,Test County,Test Postcode' },
+    { address1: '1 Test House', city: '', county: 'Test County', postalCode: 'Test Postcode', expectedResult: '1 Test House,Test County,Test Postcode' },
+    { address1: '1 Test House', city: 'Test City', county: '', postalCode: 'Test Postcode', expectedResult: '1 Test House,Test City,Test Postcode' },
+    { address1: '1 Test House', city: 'Test City', county: 'Test County', postalCode: '', expectedResult: '1 Test House,Test City,Test County' },
     { address1: '', city: '', county: '', postalCode: '', expectedResult: '' },
     { address1: null, city: null, county: null, postalCode: null, expectedResult: '' }
   ])('when getOrganisationAddress called with individual address fields, returns full address as $expectedResult',

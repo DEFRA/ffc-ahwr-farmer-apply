@@ -1,10 +1,10 @@
 const mockSession = require('../../../../../app/session/index')
 const Wreck = require('@hapi/wreck')
 const base = require('../../../../../app/api-requests/third-party-api/base')
-const mockDecodeJwt = require('../../../../../app/auth/access-token/jwt/decode-jwt')
+const mockJwtDecode = require('../../../../../app/auth/token-verify/jwt-decode')
 jest.mock('../../../../../app/session/index')
 jest.mock('@hapi/wreck')
-jest.mock('../../../../../app/auth/access-token/jwt/decode-jwt')
+jest.mock('../../../../../app/auth/token-verify/jwt-decode')
 
 describe('Base', () => {
   test('when get called - returns valid payload', async () => {
@@ -32,7 +32,7 @@ describe('Base', () => {
     })
 
     mockSession.getToken.mockResolvedValueOnce(accessToken)
-    mockDecodeJwt.mockResolvedValue(contactId)
+    mockJwtDecode.mockResolvedValue(contactId)
 
     const result = await base.get(hostname, url, expect.anything(), expect.anything())
 

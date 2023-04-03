@@ -172,7 +172,7 @@ describe('FarmerApply defra ID redirection test', () => {
       const res = await global.__SERVER__.inject(options)
       expect(res.statusCode).toBe(400)
       expect(authMock.authenticate).toBeCalledTimes(1)
-      expect(authMock.getAuthenticationUrl).toBeCalledTimes(1)
+      expect(authMock.requestAuthorizationCodeUrl).toBeCalledTimes(1)
       expect(personMock.getPersonSummary).toBeCalledTimes(1)
       expect(organisationMock.organisationIsEligible).toBeCalledTimes(1)
       const $ = cheerio.load(res.payload)

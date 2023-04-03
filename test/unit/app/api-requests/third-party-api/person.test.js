@@ -1,15 +1,15 @@
 const mockSession = require('../../../../../app/session/index')
-const mockDecodeJwt = require('../../../../../app/auth/access-token/jwt/decode-jwt')
+const mockJwtDecode = require('../../../../../app/auth/token-verify/jwt-decode')
 const mockBase = require('../../../../../app/api-requests/third-party-api/base')
 const person = require('../../../../../app/api-requests/third-party-api/person')
 jest.mock('../../../../../app/session/index')
-jest.mock('../../../../../app/auth/access-token/jwt/decode-jwt')
+jest.mock('../../../../../app/auth/token-verify/jwt-decode')
 jest.mock('../../../../../app/api-requests/third-party-api/base')
 
 describe('Person', () => {
   test('when getPersonSummary called - returns valid person data', async () => {
     mockSession.getToken.mockResolvedValueOnce({ access_token: 1234567 })
-    mockDecodeJwt.mockResolvedValue({ contactId: 1234567 })
+    mockJwtDecode.mockResolvedValue({ contactId: 1234567 })
     mockBase.get.mockResolvedValueOnce({
       _data: {
         firstName: 'Bill',
@@ -24,7 +24,7 @@ describe('Person', () => {
     const result = await person.getPersonSummary()
 
     expect(mockSession.getToken).toHaveBeenCalledTimes(1)
-    expect(mockDecodeJwt).toHaveBeenCalledTimes(1)
+    expect(mockJwtDecode).toHaveBeenCalledTimes(1)
     expect(mockBase.get).toHaveBeenCalledTimes(1)
     expect(result.firstName).toMatch('Bill')
     expect(result.middleName).toMatch('James')

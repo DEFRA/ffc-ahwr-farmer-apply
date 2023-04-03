@@ -2,23 +2,34 @@ const { get } = require('./base')
 const config = require('../../config')
 const session = require('../../session')
 const { tokens } = require('../../session/keys')
-const decodeJwt = require('../../auth/access-token/jwt/decode-jwt')
+const jwtDecode = require('../../auth/token-verify/jwt-decode')
 const hostname = config.authConfig.ruralPaymentsAgency.hostname
 const getOrganisationPermissionsUrl = config.authConfig.ruralPaymentsAgency.getOrganisationPermissionsUrl
 const getOrganisationUrl = config.authConfig.ruralPaymentsAgency.getOrganisationUrl
 const validPermissions = ['Submit - bps', 'Full permission - business']
 
 function getOrganisationAddress (address) {
-  const address1 = address.address1 != null ? address.address1 : ''
-  const city = address.city != null ? address.city : ''
-  const county = address.county != null ? address.county : ''
-  const postalCode = address.postalCode != null ? address.postalCode : ''
-  return address1.concat(' ', city, ' ', county, ' ', postalCode).trim().replaceAll(/ +/g, ' ')
+  return [
+    address.address1,
+    address.address2,
+    address.address3,
+    address.address4,
+    address.address5,
+    address.pafOrganisationName,
+    address.flatName,
+    address.buildingNumberRange,
+    address.buildingName,
+    address.street,
+    address.city,
+    address.county,
+    address.postalCode,
+    address.country
+  ].filter(Boolean).join(',')
 }
 
 function parsedAccessToken (request) {
   const accessToken = session.getToken(request, tokens.accessToken)
-  return decodeJwt(accessToken)
+  return jwtDecode(accessToken)
 }
 
 const getOrganisationAuthorisation = async (request, organisationId) => {
