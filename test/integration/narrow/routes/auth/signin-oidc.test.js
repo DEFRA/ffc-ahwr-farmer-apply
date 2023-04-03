@@ -47,7 +47,7 @@ describe('FarmerApply defra ID redirection test', () => {
       const res = await global.__SERVER__.inject(options)
       expect(res.statusCode).toBe(400)
       const $ = cheerio.load(res.payload)
-      expect(authMock.getAuthenticationUrl).toBeCalledTimes(1)
+      expect(authMock.requestAuthorizationCodeUrl).toBeCalledTimes(1)
       expect($('.govuk-heading-l').text()).toMatch('Login failed')
     })
 
@@ -61,7 +61,7 @@ describe('FarmerApply defra ID redirection test', () => {
       const res = await global.__SERVER__.inject(options)
       expect(res.statusCode).toBe(400)
       const $ = cheerio.load(res.payload)
-      expect(authMock.getAuthenticationUrl).toBeCalledTimes(1)
+      expect(authMock.requestAuthorizationCodeUrl).toBeCalledTimes(1)
       expect($('.govuk-heading-l').text()).toMatch('Login failed')
     })
 
@@ -75,7 +75,7 @@ describe('FarmerApply defra ID redirection test', () => {
       const res = await global.__SERVER__.inject(options)
       expect(res.statusCode).toBe(400)
       const $ = cheerio.load(res.payload)
-      expect(authMock.getAuthenticationUrl).toBeCalledTimes(1)
+      expect(authMock.requestAuthorizationCodeUrl).toBeCalledTimes(1)
       expect($('.govuk-heading-l').text()).toMatch('Login failed')
     })
 
@@ -93,7 +93,7 @@ describe('FarmerApply defra ID redirection test', () => {
       const res = await global.__SERVER__.inject(options)
       expect(res.statusCode).toBe(400)
       expect(authMock.authenticate).toBeCalledTimes(1)
-      expect(authMock.getAuthenticationUrl).toBeCalledTimes(1)
+      expect(authMock.requestAuthorizationCodeUrl).toBeCalledTimes(1)
       const $ = cheerio.load(res.payload)
       expect($('.govuk-heading-l').text()).toMatch('Login failed')
     })
