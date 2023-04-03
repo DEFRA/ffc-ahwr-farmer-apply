@@ -19,7 +19,7 @@ module.exports = {
         },
         keepAlive: true,
         redirectTo: (request) => {
-          return config.authConfig.defraId.enabled ? auth.getAuthenticationUrl(session, request) : '/apply/login'
+          return config.authConfig.defraId.enabled ? auth.requestAuthorizationCodeUrl(session, request) : '/apply/login'
         },
         validateFunc: async (request, s) => {
           const result = { valid: false }
