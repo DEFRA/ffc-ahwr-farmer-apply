@@ -146,5 +146,37 @@ describe('FarmerApply defra ID redirection test', () => {
       expect(organisationMock.organisationIsEligible).toBeCalledTimes(1)
       expect(authMock.setAuthCookie).toBeCalledTimes(1)
     })
+
+    test('returns 400 and login failed view when permissions failed', async () => {
+      const baseUrl = `${url}?code=432432&state=83d2b160-74ce-4356-9709-3f8da7868e35`
+      const options = {
+        method: 'GET',
+        url: baseUrl
+      }
+
+      authMock.authenticate.mockResolvedValueOnce({ accessToken: '2323' })
+      personMock.getPersonSummary.mockResolvedValueOnce({
+        _data: {
+          firstName: 'Bill',
+          middleName: null,
+          lastName: 'Smith',
+          email: 'billsmith@testemail.com',
+          id: 1234567,
+          customerReferenceNumber: '1103452436'
+        }
+      })
+      organisationMock.organisationIsEligible.mockImplementation(() => {
+        throw new Error('Person id 7654321 does not have the required permissions for organisation id 1234567')
+      })
+
+      const res = await global.__SERVER__.inject(options)
+      expect(res.statusCode).toBe(400)
+      expect(authMock.authenticate).toBeCalledTimes(1)
+      expect(authMock.getAuthenticationUrl).toBeCalledTimes(1)
+      expect(personMock.getPersonSummary).toBeCalledTimes(1)
+      expect(organisationMock.organisationIsEligible).toBeCalledTimes(1)
+      const $ = cheerio.load(res.payload)
+      expect($('.govuk-heading-l').text()).toMatch('Login failed')
+    })
   })
 })

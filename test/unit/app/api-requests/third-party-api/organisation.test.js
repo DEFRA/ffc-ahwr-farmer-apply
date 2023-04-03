@@ -99,8 +99,8 @@ describe('Organisation', () => {
 
     const result = await organisation.organisationIsEligible(expect.anything(), personId)
 
-    expect(mockSession.getToken).toHaveBeenCalledTimes(2)
-    expect(mockDecodeJwt).toHaveBeenCalledTimes(2)
+    expect(mockSession.getToken).toHaveBeenCalledTimes(1)
+    expect(mockDecodeJwt).toHaveBeenCalledTimes(1)
     expect(mockBase.get).toHaveBeenCalledTimes(2)
     expect(result.organisationPermission).toBeTruthy()
     expect(result.organisation.id).toEqual(1234567)
@@ -112,35 +112,43 @@ describe('Organisation', () => {
     expect(result.organisation.address.postalCode).toMatch('TS1 1TS')
   })
 
-  test('when organisationIsEligible called and has invalid permissions - returns valid organisation', async () => {
-    const personId = 1234567
-    mockSession.getToken.mockResolvedValueOnce({ access_token: 1234567 })
-    mockDecodeJwt.mockResolvedValue({ currentRelationshipId: 1234567 })
+  test('when organisationIsEligible called and has invalid permissions - throws error', async () => {
+    const personId = 7654321
+    const organisationId = 1234567
+    mockSession.getToken.mockResolvedValueOnce({ access_token: organisationId })
+    mockDecodeJwt.mockImplementation(() => {
+      return {
+        currentRelationshipId: organisationId
+      }
+    })
     mockBase.get.mockResolvedValueOnce({
       data: {
         personRoles: [
           {
             personId: personId,
-            role: 'Business Partner'
+            role: 'Fake Permission'
           }
         ],
         personPrivileges: [
           {
             personId: personId,
             privilegeNames: [
-              'Full permission - invalid permissions'
+              'Invalid permission'
             ]
           }
         ]
       }
     })
-    const result = await organisation.organisationIsEligible(expect.anything(), personId)
 
+    try {
+      await organisation.organisationIsEligible(expect.anything(), personId)
+    } catch (error) {
+      expect(error).toBeInstanceOf(Error)
+      expect(error).toHaveProperty('message', `Person id ${personId} does not have the required permissions for organisation id ${organisationId}`)
+    }
     expect(mockSession.getToken).toHaveBeenCalledTimes(1)
     expect(mockDecodeJwt).toHaveBeenCalledTimes(1)
     expect(mockBase.get).toHaveBeenCalledTimes(1)
-    expect(result.organisationPermission).toBeFalsy()
-    expect(result.organisation).toEqual({})
   })
 
   test.each([

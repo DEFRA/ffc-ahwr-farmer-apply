@@ -21,8 +21,7 @@ function parsedAccessToken (request) {
   return decodeJwt(accessToken)
 }
 
-const getOrganisationAuthorisation = async (request) => {
-  const organisationId = parsedAccessToken(request).currentRelationshipId
+const getOrganisationAuthorisation = async (request, organisationId) => {
   const response = await get(hostname, getOrganisationPermissionsUrl.replace('organisationId', organisationId), request)
   return response?.data
 }
@@ -31,25 +30,27 @@ const permissionMatcher = (permissions, permissionToMatch) => {
   return permissions.every(value => permissionToMatch.includes(value))
 }
 
-const organisationHasPermission = async (request, permissions, personId) => {
-  const organisationAuthorisation = await getOrganisationAuthorisation(request)
+const organisationHasPermission = async (request, permissions, personId, organisationId) => {
+  const organisationAuthorisation = await getOrganisationAuthorisation(request, organisationId)
   const personPrivileges = organisationAuthorisation.personPrivileges.filter(privilege => privilege.personId === personId)
   const hasPermission = personPrivileges.some(privilege => permissionMatcher(privilege.privilegeNames, permissions))
   return hasPermission
 }
 
-const getOrganisation = async (request) => {
-  const organisationId = parsedAccessToken(request).currentRelationshipId
+const getOrganisation = async (request, organisationId) => {
   const response = await get(hostname, getOrganisationUrl.replace('organisationId', organisationId), request)
   return response?._data
 }
 
 const organisationIsEligible = async (request, personId) => {
+  const organisationId = parsedAccessToken(request).currentRelationshipId
   let organisation = {}
-  const organisationPermission = await organisationHasPermission(request, validPermissions, personId)
+  const organisationPermission = await organisationHasPermission(request, validPermissions, personId, organisationId)
 
   if (organisationPermission) {
-    organisation = await getOrganisation(request)
+    organisation = await getOrganisation(request, organisationId)
+  } else {
+    throw new Error(`Person id ${personId} does not have the required permissions for organisation id ${organisationId}`)
   }
 
   return {
