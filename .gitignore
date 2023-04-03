@@ -26,4 +26,5 @@ layout.njk
 # IntelliJ
 
 .idea
-
+/.env.local
+/.env.snd
