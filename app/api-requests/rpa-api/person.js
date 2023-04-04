@@ -4,6 +4,9 @@ const { tokens } = require('../../session/keys')
 const config = require('../../config')
 const jwtDecode = require('../../auth/token-verify/jwt-decode')
 const hostname = config.authConfig.ruralPaymentsAgency.hostname
+
+// This URL contains a hardcoded personId value (3337243) which has been confirmed by
+// Version One - "We will be using a static "3337243" value as the personId parameter."
 const getPersonSummaryUrl = config.authConfig.ruralPaymentsAgency.getPersonSummaryUrl
 
 function getPersonName (personSummary) {

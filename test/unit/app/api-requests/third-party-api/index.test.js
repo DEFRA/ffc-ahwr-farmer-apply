@@ -1,8 +1,8 @@
-const mockPerson = require('../../../../../app/api-requests/third-party-api/person')
-const mockOrganisation = require('../../../../../app/api-requests/third-party-api/organisation')
-const index = require('../../../../../app/api-requests/third-party-api/index')
-jest.mock('../../../../../app/api-requests/third-party-api/person')
-jest.mock('../../../../../app/api-requests/third-party-api/organisation')
+const mockPerson = require('../../../../../app/api-requests/rpa-api/person')
+const mockOrganisation = require('../../../../../app/api-requests/rpa-api/organisation')
+const index = require('../../../../../app/api-requests/rpa-api/index')
+jest.mock('../../../../../app/api-requests/rpa-api/person')
+jest.mock('../../../../../app/api-requests/rpa-api/organisation')
 
 describe('Index', () => {
   test('when getPersonSummary called - returns valid payload', async () => {

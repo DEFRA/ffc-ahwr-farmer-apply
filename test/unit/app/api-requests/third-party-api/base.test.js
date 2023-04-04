@@ -1,6 +1,6 @@
 const mockSession = require('../../../../../app/session/index')
 const Wreck = require('@hapi/wreck')
-const base = require('../../../../../app/api-requests/third-party-api/base')
+const base = require('../../../../../app/api-requests/rpa-api/base')
 const mockJwtDecode = require('../../../../../app/auth/token-verify/jwt-decode')
 jest.mock('../../../../../app/session/index')
 jest.mock('@hapi/wreck')

@@ -4,7 +4,7 @@ let mockBase
 let organisation
 jest.mock('../../../../../app/session/index')
 jest.mock('../../../../../app/auth/token-verify/jwt-decode')
-jest.mock('../../../../../app/api-requests/third-party-api/base')
+jest.mock('../../../../../app/api-requests/rpa-api/base')
 
 describe('Organisation', () => {
   const env = process.env
@@ -28,8 +28,8 @@ describe('Organisation', () => {
     }))
     mockSession = require('../../../../../app/session/index')
     mockJwtDecode = require('../../../../../app/auth/token-verify/jwt-decode')
-    mockBase = require('../../../../../app/api-requests/third-party-api/base')
-    organisation = require('../../../../../app/api-requests/third-party-api/organisation')
+    mockBase = require('../../../../../app/api-requests/rpa-api/base')
+    organisation = require('../../../../../app/api-requests/rpa-api/organisation')
   })
 
   afterEach(() => {

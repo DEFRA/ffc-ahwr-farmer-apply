@@ -1,10 +1,10 @@
 const mockSession = require('../../../../../app/session/index')
 const mockJwtDecode = require('../../../../../app/auth/token-verify/jwt-decode')
-const mockBase = require('../../../../../app/api-requests/third-party-api/base')
-const person = require('../../../../../app/api-requests/third-party-api/person')
+const mockBase = require('../../../../../app/api-requests/rpa-api/base')
+const person = require('../../../../../app/api-requests/rpa-api/person')
 jest.mock('../../../../../app/session/index')
 jest.mock('../../../../../app/auth/token-verify/jwt-decode')
-jest.mock('../../../../../app/api-requests/third-party-api/base')
+jest.mock('../../../../../app/api-requests/rpa-api/base')
 
 describe('Person', () => {
   test('when getPersonSummary called - returns valid person data', async () => {

@@ -4,7 +4,7 @@ const auth = require('../../auth')
 const sessionKeys = require('../../session/keys')
 const config = require('../../config')
 const { farmerApply } = require('../../constants/user-types')
-const { getPersonSummary, getPersonName, organisationIsEligible, getOrganisationAddress } = require('../../api-requests/third-party-api')
+const { getPersonSummary, getPersonName, organisationIsEligible, getOrganisationAddress } = require('../../api-requests/rpa-api')
 
 function setCustomerSessionData (request, personSummary, organisationSummary) {
   session.setCustomer(request, sessionKeys.customer.id, personSummary.id)

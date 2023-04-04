@@ -3,10 +3,10 @@ const sessionMock = require('../../../../../app/session')
 jest.mock('../../../../../app/session')
 const authMock = require('../../../../../app/auth')
 jest.mock('../../../../../app/auth')
-const personMock = require('../../../../../app/api-requests/third-party-api/person')
-jest.mock('../../../../../app/api-requests/third-party-api/person')
-const organisationMock = require('../../../../../app/api-requests/third-party-api/organisation')
-jest.mock('../../../../../app/api-requests/third-party-api/organisation')
+const personMock = require('../../../../../app/api-requests/rpa-api/person')
+jest.mock('../../../../../app/api-requests/rpa-api/person')
+const organisationMock = require('../../../../../app/api-requests/rpa-api/organisation')
+jest.mock('../../../../../app/api-requests/rpa-api/organisation')
 
 describe('FarmerApply defra ID redirection test', () => {
   jest.mock('../../../../../app/config', () => ({
