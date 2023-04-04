@@ -82,11 +82,7 @@ module.exports = [
         const emailAddress = session.getRegisterYourInterestData(request, sessionKeys.registerYourInterestData.emailAddress)
         const sbi = session.getRegisterYourInterestData(request, sessionKeys.registerYourInterestData.sbi)
         const crn = session.getRegisterYourInterestData(request, sessionKeys.registerYourInterestData.crn)
-        await sendEmail(registerYourInterest, emailAddress, {
-          personalisation: { 
-            callChargesUri: ruralPaymentsAgency.callChargesUri
-          }
-        })
+        await sendEmail(registerYourInterest, emailAddress)
         await sendRegisterYourInterestMessage(sbi, crn, emailAddress)
         return h.redirect('registration-complete', { ruralPaymentsAgency })
       }
