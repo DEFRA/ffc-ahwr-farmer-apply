@@ -1,9 +1,7 @@
 const session = require('../../session')
 const sessionKeys = require('../../session/keys')
 const urlPrefix = require('../../config/index').urlPrefix
-const ruralPaymentsLoginUri = require('../../config/index').ruralPaymentsLoginUri
-const callChargesUri = require('../../config/index').callChargesUri
-const ruralPaymentsEmail = require('../../config/index').ruralPaymentsEmail
+const ruralPaymentsAgency = require('../../config/index').ruralPaymentsAgency
 const sendEmail = require('../../lib/email/send-email')
 const { registerYourInterest } = require('../../config').notifyConfig.emailTemplates
 const { sendRegisterYourInterestMessage } = require('../../messaging/register-your-interest')
@@ -26,9 +24,7 @@ module.exports = [
           return h.redirect(
             `${urlPrefix}/register-your-interest`,
             {
-              ruralPaymentsLoginUri,
-              callChargesUri,
-              ruralPaymentsEmail
+              ruralPaymentsAgency
             }
           )
         }
@@ -86,9 +82,13 @@ module.exports = [
         const emailAddress = session.getRegisterYourInterestData(request, sessionKeys.registerYourInterestData.emailAddress)
         const sbi = session.getRegisterYourInterestData(request, sessionKeys.registerYourInterestData.sbi)
         const crn = session.getRegisterYourInterestData(request, sessionKeys.registerYourInterestData.crn)
-        await sendEmail(registerYourInterest, emailAddress)
+        await sendEmail(registerYourInterest, emailAddress, {
+          personalisation: { 
+            callChargesUri: ruralPaymentsAgency.callChargesUri
+          }
+        })
         await sendRegisterYourInterestMessage(sbi, crn, emailAddress)
-        return h.redirect('registration-complete', { callChargesUri, ruralPaymentsEmail })
+        return h.redirect('registration-complete', { ruralPaymentsAgency })
       }
     }
   }

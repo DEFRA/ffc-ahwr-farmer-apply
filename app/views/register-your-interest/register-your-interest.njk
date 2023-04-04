@@ -55,15 +55,7 @@
       <li>find your CRN</li>
       <li>update your SBI or business email address</li>
     </ul>
-    <ul class='govuk-list'>
-      <li>Email: <a href="mailto:{{ ruralPaymentsEmail }}">{{ ruralPaymentsEmail }}</a></li>
-    </ul>
-    <ul class='govuk-list'>
-      <li>Telephone: 03000 200 301</li>
-      <li>Monday to Friday, 8:30am to 5pm, except public holidays</li>
-    </ul>
-    <p class='govuk-body'><a class="govuk-link" target="_blank" href={{ callChargesUri }}>Find out about call charges</a></p>
-
+    {{ rpaContactDetails({email: ruralPaymentsAgency.email, callChargesUri: ruralPaymentsAgency.callChargesUri, telephone: ruralPaymentsAgency.telephone}) }}
   </div>
 </div>
 {% endblock %}

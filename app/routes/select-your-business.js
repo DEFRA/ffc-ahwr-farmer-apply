@@ -80,8 +80,7 @@ module.exports = [{
             text: `${business.name} - SBI ${business.sbi}`,
             checked: selectedBusiness === business.sbi
           }))),
-          callChargesUri: config.callChargesUri,
-          ruralPaymentsEmail: config.ruralPaymentsEmail
+          ruralPaymentsAgency: config.ruralPaymentsAgency
         }
         )
     }
@@ -117,8 +116,7 @@ module.exports = [{
               text: `${business.sbi} - ${business.name}`,
               checked: checkedBusiness === business.sbi
             }))),
-            callChargesUri: config.callChargesUri,
-            ruralPaymentsEmail: config.ruralPaymentsEmail
+            ruralPaymentsAgency: config.ruralPaymentsAgency
           }
           )
           .code(400)

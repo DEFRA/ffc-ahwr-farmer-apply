@@ -45,9 +45,12 @@ const schema = Joi.object({
   serviceName: Joi.string().default('Annual health and welfare review of livestock'),
   useRedis: Joi.boolean().default(false),
   urlPrefix: Joi.string().default(urlPrefix),
-  ruralPaymentsLoginUri: Joi.string().uri().default('https://www.ruralpayments.service.gov.uk'),
-  callChargesUri: Joi.string().uri().default('https://www.gov.uk/call-charges'),
-  ruralPaymentsEmail: Joi.string().email().default('ruralpayments@defra.gov.uk'),
+  ruralPaymentsAgency: {
+    loginUri: Joi.string().uri().default('https://www.ruralpayments.service.gov.uk'),
+    callChargesUri: Joi.string().uri().default('https://www.gov.uk/call-charges'),
+    email: Joi.string().email().default('ruralpayments@defra.gov.uk'),
+    telephone: Joi.string().default('03000 200 301')
+  },
   registerYourInterest: {
     enabled: Joi.bool().default(true)
   },
@@ -88,9 +91,12 @@ const config = {
   claimServiceUri: process.env.CLAIM_SERVICE_URI,
   useRedis: process.env.NODE_ENV !== 'test',
   urlPrefix: process.env.URL_PREFIX,
-  ruralPaymentsLoginUri: 'https://www.ruralpayments.service.gov.uk',
-  callChargesUri: 'https://www.gov.uk/call-charges',
-  ruralPaymentsEmail: 'ruralpayments@defra.gov.uk',
+  ruralPaymentsAgency: {
+    loginUri: 'https://www.ruralpayments.service.gov.uk',
+    callChargesUri: 'https://www.gov.uk/call-charges',
+    email: 'ruralpayments@defra.gov.uk',
+    telephone: '03000 200 301'
+  },
   registerYourInterest: {
     enabled: process.env.REGISTER_YOUR_INTEREST_ENABLED
   },

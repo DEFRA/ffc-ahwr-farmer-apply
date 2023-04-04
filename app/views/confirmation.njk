@@ -20,31 +20,23 @@
 
     <p class="govuk-body">Contact your vet to arrange a review. Read the <a href="/apply" target="_blank">guidance on how to set up a review</a>.</p>
 
-    <p class="govuk-body">After the vet has completed the review you can <a href="{{claimServiceUri}}" target="_blank">claim funding for the annual health and welfare review</a>.</p>
+    <p class="govuk-body">After the vet has completed the review, you can <a href="{{claimServiceUri}}" target="_blank">claim funding for the annual health and welfare review</a>.</p>
 
     <p class="govuk-body">You’ll need to apply for a new agreement number if you do not arrange a review and claim your funding within 6 months of getting this agreement number.</p>
 
     <h2 class="govuk-heading-m">Get help with your application</h2>
 
-    <p>Contact the RPA if you:</p>
+    <p>Contact the RPA by phone or email if you:</p>
 
     <ul class="govuk-list govuk-list--bullet">
       <li>need to change your application - for example if you want to change the livestock you’re having reviewed</li>
-      <li>decide you do not want a review after you’ve accepted your agreement offer</li>
+      <li>decide you do not want a review after you have accepted your agreement offer</li>
       <li>have a question about your application</li>
     </ul>
 
     <p>Have your agreement number with you when you call or include it in your email.</p>
 
-    <ul class="govuk-list">
-      <li>Rural Payments Agency</li>
-      <li>Telephone: 03000 200 301</li>
-      <li>Monday to Friday, 8:30am to 5pm (except public holidays)</li>
-      <li><a class="govuk-link" href="mailto:ruralpayments@defra.gov.uk">ruralpayments@defra.gov.uk</a></li>
-    </ul>
-
-    <p class="govuk-body"><a class="govuk-link" href="https://www.gov.uk/call-charges">Find out about call charges</a>.</p>
-
+    {{ rpaContactDetails({email: ruralPaymentsAgency.email, callChargesUri: ruralPaymentsAgency.callChargesUri, telephone: ruralPaymentsAgency.telephone}) }}
   </div>
 </div>
 {% endblock %}
