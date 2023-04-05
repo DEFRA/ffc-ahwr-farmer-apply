@@ -6,6 +6,7 @@ jest.mock('../../../../../app/auth')
 const personMock = require('../../../../../app/api-requests/rpa-api/person')
 jest.mock('../../../../../app/api-requests/rpa-api/person')
 const organisationMock = require('../../../../../app/api-requests/rpa-api/organisation')
+const { InvalidPermissionsError, InvalidStateError } = require('../../../../../app/exceptions')
 jest.mock('../../../../../app/api-requests/rpa-api/organisation')
 
 describe('FarmerApply defra ID redirection test', () => {
@@ -87,7 +88,7 @@ describe('FarmerApply defra ID redirection test', () => {
       }
 
       authMock.authenticate.mockImplementation(() => {
-        throw new Error('Invalid state')
+        throw new InvalidStateError('Invalid state')
       })
 
       const res = await global.__SERVER__.inject(options)
@@ -149,7 +150,7 @@ describe('FarmerApply defra ID redirection test', () => {
 
     test('returns 400 and login failed view when permissions failed', async () => {
       const consoleErrorSpy = jest.spyOn(console, 'error')
-      const expectedError = new Error('Person id 7654321 does not have the required permissions for organisation id 1234567')
+      const expectedError = new InvalidPermissionsError('Person id 7654321 does not have the required permissions for organisation id 1234567')
       const baseUrl = `${url}?code=432432&state=83d2b160-74ce-4356-9709-3f8da7868e35`
       const options = {
         method: 'GET',
@@ -168,7 +169,7 @@ describe('FarmerApply defra ID redirection test', () => {
         }
       })
       organisationMock.organisationIsEligible.mockImplementation(() => {
-        throw new Error('Person id 7654321 does not have the required permissions for organisation id 1234567')
+        throw new InvalidPermissionsError('Person id 7654321 does not have the required permissions for organisation id 1234567')
       })
 
       const res = await global.__SERVER__.inject(options)
@@ -180,7 +181,7 @@ describe('FarmerApply defra ID redirection test', () => {
       const $ = cheerio.load(res.payload)
       expect($('.govuk-heading-l').text()).toMatch('Login failed')
       expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
-      expect(consoleErrorSpy).toHaveBeenCalledWith(`Error when handling DEFRA ID redirect ${JSON.stringify(expectedError.message)}.`)
+      expect(consoleErrorSpy).toHaveBeenCalledWith(`Received error with name InvalidPermissionsError and ${expectedError.message}.`)
     })
   })
 })
