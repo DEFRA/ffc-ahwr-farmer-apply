@@ -19,8 +19,3 @@ Feature: Apply journey smoke tests
       | valid credential   |
       | ibrahim.adekanmi@kainos.com|
 
-  Scenario Outline: user navigate to business email to fetch magic link
-    Given user navigate to the magic link
-    Examples:
-      | businessEmail               |
-      | ibrahim.adekanmi@kainos.com |

@@ -12,12 +12,11 @@
     "selenium"
   ],
   "scripts": {
-    "test": "wdio wdio.conf.js",
-    "test:local": "wdio wdio.local.config.js",
-    "test:smoke:local": "wdio wdio.local.config.js  --cucumberOpts.tagExpression='@smoke'",
+    "test": "wdio wdio.bs.conf.js",
+    "test:smoke:snd": "ENV=snd wdio wdio.config.js  --cucumberOpts.tagExpression='@smoke'",
     "generate-report:allure": "allure generate allure-results --clean",
     "generate-report:cucumber-html": "node reporter/cucumber-report.js",
-    "test:debug": "node --inspect-brk=0.0.0.0 ./node_modules/@wdio/cli/bin/wdio.js wdio.conf.js"
+    "test:debug": "node --inspect-brk=0.0.0.0 ./node_modules/@wdio/cli/bin/wdio.js wdio.bs.conf.js"
   },
   "dependencies": {
     "@babel/cli": "^7.2.3",
@@ -35,6 +34,7 @@
     "axe-webdriverio": "^0.2.0",
     "browserstack-local": "^1.4.8",
     "chai": "^4.1.2",
+    "constants": "^0.0.2",
     "cross-env": "^5.2.0",
     "crypto-js": "^4.1.1",
     "dotenv": "^16.0.3",
