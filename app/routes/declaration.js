@@ -60,6 +60,8 @@ module.exports = [{
       }
 
       if (!applicationReference) {
+        // TODO: this requires a designed error screen for this scenario
+        // as opposed to the generic screen that this will redirect to.
         console.log('Apply declaration returned a null application reference.')
         throw boom.internal()
       }
