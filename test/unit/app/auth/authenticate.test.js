@@ -303,7 +303,7 @@ describe('authenticate', () => {
       .mockResolvedValue(testCase.when.redeemResponse)
     when(Wreck.get)
       .calledWith(
-        'hostname/discovery/v2.0/keys?p=b2c_1a_signupsignin',
+        'hostname/discovery/v2.0/keys?p=policy',
         { json: true }
       )
       .mockResolvedValue({

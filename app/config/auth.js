@@ -13,6 +13,12 @@ const authSchema = Joi.object({
     clientSecret: Joi.string(),
     serviceId: Joi.string(),
     scope: Joi.string()
+  },
+  ruralPaymentsAgency: {
+    hostname: Joi.string(),
+    getPersonSummaryUrl: Joi.string(),
+    getOrganisationPermissionsUrl: Joi.string(),
+    getOrganisationUrl: Joi.string()
   }
 })
 
@@ -29,6 +35,12 @@ const authConfig = {
     clientSecret: process.env.DEFRA_ID_CLIENT_SECRET,
     serviceId: process.env.DEFRA_ID_SERVICE_ID,
     scope: `openid ${process.env.DEFRA_ID_CLIENT_ID} offline_access`
+  },
+  ruralPaymentsAgency: {
+    hostname: process.env.RPA_HOST_NAME,
+    getPersonSummaryUrl: process.env.RPA_GET_PERSON_SUMMARY_URL,
+    getOrganisationPermissionsUrl: process.env.RPA_GET_ORGANISATION_PERMISSIONS_URL,
+    getOrganisationUrl: process.env.RPA_GET_ORGANISATION_URL
   }
 }
 

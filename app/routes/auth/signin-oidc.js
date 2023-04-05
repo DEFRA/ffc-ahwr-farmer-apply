@@ -4,6 +4,28 @@ const auth = require('../../auth')
 const sessionKeys = require('../../session/keys')
 const config = require('../../config')
 const { farmerApply } = require('../../constants/user-types')
+const { getPersonSummary, getPersonName, organisationIsEligible, getOrganisationAddress } = require('../../api-requests/rpa-api')
+
+function setCustomerSessionData (request, personSummary, organisationSummary) {
+  session.setCustomer(request, sessionKeys.customer.id, personSummary.id)
+  session.setCustomer(request, sessionKeys.customer.crn, personSummary.customerReferenceNumber)
+  session.setCustomer(request, sessionKeys.customer.organisationId, organisationSummary.organisation.id)
+}
+
+function setOrganisationSessionData (request, personSummary, organisationSummary) {
+  const organisation = {
+    sbi: organisationSummary.organisation.sbi.toString(),
+    farmerName: getPersonName(personSummary),
+    name: organisationSummary.organisation.name,
+    email: organisationSummary.organisation.email,
+    address: getOrganisationAddress(organisationSummary.organisation.address)
+  }
+  session.setFarmerApplyData(
+    request,
+    sessionKeys.farmerApplyData.organisation,
+    organisation
+  )
+}
 
 module.exports = [{
   method: 'GET',
@@ -26,21 +48,12 @@ module.exports = [{
     handler: async (request, h) => {
       try {
         await auth.authenticate(request, session)
-        // todo implement RPA api calls
-        // navigate to exception screen or org review
-        const organisation = {
-          sbi: '113333333',
-          farmerName: 'DEFRA ID Placeholder',
-          name: 'DEFRA ID Placeholder',
-          email: 'dummyemail@email.con',
-          address: 'DEFRA ID Placeholder'
-        }
-        session.setFarmerApplyData(
-          request,
-          sessionKeys.farmerApplyData.organisation,
-          organisation
-        )
-        auth.setAuthCookie(request, organisation.email, farmerApply)
+        const personSummary = await getPersonSummary(request)
+        const organisationSummary = await organisationIsEligible(request, personSummary.id)
+        setCustomerSessionData(request, personSummary, organisationSummary)
+        setOrganisationSessionData(request, personSummary, organisationSummary)
+
+        auth.setAuthCookie(request, organisationSummary.organisation.email, farmerApply)
         return h.redirect(`${config.urlPrefix}/org-review`)
       } catch (e) {
         return h.view('verify-login-failed', {

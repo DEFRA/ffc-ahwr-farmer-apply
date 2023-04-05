@@ -16,7 +16,11 @@ describe('Auth config', () => {
         jwtIssuerId: 'dummy_jwt_issuer_id',
         clientId: 'dummyclientid',
         clientSecret: 'dummyclientsecret',
-        serviceId: 'dummyserviceid'
+        serviceId: 'dummyserviceid',
+        rpaHostname: 'dummy-host-name',
+        rpaGetPersonSummaryUrl: 'dummy-get-person-summary-url',
+        rpaGetOrganisationPermissionsUrl: 'dummy-get-organisation-permissions-url',
+        rpaGetOrganisationUrl: 'dummy-get-organisation-url'
       },
       config: {
         defraId: {
@@ -31,6 +35,12 @@ describe('Auth config', () => {
           clientSecret: 'dummyclientsecret',
           serviceId: 'dummyserviceid',
           scope: 'openid dummyclientid offline_access'
+        },
+        ruralPaymentsAgency: {
+          hostname: 'dummy-host-name',
+          getPersonSummaryUrl: 'dummy-get-person-summary-url',
+          getOrganisationPermissionsUrl: 'dummy-get-organisation-permissions-url',
+          getOrganisationUrl: 'dummy-get-organisation-url'
         }
       }
     }
@@ -43,6 +53,10 @@ describe('Auth config', () => {
     process.env.DEFRA_ID_CLIENT_ID = testCase.processEnv.clientId
     process.env.DEFRA_ID_CLIENT_SECRET = testCase.processEnv.clientSecret
     process.env.DEFRA_ID_SERVICE_ID = testCase.processEnv.serviceId
+    process.env.RPA_HOST_NAME = testCase.processEnv.rpaHostname
+    process.env.RPA_GET_PERSON_SUMMARY_URL = testCase.processEnv.rpaGetPersonSummaryUrl
+    process.env.RPA_GET_ORGANISATION_PERMISSIONS_URL = testCase.processEnv.rpaGetOrganisationPermissionsUrl
+    process.env.RPA_GET_ORGANISATION_URL = testCase.processEnv.rpaGetOrganisationUrl
 
     const config = require('../../../../app/config/auth')
 
