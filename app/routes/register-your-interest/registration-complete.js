@@ -14,19 +14,9 @@ module.exports = [
       handler: async (request, h) => {
         session.clear(request)
         if (defraIdConfig.enabled) {
-          return h.view(
-            'defra-id/register-your-interest/registration-complete',
-            {
-              ruralPaymentsAgency
-            }
-          )
+          return h.view('defra-id/register-your-interest/registration-complete', { ruralPaymentsAgency })
         } else {
-          return h.view(
-            'register-your-interest/registration-complete',
-            {
-              ruralPaymentsAgency
-            }
-          )
+          return h.view('register-your-interest/registration-complete', { ruralPaymentsAgency })
         }
       }
     }
