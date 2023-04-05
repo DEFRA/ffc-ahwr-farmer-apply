@@ -11,10 +11,9 @@ const parallel = process.env.BROWSERSTACK_PARALLEL_RUNS
 
 exports.config = {
   hostname: 'hub-cloud.browserstack.com',
-  user: process.env.BROWSERSTACK_USERNAME,
-  key: process.env.BROWSERSTACK_ACCESS_KEY,
+  user,
+  key,
   specs: ['./features/**/*.feature'],
-  exclude: ['./scratch/**'],
   parallel,
   maxInstances,
   capabilities: [
