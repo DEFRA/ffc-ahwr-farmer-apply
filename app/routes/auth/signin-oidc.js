@@ -5,6 +5,7 @@ const sessionKeys = require('../../session/keys')
 const config = require('../../config')
 const { farmerApply } = require('../../constants/user-types')
 const { getPersonSummary, getPersonName, organisationIsEligible, getOrganisationAddress } = require('../../api-requests/rpa-api')
+const { InvalidPermissionsError, AlreadyAppliedError, NoEligibleCphError } = require('../../exceptions')
 
 function setCustomerSessionData (request, personSummary, organisationSummary) {
   session.setCustomer(request, sessionKeys.customer.id, personSummary.id)
@@ -40,6 +41,7 @@ module.exports = [{
         stripUnknown: true
       }),
       failAction (request, h, err) {
+        console.log(`Validation error caught during DEFRA ID redirect - ${err.message}.`)
         return h.view('verify-login-failed', {
           backLink: auth.requestAuthorizationCodeUrl(session, request)
         }).code(400).takeover()
@@ -55,10 +57,24 @@ module.exports = [{
 
         auth.setAuthCookie(request, organisationSummary.organisation.email, farmerApply)
         return h.redirect(`${config.urlPrefix}/org-review`)
-      } catch (e) {
-        return h.view('verify-login-failed', {
-          backLink: auth.requestAuthorizationCodeUrl(session, request)
-        }).code(400)
+      } catch (err) {
+        console.log(`Received error with name ${err.name} and message ${err.message}.`)
+        // todo could make this cleaner
+        if (err instanceof AlreadyAppliedError || err instanceof InvalidPermissionsError || err instanceof NoEligibleCphError) {
+          return h.view('defra-id/cannot-apply-for-livestock-review-exception', {
+            ruralPaymentsAgency: config.ruralPaymentsAgency,
+            alreadyAppliedError: err instanceof AlreadyAppliedError,
+            permissionError: err instanceof InvalidPermissionsError,
+            cphError: err instanceof NoEligibleCphError,
+            hasMultipleBusineses: session.getCustomer(request, sessionKeys.customer.attachedToMultipleBusinesses),
+            backLink: auth.requestAuthorizationCodeUrl(session, request)
+          })
+        } else {
+          // generic error
+          return h.view('verify-login-failed', {
+            backLink: auth.requestAuthorizationCodeUrl(session, request)
+          }).code(400)
+        }
       }
     }
   }
