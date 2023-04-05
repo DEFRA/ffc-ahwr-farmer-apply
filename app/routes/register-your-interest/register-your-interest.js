@@ -1,7 +1,5 @@
 const urlPrefix = require('../../config/index').urlPrefix
-const ruralPaymentsLoginUri = require('../../config/index').ruralPaymentsLoginUri
-const callChargesUri = require('../../config/index').callChargesUri
-const ruralPaymentsEmail = require('../../config/index').ruralPaymentsEmail
+const ruralPaymentsAgency = require('../../config/index').ruralPaymentsAgency
 
 module.exports = [
   {
@@ -10,7 +8,7 @@ module.exports = [
     options: {
       auth: false,
       handler: async (request, h) => {
-        return h.view('register-your-interest/register-your-interest', { ruralPaymentsLoginUri, callChargesUri, ruralPaymentsEmail })
+        return h.view('register-your-interest/register-your-interest', { ruralPaymentsAgency })
       }
     }
   }

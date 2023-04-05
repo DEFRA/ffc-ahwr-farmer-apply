@@ -144,7 +144,7 @@ describe('Declaration test', () => {
 
       expect(res.statusCode).toBe(200)
       const $ = cheerio.load(res.payload)
-      expect($('.govuk-heading-l').text()).toEqual('You’ve rejected the agreement offer')
+      expect($('.govuk-heading-l').text()).toEqual('Agreement offer rejected')
       expect($('title').text()).toEqual(config.serviceName)
       expectPhaseBanner.ok($)
       expect(sessionMock.clear).toBeCalledTimes(1)

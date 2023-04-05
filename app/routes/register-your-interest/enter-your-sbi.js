@@ -2,8 +2,7 @@ const Joi = require('joi')
 const session = require('../../session')
 const sessionKeys = require('../../session/keys')
 const urlPrefix = require('../../config/index').urlPrefix
-const callChargesUri = require('../../config/index').callChargesUri
-const ruralPaymentsEmail = require('../../config/index').ruralPaymentsEmail
+const ruralPaymentsAgency = require('../../config/index').ruralPaymentsAgency
 const SBI_SCHEMA = require('../../schemas/sbi.schema.js')
 
 const ERROR_MESSAGE = {
@@ -24,8 +23,7 @@ module.exports = [
         return h.view(
           'register-your-interest/enter-your-sbi',
           {
-            callChargesUri,
-            ruralPaymentsEmail,
+            ruralPaymentsAgency,
             sbi: session.getRegisterYourInterestData(
               request,
               sessionKeys.registerYourInterestData.sbi
@@ -79,8 +77,7 @@ module.exports = [
             'register-your-interest/enter-your-sbi',
             {
               ...request.payload,
-              callChargesUri,
-              ruralPaymentsEmail,
+              ruralPaymentsAgency,
               errorMessages
             }
           ).code(400).takeover()
@@ -97,7 +94,7 @@ module.exports = [
           sessionKeys.registerYourInterestData.confirmSbi,
           request.payload[sessionKeys.registerYourInterestData.confirmSbi]
         )
-        return h.redirect('enter-your-email-address', { callChargesUri, ruralPaymentsEmail })
+        return h.redirect('enter-your-email-address', { ruralPaymentsAgency })
       }
     }
   }
