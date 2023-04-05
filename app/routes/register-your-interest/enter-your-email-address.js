@@ -2,8 +2,7 @@ const Joi = require('joi')
 const session = require('../../session')
 const sessionKeys = require('../../session/keys')
 const urlPrefix = require('../../config/index').urlPrefix
-const callChargesUri = require('../../config/index').callChargesUri
-const ruralPaymentsEmail = require('../../config/index').ruralPaymentsEmail
+const ruralPaymentsAgency = require('../../config/index').ruralPaymentsAgency
 const BUSINESS_EMAIL_SCHEMA = require('../../schemas/business-email.schema.js')
 
 const ERROR_MESSAGE = {
@@ -25,8 +24,7 @@ module.exports = [
         return h.view(
           'register-your-interest/enter-your-email-address',
           {
-            callChargesUri,
-            ruralPaymentsEmail,
+            ruralPaymentsAgency,
             emailAddress: session.getRegisterYourInterestData(
               request,
               sessionKeys.registerYourInterestData.emailAddress
@@ -76,8 +74,7 @@ module.exports = [
             'register-your-interest/enter-your-email-address',
             {
               ...request.payload,
-              callChargesUri,
-              ruralPaymentsEmail,
+              ruralPaymentsAgency,
               errorMessages
             }
           ).code(400).takeover()
@@ -94,7 +91,7 @@ module.exports = [
           sessionKeys.registerYourInterestData.confirmEmailAddress,
           request.payload[sessionKeys.registerYourInterestData.confirmEmailAddress]
         )
-        return h.redirect('check-your-answers-and-register-your-interest', { callChargesUri, ruralPaymentsEmail })
+        return h.redirect('check-your-answers-and-register-your-interest', { ruralPaymentsAgency })
       }
     }
   }

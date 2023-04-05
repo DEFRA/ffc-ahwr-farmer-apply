@@ -1,7 +1,6 @@
 const session = require('../../session')
 const urlPrefix = require('../../config/index').urlPrefix
-const callChargesUri = require('../../config/index').callChargesUri
-const ruralPaymentsEmail = require('../../config/index').ruralPaymentsEmail
+const ruralPaymentsAgency = require('../../config/index').ruralPaymentsAgency
 
 const PATH = `${urlPrefix}/register-your-interest/registration-complete`
 
@@ -16,8 +15,7 @@ module.exports = [
         return h.view(
           'register-your-interest/registration-complete',
           {
-            callChargesUri,
-            ruralPaymentsEmail
+            ruralPaymentsAgency
           }
         )
       }

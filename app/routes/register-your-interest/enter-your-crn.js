@@ -2,8 +2,7 @@ const session = require('../../session')
 const sessionKeys = require('../../session/keys')
 const Joi = require('joi')
 const urlPrefix = require('../../config/index').urlPrefix
-const callChargesUri = require('../../config/index').callChargesUri
-const ruralPaymentsEmail = require('../../config/index').ruralPaymentsEmail
+const ruralPaymentsAgency = require('../../config/index').ruralPaymentsAgency
 const CRN_SCHEMA = require('../../schemas/crn.schema.js')
 
 const ERROR_MESSAGE = {
@@ -26,8 +25,7 @@ module.exports = [
         return h.view(
           'register-your-interest/enter-your-crn',
           {
-            callChargesUri,
-            ruralPaymentsEmail,
+            ruralPaymentsAgency,
             crn: session.getRegisterYourInterestData(request, sessionKeys.registerYourInterestData.crn),
             confirmCrn: session.getRegisterYourInterestData(request, sessionKeys.registerYourInterestData.confirmCrn)
           }
@@ -67,8 +65,7 @@ module.exports = [
             .reduce((acc, e) => ({ ...acc, [e.context.label]: { text: e.message } }), {})
           return h.view('register-your-interest/enter-your-crn', {
             ...request.payload,
-            callChargesUri,
-            ruralPaymentsEmail,
+            ruralPaymentsAgency,
             errorMessages
           }
           ).code(400).takeover()
@@ -85,7 +82,7 @@ module.exports = [
           sessionKeys.registerYourInterestData.confirmCrn,
           request.payload[sessionKeys.registerYourInterestData.confirmCrn]
         )
-        return h.redirect('enter-your-sbi', { callChargesUri, ruralPaymentsEmail })
+        return h.redirect('enter-your-sbi', { ruralPaymentsAgency })
       }
     }
   }
