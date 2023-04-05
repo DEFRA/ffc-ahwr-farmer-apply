@@ -56,6 +56,7 @@ module.exports = [{
         auth.setAuthCookie(request, organisationSummary.organisation.email, farmerApply)
         return h.redirect(`${config.urlPrefix}/org-review`)
       } catch (e) {
+        console.error(`Error when handling DEFRA ID redirect ${JSON.stringify(e.message)}.`)
         return h.view('verify-login-failed', {
           backLink: auth.requestAuthorizationCodeUrl(session, request)
         }).code(400)
