@@ -59,6 +59,11 @@ module.exports = [{
         return h.view('offer-rejected')
       }
 
+      if (!applicationReference) {
+        console.log('Apply declaration returned a null application reference.')
+        throw boom.internal()
+      }
+
       return h.view('confirmation', {
         reference: applicationReference
       })
