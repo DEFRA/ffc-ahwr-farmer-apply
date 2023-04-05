@@ -41,3 +41,10 @@ Feature: select business
 
 
 
+#  Scenario: user reject the terms and conditions
+#    When user review the agreement
+#    And user check through the terms and conditions
+#    And user accept the terms and conditions
+#    Then application should be accepted
+
+
