@@ -69,15 +69,7 @@
       {{ 
         govukDetails({
           summaryText: "Problems with your email",
-          html: "<p>If you’ve lost or forgotten the email address, contact the Rural Payments Agency.</p>
-          <ul class='govuk-list'>
-            <li>Rural Payments Agency</li>
-            <li>Telephone: 03000 200 301</li>
-            <li>Monday to Friday, 8:30am to 5pm (except public holidays)</li>
-            <li><a href='mailto:" + ruralPaymentsEmail + "'>" + ruralPaymentsEmail + "</a></li>
-          </ul>
-          <p class='govuk-body'>Find out about <a class='govuk-link' target='_blank' href='" + callChargesUri + "'> call charges</a></p>
-          " 
+          html: "<p>If you have lost or forgotten your business email address or need to check which email address is linked to the business, contact the Rural Payments Agency.</p>" + rpaContactDetails({email: ruralPaymentsAgency.email, callChargesUri: ruralPaymentsAgency.callChargesUri, telephone: ruralPaymentsAgency.telephone})
         })  
       }}
     </form>

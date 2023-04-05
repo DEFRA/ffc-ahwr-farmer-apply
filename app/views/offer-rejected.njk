@@ -6,24 +6,26 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
-    <h1 class="govuk-heading-l">You’ve rejected the agreement offer</h1>
+    <h1 class="govuk-heading-l">Agreement offer rejected</h1>
+
     <p class="govuk-body">
-      Based on your choice you’re not able to claim for an Annual Health and Welfare Review.
-    </p>
-    <p class="govuk-body">
-      If you still want to apply for a review, you can <a class="govuk-link" href="/apply/start">start a new application</a>.
+      You have rejected the agreement offer and your application has been cancelled.
     </p>
 
     <p class="govuk-body">
-      If you have a question about the service contact the Rural Payments Agency:
+      You'll need to start a new application if:
     </p>
-    <ul class="govuk-list">
-      <li>Rural Payments Agency</li>
-      <li>Telephone: 03000 200 301</li>
-      <li>Monday to Friday, 8:30am to 5pm (except public holidays)</li>
-      <li><a class="govuk-link" href="mailto:ruralpayments@defra.gov.uk">ruralpayments@defra.gov.uk</a></li>
+
+     <ul class="govuk-list">
+      <li>you rejected the agreement by mistake</li>
+      <li>you change your mind and do want to apply</li>
     </ul>
-    <p class="govuk-body"><a class="govuk-link" href="https://www.gov.uk/call-charges">Find out about call charges</a>.</p>
+
+    <p class="govuk-body">
+     If you have any questions about your application, contact the Rural Payments Agency by email or phone.
+    </p>
+
+    {{ rpaContactDetails({email: ruralPaymentsAgency.email, callChargesUri: ruralPaymentsAgency.callChargesUri, telephone: ruralPaymentsAgency.telephone}) }}
 
   </div>
 </div>
