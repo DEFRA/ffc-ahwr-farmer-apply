@@ -3,7 +3,6 @@ const BUSINESS_EMAIL_SCHEMA = require('./business-email.schema')
 const getSignedJwt = require('./get-signed-jwt')
 
 const Wreck = require('@hapi/wreck')
-
 async function getMagicLink (businessEmail) {
   try {
     businessEmail = BUSINESS_EMAIL_SCHEMA.validate(businessEmail)
@@ -12,15 +11,22 @@ async function getMagicLink (businessEmail) {
 
     }
 
+
     const templateId = process.env.NOTIFY_TEMPLATE_ID_FARMER_APPLY_LOGIN
 
     const signedJwt = getSignedJwt()
+
+
+
 
     if (signedJwt === null) {
 
       throw new Error('Unable to sign JWT')
 
     }
+
+
+
 
     const options = {
 
@@ -36,13 +42,22 @@ async function getMagicLink (businessEmail) {
 
     }
 
+
+
+
     const response = await Wreck.get('https://api.notifications.service.gov.uk/v2/notifications', options)
+
+
+
 
     if (response.res.statusCode !== 200) {
 
       throw new Error(`HTTP ${response.res.statusCode} (${response.res.statusMessage}). The response was: ${JSON.stringify(response.payload)}`)
 
     }
+
+
+
 
     const latestEmail = response.payload.notifications.filter(notification => notification.template.id === templateId)
 
@@ -56,6 +71,9 @@ async function getMagicLink (businessEmail) {
 
     }
 
+
+
+
     const token = latestEmail[0].reference
 
     if (token === null || token === undefined) {
@@ -64,7 +82,13 @@ async function getMagicLink (businessEmail) {
 
     }
 
+
+
+
     const magicLink = `${process.env.TEST_ENVIRONMENT_ROOT_URL}/apply/verify-login?token=${token}&email=${businessEmail.value}`
+
+
+
 
     console.log(`${new Date().toISOString()} Magic link for ${businessEmail.value} is ${magicLink}`)
 
@@ -79,5 +103,6 @@ async function getMagicLink (businessEmail) {
   }
 
 }
+
 
 module.exports = getMagicLink
