@@ -3,15 +3,7 @@ const getCrumbs = require('../../../utils/get-crumbs')
 const expectPhaseBanner = require('../../../utils/phase-banner-expect')
 const species = require('../../../../app/constants/species')
 const speciesContent = require('../../../../app/constants/species-content')
-jest.mock('../../../../app/config', () => ({
-  ...jest.requireActual('../../../../app/config'),
-  authConfig: {
-    defraId: {
-      enabled: false
-    }
-  }
-}))
-const config = require('../../../../app/config')
+const { serviceName, urlPrefix } = require('../../../../app/config')
 
 describe('Species eligibility test', () => {
   const auth = { credentials: { reference: '1111', sbi: '111111111' }, strategy: 'cookie' }
@@ -23,7 +15,7 @@ describe('Species eligibility test', () => {
       { species: species.pigs },
       { species: species.sheep }
     ])('returns 200', async ({ species }) => {
-      const url = `${config.urlPrefix}/${species}-eligibility`
+      const url = `${urlPrefix}/${species}-eligibility`
       const options = {
         method: 'GET',
         url,
@@ -34,7 +26,7 @@ describe('Species eligibility test', () => {
       expect(res.statusCode).toBe(200)
       const $ = cheerio.load(res.payload)
       expect($('h1').text()).toMatch(speciesContent[species].legendText)
-      expect($('title').text()).toEqual(speciesContent[species].title + ` - ${config.serviceName}`)
+      expect($('title').text()).toEqual(speciesContent[species].title + ` - ${serviceName}`)
       expect($('.govuk-hint').text()).toMatch(speciesContent[species].hintText)
       expectPhaseBanner.ok($)
     })
@@ -45,7 +37,7 @@ describe('Species eligibility test', () => {
       { species: species.pigs },
       { species: species.sheep }
     ])('when not logged in redirects to /login', async ({ species }) => {
-      const url = `${config.urlPrefix}/${species}-eligibility`
+      const url = `${urlPrefix}/${species}-eligibility`
       const options = {
         method: 'GET',
         url
@@ -54,7 +46,7 @@ describe('Species eligibility test', () => {
       const res = await global.__SERVER__.inject(options)
 
       expect(res.statusCode).toBe(302)
-      expect(res.headers.location).toEqual(`${config.urlPrefix}/login`)
+      expect(res.headers.location).toEqual(`${urlPrefix}/login`)
     })
   })
 
@@ -67,16 +59,16 @@ describe('Species eligibility test', () => {
     })
 
     test.each([
-      { species: species.beef, eligibleSpecies: 'no', nextPage: `${config.urlPrefix}/not-eligible` },
-      { species: species.dairy, eligibleSpecies: 'no', nextPage: `${config.urlPrefix}/not-eligible` },
-      { species: species.pigs, eligibleSpecies: 'no', nextPage: `${config.urlPrefix}/not-eligible` },
-      { species: species.sheep, eligibleSpecies: 'no', nextPage: `${config.urlPrefix}/not-eligible` },
-      { species: species.beef, eligibleSpecies: 'yes', nextPage: `${config.urlPrefix}/check-answers` },
-      { species: species.dairy, eligibleSpecies: 'yes', nextPage: `${config.urlPrefix}/check-answers` },
-      { species: species.pigs, eligibleSpecies: 'yes', nextPage: `${config.urlPrefix}/check-answers` },
-      { species: species.sheep, eligibleSpecies: 'yes', nextPage: `${config.urlPrefix}/check-answers` }
+      { species: species.beef, eligibleSpecies: 'no', nextPage: `${urlPrefix}/not-eligible` },
+      { species: species.dairy, eligibleSpecies: 'no', nextPage: `${urlPrefix}/not-eligible` },
+      { species: species.pigs, eligibleSpecies: 'no', nextPage: `${urlPrefix}/not-eligible` },
+      { species: species.sheep, eligibleSpecies: 'no', nextPage: `${urlPrefix}/not-eligible` },
+      { species: species.beef, eligibleSpecies: 'yes', nextPage: `${urlPrefix}/check-answers` },
+      { species: species.dairy, eligibleSpecies: 'yes', nextPage: `${urlPrefix}/check-answers` },
+      { species: species.pigs, eligibleSpecies: 'yes', nextPage: `${urlPrefix}/check-answers` },
+      { species: species.sheep, eligibleSpecies: 'yes', nextPage: `${urlPrefix}/check-answers` }
     ])('returns 302 to next page when acceptable answer given', async ({ species, eligibleSpecies, nextPage }) => {
-      const url = `${config.urlPrefix}/${species}-eligibility`
+      const url = `${urlPrefix}/${species}-eligibility`
       const options = {
         method,
         url,
@@ -109,7 +101,7 @@ describe('Species eligibility test', () => {
       { species: species.pigs, eligibleSpecies: '' },
       { species: species.sheep, eligibleSpecies: '' }
     ])('returns error when unacceptable answer is given', async ({ species, eligibleSpecies }) => {
-      const url = `${config.urlPrefix}/${species}-eligibility`
+      const url = `${urlPrefix}/${species}-eligibility`
       const options = {
         method,
         url,
@@ -131,7 +123,7 @@ describe('Species eligibility test', () => {
       { species: species.pigs },
       { species: species.sheep }
     ])('when not logged in redirects to /login', async ({ species }) => {
-      const url = `${config.urlPrefix}/${species}-eligibility`
+      const url = `${urlPrefix}/${species}-eligibility`
       const options = {
         method,
         url,
@@ -142,7 +134,7 @@ describe('Species eligibility test', () => {
       const res = await global.__SERVER__.inject(options)
 
       expect(res.statusCode).toBe(302)
-      expect(res.headers.location).toEqual(`${config.urlPrefix}/login`)
+      expect(res.headers.location).toEqual(`${urlPrefix}/login`)
     })
   })
 })

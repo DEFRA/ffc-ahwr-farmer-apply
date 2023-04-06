@@ -84,7 +84,7 @@ When(/^user accept the terms and conditions$/, async function () {
   await selectBusinessPage.termsAndConditionTitle()
   await selectBusinessPage.agreeToTerms()
 });
-/*Then(/^user complete the application$/, async function () {
+Then(/^user complete the application$/, async function () {
   await selectBusinessPage.termsCheckBox()
   await selectBusinessPage.applicationCompleted()
 });
@@ -92,5 +92,5 @@ Then(/^user should see successful message$/, async function () {
   await selectBusinessPage.successfulMessage()
 });
 
- */
+
 

@@ -1,12 +1,10 @@
 const CommonActions = require('./common-actions')
-//const getMagicLink = require('../support/get-magic-link')
 // Page elements
 const START_BUTTON = 'a[role="button"]'
 const EMAIL_INPUT = '#email'
 const ERROR_MESSAGE = '#email-error'
 const LINK_MESSAGE = '.govuk-heading-l'
 const CONTINUE_BUTTON = '#submit'
-//const BUSINESS_EMAIL = 'ibrahim.adekanmi@kainos.com'
 
 class LandingPageActions extends CommonActions {
 
@@ -29,10 +27,7 @@ class LandingPageActions extends CommonActions {
   async magicLinkMessage(){
     await this.elementToContainText(LINK_MESSAGE,"Check your email")
   }
-  /*async magicLinkUrl(){
-    const magicLink = await getMagicLink(BUSINESS_EMAIL)
-    await browser.url(magicLink)
-  }*/
+
 }
 
 module.exports = LandingPageActions

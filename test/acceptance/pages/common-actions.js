@@ -6,7 +6,6 @@ require("dotenv").config({path:`.env.${process.env.ENV}`})
 class CommonActions {
   async open (path) {
     const url = process.env.TEST_ENVIRONMENT_ROOT_URL + path
-    //console.log('url', url)
     await browser.url(url)
 
   }
@@ -20,7 +19,6 @@ class CommonActions {
     const locator = browser.$(element)
     await locator.setValue(text)
   }
-
   async elementToContainText (element, text) {
     const locator = await browser.$(element)
     expect(await locator.getText()).to.include(text)
@@ -40,7 +38,5 @@ class CommonActions {
     const actualUrl = await browser.getUrl()
     expect(actualUrl).to.include(expectedUrl)
   }
-
 }
-
 module.exports = CommonActions

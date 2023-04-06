@@ -76,7 +76,7 @@ describe('Farmer apply "Check your answers and register your interest" page', ()
       expect($('.govuk-summary-list__row').next().first().find('.govuk-summary-list__value').text().trim()).toEqual(EXPECTED_SBI)
       expect($('.govuk-summary-list__row').next().first().find('.govuk-link').attr('href')).toEqual(`${mockConfig.urlPrefix}/register-your-interest/enter-your-sbi`)
 
-      expect($('.govuk-summary-list__row').next().next().first().find('.govuk-summary-list__key').text().trim()).toEqual('Main Rural Payments business email address')
+      expect($('.govuk-summary-list__row').next().next().first().find('.govuk-summary-list__key').text().trim()).toEqual('Email address')
       expect($('.govuk-summary-list__row').next().next().first().find('.govuk-summary-list__value').text().trim()).toEqual(EXPECTED_EMAIL_ADDRESS)
       expect($('.govuk-summary-list__row').next().next().first().find('.govuk-link').attr('href')).toEqual(`${mockConfig.urlPrefix}/register-your-interest/enter-your-email-address`)
 

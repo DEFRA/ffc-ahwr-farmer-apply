@@ -1,20 +1,11 @@
 const cheerio = require('cheerio')
 const expectPhaseBanner = require('../../../utils/phase-banner-expect')
 const getCrumbs = require('../../../utils/get-crumbs')
-jest.mock('../../../../app/config', () => ({
-  ...jest.requireActual('../../../../app/config'),
-  authConfig: {
-    defraId: {
-      enabled: false
-    }
-  }
-}))
-
-const config = require('../../../../app/config')
+const { serviceName, urlPrefix } = require('../../../../app/config')
 
 describe('Org review page test', () => {
   let session
-  const url = `${config.urlPrefix}/org-review`
+  const url = `${urlPrefix}/org-review`
   const auth = {
     credentials: { reference: '1111', sbi: '111111111' },
     strategy: 'cookie'
@@ -58,7 +49,7 @@ describe('Org review page test', () => {
       expect(values.eq(2).text()).toMatch(org.sbi)
       expect(keys.eq(3).text()).toMatch('Address')
       expect(values.eq(3).text()).toMatch(org.address)
-      expect($('title').text()).toEqual(`Check your details - ${config.serviceName}`)
+      expect($('title').text()).toEqual(`Check your details - ${serviceName}`)
       expect($('legend').text().trim()).toEqual('Are your details correct?')
       expect($('.govuk-radios__item').length).toEqual(2)
       expectPhaseBanner.ok($)
@@ -92,7 +83,7 @@ describe('Org review page test', () => {
         const res = await global.__SERVER__.inject(options)
 
         expect(res.statusCode).toBe(302)
-        expect(res.headers.location).toEqual(`${config.urlPrefix}/login`)
+        expect(res.headers.location).toEqual(`${urlPrefix}/login`)
       })
     })
   })
@@ -117,7 +108,7 @@ describe('Org review page test', () => {
       const res = await global.__SERVER__.inject(options)
 
       expect(res.statusCode).toBe(302)
-      expect(res.headers.location).toEqual(`${config.urlPrefix}/which-review`)
+      expect(res.headers.location).toEqual(`${urlPrefix}/which-review`)
     })
 
     test('returns 200 with details are not recognised when no is answered', async () => {

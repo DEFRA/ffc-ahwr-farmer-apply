@@ -1,21 +1,13 @@
 const cheerio = require('cheerio')
 const getCrumbs = require('../../../utils/get-crumbs')
 const expectPhaseBanner = require('../../../utils/phase-banner-expect')
-jest.mock('../../../../app/config', () => ({
-  ...jest.requireActual('../../../../app/config'),
-  authConfig: {
-    defraId: {
-      enabled: false
-    }
-  }
-}))
+const { serviceName, urlPrefix } = require('../../../../app/config')
 
-const config = require('../../../../app/config')
 jest.mock('ffc-messaging')
 
 describe('Species review test', () => {
   const auth = { credentials: { reference: '1111', sbi: '111111111' }, strategy: 'cookie' }
-  const url = `${config.urlPrefix}/which-review`
+  const url = `${urlPrefix}/which-review`
 
   describe(`GET ${url} route`, () => {
     test('returns 200', async () => {
@@ -30,7 +22,7 @@ describe('Species review test', () => {
       expect(res.statusCode).toBe(200)
       const $ = cheerio.load(res.payload)
       expect($('h1').text()).toMatch('Which livestock do you want a review for?')
-      expect($('title').text()).toEqual(`Which livestock do you want a review for? - ${config.serviceName}`)
+      expect($('title').text()).toEqual(`Which livestock do you want a review for? - ${serviceName}`)
       expectPhaseBanner.ok($)
     })
 
@@ -43,7 +35,7 @@ describe('Species review test', () => {
       const res = await global.__SERVER__.inject(options)
 
       expect(res.statusCode).toBe(302)
-      expect(res.headers.location).toEqual(`${config.urlPrefix}/login`)
+      expect(res.headers.location).toEqual(`${urlPrefix}/login`)
     })
   })
 
@@ -72,7 +64,7 @@ describe('Species review test', () => {
       const res = await global.__SERVER__.inject(options)
 
       expect(res.statusCode).toBe(302)
-      expect(res.headers.location).toEqual(`${config.urlPrefix}/${whichReview}-eligibility`)
+      expect(res.headers.location).toEqual(`${urlPrefix}/${whichReview}-eligibility`)
     })
 
     test.each([
@@ -107,7 +99,7 @@ describe('Species review test', () => {
       const res = await global.__SERVER__.inject(options)
 
       expect(res.statusCode).toBe(302)
-      expect(res.headers.location).toEqual(`${config.urlPrefix}/login`)
+      expect(res.headers.location).toEqual(`${urlPrefix}/login`)
     })
   })
 })
