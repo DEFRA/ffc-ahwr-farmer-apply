@@ -40,6 +40,7 @@ class CommonActions {
     const actualUrl = await browser.getUrl()
     expect(actualUrl).to.include(expectedUrl)
   }
+
 }
 
 module.exports = CommonActions
