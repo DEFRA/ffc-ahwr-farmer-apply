@@ -359,6 +359,11 @@ describe('authenticate', () => {
         sessionKeys.customer.organisationId,
         '123456789'
       )
+      expect(session.setCustomer).toHaveBeenCalledWith(
+        testCase.given.request,
+        sessionKeys.customer.attachedToMultipleBusinesses,
+        expect.anything()
+      )
       expect(MOCK_COOKIE_AUTH_SET).toHaveBeenCalledWith({
         account: {
           email: 'john.doe@email.com',

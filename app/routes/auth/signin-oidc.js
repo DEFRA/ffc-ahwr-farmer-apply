@@ -60,9 +60,7 @@ module.exports = [{
         console.error(`Received error with name ${err.name} and message ${err.message}.`)
         if (err instanceof AlreadyAppliedError || err instanceof InvalidPermissionsError || err instanceof NoEligibleCphError) {
           const customerData = session.getCustomer(request)
-          // console.log(`customer data is ${JSON.stringify(customerData)}`)
           const organisation = session.getFarmerApplyData(request, sessionKeys.farmerApplyData.organisation)
-          // console.log(`organisation data is ${JSON.stringify(organisation)}`)
 
           return h.view('defra-id/cannot-apply-for-livestock-review-exception', {
             ruralPaymentsAgency: config.ruralPaymentsAgency,
