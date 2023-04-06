@@ -18,7 +18,15 @@ const authSchema = Joi.object({
     hostname: Joi.string(),
     getPersonSummaryUrl: Joi.string(),
     getOrganisationPermissionsUrl: Joi.string(),
-    getOrganisationUrl: Joi.string()
+    getOrganisationUrl: Joi.string(),
+    ocpApimSubscriptionKey: Joi.string()
+  },
+  apim: {
+    hostname: Joi.string(),
+    oAuthPath: Joi.string(),
+    clientId: Joi.string(),
+    clientSecret: Joi.string(),
+    scope: Joi.string()
   }
 })
 
@@ -40,7 +48,15 @@ const authConfig = {
     hostname: process.env.RPA_HOST_NAME,
     getPersonSummaryUrl: process.env.RPA_GET_PERSON_SUMMARY_URL,
     getOrganisationPermissionsUrl: process.env.RPA_GET_ORGANISATION_PERMISSIONS_URL,
-    getOrganisationUrl: process.env.RPA_GET_ORGANISATION_URL
+    getOrganisationUrl: process.env.RPA_GET_ORGANISATION_URL,
+    ocpApimSubscriptionKey: process.env.RPA_OCP_APIM_SUBSCRIPTION_KEY
+  },
+  apim: {
+    hostname: process.env.APIM_HOST_NAME,
+    oAuthPath: process.env.APIM_OAUTH_PATH,
+    clientId: process.env.APIM_CLIENT_ID,
+    clientSecret: process.env.APIM_CLIENT_SECRET,
+    scope: process.env.APIM_SCOPE
   }
 }
 

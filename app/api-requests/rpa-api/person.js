@@ -18,9 +18,9 @@ function parsedAccessToken (request) {
   return jwtDecode(accessToken)
 }
 
-const getPersonSummary = async (request) => {
+const getPersonSummary = async (request, apimAccessToken) => {
   const crn = parsedAccessToken(request).contactId
-  const response = await get(hostname, getPersonSummaryUrl, request, { crn })
+  const response = await get(hostname, getPersonSummaryUrl, request, { crn, Authorization: apimAccessToken })
   return response._data
 }
 

@@ -73,6 +73,12 @@ container:
   rpaGetPersonSummaryUrl:
   rpaGetOrganisationPermissionsUrl:
   rpaGetOrganisationUrl:
+  rpaOcpApimSubscriptionKey:
+  apimHostname:
+  apimOAuthPath:
+  apimClientId:
+  apimClientSecret:
+  apimScope:
  
 ingress:
   class: nginx
