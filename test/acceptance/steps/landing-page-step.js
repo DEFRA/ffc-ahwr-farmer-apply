@@ -19,6 +19,4 @@ Then(/^an email error is displayed$/, async function () {
 Then(/^magic link is sent to user email$/, async function () {
 await landingPage.magicLinkMessage()
 })
-Then(/^magic link is sent to user email$/, async function () {
-  await landingPage.magicLinkMessage()
-})
+

@@ -16,7 +16,7 @@
     "test:smoke:snd": "ENV=snd wdio wdio.config.js  --cucumberOpts.tagExpression='@smoke'",
     "generate-report:allure": "allure generate allure-results --clean",
     "generate-report:cucumber-html": "node reporter/cucumber-report.js",
-    "test:debug": "node --inspect-brk=0.0.0.0 ./node_modules/@wdio/cli/bin/wdio.js wdio.bs.conf.js"
+    "test:debug": "node --inspect-brk=0.0.0.0 ./node_modules/@wdio/cli/bin/wdio.js wdio.bs.config.js"
   },
   "dependencies": {
     "@babel/cli": "^7.2.3",
@@ -25,6 +25,7 @@
     "@babel/register": "^7.4.0",
     "@cucumber/cucumber": "^9.0.0",
     "@hapi/wreck": "^18.0.1",
+    "@log4js-node/log4js-api": "^1.0.2",
     "@rpii/wdio-report-events": "^0.2.0",
     "@types/cucumber": "^4.0.5",
     "@wdio/browserstack-service": "^8.6.0",

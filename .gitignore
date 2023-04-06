@@ -27,3 +27,4 @@ layout.njk
 
 .idea
 
+/test/acceptance/.env.snd

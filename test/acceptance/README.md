@@ -16,7 +16,7 @@ The framework is (Cucumber)[https://cucumber.io/] and (webdriver.io)[https://web
 
 Docker is used to create a container for each of selenium-hub, chrome-browser and webdriver-cuke.
 * Selenium Hub allows concurrent execution of test cases
-* Chrome Browser is the browser specified in the configuration file `wdio.bs.conf.js` by default
+* Chrome Browser is the browser specified in the configuration file `wdio.bs.config.js` by default
 * Webdriver.io along with Cucumber is this framework that defines the tests.
 
 ## How to run the tests
@@ -76,7 +76,7 @@ Feature: ...
 To run only the tests with specific tag(s) use the `--cucumberOpts.tagExpression=` parameter like so:
 
 ```sh
-$ npx wdio wdio.bs.conf.js --cucumberOpts.tagExpression='@Tag or @AnotherTag'
+$ npx wdio wdio.bs.config.js --cucumberOpts.tagExpression='@Tag or @AnotherTag'
 ```
 
 For more tag options please see the [Cucumber.js documentation](https://docs.cucumber.io/tag-expressions/)

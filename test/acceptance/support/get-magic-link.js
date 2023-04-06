@@ -51,7 +51,4 @@ async function getMagicLink (businessEmail) {
     return null
   }
 }
-
-module.exports = getMagicLink
-
 module.exports = getMagicLink
