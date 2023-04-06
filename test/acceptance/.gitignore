@@ -1,2 +1,4 @@
 browserstack.err
 /.env.snd
+allure-results
+reporter
