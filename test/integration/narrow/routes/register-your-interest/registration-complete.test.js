@@ -8,8 +8,6 @@ describe('Farmer apply "Registration complete" page', () => {
 
   beforeAll(async () => {
     jest.resetAllMocks()
-    jest.mock('../../../../../app/session')
-    session = require('../../../../../app/session')
   })
 
   describe('GET - Defra Id Off', () => {
