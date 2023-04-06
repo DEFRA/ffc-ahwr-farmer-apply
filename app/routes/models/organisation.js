@@ -1,4 +1,6 @@
 const session = require('../../session')
+const auth = require('../../auth')
+const config = require('../../config')
 const { confirmCheckDetails } = require('../../session/keys').farmerApplyData
 const { getYesNoRadios } = require('./form-component/yes-no-radios')
 
@@ -21,7 +23,7 @@ const getOrganisation = (request, organisation, errorText) => {
   ]
   return {
     backLink: {
-      href: `/apply/select-your-business?businessEmail=${organisation.email}`
+      href: config.authConfig.defraId.enabled ? auth.requestAuthorizationCodeUrl(session, request) : `/apply/select-your-business?businessEmail=${organisation.email}`
     },
     organisation,
     listData: { rows },

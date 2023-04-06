@@ -8,7 +8,7 @@
     <h1 class="govuk-heading-l">You cannot apply for a livestock review for this business</h1>
 
     {% if alreadyAppliedError %}
-      <p class="govuk-body">The Dairy Farm - SBI 123456789 has already applied for an annual health and welfare review of livestock.</p>
+      <p class="govuk-body">{{ organisationName }} - SBI {{ sbi }} has already applied for an annual health and welfare review of livestock.</p>
     
       <h2 class="govuk-heading-m">What to do next</h2>
       
@@ -16,23 +16,23 @@
     {% endif %}
 
     {% if permissionError %}
-      <p class="govuk-body">You do not have the required permission to act for The Dairy Farm - SBI 123456789.</p>
+      <p class="govuk-body">You do not have the required permission to act for {{ organisationName }} - SBI {{ sbi }}.</p>
     
       <h2 class="govuk-heading-m">What to do next</h2>
 
       <p class="govuk-body">To apply for this business, the business owner must give you either:</p>
-      <ul class='govuk-list'>
+      <ul class='govuk-list govuk-list--bullet'>
         <li>full permission level for business details</li>
         <li>‘submit’ permission level for the basic payment scheme</li>
       </ul>
     {% endif %}
 
     {% if cphError %}
-      <p class="govuk-body">The Dairy Farm - SBI 123456789 has no eligible county parish holding (CPH) number registered to it.</p>
+      <p class="govuk-body">{{ organisationName }} - SBI {{ sbi }} has no eligible county parish holding (CPH) number registered to it.</p>
     
       <p class="govuk-body">To be eligible a CPH must be registered in England.</p>
       <p class="govuk-body">The CPH number cannot be:</p>
-      <ul class='govuk-list'>
+      <ul class='govuk-list govuk-list--bullet'>
         <li>an 8000 number used for abattoirs, pet food manufacturers, racing pigeon establishments and showgrounds</li>
         <li>a 9000 number used for poultry keepers</li>
       </ul>

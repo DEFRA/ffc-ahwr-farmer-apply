@@ -7,7 +7,6 @@ const hostname = config.authConfig.ruralPaymentsAgency.hostname
 const getOrganisationPermissionsUrl = config.authConfig.ruralPaymentsAgency.getOrganisationPermissionsUrl
 const getOrganisationUrl = config.authConfig.ruralPaymentsAgency.getOrganisationUrl
 const validPermissions = ['Submit - bps', 'Full permission - business']
-const { InvalidPermissionsError } = require('../../exceptions')
 
 function getOrganisationAddress (address) {
   return [
@@ -56,14 +55,8 @@ const getOrganisation = async (request, organisationId) => {
 
 const organisationIsEligible = async (request, personId) => {
   const organisationId = parsedAccessToken(request).currentRelationshipId
-  let organisation = {}
   const organisationPermission = await organisationHasPermission(request, validPermissions, personId, organisationId)
-
-  if (organisationPermission) {
-    organisation = await getOrganisation(request, organisationId)
-  } else {
-    throw new InvalidPermissionsError(`Person id ${personId} does not have the required permissions for organisation id ${organisationId}`)
-  }
+  const organisation = await getOrganisation(request, organisationId)
 
   return {
     organisationPermission,

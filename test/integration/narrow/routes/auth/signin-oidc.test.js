@@ -118,6 +118,7 @@ describe('FarmerApply defra ID redirection test', () => {
         }
       })
       organisationMock.organisationIsEligible.mockResolvedValueOnce({
+        organisationPermission: true,
         organisation: {
           id: 7654321,
           name: 'Mrs Gill Black',
@@ -150,7 +151,7 @@ describe('FarmerApply defra ID redirection test', () => {
 
     test('returns 400 and login failed view when permissions failed', async () => {
       const consoleErrorSpy = jest.spyOn(console, 'error')
-      const expectedError = new InvalidPermissionsError('Person id 7654321 does not have the required permissions for organisation id 1234567')
+      const expectedError = new InvalidPermissionsError('Person id 1234567 does not have the required permissions for organisation id 7654321')
       const baseUrl = `${url}?code=432432&state=83d2b160-74ce-4356-9709-3f8da7868e35`
       const options = {
         method: 'GET',
@@ -159,17 +160,59 @@ describe('FarmerApply defra ID redirection test', () => {
 
       authMock.authenticate.mockResolvedValueOnce({ accessToken: '2323' })
       personMock.getPersonSummary.mockResolvedValueOnce({
-        _data: {
-          firstName: 'Bill',
-          middleName: null,
-          lastName: 'Smith',
-          email: 'billsmith@testemail.com',
-          id: 1234567,
-          customerReferenceNumber: '1103452436'
-        }
+        firstName: 'Bill',
+        middleName: null,
+        lastName: 'Smith',
+        email: 'billsmith@testemail.com',
+        id: 1234567,
+        customerReferenceNumber: '1103452436'
       })
-      organisationMock.organisationIsEligible.mockImplementation(() => {
-        throw new InvalidPermissionsError('Person id 7654321 does not have the required permissions for organisation id 1234567')
+      organisationMock.organisationIsEligible.mockResolvedValueOnce({
+        organisation: {
+          id: 7654321,
+          name: 'Mrs Gill Black',
+          sbi: 101122201,
+          address: {
+            address1: 'The Test House',
+            address2: 'Test road',
+            address3: 'Wicklewood',
+            buildingNumberRange: '11',
+            buildingName: 'TestHouse',
+            street: 'Test ROAD',
+            city: 'Test City',
+            postalCode: 'TS1 1TS',
+            country: 'United Kingdom',
+            dependentLocality: 'Test Local'
+          },
+          email: 'org1@testemail.com'
+        },
+        organisationPermission: false
+      })
+
+      sessionMock.getCustomer.mockResolvedValueOnce({
+        attachedToMultipleBusinesses: false,
+        foo: 'sadaasas'
+      })
+
+      sessionMock.getFarmerApplyData.mockResolvedValueOnce({
+        organisation: {
+          id: 7654321,
+          name: 'Mrs Gill Black',
+          sbi: 101122201,
+          address: {
+            address1: 'The Test House',
+            address2: 'Test road',
+            address3: 'Wicklewood',
+            buildingNumberRange: '11',
+            buildingName: 'TestHouse',
+            street: 'Test ROAD',
+            city: 'Test City',
+            postalCode: 'TS1 1TS',
+            country: 'United Kingdom',
+            dependentLocality: 'Test Local'
+          },
+          email: 'org1@testemail.com'
+        }
       })
 
       const res = await global.__SERVER__.inject(options)
@@ -179,9 +222,9 @@ describe('FarmerApply defra ID redirection test', () => {
       expect(personMock.getPersonSummary).toBeCalledTimes(1)
       expect(organisationMock.organisationIsEligible).toBeCalledTimes(1)
       const $ = cheerio.load(res.payload)
-      expect($('.govuk-heading-l').text()).toMatch('Login failed')
+      expect($('.govuk-heading-l').text()).toMatch('You cannot apply for a livestock review for this business')
       expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
-      expect(consoleErrorSpy).toHaveBeenCalledWith(`Received error with name InvalidPermissionsError and ${expectedError.message}.`)
+      expect(consoleErrorSpy).toHaveBeenCalledWith(`Received error with name InvalidPermissionsError and message ${expectedError.message}.`)
     })
   })
 })

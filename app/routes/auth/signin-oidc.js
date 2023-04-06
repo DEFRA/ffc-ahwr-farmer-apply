@@ -7,18 +7,12 @@ const { farmerApply } = require('../../constants/user-types')
 const { getPersonSummary, getPersonName, organisationIsEligible, getOrganisationAddress } = require('../../api-requests/rpa-api')
 const { InvalidPermissionsError, AlreadyAppliedError, NoEligibleCphError } = require('../../exceptions')
 
-function setCustomerSessionData (request, personSummary, organisationSummary) {
-  session.setCustomer(request, sessionKeys.customer.id, personSummary.id)
-  session.setCustomer(request, sessionKeys.customer.crn, personSummary.customerReferenceNumber)
-  session.setCustomer(request, sessionKeys.customer.organisationId, organisationSummary.organisation.id)
-}
-
 function setOrganisationSessionData (request, personSummary, organisationSummary) {
   const organisation = {
     sbi: organisationSummary.organisation.sbi.toString(),
     farmerName: getPersonName(personSummary),
     name: organisationSummary.organisation.name,
-    email: organisationSummary.organisation.email,
+    email: organisationSummary.organisation.email ? organisationSummary.organisation.email : personSummary.email,
     address: getOrganisationAddress(organisationSummary.organisation.address)
   }
   session.setFarmerApplyData(
@@ -51,30 +45,40 @@ module.exports = [{
       try {
         await auth.authenticate(request, session)
         const personSummary = await getPersonSummary(request)
+        session.setCustomer(request, sessionKeys.customer.id, personSummary.id)
+
         const organisationSummary = await organisationIsEligible(request, personSummary.id)
-        setCustomerSessionData(request, personSummary, organisationSummary)
         setOrganisationSessionData(request, personSummary, organisationSummary)
 
-        auth.setAuthCookie(request, organisationSummary.organisation.email, farmerApply)
+        if (!organisationSummary.organisationPermission) {
+          throw new InvalidPermissionsError(`Person id ${personSummary.id} does not have the required permissions for organisation id ${organisationSummary.organisation.id}`)
+        }
+
+        auth.setAuthCookie(request, personSummary.email, farmerApply)
         return h.redirect(`${config.urlPrefix}/org-review`)
       } catch (err) {
-        console.log(`Received error with name ${err.name} and message ${err.message}.`)
-        // todo could make this cleaner
+        console.error(`Received error with name ${err.name} and message ${err.message}.`)
         if (err instanceof AlreadyAppliedError || err instanceof InvalidPermissionsError || err instanceof NoEligibleCphError) {
+          const customerData = session.getCustomer(request)
+          // console.log(`customer data is ${JSON.stringify(customerData)}`)
+          const organisation = session.getFarmerApplyData(request, sessionKeys.farmerApplyData.organisation)
+          // console.log(`organisation data is ${JSON.stringify(organisation)}`)
+
           return h.view('defra-id/cannot-apply-for-livestock-review-exception', {
             ruralPaymentsAgency: config.ruralPaymentsAgency,
             alreadyAppliedError: err instanceof AlreadyAppliedError,
             permissionError: err instanceof InvalidPermissionsError,
             cphError: err instanceof NoEligibleCphError,
-            hasMultipleBusineses: session.getCustomer(request, sessionKeys.customer.attachedToMultipleBusinesses),
-            backLink: auth.requestAuthorizationCodeUrl(session, request)
-          })
-        } else {
-          // generic error
-          return h.view('verify-login-failed', {
-            backLink: auth.requestAuthorizationCodeUrl(session, request)
+            hasMultipleBusineses: customerData?.attachedToMultipleBusinesses,
+            backLink: auth.requestAuthorizationCodeUrl(session, request),
+            sbi: organisation?.sbi,
+            organisationName: organisation?.name
           }).code(400)
         }
+
+        return h.view('verify-login-failed', {
+          backLink: auth.requestAuthorizationCodeUrl(session, request)
+        }).code(400)
       }
     }
   }
