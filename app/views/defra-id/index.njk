@@ -1,30 +1,64 @@
 {% extends './layouts/layout.njk' %}
 
-{% block pageTitle %}{{ serviceName }}{% endblock %}
+{% block pageTitle %}{{serviceName}}{% endblock %}
 
 {% block content %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l">Apply for an annual health and welfare review of your livestock</h1>
+    <form method="POST" autocomplete="off" novalidate="novalidate">
+    <input type="hidden" name="crumb" value="{{crumb}}"/>
 
-    <p class="govuk-body">Use this service to apply for an annual health and welfare review with your vet.</p>
-    <p class="govuk-body">Applying takes around 5 minutes.</p>
+    {% call govukFieldset({
+        legend: {
+          text: "Register your interest in a health and welfare review of your livestock",
+          classes: "govuk-fieldset__legend--l",
+          isPageHeading: true
+        }
+      }) %}
 
-    {{ govukButton({
-      classes: "govuk-!-margin-top-2 govuk-!-margin-bottom-8",
-      href: defraIdLogin,
-      isStartButton: true,
-      text: "Start now",
-      preventDoubleClick: true
-    }) }}
+    <br>
+    <p class="govuk-heading-body">To register your interest in applying for a review, enter the main business email address of the business registering. This is the main business email address linked to the business in your Rural Payments account.</p>
+    <p class="govuk-heading-body">Do not use your personal email address which may also be linked to the business.</p>
 
-    <h2 class="govuk-heading-m">Before you start</h2>
-    <p class="govuk-body">You’ll need your Rural Payments service customer reference number (CRN) and password to sign in.</p>
-    <p class="govuk-body">You must be eligible to apply for an annual health and welfare review. Read the guidance on <a href="/apply/start">getting a funded annual health and welfare review of your livestock</a> before you use this service.</p>
+    {{ 
+      govukInput({
+        label: {
+          text: "Main business email address",
+          classes: "govuk-label",
+          for: "emailAddress"
+        },
+        classes: "govuk-input govuk-!-width-three-quarters",
+        id: "emailAddress",
+        name: "emailAddress",
+        value: emailAddress,
+        errorMessage: errorMessages.emailAddress
+      }) 
+    }}
 
-    <h2 class="govuk-heading-m">Get help with your application</h2>
-    <p class="govuk-body">If you cannot apply online or have a question about your application, contact the Rural Payments Agency.</p>
+    <p class="govuk-heading-body">The Rural Payments Agency will contact you with a link to start your application as soon as possible.</p>
+
+    <h2 class="govuk-heading-m">More than one business linked to customer reference number</h2>
+    <p class="govuk-heading-body">You’ll be able to choose which business you want a review for when you start your application.</p>
+
+    {% endcall %}
+
+    {{ 
+      govukButton({
+        classes: "govuk-!-margin-top-2 govuk-!-margin-bottom-8",
+        isStartButton: true,
+        text: "Register",
+        preventDoubleClick: true
+      }) 
+    }}
+
+    <h2 class="govuk-heading-m">Help with registering</h2>
+
+    <p>If you need to update your main business email address, <a href="{{ ruralPaymentsAgency.loginUri }}">sign in to the Rural Payments service.</a></p>
+    <p class="govuk-heading-body">If you have another question about your registration, contact the RPA by email or phone:</p>
+
     {{ rpaContactDetails({email: ruralPaymentsAgency.email, callChargesUri: ruralPaymentsAgency.callChargesUri, telephone: ruralPaymentsAgency.telephone}) }}
+    
+    <p>If you do not have an account, <a href="{{ ruralPaymentsAgency.loginUri }}">register with the Rural Payments service.</a></p>
   </div>
 </div>
 {% endblock %}
