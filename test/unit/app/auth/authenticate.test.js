@@ -362,7 +362,7 @@ describe('authenticate', () => {
       expect(session.setCustomer).toHaveBeenCalledWith(
         testCase.given.request,
         sessionKeys.customer.attachedToMultipleBusinesses,
-        expect.anything()
+        undefined
       )
       expect(MOCK_COOKIE_AUTH_SET).toHaveBeenCalledWith({
         account: {
