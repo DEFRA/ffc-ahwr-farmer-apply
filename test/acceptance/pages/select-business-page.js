@@ -151,4 +151,5 @@ class SelectBusinessPage extends CommonActions {
     await this.elementToContainText(SUCCESS_MESSAGE,MESSAGE)
   }
 }
+
 module.exports = SelectBusinessPage
