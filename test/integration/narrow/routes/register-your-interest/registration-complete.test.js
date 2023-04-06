@@ -4,8 +4,6 @@ const { serviceName, urlPrefix } = require('../../../../../app/config')
 const mockConfig = require('../../../../../app/config')
 
 describe('Farmer apply "Registration complete" page', () => {
-  let session
-
   beforeAll(async () => {
     jest.resetAllMocks()
   })
