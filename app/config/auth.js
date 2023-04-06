@@ -7,9 +7,18 @@ const authSchema = Joi.object({
     oAuthAuthorisePath: Joi.string(),
     policy: Joi.string(),
     redirectUri: Joi.string().uri(),
+    tenantName: Joi.string(),
+    jwtIssuerId: Joi.string(),
     clientId: Joi.string(),
+    clientSecret: Joi.string(),
     serviceId: Joi.string(),
     scope: Joi.string()
+  },
+  ruralPaymentsAgency: {
+    hostname: Joi.string(),
+    getPersonSummaryUrl: Joi.string(),
+    getOrganisationPermissionsUrl: Joi.string(),
+    getOrganisationUrl: Joi.string()
   }
 })
 
@@ -20,9 +29,18 @@ const authConfig = {
     oAuthAuthorisePath: '/oauth2/v2.0/authorize',
     policy: process.env.DEFRA_ID_POLICY,
     redirectUri: process.env.DEFRA_ID_REDIRECT_URI,
+    tenantName: process.env.DEFRA_ID_TENANT,
+    jwtIssuerId: process.env.DEFRA_ID_JWT_ISSUER_ID,
     clientId: process.env.DEFRA_ID_CLIENT_ID,
+    clientSecret: process.env.DEFRA_ID_CLIENT_SECRET,
     serviceId: process.env.DEFRA_ID_SERVICE_ID,
     scope: `openid ${process.env.DEFRA_ID_CLIENT_ID} offline_access`
+  },
+  ruralPaymentsAgency: {
+    hostname: process.env.RPA_HOST_NAME,
+    getPersonSummaryUrl: process.env.RPA_GET_PERSON_SUMMARY_URL,
+    getOrganisationPermissionsUrl: process.env.RPA_GET_ORGANISATION_PERMISSIONS_URL,
+    getOrganisationUrl: process.env.RPA_GET_ORGANISATION_URL
   }
 }
 

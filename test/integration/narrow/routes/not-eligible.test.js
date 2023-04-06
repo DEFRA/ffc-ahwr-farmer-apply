@@ -1,9 +1,18 @@
 const cheerio = require('cheerio')
 const expectPhaseBanner = require('../../../utils/phase-banner-expect')
-const { serviceName, urlPrefix } = require('../../../../app/config')
+jest.mock('../../../../app/config', () => ({
+  ...jest.requireActual('../../../../app/config'),
+  authConfig: {
+    defraId: {
+      enabled: false
+    }
+  }
+}))
+
+const config = require('../../../../app/config')
 
 describe('Not eligible page test', () => {
-  const url = `${urlPrefix}/not-eligible`
+  const url = `${config.urlPrefix}/not-eligible`
 
   describe(`GET ${url} route`, () => {
     test('when logged in returns 200', async () => {
@@ -18,7 +27,7 @@ describe('Not eligible page test', () => {
       expect(res.statusCode).toBe(200)
       const $ = cheerio.load(res.payload)
       expect($('.govuk-heading-l').text()).toEqual('You\'re not eligible to apply')
-      expect($('title').text()).toEqual(`Not Eligible - ${serviceName}`)
+      expect($('title').text()).toEqual(`Not Eligible - ${config.serviceName}`)
       expectPhaseBanner.ok($)
     })
 
@@ -31,7 +40,7 @@ describe('Not eligible page test', () => {
       const res = await global.__SERVER__.inject(options)
 
       expect(res.statusCode).toBe(302)
-      expect(res.headers.location).toEqual(`${urlPrefix}/login`)
+      expect(res.headers.location).toEqual(`${config.urlPrefix}/login`)
     })
   })
 })

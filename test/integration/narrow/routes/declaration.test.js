@@ -4,8 +4,16 @@ const expectPhaseBanner = require('../../../utils/phase-banner-expect')
 const { farmerApplyData: { declaration } } = require('../../../../app/session/keys')
 const species = require('../../../../app/constants/species')
 const states = require('../../../../app/constants/states')
-const { serviceName, urlPrefix } = require('../../../../app/config')
+jest.mock('../../../../app/config', () => ({
+  ...jest.requireActual('../../../../app/config'),
+  authConfig: {
+    defraId: {
+      enabled: false
+    }
+  }
+}))
 
+const config = require('../../../../app/config')
 const sessionMock = require('../../../../app/session')
 jest.mock('../../../../app/session')
 const messagingMock = require('../../../../app/messaging')
@@ -13,7 +21,7 @@ jest.mock('../../../../app/messaging')
 
 function expectPageContentOk ($, organisation) {
   expect($('h1.govuk-heading-l').text()).toEqual('Review your agreement offer')
-  expect($('title').text()).toEqual(`Review your agreement offer - ${serviceName}`)
+  expect($('title').text()).toEqual(`Review your agreement offer - ${config.serviceName}`)
   expect($('#organisation-name').text()).toEqual(organisation.name)
   expect($('#organisation-address').text()).toEqual(organisation.address)
   expect($('#organisation-sbi').text()).toEqual(organisation.sbi)
@@ -22,7 +30,7 @@ function expectPageContentOk ($, organisation) {
 describe('Declaration test', () => {
   const organisation = { id: 'organisation', name: 'org-name', address: 'org-address', sbi: '0123456789' }
   const auth = { credentials: { reference: '1111', sbi: '111111111' }, strategy: 'cookie' }
-  const url = `${urlPrefix}/declaration`
+  const url = `${config.urlPrefix}/declaration`
 
   afterEach(() => {
     jest.resetAllMocks()
@@ -62,7 +70,7 @@ describe('Declaration test', () => {
       const res = await global.__SERVER__.inject(options)
 
       expect(res.statusCode).toBe(302)
-      expect(res.headers.location).toEqual(`${urlPrefix}/login`)
+      expect(res.headers.location).toEqual(`${config.urlPrefix}/login`)
     })
 
     test('returns 400 when no application found', async () => {
@@ -104,7 +112,7 @@ describe('Declaration test', () => {
       expect(res.statusCode).toBe(200)
       const $ = cheerio.load(res.payload)
       expect($('h1').text()).toMatch('Application complete')
-      expect($('title').text()).toEqual(`Application complete - ${serviceName}`)
+      expect($('title').text()).toEqual(`Application complete - ${config.serviceName}`)
       expectPhaseBanner.ok($)
       expect(sessionMock.clear).toBeCalledTimes(1)
       expect(sessionMock.setFarmerApplyData).toHaveBeenCalledTimes(3)
@@ -136,8 +144,8 @@ describe('Declaration test', () => {
 
       expect(res.statusCode).toBe(200)
       const $ = cheerio.load(res.payload)
-      expect($('.govuk-heading-l').text()).toEqual('You’ve rejected the agreement offer')
-      expect($('title').text()).toEqual(serviceName)
+      expect($('.govuk-heading-l').text()).toEqual('Agreement offer rejected')
+      expect($('title').text()).toEqual(config.serviceName)
       expectPhaseBanner.ok($)
       expect(sessionMock.clear).toBeCalledTimes(1)
       expect(sessionMock.setFarmerApplyData).toHaveBeenCalledTimes(3)
@@ -167,7 +175,7 @@ describe('Declaration test', () => {
       expect(res.statusCode).toBe(200)
       const $ = cheerio.load(res.payload)
       expect($('h1').text()).toMatch('Application complete')
-      expect($('title').text()).toEqual(`Application complete - ${serviceName}`)
+      expect($('title').text()).toEqual(`Application complete - ${config.serviceName}`)
       expectPhaseBanner.ok($)
       expect(sessionMock.getFarmerApplyData).toHaveBeenCalledTimes(1)
       expect(sessionMock.setFarmerApplyData).toHaveBeenCalledTimes(0)
@@ -231,7 +239,27 @@ describe('Declaration test', () => {
       const res = await global.__SERVER__.inject(options)
 
       expect(res.statusCode).toBe(302)
-      expect(res.headers.location).toEqual(`${urlPrefix}/login`)
+      expect(res.headers.location).toEqual(`${config.urlPrefix}/login`)
     })
+  })
+
+  test('returns 500 when application reference is null', async () => {
+    const application = { whichReview: species.beef, organisation }
+    sessionMock.getFarmerApplyData.mockReturnValue(application)
+    messagingMock.receiveMessage.mockResolvedValueOnce({ applicationReference: null })
+    const crumb = await getCrumbs(global.__SERVER__)
+    const options = {
+      method: 'POST',
+      url,
+      payload: { crumb, terms: 'agree', offerStatus: 'accepted' },
+      auth,
+      headers: { cookie: `crumb=${crumb}` }
+    }
+
+    const res = await global.__SERVER__.inject(options)
+
+    expect(res.statusCode).toBe(500)
+    const $ = cheerio.load(res.payload)
+    expect($('h1').text()).toEqual('Sorry, there is a problem with the service')
   })
 })

@@ -23,8 +23,11 @@
           isPageHeading: true
         }
       }) %}
-        <p class="govuk-body">Enter the business email address linked to the business registering an interest. This may be different to your personal email address which may also be linked to the business.</p>
-        <p class="govuk-body">We’ll use this to send you confirmation you’ve successfully registered your interest.</p>
+        <p class="govuk-body">Enter the main business email address linked to the business registering an interest in your Rural Payments account.</p>
+        <p class="govuk-body">Do not use your personal email address which may also be linked to the business.</p>
+        <div class="govuk-inset-text">
+          <p class="govuk-body">We'll only send confirmation you've successfully registered to the main business email address.</p>
+        </div>
         {{ 
           govukInput({
             label: {
@@ -66,15 +69,7 @@
       {{ 
         govukDetails({
           summaryText: "Problems with your email",
-          html: "<p>If you’ve lost or forgotten the email address, contact the Rural Payments Agency.</p>
-          <ul class='govuk-list'>
-            <li>Rural Payments Agency</li>
-            <li>Telephone: 03000 200 301</li>
-            <li>Monday to Friday, 8:30am to 5pm (except public holidays)</li>
-            <li><a href='mailto:" + ruralPaymentsEmail + "'>" + ruralPaymentsEmail + "</a></li>
-          </ul>
-          <p class='govuk-body'>Find out about <a class='govuk-link' target='_blank' href='" + callChargesUri + "'> call charges</a></p>
-          " 
+          html: "<p>If you have lost or forgotten your business email address or need to check which email address is linked to the business, contact the Rural Payments Agency.</p>" + rpaContactDetails({email: ruralPaymentsAgency.email, callChargesUri: ruralPaymentsAgency.callChargesUri, telephone: ruralPaymentsAgency.telephone})
         })  
       }}
     </form>

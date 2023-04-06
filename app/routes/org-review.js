@@ -3,7 +3,6 @@ const { organisation: organisationKey, confirmCheckDetails } = require('../sessi
 const getOrganisation = require('./models/organisation')
 const session = require('../session')
 const Joi = require('joi')
-
 const errorMessage = 'Select yes if these details are correct'
 const config = require('../config')
 
@@ -46,7 +45,9 @@ module.exports = [{
         )
         return h.redirect(`${config.urlPrefix}/which-review`)
       }
-      return h.view('details-incorrect')
+      return h.view('details-incorrect', {
+        ruralPaymentsAgency: config.ruralPaymentsAgency
+      })
     }
   }
 }]

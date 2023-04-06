@@ -33,4 +33,9 @@ data:
   DEFRA_ID_REDIRECT_URI: {{ quote .Values.container.defraIdRedirectUri }}
   JWT_SECRET: {{ quote .Values.container.jwtSecret }}
   JWT_ISSUER: {{ quote .Values.container.jwtIssuer }}
+  DEFRA_ID_JWT_ISSUER_ID: {{ quote .Values.container.defraIdJwtIssuerId }}
+  RPA_HOST_NAME: {{ quote .Values.container.rpaHostname }}
+  RPA_GET_PERSON_SUMMARY_URL: {{ quote .Values.container.rpaGetPersonSummaryUrl }}
+  RPA_GET_ORGANISATION_PERMISSIONS_URL: {{ quote .Values.container.rpaGetOrganisationPermissionsUrl }}
+  RPA_GET_ORGANISATION_URL: {{ quote .Values.container.rpaGetOrganisationUrl }}
 {{- end -}}

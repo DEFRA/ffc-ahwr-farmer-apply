@@ -64,13 +64,18 @@ container:
   defraIdEnabled:
   defraIdTenant:
   defraIdRedirectUri:
+  defraIdJwtIssuerId:
   defraIdClientId:
   defraIdClientSecret:
   defraIdServiceId:
   defraIdPolicy:
   jwtSecret:
   jwtIssuer:
-
+  rpaHostname:
+  rpaGetPersonSummaryUrl:
+  rpaGetOrganisationPermissionsUrl:
+  rpaGetOrganisationUrl:
+ 
 ingress:
   class: nginx
   endpoint: ffc-ahwr-farmer

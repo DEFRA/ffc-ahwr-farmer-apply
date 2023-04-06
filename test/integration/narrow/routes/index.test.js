@@ -53,6 +53,12 @@ describe('Farmer apply home page test - DEFRA ID enabled', () => {
           clientId: 'dummy_client_id',
           serviceId: 'dummy_service_id',
           scope: 'openid dummy_client_id offline_access'
+        },
+        ruralPaymentsAgency: {
+          hostname: 'dummy-host-name',
+          getPersonSummaryUrl: 'dummy-get-person-summary-url',
+          getOrganisationPermissionsUrl: 'dummy-get-organisation-permissions-url',
+          getOrganisationUrl: 'dummy-get-organisation-url'
         }
       }
     }))
@@ -69,7 +75,7 @@ describe('Farmer apply home page test - DEFRA ID enabled', () => {
     expect(res.statusCode).toBe(200)
     const $ = cheerio.load(res.payload)
     expect($('.govuk-heading-l').text()).toEqual(
-      'DEFRA ID PLACEHOLDER START SCREEN'
+      'Apply for an annual health and welfare review of your livestock'
     )
     const button = $('.govuk-main-wrapper .govuk-button')
     expect(button.attr('href')).toContain('https://tenant.b2clogin.com/tenant.onmicrosoft.com/oauth2/v2.0/authorize')

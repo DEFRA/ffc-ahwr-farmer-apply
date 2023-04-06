@@ -24,6 +24,14 @@ class CommonActions {
   async elementToContainText (element, text) {
     const locator = await browser.$(element)
     expect(await locator.getText()).to.include(text)
+<<<<<<< HEAD
+=======
+  }
+
+  async elementTextShouldBe (element, text) {
+    const locator = await browser.$(element)
+    expect(await locator.getText()).to.equal(text)
+>>>>>>> main
   }
 
   async elementTextShouldBe (element, text) {
@@ -42,5 +50,9 @@ class CommonActions {
   }
 
 }
+<<<<<<< HEAD
 
 module.exports = CommonActions
+=======
+module.exports = CommonActions
+>>>>>>> main

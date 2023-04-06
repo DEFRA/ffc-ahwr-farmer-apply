@@ -8,7 +8,6 @@ LABEL uk.gov.defra.ffc.parent-image=defradigital/node-development:${PARENT_VERSI
 ARG PORT_DEBUG
 EXPOSE ${PORT_DEBUG}
 COPY --chown=node:node package*.json ./
-RUN npm config set strict-ssl false
 RUN npm install
 COPY --chown=node:node . .
 CMD [ "npm", "run", "test" ]
