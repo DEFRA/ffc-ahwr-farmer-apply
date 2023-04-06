@@ -41,6 +41,10 @@ const LIVESTOCK_NUMBER = 'eligible for funding'
 
 class SelectBusinessPage extends CommonActions {
   async magicLinkUrl () {
+    const sleep = (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitTimeInMs))
+    comsole.log('sleeping')
+    await sleep(20000)
+    comsole.log('after sleep')
     const magicLink = await getMagicLink(BUSINESS_EMAIL)
     await browser.url(magicLink)
     await this.urlContain(BUSINESS_EMAIL)
