@@ -59,7 +59,7 @@ module.exports = [{
       } catch (err) {
         console.error(`Received error with name ${err.name} and message ${err.message}.`)
         if (err instanceof AlreadyAppliedError || err instanceof InvalidPermissionsError || err instanceof NoEligibleCphError) {
-          const customerData = session.getCustomer(request)
+          const attachedToMultipleBusinesses = session.getCustomer(request, sessionKeys.customer.attachedToMultipleBusinesses)
           const organisation = session.getFarmerApplyData(request, sessionKeys.farmerApplyData.organisation)
 
           return h.view('defra-id/cannot-apply-for-livestock-review-exception', {
@@ -67,7 +67,7 @@ module.exports = [{
             alreadyAppliedError: err instanceof AlreadyAppliedError,
             permissionError: err instanceof InvalidPermissionsError,
             cphError: err instanceof NoEligibleCphError,
-            hasMultipleBusineses: customerData?.attachedToMultipleBusinesses,
+            hasMultipleBusineses: attachedToMultipleBusinesses,
             backLink: auth.requestAuthorizationCodeUrl(session, request),
             sbi: organisation?.sbi,
             organisationName: organisation?.name
