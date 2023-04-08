@@ -1,3 +1,0 @@
-{{- include "ffc-helm-library.cluster-ip-service" (list . "ffc-ahwr-farmer-apply.cluster-ip-service") -}}
-{{- define "ffc-ahwr-farmer-apply.cluster-ip-service" -}}
-{{- end -}}
