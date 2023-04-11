@@ -45,7 +45,7 @@ module.exports = [{
         )
         return h.redirect(`${config.urlPrefix}/which-review`)
       }
-      return h.view('details-incorrect', {
+      return h.view('update-details', {
         ruralPaymentsAgency: config.ruralPaymentsAgency
       })
     }
