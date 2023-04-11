@@ -40,10 +40,12 @@ describe('Send Magic Link test', () => {
 
   test('Sends email for farmer apply', async () => {
     jest.isolateModules(async () => {
+      const MOCK_SERVICE_URI = 'http://localhost'
       jest.mock('../../../../../app/config', () => {
         const originalModule = jest.requireActual('../../../../../app/config')
         return {
-          ...originalModule
+          ...originalModule,
+          serviceUri: MOCK_SERVICE_URI
         }
       })
       const token = testToken
@@ -57,7 +59,7 @@ describe('Send Magic Link test', () => {
       expect(cacheData[token]).toEqual({ email, redirectTo, userType: farmerApply })
       expect(sendEmail).toHaveBeenCalledTimes(1)
       expect(sendEmail).toHaveBeenCalledWith(config.notifyConfig.emailTemplates.applyLogin, email, {
-        personalisation: { magiclink: `${config.serviceUri}/verify-login?token=${token}&email=${email}` },
+        personalisation: { magiclink: `${MOCK_SERVICE_URI}/verify-login?token=${encodeURIComponent(token)}&email=${encodeURIComponent(email)}` },
         reference: token
       })
     })

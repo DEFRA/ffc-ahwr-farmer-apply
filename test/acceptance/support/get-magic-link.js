@@ -42,7 +42,7 @@ async function getMagicLink (businessEmail) {
       throw new Error(`Unable to find token in magic link email for ${businessEmail.value}`)
     }
 
-    const magicLink = `${process.env.TEST_ENVIRONMENT_ROOT_URL}/verify-login?token=${token}&email=${businessEmail.value}`
+    const magicLink = `${process.env.TEST_ENVIRONMENT_ROOT_URL}/apply/verify-login?token=${token}&email=${businessEmail.value}`
 
     console.log(`${new Date().toISOString()} Magic link for ${businessEmail.value} is ${magicLink}`)
     return magicLink
@@ -51,5 +51,4 @@ async function getMagicLink (businessEmail) {
     return null
   }
 }
-
 module.exports = getMagicLink
