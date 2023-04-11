@@ -41,6 +41,7 @@ describe('Organisation', () => {
 
   test('when organisationIsEligible called and has valid permissions - returns valid organisation', async () => {
     const personId = 1234567
+    const apimToken = 'apim_token'
     mockSession.getToken.mockResolvedValueOnce({ access_token: 1234567 })
     mockJwtDecode.mockResolvedValue({ currentRelationshipId: 1234567 })
     mockBase.get.mockResolvedValueOnce({
@@ -97,7 +98,7 @@ describe('Organisation', () => {
       }
     })
 
-    const result = await organisation.organisationIsEligible(expect.anything(), personId)
+    const result = await organisation.organisationIsEligible(expect.anything(), personId, apimToken)
 
     expect(mockSession.getToken).toHaveBeenCalledTimes(1)
     expect(mockJwtDecode).toHaveBeenCalledTimes(1)
@@ -115,6 +116,7 @@ describe('Organisation', () => {
   test('when organisationIsEligible called and has invalid permissions - throws error', async () => {
     const personId = 7654321
     const organisationId = 1234567
+    const apimToken = 'apim_token'
     mockSession.getToken.mockResolvedValueOnce({ access_token: organisationId })
     mockJwtDecode.mockImplementation(() => {
       return {
@@ -141,7 +143,7 @@ describe('Organisation', () => {
     })
 
     try {
-      await organisation.organisationIsEligible(expect.anything(), personId)
+      await organisation.organisationIsEligible(expect.anything(), personId, apimToken)
     } catch (error) {
       expect(error).toBeInstanceOf(Error)
       expect(error).toHaveProperty('message', `Person id ${personId} does not have the required permissions for organisation id ${organisationId}`)

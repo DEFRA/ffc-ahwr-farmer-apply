@@ -12,6 +12,7 @@ describe('Base', () => {
     const url = '/get/test'
     const contactName = 'Mr Smith'
     const accessToken = 'access_token'
+    const ocpApimSubscriptionKey = 'ocp-apim-subscription-key'
     const contactId = 1234567
     const wreckResponse = {
       payload: {
@@ -22,8 +23,13 @@ describe('Base', () => {
         statusCode: 200
       }
     }
+
+    const headers = {}
+    headers['X-Forwarded-Authorization'] = accessToken
+    headers['Ocp-Apim-Subscription-Key'] = ocpApimSubscriptionKey
+
     const options = {
-      headers: { Authorization: accessToken },
+      headers,
       json: true,
       rejectUnauthorized: false
     }

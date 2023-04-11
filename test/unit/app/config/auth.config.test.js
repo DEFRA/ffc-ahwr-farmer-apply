@@ -20,7 +20,13 @@ describe('Auth config', () => {
         rpaHostname: 'dummy-host-name',
         rpaGetPersonSummaryUrl: 'dummy-get-person-summary-url',
         rpaGetOrganisationPermissionsUrl: 'dummy-get-organisation-permissions-url',
-        rpaGetOrganisationUrl: 'dummy-get-organisation-url'
+        rpaGetOrganisationUrl: 'dummy-get-organisation-url',
+        rpaOcpApimSubscriptionKey: 'dummy-ocp-apim-subscription-key',
+        apimHostname: 'dummy-host-name',
+        apimOAuthPath: 'dummy-oauth-path',
+        apimClientId: 'dummy-client-id',
+        apimClientSecret: 'dummy-client-secret',
+        apimScope: 'dummy-scope'
       },
       config: {
         defraId: {
@@ -40,7 +46,15 @@ describe('Auth config', () => {
           hostname: 'dummy-host-name',
           getPersonSummaryUrl: 'dummy-get-person-summary-url',
           getOrganisationPermissionsUrl: 'dummy-get-organisation-permissions-url',
-          getOrganisationUrl: 'dummy-get-organisation-url'
+          getOrganisationUrl: 'dummy-get-organisation-url',
+          ocpApimSubscriptionKey: 'dummy-ocp-apim-subscription-key'
+        },
+        apim: {
+          hostname: 'dummy-host-name',
+          oAuthPath: 'dummy-oauth-path',
+          clientId: 'dummy-client-id',
+          clientSecret: 'dummy-client-secret',
+          scope: 'dummy-scope'
         }
       }
     }
@@ -57,6 +71,12 @@ describe('Auth config', () => {
     process.env.RPA_GET_PERSON_SUMMARY_URL = testCase.processEnv.rpaGetPersonSummaryUrl
     process.env.RPA_GET_ORGANISATION_PERMISSIONS_URL = testCase.processEnv.rpaGetOrganisationPermissionsUrl
     process.env.RPA_GET_ORGANISATION_URL = testCase.processEnv.rpaGetOrganisationUrl
+    process.env.RPA_OCP_APIM_SUBSCRIPTION_KEY = testCase.processEnv.rpaOcpApimSubscriptionKey
+    process.env.APIM_HOST_NAME = testCase.processEnv.apimHostname
+    process.env.APIM_OAUTH_PATH = testCase.processEnv.apimOAuthPath
+    process.env.APIM_CLIENT_ID = testCase.processEnv.apimClientId
+    process.env.APIM_CLIENT_SECRET = testCase.processEnv.apimClientSecret
+    process.env.APIM_SCOPE = testCase.processEnv.apimScope
 
     const config = require('../../../../app/config/auth')
 
