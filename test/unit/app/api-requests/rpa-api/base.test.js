@@ -48,4 +48,23 @@ describe('Base', () => {
     expect(Wreck.get).toHaveBeenCalledTimes(1)
     expect(Wreck.get).toHaveBeenCalledWith(`${hostname}${url}`, options)
   })
+
+  test('when called and error occurs, throwns error', async () => {
+    const hostname = 'https://testhost'
+    const url = '/get/test'
+    const contactId = 1234567
+    const accessToken = 'access_token'
+    const error = new Error('Test error in base')
+
+    Wreck.get = jest.fn(async function (_url, _options) {
+      throw error
+    })
+
+    mockSession.getToken.mockResolvedValueOnce(accessToken)
+    mockJwtDecode.mockResolvedValue(contactId)
+
+    expect(async () =>
+      await base.get(hostname, url, expect.anything(), expect.anything())
+    ).rejects.toThrowError(error)
+  })
 })
