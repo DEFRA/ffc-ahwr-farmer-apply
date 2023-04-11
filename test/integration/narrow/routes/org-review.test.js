@@ -120,7 +120,7 @@ describe('Org review page test', () => {
       expect(res.headers.location).toEqual(`${config.urlPrefix}/which-review`)
     })
 
-    test('returns 200 with details are not recognised when no is answered', async () => {
+    test('returns 200 with update your details recognised when no is answered', async () => {
       const options = {
         method,
         url,
@@ -133,7 +133,7 @@ describe('Org review page test', () => {
 
       expect(res.statusCode).toBe(200)
       const $ = cheerio.load(res.payload)
-      expect($('.govuk-heading-l').text()).toEqual('Details are not recognised')
+      expect($('.govuk-heading-l').text()).toEqual('Update your details')
     })
 
     test.each([
