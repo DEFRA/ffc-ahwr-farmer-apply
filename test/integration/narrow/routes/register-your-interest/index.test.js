@@ -74,8 +74,26 @@ describe('Farmer apply "Enter your business email address" page', () => {
           payload: {
             emailAddress: 'nAme@eXample.com'
           }
+        },
+        {
+          payload: {}
+        },
+        {
+          payload: {
+            emailAddress: ''
+          }
+        },
+        {
+          payload: {
+            emailAddress: 1
+          }
+        },
+        {
+          payload: {
+            emailAddress: 'name'
+          }
         }
-      ])('when any $payload then expect 404 and redirect to "Registration Complete" page', async (testCase) => {
+      ])('when any $payload then expect 400 and redirect to "Register your interest" page', async (testCase) => {
         const options = {
           method: 'POST',
           url: `${urlPrefix}/register-your-interest`,

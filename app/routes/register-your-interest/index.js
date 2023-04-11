@@ -43,8 +43,19 @@ module.exports = [
           const errorMessages = error
             .details
             .reduce((acc, e) => ({ ...acc, [e.context.label]: { text: e.message } }), {})
-          return h.view(
-            'defra-id/register-your-interest/index',
+          if (defraIdConfig.enabled === true) {
+            return h.view(
+              'defra-id/register-your-interest/index',
+              {
+                ...request.payload,
+                ruralPaymentsAgency,
+                errorMessages
+              }
+            ).code(400).takeover()
+          }
+          console.log('Defra ID is not enabled', request)
+          return h.redirect(
+            'register-your-interest',
             {
               ...request.payload,
               ruralPaymentsAgency,
@@ -62,7 +73,7 @@ module.exports = [
           {
             ...request.payload,
             ruralPaymentsAgency,
-            errorMessage: 'Defra ID is not enabled'
+            errorMessages: 'Defra ID is not enabled'
           }).code(400).takeover()
       }
     }
