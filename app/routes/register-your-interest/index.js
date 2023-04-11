@@ -61,11 +61,11 @@ module.exports = [
         }
         console.log('Defra ID is not enabled', request)
         return h.redirect('register-your-interest',
-         { 
-          ...request.payload,
-          ruralPaymentsAgency,
-          errorMessage: 'Defra ID is not enabled'
-         })
+          {
+            ...request.payload,
+            ruralPaymentsAgency,
+            errorMessage: 'Defra ID is not enabled'
+          })
       }
     }
   }
