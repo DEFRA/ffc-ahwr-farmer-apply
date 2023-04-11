@@ -18,4 +18,4 @@ Feature: Apply journey smoke tests
     Examples:
       | valid credential   |
       | ibrahim.adekanmi@kainos.com|
-      
+

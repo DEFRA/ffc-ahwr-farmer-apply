@@ -14,7 +14,6 @@ exports.config = {
   user,
   key,
   specs: ['./features/**/*.feature'],
-  exclude: ['./scratch/**'],
   parallel,
   maxInstances,
   capabilities: [
@@ -106,7 +105,7 @@ exports.config = {
   connectionRetryCount: 1,
   services: ['browserstack'],
   framework: 'cucumber',
-  specFileRetries: 2,
+  specFileRetries: 0,
   specFileRetriesDelay: 30,
   reporters: ['spec',
     [HtmlReporter, {
