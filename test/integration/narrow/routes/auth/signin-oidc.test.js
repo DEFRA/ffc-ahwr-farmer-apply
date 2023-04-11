@@ -6,8 +6,12 @@ jest.mock('../../../../../app/auth')
 const personMock = require('../../../../../app/api-requests/rpa-api/person')
 jest.mock('../../../../../app/api-requests/rpa-api/person')
 const organisationMock = require('../../../../../app/api-requests/rpa-api/organisation')
-const { InvalidPermissionsError, InvalidStateError } = require('../../../../../app/exceptions')
 jest.mock('../../../../../app/api-requests/rpa-api/organisation')
+
+const businessEligibleToApplyMock = require('../../../../../app/api-requests/business-eligble-to-apply')
+jest.mock('../../../../../app/api-requests/business-eligble-to-apply')
+
+const { InvalidPermissionsError, InvalidStateError } = require('../../../../../app/exceptions')
 
 describe('FarmerApply defra ID redirection test', () => {
   jest.mock('../../../../../app/config', () => ({
@@ -139,10 +143,20 @@ describe('FarmerApply defra ID redirection test', () => {
         }
       })
 
+      sessionMock.getFarmerApplyData.mockResolvedValueOnce({
+        organisation: {
+          sbi: 101122201
+        }
+      })
+
+      businessEligibleToApplyMock.mockResolvedValueOnce(true)
+
       const res = await global.__SERVER__.inject(options)
       expect(res.statusCode).toBe(302)
       expect(res.headers.location).toEqual('/apply/org-review')
       expect(sessionMock.setFarmerApplyData).toBeCalledTimes(1)
+      expect(sessionMock.getFarmerApplyData).toBeCalledTimes(1)
+      expect(businessEligibleToApplyMock).toBeCalledTimes(1)
       expect(authMock.authenticate).toBeCalledTimes(1)
       expect(personMock.getPersonSummary).toBeCalledTimes(1)
       expect(organisationMock.organisationIsEligible).toBeCalledTimes(1)
@@ -189,6 +203,8 @@ describe('FarmerApply defra ID redirection test', () => {
         organisationPermission: false
       })
 
+      businessEligibleToApplyMock.mockResolvedValueOnce(true)
+
       sessionMock.getCustomer.mockResolvedValueOnce({
         attachedToMultipleBusinesses: false,
         foo: 'sadaasas'
@@ -221,6 +237,7 @@ describe('FarmerApply defra ID redirection test', () => {
       expect(authMock.requestAuthorizationCodeUrl).toBeCalledTimes(1)
       expect(personMock.getPersonSummary).toBeCalledTimes(1)
       expect(organisationMock.organisationIsEligible).toBeCalledTimes(1)
+      expect(businessEligibleToApplyMock).toBeCalledTimes(1)
       const $ = cheerio.load(res.payload)
       expect($('.govuk-heading-l').text()).toMatch('You cannot apply for a livestock review for this business')
       expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
