@@ -22,7 +22,7 @@ const routes = [].concat(
 )
 
 const registerYourInterestRoutes = [].concat(
-  require('../routes/register-your-interest'),
+  require('../routes/register-your-interest/index'),
   require('../routes/register-your-interest/enter-your-crn'),
   require('../routes/register-your-interest/enter-your-sbi'),
   require('../routes/register-your-interest/enter-your-email-address'),

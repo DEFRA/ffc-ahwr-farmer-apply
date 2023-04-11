@@ -1,8 +1,8 @@
 const urlPrefix = require('../../config/index').urlPrefix
 const ruralPaymentsAgency = require('../../config/index').ruralPaymentsAgency
-const Joi = require('joi')
+const defraIdConfig = require('../../config').authConfig.defraId
 const BUSINESS_EMAIL_SCHEMA = require('../../schemas/business-email.schema.js')
-const config = require('../../config')
+const Joi = require('joi')
 
 const ERROR_MESSAGE = {
   enterYourEmailAddress: 'Enter your business email address',
@@ -16,10 +16,8 @@ module.exports = [
     options: {
       auth: false,
       handler: async (request, h) => {
-        if (config.authConfig.defraId.enabled) {
-          return h.view('defra-id/register-your-interest/index', {
-            ruralPaymentsAgency
-          })
+        if (defraIdConfig.enabled) {
+          return h.view('defra-id/register-your-interest/index', { ruralPaymentsAgency })
         } else {
           return h.view('register-your-interest/index', { ruralPaymentsAgency })
         }
@@ -28,7 +26,7 @@ module.exports = [
   },
   {
     method: 'POST',
-    path: `${config.urlPrefix}/register-your-interest`,
+    path: `${urlPrefix}/register-your-interest`,
     options: {
       auth: false,
       validate: {
@@ -42,21 +40,21 @@ module.exports = [
             })
         }),
         failAction: async (request, h, error) => {
-          const errorMessage = error
+          const errorMessages = error
             .details
             .reduce((acc, e) => ({ ...acc, [e.context.label]: { text: e.message } }), {})
           return h.view(
-            'defra-id/index',
+            'defra-id/register-your-interest/index',
             {
               ...request.payload,
               ruralPaymentsAgency,
-              errorMessage
+              errorMessages
             }
           ).code(400).takeover()
         }
       },
       handler: async (request, h) => {
-        if (config.authConfig.defraId.enabled) {
+        if (defraIdConfig.enabled === true) {
           return h.redirect('register-your-interest/registration-complete', { ruralPaymentsAgency })
         }
         console.log('Defra ID is not enabled', request)
@@ -65,7 +63,7 @@ module.exports = [
             ...request.payload,
             ruralPaymentsAgency,
             errorMessage: 'Defra ID is not enabled'
-          })
+          }).code(400).takeover()
       }
     }
   }
