@@ -6,11 +6,7 @@ const mockConfig = require('../../../../../app/config')
 
 describe('Farmer apply "Enter your business email address" page', () => {
   describe('Defra ID disabled', () => {
-    let logSpy
-
     beforeAll(async () => {
-      logSpy = jest.spyOn(console, 'log')
-
       jest.resetAllMocks()
       jest.mock('../../../../../app/config', () => ({
         ...mockConfig,
@@ -54,57 +50,6 @@ describe('Farmer apply "Enter your business email address" page', () => {
         expect($('.govuk-heading-body').first().text()).toEqual('To be eligible for a review, you must have one of the following: ')
         expect($('title').text()).toEqual(serviceName)
         expectPhaseBanner.ok($)
-      })
-    })
-
-    describe('POST', () => {
-      let crumb
-
-      beforeEach(async () => {
-        crumb = await getCrumbs(global.__SERVER__)
-      })
-
-      test.each([
-        {
-          payload: {
-            emailAddress: 'name@example.com'
-          }
-        },
-        {
-          payload: {
-            emailAddress: 'nAme@eXample.com'
-          }
-        },
-        {
-          payload: {}
-        },
-        {
-          payload: {
-            emailAddress: ''
-          }
-        },
-        {
-          payload: {
-            emailAddress: 1
-          }
-        },
-        {
-          payload: {
-            emailAddress: 'name'
-          }
-        }
-      ])('when any $payload then expect 400 and redirect to "Register your interest" page', async (testCase) => {
-        const options = {
-          method: 'POST',
-          url: `${urlPrefix}/register-your-interest`,
-          payload: { crumb, ...testCase.payload },
-          headers: { cookie: `crumb=${crumb}` }
-        }
-
-        const res = await global.__SERVER__.inject(options)
-        expect(res.statusCode).toBe(400)
-        expect(logSpy).toHaveBeenCalledWith('Defra ID is not enabled', expect.anything())
-        expect(res.headers.location).toEqual('register-your-interest')
       })
     })
   })

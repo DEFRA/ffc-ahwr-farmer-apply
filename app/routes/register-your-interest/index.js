@@ -2,6 +2,9 @@ const urlPrefix = require('../../config/index').urlPrefix
 const ruralPaymentsAgency = require('../../config/index').ruralPaymentsAgency
 const defraIdConfig = require('../../config').authConfig.defraId
 const BUSINESS_EMAIL_SCHEMA = require('../../schemas/business-email.schema.js')
+const { sendDefraIdRegisterYourInterestMessage } = require('../../messaging/register-your-interest')
+const sendEmail = require('../../lib/email/send-email')
+const { registerYourInterest } = require('../../config').notifyConfig.emailTemplates
 const Joi = require('joi')
 
 const ERROR_MESSAGE = {
@@ -43,19 +46,8 @@ module.exports = [
           const errorMessages = error
             .details
             .reduce((acc, e) => ({ ...acc, [e.context.label]: { text: e.message } }), {})
-          if (defraIdConfig.enabled === true) {
-            return h.view(
-              'defra-id/register-your-interest/index',
-              {
-                ...request.payload,
-                ruralPaymentsAgency,
-                errorMessages
-              }
-            ).code(400).takeover()
-          }
-          console.log('Defra ID is not enabled', request)
-          return h.redirect(
-            'register-your-interest',
+          return h.view(
+            'defra-id/register-your-interest/index',
             {
               ...request.payload,
               ruralPaymentsAgency,
@@ -63,19 +55,12 @@ module.exports = [
             }
           ).code(400).takeover()
         }
-      },
-      handler: async (request, h) => {
-        if (defraIdConfig.enabled === true) {
-          return h.redirect('register-your-interest/registration-complete', { ruralPaymentsAgency })
-        }
-        console.log('Defra ID is not enabled', request)
-        return h.redirect('register-your-interest',
-          {
-            ...request.payload,
-            ruralPaymentsAgency,
-            errorMessages: 'Defra ID is not enabled'
-          }).code(400).takeover()
       }
+    },
+    handler: async (request, h) => {
+      await sendEmail(registerYourInterest, request.payload.emailAddress)
+      await sendDefraIdRegisterYourInterestMessage(request.payload.emailAddress)
+      return h.redirect('register-your-interest/registration-complete', { ruralPaymentsAgency })
     }
   }
 ]
