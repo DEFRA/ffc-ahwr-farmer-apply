@@ -15,7 +15,7 @@ const getAppliableBusinesses = async (businessEmail) => {
   const isAppliable = await (async (businessEmail) => {
     const WITHDRAWN = 2
     const NOT_AGREED = 7
-    const latestApplications = await applicationApi.getLatestApplicationsBy(businessEmail)
+    const latestApplications = await applicationApi.getLatestApplicationsByEmail(businessEmail)
     return eligibleBusiness =>
     // has not been applied before
       latestApplications

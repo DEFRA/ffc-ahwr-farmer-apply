@@ -5,6 +5,7 @@ const sessionKeys = require('../../session/keys')
 const config = require('../../config')
 const { farmerApply } = require('../../constants/user-types')
 const { getPersonSummary, getPersonName, organisationIsEligible, getOrganisationAddress } = require('../../api-requests/rpa-api')
+const businessEligibleToApply = require('../../api-requests/business-eligble-to-apply')
 const { InvalidPermissionsError, AlreadyAppliedError, NoEligibleCphError } = require('../../exceptions')
 
 function setOrganisationSessionData (request, personSummary, organisationSummary) {
@@ -44,11 +45,19 @@ module.exports = [{
     handler: async (request, h) => {
       try {
         await auth.authenticate(request, session)
+
         const personSummary = await getPersonSummary(request)
         session.setCustomer(request, sessionKeys.customer.id, personSummary.id)
 
         const organisationSummary = await organisationIsEligible(request, personSummary.id)
         setOrganisationSessionData(request, personSummary, organisationSummary)
+
+        const sbi = session.getFarmerApplyData(request, sessionKeys.farmerApplyData.organisation).sbi
+        const businessCanApply = await businessEligibleToApply(sbi)
+
+        if (!businessCanApply) {
+          throw new AlreadyAppliedError(`Business with SBI ${sbi} is not eligble to apply`)
+        }
 
         if (!organisationSummary.organisationPermission) {
           throw new InvalidPermissionsError(`Person id ${personSummary.id} does not have the required permissions for organisation id ${organisationSummary.organisation.id}`)
