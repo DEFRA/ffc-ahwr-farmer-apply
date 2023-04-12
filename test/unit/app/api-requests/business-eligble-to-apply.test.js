@@ -79,4 +79,49 @@ describe('Business Eligble to Apply Tests', () => {
     expect(applicationApiMock.getLatestApplicationsBySbi).toHaveBeenCalledWith(SBI)
     expect(result).toEqual(true)
   })
+
+  test.each([
+    {
+      latestApplications: [
+        {
+          data: {
+            organisation: {
+              sbi: '122333'
+            }
+          },
+          updatedAt: '2023-06-06T13:52:14.207Z',
+          statusId: 5
+        },
+        {
+          data: {
+            organisation: {
+              sbi: '122333'
+            }
+          },
+          updatedAt: '2023-05-05T13:52:14.207Z',
+          statusId: 1
+        }
+      ]
+    },
+    {
+      latestApplications: [
+        {
+          data: {
+            organisation: {
+              sbi: '122333'
+            }
+          },
+          updatedAt: '2023-06-06T13:52:14.207Z',
+          statusId: 1
+        }
+      ]
+    }
+  ])('Business is not eligible', async ({ latestApplications }) => {
+    const SBI = 123456789
+    applicationApiMock.getLatestApplicationsBySbi.mockResolvedValueOnce(latestApplications)
+    const result = await businessEligibleToApply(SBI)
+    expect(applicationApiMock.getLatestApplicationsBySbi).toHaveBeenCalledTimes(1)
+    expect(applicationApiMock.getLatestApplicationsBySbi).toHaveBeenCalledWith(SBI)
+    expect(result).toEqual(false)
+  })
 })
