@@ -3,7 +3,7 @@ const mockConfig = require('../../../../app/config')
 jest.mock('@hapi/wreck')
 const consoleLogSpy = jest.spyOn(console, 'log')
 const consoleErrorSpy = jest.spyOn(console, 'error')
-const mockApplicationApiUri = 'http://internal:3333/apiddddd'
+const mockApplicationApiUri = 'http://internal:3333/api'
 
 const MOCK_NOW = new Date()
 
