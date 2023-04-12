@@ -52,11 +52,10 @@ module.exports = [{
         const organisationSummary = await organisationIsEligible(request, personSummary.id)
         setOrganisationSessionData(request, personSummary, organisationSummary)
 
-        const sbi = session.getFarmerApplyData(request, sessionKeys.farmerApplyData.organisation).sbi
-        const businessCanApply = await businessEligibleToApply(sbi)
+        const businessCanApply = await businessEligibleToApply(organisationSummary.organisation.sbi)
 
         if (!businessCanApply) {
-          throw new AlreadyAppliedError(`Business with SBI ${sbi} is not eligble to apply`)
+          throw new AlreadyAppliedError(`Business with SBI ${organisationSummary.organisation.sbi} is not eligble to apply`)
         }
 
         if (!organisationSummary.organisationPermission) {

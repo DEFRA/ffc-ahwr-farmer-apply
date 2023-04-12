@@ -143,19 +143,12 @@ describe('FarmerApply defra ID redirection test', () => {
         }
       })
 
-      sessionMock.getFarmerApplyData.mockResolvedValueOnce({
-        organisation: {
-          sbi: 101122201
-        }
-      })
-
       businessEligibleToApplyMock.mockResolvedValueOnce(true)
 
       const res = await global.__SERVER__.inject(options)
       expect(res.statusCode).toBe(302)
       expect(res.headers.location).toEqual('/apply/org-review')
       expect(sessionMock.setFarmerApplyData).toBeCalledTimes(1)
-      expect(sessionMock.getFarmerApplyData).toBeCalledTimes(1)
       expect(businessEligibleToApplyMock).toBeCalledTimes(1)
       expect(authMock.authenticate).toBeCalledTimes(1)
       expect(personMock.getPersonSummary).toBeCalledTimes(1)
