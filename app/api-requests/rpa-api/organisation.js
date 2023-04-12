@@ -57,14 +57,8 @@ const getOrganisation = async (request, organisationId) => {
 const organisationIsEligible = async (request, personId, apimAccessToken) => {
   apimToken = apimAccessToken
   const organisationId = parsedAccessToken(request).currentRelationshipId
-  let organisation = {}
   const organisationPermission = await organisationHasPermission(request, validPermissions, personId, organisationId)
-
-  if (organisationPermission) {
-    organisation = await getOrganisation(request, organisationId)
-  } else {
-    throw new Error(`Person id ${personId} does not have the required permissions for organisation id ${organisationId}`)
-  }
+  const organisation = await getOrganisation(request, organisationId)
 
   return {
     organisationPermission,
