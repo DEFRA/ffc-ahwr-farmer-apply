@@ -148,7 +148,7 @@ describe('Organisation', () => {
     }
     expect(mockSession.getToken).toHaveBeenCalledTimes(1)
     expect(mockJwtDecode).toHaveBeenCalledTimes(1)
-    expect(mockBase.get).toHaveBeenCalledTimes(1)
+    expect(mockBase.get).toHaveBeenCalledTimes(2)
   })
 
   test.each([

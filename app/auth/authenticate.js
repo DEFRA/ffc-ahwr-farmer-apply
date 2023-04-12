@@ -8,10 +8,11 @@ const expiresIn = require('./auth-code-grant/expires-in')
 const session = require('../session')
 const sessionKeys = require('../session/keys')
 const cookieAuth = require('./cookie-auth/cookie-auth')
+const { InvalidStateError } = require('../exceptions')
 
 const authenticate = async (request) => {
   if (!state.verify(request)) {
-    throw new Error('Invalid state')
+    throw new InvalidStateError('Invalid state')
   }
   const redeemResponse = await redeemAuthorizationCodeForAccessToken(request)
   await jwtVerify(redeemResponse.access_token)
@@ -24,6 +25,7 @@ const authenticate = async (request) => {
   session.setToken(request, sessionKeys.tokens.tokenExpiry, expiresIn.toISOString(redeemResponse.expires_in))
   session.setCustomer(request, sessionKeys.customer.crn, accessToken.contactId)
   session.setCustomer(request, sessionKeys.customer.organisationId, accessToken.currentRelationshipId)
+  session.setCustomer(request, sessionKeys.customer.attachedToMultipleBusinesses, typeof accessToken.enrolmentCount !== 'undefined' && accessToken.enrolmentCount > 1)
 
   cookieAuth.set(request, accessToken)
 
