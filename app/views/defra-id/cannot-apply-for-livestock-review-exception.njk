@@ -1,0 +1,52 @@
+{% extends './layouts/layout.njk' %}
+
+{% block pageTitle %}{{ serviceName }}{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">You cannot apply for a livestock review for this business</h1>
+
+    {% if alreadyAppliedError %}
+      <p class="govuk-body">{{ organisationName }} - SBI {{ sbi }} has already applied for an annual health and welfare review of livestock.</p>
+    
+      <h2 class="govuk-heading-m">What to do next</h2>
+      
+      <p>To find out when you can apply again, read the <a href='{{guidanceLink}}'>guidance on getting a funded annual health and welfare review of your livestock</a></p>
+    {% endif %}
+
+    {% if permissionError %}
+      <p class="govuk-body">You do not have the required permission to act for {{ organisationName }} - SBI {{ sbi }}.</p>
+    
+      <h2 class="govuk-heading-m">What to do next</h2>
+
+      <p class="govuk-body">To apply for this business, the business owner must give you either:</p>
+      <ul class='govuk-list govuk-list--bullet'>
+        <li>full permission level for business details</li>
+        <li>‘submit’ permission level for the basic payment scheme</li>
+      </ul>
+    {% endif %}
+
+    {% if cphError %}
+      <p class="govuk-body">{{ organisationName }} - SBI {{ sbi }} has no eligible county parish holding (CPH) number registered to it.</p>
+    
+      <p class="govuk-body">To be eligible a CPH must be registered in England.</p>
+      <p class="govuk-body">The CPH number cannot be:</p>
+      <ul class='govuk-list govuk-list--bullet'>
+        <li>an 8000 number used for abattoirs, pet food manufacturers, racing pigeon establishments and showgrounds</li>
+        <li>a 9000 number used for poultry keepers</li>
+      </ul>
+    {% endif %}
+
+    {% if hasMultipleBusineses %}
+        <h2 class="govuk-heading-m">Apply for another business</h2>
+        <p>You can <a href='{{backLink}}'>apply for another business</a> that has registered an interest in the review.</p>
+    {% endif %}
+
+    <h2 class="govuk-heading-m">Get help with your application</h2>
+    <p class="govuk-body">If you need help with your application, contact the Rural Payments Agency by email or phone.</p>
+   
+    {{ rpaContactDetails({email: ruralPaymentsAgency.email, callChargesUri: ruralPaymentsAgency.callChargesUri, telephone: ruralPaymentsAgency.telephone}) }}
+  </div>
+</div>
+{% endblock %}
