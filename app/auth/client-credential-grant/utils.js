@@ -1,6 +1,6 @@
 const clientCredentialCacheKey = 'Client_Credential'
 
-const lookupClientCredentialToken = async (request, token) => {
+const lookupClientCredentialToken = async (request) => {
   const { clientCredentialCache } = request.server.app
   return (await clientCredentialCache.get(clientCredentialCacheKey)) ?? {}
 }
