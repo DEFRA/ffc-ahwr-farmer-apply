@@ -48,7 +48,7 @@ module.exports = [{
     handler: async (request, h) => {
       try {
         await auth.authenticate(request, session)
-        const apimAccessToken = await auth.requestAccessToken()
+        const apimAccessToken = await auth.getClientCredentials(request)
         const personSummary = await getPersonSummary(request, apimAccessToken)
         const organisationSummary = await organisationIsEligible(request, personSummary.id, apimAccessToken)
         setCustomerSessionData(request, personSummary, organisationSummary)

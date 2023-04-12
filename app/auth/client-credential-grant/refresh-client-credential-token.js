@@ -1,8 +1,9 @@
 const wreck = require('@hapi/wreck')
 const FormData = require('form-data')
 const config = require('../../config')
+const { cacheClientCredentialToken } = require('./utils')
 
-const requestAccessToken = async () => {
+const refreshClientCredentialToken = async (request) => {
   console.log(`${new Date().toISOString()} Requesting an access token for APIM: ${JSON.stringify(`${config.authConfig.apim.hostname}${config.authConfig.apim.oAuthPath}`)}`)
   try {
     const uri = `${config.authConfig.apim.hostname}${config.authConfig.apim.oAuthPath}`
@@ -24,12 +25,14 @@ const requestAccessToken = async () => {
     if (response.res.statusCode !== 200) {
       throw new Error(`HTTP ${response.res.statusCode} (${response.res.statusMessage})`)
     }
-    return `Bearer ${response?.payload.access_token}`
+
+    await cacheClientCredentialToken(request, response?.payload)
+    return `${response?.payload.token_type} ${response?.payload.access_token}`
   } catch (error) {
-    console.log(`${new Date().toISOString()} Response mssage received from access token request: ${JSON.stringify(error.message)}`)
+    console.log(`${new Date().toISOString()} Response message received from access token request: ${JSON.stringify(error.message)}`)
     console.error(error)
     throw error
   }
 }
 
-module.exports = requestAccessToken
+module.exports = refreshClientCredentialToken
