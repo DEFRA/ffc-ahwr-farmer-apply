@@ -33,7 +33,7 @@ module.exports = [{
     },
     handler: async (request, h) => {
       console.log(`Verify Login query parameters - ${request.query}.`)
-      
+
       const { email, token } = request.query
       const { magiclinkCache } = request.server.app
 
