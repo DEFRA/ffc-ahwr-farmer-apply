@@ -7,6 +7,7 @@ const hostname = config.authConfig.ruralPaymentsAgency.hostname
 const getOrganisationPermissionsUrl = config.authConfig.ruralPaymentsAgency.getOrganisationPermissionsUrl
 const getOrganisationUrl = config.authConfig.ruralPaymentsAgency.getOrganisationUrl
 const validPermissions = ['Submit - bps', 'Full permission - business']
+let apimToken
 
 function getOrganisationAddress (address) {
   return [
@@ -33,7 +34,7 @@ function parsedAccessToken (request) {
 }
 
 const getOrganisationAuthorisation = async (request, organisationId) => {
-  const response = await get(hostname, getOrganisationPermissionsUrl.replace('organisationId', organisationId), request)
+  const response = await get(hostname, getOrganisationPermissionsUrl.replace('organisationId', organisationId), request, { Authorization: apimToken })
   return response?.data
 }
 
@@ -49,11 +50,12 @@ const organisationHasPermission = async (request, permissions, personId, organis
 }
 
 const getOrganisation = async (request, organisationId) => {
-  const response = await get(hostname, getOrganisationUrl.replace('organisationId', organisationId), request)
+  const response = await get(hostname, getOrganisationUrl.replace('organisationId', organisationId), request, { Authorization: apimToken })
   return response?._data
 }
 
-const organisationIsEligible = async (request, personId) => {
+const organisationIsEligible = async (request, personId, apimAccessToken) => {
+  apimToken = apimAccessToken
   const organisationId = parsedAccessToken(request).currentRelationshipId
   const organisationPermission = await organisationHasPermission(request, validPermissions, personId, organisationId)
   const organisation = await getOrganisation(request, organisationId)

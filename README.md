@@ -45,6 +45,24 @@ Please ask a developer for an example `.env` file that you can include in the ro
 | TEST_TOKEN                            | Test Token for Magic link for getting access to test access                                      |
 | AZURE_STORAGE_CREATE_CONTAINERS       | Set true to use connection string, false to connect using azure credentials for blobstorage      |
 | REGISTER_YOUR_INTEREST_ENABLED        | Feature flag for the register your interest journey                                              |
+| DEFRA_ID_ENABLED                      | Feature flag for Defra Id                                                                        |
+| DEFRA_ID_TENANT                       | The Azure tenant for Defra Id                                                                    |
+| DEFRA_ID_POLICY                       | Defra Id policy                                                                                  |
+| DEFRA_ID_REDIRECT_URI                 | Defra Id redirect URI                                                                            |
+| DEFRA_ID_JWT_ISSUER_ID                | Defra Id JWT Issuer id                                                                           |
+| DEFRA_ID_CLIENT_ID                    | The application ID assigned to your app during the registration with Defra Id                    |
+| DEFRA_ID_CLIENT_SECRET                | Secret supplied by Defra Id                                                                      |
+| DEFRA_ID_SERVICE_ID                   | The unique identifier for your service provided as part of being on-boarded to Defra Id          |
+| RPA_HOST_NAME                         | Rural payment agency api endpoint host name                                                      |
+| RPA_GET_PERSON_SUMMARY_URL            | Rural payment agency URL for the get person summary api                                          |
+| RPA_GET_ORGANISATION_PERMISSIONS_URL  | Rural payment agency URL for the get organisation permissions api                                |
+| RPA_GET_ORGANISATION_URL              | Rural payment agency URL for the get organisation api                                            |
+| APIM_OCP_SUBSCRIPTION_KEY             | Unique key used to manage auth requests with Azure API management                                |
+| APIM_HOST_NAME                        | Azure API management host name                                                                   |
+| APIM_OAUTH_PATH                       | Azure API management authorisation endpoint path                                                 |
+| APIM_CLIENT_ID                        | Client Id as registered with Azure API management                                                |
+| APIM_CLIENT_SECRET                    | Client Secret as registered with Azure API management                                            |
+| APIM_SCOPE                            | Scope of the access token being requested from Azure API management                              |
 
 ## Running the application
 
