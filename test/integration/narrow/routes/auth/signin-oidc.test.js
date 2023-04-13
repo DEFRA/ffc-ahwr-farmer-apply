@@ -156,6 +156,30 @@ describe('FarmerApply defra ID redirection test', () => {
       expect(authMock.setAuthCookie).toBeCalledTimes(1)
     })
 
+    test('returns 400 and login failed view when apim access token auth fails', async () => {
+      const consoleErrorSpy = jest.spyOn(console, 'error')
+      const expectedError = new Error('APIM Access Token Retrieval Failed')
+      const baseUrl = `${url}?code=432432&state=83d2b160-74ce-4356-9709-3f8da7868e35`
+      const options = {
+        method: 'GET',
+        url: baseUrl
+      }
+
+      authMock.authenticate.mockResolvedValueOnce({ accessToken: '2323' })
+      authMock.getClientCredentials.mockImplementation(() => {
+        throw new Error('APIM Access Token Retrieval Failed')
+      })
+
+      const res = await global.__SERVER__.inject(options)
+      expect(res.statusCode).toBe(400)
+      expect(authMock.authenticate).toBeCalledTimes(1)
+      expect(authMock.getClientCredentials).toBeCalledTimes(1)
+      const $ = cheerio.load(res.payload)
+      expect($('.govuk-heading-l').text()).toMatch('Login failed')
+      expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
+      expect(consoleErrorSpy).toHaveBeenCalledWith(`Received error with name Error and message ${expectedError.message}.`)
+    })
+
     test('returns 400 and exception view when permissions failed', async () => {
       const consoleErrorSpy = jest.spyOn(console, 'error')
       const expectedError = new InvalidPermissionsError('Person id 1234567 does not have the required permissions for organisation id 7654321')
@@ -166,6 +190,7 @@ describe('FarmerApply defra ID redirection test', () => {
       }
 
       authMock.authenticate.mockResolvedValueOnce({ accessToken: '2323' })
+      authMock.getClientCredentials.mockResolvedValueOnce('Bearer 2323')
       personMock.getPersonSummary.mockResolvedValueOnce({
         firstName: 'Bill',
         middleName: null,
@@ -226,6 +251,7 @@ describe('FarmerApply defra ID redirection test', () => {
       const res = await global.__SERVER__.inject(options)
       expect(res.statusCode).toBe(400)
       expect(authMock.authenticate).toBeCalledTimes(1)
+      expect(authMock.getClientCredentials).toBeCalledTimes(1)
       expect(authMock.requestAuthorizationCodeUrl).toBeCalledTimes(1)
       expect(personMock.getPersonSummary).toBeCalledTimes(1)
       expect(organisationMock.organisationIsEligible).toBeCalledTimes(1)
@@ -246,6 +272,7 @@ describe('FarmerApply defra ID redirection test', () => {
       }
 
       authMock.authenticate.mockResolvedValueOnce({ accessToken: '2323' })
+      authMock.getClientCredentials.mockResolvedValueOnce('Bearer 2323')
       personMock.getPersonSummary.mockResolvedValueOnce({
         firstName: 'Bill',
         middleName: null,
@@ -306,6 +333,7 @@ describe('FarmerApply defra ID redirection test', () => {
       const res = await global.__SERVER__.inject(options)
       expect(res.statusCode).toBe(400)
       expect(authMock.authenticate).toBeCalledTimes(1)
+      expect(authMock.getClientCredentials).toBeCalledTimes(1)
       expect(authMock.requestAuthorizationCodeUrl).toBeCalledTimes(1)
       expect(personMock.getPersonSummary).toBeCalledTimes(1)
       expect(organisationMock.organisationIsEligible).toBeCalledTimes(1)
