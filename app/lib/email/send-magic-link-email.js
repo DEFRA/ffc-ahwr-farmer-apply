@@ -10,8 +10,13 @@ async function createAndCacheToken (request, email, redirectTo, userType, data) 
   const token = await getToken(email)
   const tokens = await magiclinkCache.get(email) ?? []
   tokens.push(token)
+  
+  console.log(`Tokens for email ${email} - ${tokens.length}.`)
+
   await magiclinkCache.set(email, tokens)
   await magiclinkCache.set(token, { email, redirectTo, userType, data })
+
+  console.log(`Added token ${token} to cache for ${email}.`)
   return token
 }
 
