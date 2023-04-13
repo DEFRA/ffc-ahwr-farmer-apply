@@ -9,7 +9,6 @@
     <input type="hidden" name="crumb" value="{{crumb}}"/>
 
     <h1 class="govuk-heading-l">Register your interest in a health and welfare review of your livestock</h1>
-    <br>
 
     <p class="govuk-heading-body">To register your interest in applying for a review, enter the main business email address of the business registering. This is the main business email address linked to the business in your Rural Payments account.</p>
     <p class="govuk-heading-body">Do not use your personal email address which may also be linked to the business.</p>
@@ -29,7 +28,7 @@
       }) 
     }}
 
-    <p class="govuk-heading-body">The Rural Payments Agency will contact you with a link to start your application as soon as possible.</p>
+    <p class="govuk-heading-body">The Rural Payments Agency (RPA) will contact you with a link to start your application as soon as possible.</p>
 
     <h2 class="govuk-heading-m">More than one business linked to customer reference number</h2>
     
@@ -47,7 +46,7 @@
     <h2 class="govuk-heading-m">Help with registering</h2>
 
     <p>If you need to update your main business email address, <a href="{{ ruralPaymentsAgency.loginUri }}">sign in to the Rural Payments service.</a></p>
-    <p class="govuk-body">If you cannot apply online or have a question about your application contact the Rural Payments Agency by email or phone.</p>
+    <p class="govuk-body">If you have another question about your registration, contact the RPA by email or phone:</p>
 
     {{ rpaContactDetails({email: ruralPaymentsAgency.email, callChargesUri: ruralPaymentsAgency.callChargesUri, telephone: ruralPaymentsAgency.telephone}) }}
     
