@@ -10,8 +10,13 @@ async function createAndCacheToken (request, email, redirectTo, userType, data) 
   const token = await getToken(email)
   const tokens = await magiclinkCache.get(email) ?? []
   tokens.push(token)
+
+  console.log(`Tokens for email ${email} - ${tokens.length}.`)
+
   await magiclinkCache.set(email, tokens)
   await magiclinkCache.set(token, { email, redirectTo, userType, data })
+
+  console.log(`Added token ${token} to cache for ${email}.`)
   return token
 }
 
@@ -21,6 +26,8 @@ async function sendMagicLinkEmail (request, email, templateId, redirectTo, userT
   const magicLink = new URL(`${serviceUri}/verify-login`)
   magicLink.searchParams.append('token', token)
   magicLink.searchParams.append('email', email)
+
+  console.log(`Sending magic link ${magicLink.href} to email ${email}`)
 
   return sendEmail(templateId, email, {
     personalisation: { magiclink: magicLink.href },
