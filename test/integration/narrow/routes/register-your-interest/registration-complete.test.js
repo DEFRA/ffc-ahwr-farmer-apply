@@ -85,7 +85,7 @@ describe('Farmer apply "Registration complete" page', () => {
 
       expect(res.statusCode).toBe(200)
       const $ = cheerio.load(res.payload)
-      expect($('.govuk-panel__title').first().text().trim()).toEqual('Registration complete - DRAFT PAGE')
+      expect($('.govuk-panel__title').first().text().trim()).toEqual('Registration complete')
       expect($('title').text()).toEqual(serviceName)
       expectPhaseBanner.ok($)
     })
