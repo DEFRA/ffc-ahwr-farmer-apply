@@ -46,10 +46,12 @@ module.exports = [{
       try {
         await auth.authenticate(request, session)
 
-        const personSummary = await getPersonSummary(request)
+        const apimAccessToken = await auth.getClientCredentials(request)
+
+        const personSummary = await getPersonSummary(request, apimAccessToken)
         session.setCustomer(request, sessionKeys.customer.id, personSummary.id)
 
-        const organisationSummary = await organisationIsEligible(request, personSummary.id)
+        const organisationSummary = await organisationIsEligible(request, personSummary.id, apimAccessToken)
         setOrganisationSessionData(request, personSummary, organisationSummary)
 
         const businessCanApply = await businessEligibleToApply(organisationSummary.organisation.sbi)

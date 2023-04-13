@@ -12,6 +12,7 @@ describe('Base', () => {
     const url = '/get/test'
     const contactName = 'Mr Smith'
     const accessToken = 'access_token'
+    const apimOcpSubscriptionKey = 'apim-ocp-subscription-key'
     const contactId = 1234567
     const wreckResponse = {
       payload: {
@@ -22,10 +23,16 @@ describe('Base', () => {
         statusCode: 200
       }
     }
+
+    const headers = {}
+    headers['X-Forwarded-Authorization'] = accessToken
+    headers['Ocp-Apim-Subscription-Key'] = apimOcpSubscriptionKey
+
     const options = {
-      headers: { Authorization: accessToken },
+      headers,
       json: true,
-      rejectUnauthorized: false
+      rejectUnauthorized: false,
+      timeout: 10000
     }
     Wreck.get = jest.fn(async function (_url, _options) {
       return wreckResponse
@@ -41,5 +48,24 @@ describe('Base', () => {
     expect(result.id).toEqual(contactId)
     expect(Wreck.get).toHaveBeenCalledTimes(1)
     expect(Wreck.get).toHaveBeenCalledWith(`${hostname}${url}`, options)
+  })
+
+  test('when called and error occurs, throwns error', async () => {
+    const hostname = 'https://testhost'
+    const url = '/get/test'
+    const contactId = 1234567
+    const accessToken = 'access_token'
+    const error = new Error('Test error in base')
+
+    Wreck.get = jest.fn(async function (_url, _options) {
+      throw error
+    })
+
+    mockSession.getToken.mockResolvedValueOnce(accessToken)
+    mockJwtDecode.mockResolvedValue(contactId)
+
+    expect(async () =>
+      await base.get(hostname, url, expect.anything(), expect.anything())
+    ).rejects.toThrowError(error)
   })
 })

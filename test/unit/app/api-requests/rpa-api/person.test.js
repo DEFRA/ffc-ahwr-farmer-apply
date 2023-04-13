@@ -8,6 +8,7 @@ jest.mock('../../../../../app/api-requests/rpa-api/base')
 
 describe('Person', () => {
   test('when getPersonSummary called - returns valid person data', async () => {
+    const apimToken = 'apim_token'
     mockSession.getToken.mockResolvedValueOnce({ access_token: 1234567 })
     mockJwtDecode.mockResolvedValue({ contactId: 1234567 })
     mockBase.get.mockResolvedValueOnce({
@@ -21,7 +22,7 @@ describe('Person', () => {
       }
     })
 
-    const result = await person.getPersonSummary()
+    const result = await person.getPersonSummary(expect.anything(), apimToken)
 
     expect(mockSession.getToken).toHaveBeenCalledTimes(1)
     expect(mockJwtDecode).toHaveBeenCalledTimes(1)
