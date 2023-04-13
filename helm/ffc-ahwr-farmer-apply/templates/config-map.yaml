@@ -39,4 +39,5 @@ data:
   APIM_HOST_NAME: {{ quote .Values.container.apimHostname }}
   APIM_OAUTH_PATH: {{ quote .Values.container.apimOAuthPath }}
   APIM_SCOPE: {{ quote .Values.container.apimScope }}
+  WRECK_HTTP_TIMEOUT_MILLISECONDS: {{ quote .Values.wreckHttp.timeoutMilliseconds }}
 {{- end -}}

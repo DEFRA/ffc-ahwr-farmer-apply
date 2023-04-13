@@ -12,7 +12,7 @@ describe('Base', () => {
     const url = '/get/test'
     const contactName = 'Mr Smith'
     const accessToken = 'access_token'
-    const ocpApimSubscriptionKey = 'ocp-apim-subscription-key'
+    const apimOcpSubscriptionKey = 'apim-ocp-subscription-key'
     const contactId = 1234567
     const wreckResponse = {
       payload: {
@@ -26,12 +26,13 @@ describe('Base', () => {
 
     const headers = {}
     headers['X-Forwarded-Authorization'] = accessToken
-    headers['Ocp-Apim-Subscription-Key'] = ocpApimSubscriptionKey
+    headers['Ocp-Apim-Subscription-Key'] = apimOcpSubscriptionKey
 
     const options = {
       headers,
       json: true,
-      rejectUnauthorized: false
+      rejectUnauthorized: false,
+      timeout: 10000
     }
     Wreck.get = jest.fn(async function (_url, _options) {
       return wreckResponse

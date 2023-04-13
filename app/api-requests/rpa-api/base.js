@@ -2,11 +2,12 @@ const wreck = require('@hapi/wreck')
 const session = require('../../session')
 const { tokens } = require('../../session/keys')
 const config = require('../../config')
+const apiHeaders = require('../../constants/api-headers')
 
 const get = async (hostname, url, request, headers = {}) => {
   const token = session.getToken(request, tokens.accessToken)
-  headers['X-Forwarded-Authorization'] = token
-  headers['Ocp-Apim-Subscription-Key'] = config.authConfig.ruralPaymentsAgency.ocpApimSubscriptionKey
+  headers[apiHeaders.xForwardedAuthorization] = token
+  headers[apiHeaders.ocpSubscriptionKey] = config.authConfig.apim.ocpSubscriptionKey
   console.log(`${new Date().toISOString()} Request message to RPA: ${JSON.stringify(`${hostname}${url}`)}`)
 
   try {
@@ -14,7 +15,8 @@ const get = async (hostname, url, request, headers = {}) => {
       {
         headers,
         json: true,
-        rejectUnauthorized: false
+        rejectUnauthorized: false,
+        timeout: config.wreckHttp.timeoutMilliseconds
       })
 
     console.log(`${new Date().toISOString()} Response status code from RPA: ${JSON.stringify(response.res.statusCode)}`)

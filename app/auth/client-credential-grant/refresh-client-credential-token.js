@@ -18,7 +18,8 @@ const refreshClientCredentialToken = async (request) => {
       {
         headers: data.getHeaders(),
         payload: data,
-        json: true
+        json: true,
+        timeout: config.wreckHttp.timeoutMilliseconds
       }
     )
     console.log(`${new Date().toISOString()} Response status code from access token request: ${JSON.stringify(response.res.statusCode)}`)
