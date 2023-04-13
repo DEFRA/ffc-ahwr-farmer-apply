@@ -4,6 +4,7 @@ const { sendMonitoringEvent } = require('../../event')
 const config = require('../../config')
 
 function isRequestInvalid (cachedEmail, email) {
+  console.error(`Comparing cached email ${cachedEmail} with type ${typeof cachedEmail} to email from verify-login query param ${email} with type ${typeof email}.`)
   return !cachedEmail || email !== cachedEmail
 }
 
@@ -35,8 +36,10 @@ module.exports = [{
       const { magiclinkCache } = request.server.app
 
       const { email: cachedEmail, redirectTo, userType } = await lookupToken(request, token)
+      console.error(`Retrieved ${cachedEmail} from cache for request id ${request.yar.id}.`)
+
       if (isRequestInvalid(cachedEmail, email)) {
-        console.error('Email in the verify login link does not match the cached email.')
+        console.error(`Email in the verify login link does not match the cached email for request id ${request.yar.id}.`)
         sendMonitoringEvent(request.yar.id, 'Invalid token', email, getIp(request))
         return h.view('verify-login-failed', {
           backLink: `${config.urlPrefix}/login`

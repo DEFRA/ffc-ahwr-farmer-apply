@@ -22,6 +22,8 @@ async function sendMagicLinkEmail (request, email, templateId, redirectTo, userT
   magicLink.searchParams.append('token', token)
   magicLink.searchParams.append('email', email)
 
+  console.log(`Sending magic link ${magicLink.href} to email ${email}`)
+
   return sendEmail(templateId, email, {
     personalisation: { magiclink: magicLink.href },
     reference: token
