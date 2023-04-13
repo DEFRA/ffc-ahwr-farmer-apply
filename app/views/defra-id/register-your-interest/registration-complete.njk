@@ -6,13 +6,13 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       {{ govukPanel({
-        titleText: "Registration complete - DRAFT PAGE"
+        titleText: "Registration complete"
       }) }}
 
-      <p class="govuk-body">Thank you for registering your interest in the review.</p>
+      <h2 class="govuk-heading-m">What happens next</h2>
 
-      <p class="govuk-body">We’ll check the information you’ve provided and send you an email with the next steps as soon as possible.</p>
-
+      <p class="govuk-body">We’ll send you an email to confirm your registration.</p>
+      <p class="govuk-body">We’ll contact you again with a link to start your application as soon as possible.</p>
       <p class="govuk-body">If you have any questions about your application, contact the Rural Payments Agency.</p>
       
       {{ rpaContactDetails({email: ruralPaymentsAgency.email, callChargesUri: ruralPaymentsAgency.callChargesUri, telephone: ruralPaymentsAgency.telephone}) }}

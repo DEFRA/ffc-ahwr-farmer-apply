@@ -60,7 +60,7 @@ module.exports = [
     handler: async (request, h) => {
       await sendEmail(registerYourInterest, request.payload.emailAddress)
       await sendDefraIdRegisterYourInterestMessage(request.payload.emailAddress)
-      return h.redirect('register-your-interest/registration-complete', { ruralPaymentsAgency })
+      return h.redirect('registration-complete', { ruralPaymentsAgency })
     }
   }
 ]
