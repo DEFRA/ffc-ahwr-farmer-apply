@@ -38,17 +38,11 @@ module.exports = [{
     handler: async (request, h) => {
       console.log(`Request to /verify-login: ${JSON.stringify({
         id: request.yar.id,
-        query: request.query,
-        isAuthenticated: request.auth.isAuthenticated
+        query: request.query
       })}`)
 
-      if (request.auth.credentials) {
-        const email = request.auth.credentials && request.auth.credentials.email
-        return h.redirect(request.query?.next || `${config.urlPrefix}/select-your-business?businessEmail=${email}`)
-      }
-
       const { email, token } = request.query
-      const { magiclinkCache } = request.server.app
+      // const { magiclinkCache } = request.server.app
 
       const { email: cachedEmail, redirectTo, userType } = await lookupToken(request, token)
       console.error(`Retrieved ${cachedEmail} from cache for request id ${request.yar.id}.`)
@@ -63,8 +57,8 @@ module.exports = [{
 
       setAuthCookie(request, email, userType)
 
-      await magiclinkCache.drop(email)
-      await magiclinkCache.drop(token)
+      // await magiclinkCache.drop(email)
+      // await magiclinkCache.drop(token)
 
       return h.redirect(`${redirectTo}${(`?businessEmail=${email}`)}`)
     }
