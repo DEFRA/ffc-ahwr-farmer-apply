@@ -5,7 +5,7 @@ const config = require('../../config')
 
 function isRequestInvalid (cachedEmail, email) {
   console.log(`Comparing cached email ${cachedEmail} with type ${typeof cachedEmail} to email from verify-login query param ${email} with type ${typeof email}.`)
-  return !cachedEmail || email !== cachedEmail
+  return typeof cachedEmail === 'undefined' || email !== cachedEmail
 }
 
 const getIp = (request) => {
