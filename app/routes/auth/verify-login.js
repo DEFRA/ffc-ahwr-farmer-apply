@@ -24,7 +24,11 @@ module.exports = [{
         token: Joi.string().uuid().required()
       }),
       failAction: async (request, h, error) => {
-        console.error(`Validation error - ${error.message} for query string - ${JSON.stringify(request.query)}`)
+        console.log(`Request to /verify-login failed: ${JSON.stringify({
+          id: request.yar.id,
+          query: request.query,
+          errorMessage: error.message
+        })}`)
         sendMonitoringEvent(request.yar.id, error.details[0].message, '', getIp(request))
         return h.view('verify-login-failed', {
           backLink: `${config.urlPrefix}/login`
@@ -32,7 +36,16 @@ module.exports = [{
       }
     },
     handler: async (request, h) => {
-      console.log(`Verify Login query parameters - ${JSON.stringify(request.query)}.`)
+      console.log(`Request to /verify-login: ${JSON.stringify({
+        id: request.yar.id,
+        query: request.query
+      })}`)
+
+      if (request.auth.isAuthenticated) {
+        console.log(`Already authenticated: ${request.yar.id}`)
+        const email = request.auth.credentials && request.auth.credentials.email
+        return h.redirect(request.query?.next || `${config.urlPrefix}/select-your-business?businessEmail=${email}`)
+      }
 
       const { email, token } = request.query
       const { magiclinkCache } = request.server.app
