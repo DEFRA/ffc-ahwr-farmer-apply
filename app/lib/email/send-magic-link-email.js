@@ -24,8 +24,8 @@ async function sendMagicLinkEmail (request, email, templateId, redirectTo, userT
   const token = await createAndCacheToken(request, email, redirectTo, userType, data)
 
   const magicLink = new URL(`${serviceUri}/verify-login`)
-  magicLink.searchParams.append('token', token)
   magicLink.searchParams.append('email', email)
+  magicLink.searchParams.append('token', token)
 
   console.log(`Sending magic link ${magicLink.href} to email ${email}`)
 

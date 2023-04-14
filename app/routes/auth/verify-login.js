@@ -39,7 +39,7 @@ module.exports = [{
       console.log(`Request to /verify-login: ${JSON.stringify({
         id: request.yar.id,
         query: request.query,
-        alreadyAuthenticated: request.auth.isAuthenticated
+        isAuthenticated: request.auth.isAuthenticated
       })}`)
 
       if (request.auth.isAuthenticated) {
