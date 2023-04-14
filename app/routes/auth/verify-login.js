@@ -42,7 +42,7 @@ module.exports = [{
         isAuthenticated: request.auth.isAuthenticated
       })}`)
 
-      if (request.auth.isAuthenticated) {
+      if (request.auth.credentials) {
         const email = request.auth.credentials && request.auth.credentials.email
         return h.redirect(request.query?.next || `${config.urlPrefix}/select-your-business?businessEmail=${email}`)
       }
