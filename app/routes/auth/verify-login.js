@@ -38,11 +38,11 @@ module.exports = [{
     handler: async (request, h) => {
       console.log(`Request to /verify-login: ${JSON.stringify({
         id: request.yar.id,
-        query: request.query
+        query: request.query,
+        alreadyAuthenticated: request.auth.isAuthenticated
       })}`)
 
       if (request.auth.isAuthenticated) {
-        console.log(`Already authenticated: ${request.yar.id}`)
         const email = request.auth.credentials && request.auth.credentials.email
         return h.redirect(request.query?.next || `${config.urlPrefix}/select-your-business?businessEmail=${email}`)
       }
