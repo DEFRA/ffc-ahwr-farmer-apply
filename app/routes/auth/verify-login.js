@@ -42,7 +42,7 @@ module.exports = [{
       })}`)
 
       const { email, token } = request.query
-      // const { magiclinkCache } = request.server.app
+      const { magiclinkCache } = request.server.app
 
       const { email: cachedEmail, redirectTo, userType } = await lookupToken(request, token)
       console.error(`Retrieved ${cachedEmail} from cache for request id ${request.yar.id}.`)
@@ -57,8 +57,8 @@ module.exports = [{
 
       setAuthCookie(request, email, userType)
 
-      // await magiclinkCache.drop(email)
-      // await magiclinkCache.drop(token)
+      await magiclinkCache.drop(email)
+      await magiclinkCache.drop(token)
 
       return h.redirect(`${redirectTo}${(`?businessEmail=${email}`)}`)
     }
