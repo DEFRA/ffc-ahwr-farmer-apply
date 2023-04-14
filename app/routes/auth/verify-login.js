@@ -45,7 +45,7 @@ module.exports = [{
         sendMonitoringEvent(request.yar.id, 'Invalid token', email, getIp(request))
         return h.view('verify-login-failed', {
           backLink: `${config.urlPrefix}/login`
-        }).code(400)
+        }).code(400).takeover()
       }
 
       setAuthCookie(request, email, userType)
