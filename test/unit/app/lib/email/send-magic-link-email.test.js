@@ -59,7 +59,7 @@ describe('Send Magic Link test', () => {
       expect(cacheData[token]).toEqual({ email, redirectTo, userType: farmerApply })
       expect(sendEmail).toHaveBeenCalledTimes(1)
       expect(sendEmail).toHaveBeenCalledWith(config.notifyConfig.emailTemplates.applyLogin, email, {
-        personalisation: { magiclink: `${MOCK_SERVICE_URI}/verify-login?token=${encodeURIComponent(token)}&email=${encodeURIComponent(email)}` },
+        personalisation: { magiclink: `${MOCK_SERVICE_URI}/verify-login?email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}` },
         reference: token
       })
     })

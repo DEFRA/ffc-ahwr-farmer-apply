@@ -177,7 +177,7 @@ describe('FarmerApply application login page test', () => {
         applyLogin,
         validEmail,
         expect.objectContaining(
-          { personalisation: { magiclink: expect.stringMatching(new RegExp(`${serviceUri}/verify-login\\?token=${uuidRegex}&email=${encodeURIComponent(validEmail)}`)) }, reference: expect.stringMatching(new RegExp(uuidRegex)) })
+          { personalisation: { magiclink: expect.stringMatching(new RegExp(`${serviceUri}/verify-login\\?email=${encodeURIComponent(validEmail)}&token=${uuidRegex}`)) }, reference: expect.stringMatching(new RegExp(uuidRegex)) })
       )
     })
 
