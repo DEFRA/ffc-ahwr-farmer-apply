@@ -5,7 +5,7 @@ const session = require('../session')
 const { declaration, reference, offerStatus } = require('../session/keys').farmerApplyData
 const { sendApplication } = require('../messaging/application')
 const urlPrefix = require('../config/index').urlPrefix
-const ruralPaymentsAgency = require('../config/index').ruralPaymentsAgency
+const config = require('../config/index')
 
 module.exports = [{
   method: 'GET',
@@ -57,7 +57,7 @@ module.exports = [{
       request.cookieAuth.clear()
 
       if (request.payload.offerStatus === 'rejected') {
-        return h.view('offer-rejected', { ruralPaymentsAgency })
+        return h.view('offer-rejected', { ruralPaymentsAgency: config.ruralPaymentsAgency })
       }
 
       if (!applicationReference) {
@@ -69,7 +69,8 @@ module.exports = [{
 
       return h.view('confirmation', {
         reference: applicationReference,
-        ruralPaymentsAgency
+        ruralPaymentsAgency: config.ruralPaymentsAgency,
+        applySurveyUri: config.customerSurvey.uri
       })
     }
   }
