@@ -5,7 +5,7 @@ const config = require('../../config')
 
 function isRequestInvalid (cachedEmail, email) {
   console.log(`Comparing cached email ${cachedEmail} with type ${typeof cachedEmail} to email from verify-login query param ${email} with type ${typeof email}.`)
-  return !cachedEmail || email !== cachedEmail
+  return typeof cachedEmail === 'undefined' || email !== cachedEmail
 }
 
 const getIp = (request) => {
@@ -24,7 +24,11 @@ module.exports = [{
         token: Joi.string().uuid().required()
       }),
       failAction: async (request, h, error) => {
-        console.error(`Validation error - ${error.message} for query string - ${JSON.stringify(request.query)}`)
+        console.log(`Request to /verify-login failed: ${JSON.stringify({
+          id: request.yar.id,
+          query: request.query,
+          errorMessage: error.message
+        })}`)
         sendMonitoringEvent(request.yar.id, error.details[0].message, '', getIp(request))
         return h.view('verify-login-failed', {
           backLink: `${config.urlPrefix}/login`
@@ -32,10 +36,12 @@ module.exports = [{
       }
     },
     handler: async (request, h) => {
-      console.log(`Verify Login query parameters - ${JSON.stringify(request.query)}.`)
+      console.log(`Request to /verify-login: ${JSON.stringify({
+        id: request.yar.id,
+        query: request.query
+      })}`)
 
       const { email, token } = request.query
-      const { magiclinkCache } = request.server.app
 
       const { email: cachedEmail, redirectTo, userType } = await lookupToken(request, token)
       console.error(`Retrieved ${cachedEmail} from cache for request id ${request.yar.id}.`)
@@ -45,13 +51,10 @@ module.exports = [{
         sendMonitoringEvent(request.yar.id, 'Invalid token', email, getIp(request))
         return h.view('verify-login-failed', {
           backLink: `${config.urlPrefix}/login`
-        }).code(400)
+        }).code(400).takeover()
       }
 
       setAuthCookie(request, email, userType)
-
-      await magiclinkCache.drop(email)
-      await magiclinkCache.drop(token)
 
       return h.redirect(`${redirectTo}${(`?businessEmail=${email}`)}`)
     }

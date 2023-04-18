@@ -81,12 +81,12 @@ module.exports = [{
             backLink: auth.requestAuthorizationCodeUrl(session, request),
             sbi: organisation?.sbi,
             organisationName: organisation?.name
-          }).code(400)
+          }).code(400).takeover()
         }
 
         return h.view('verify-login-failed', {
           backLink: auth.requestAuthorizationCodeUrl(session, request)
-        }).code(400)
+        }).code(400).takeover()
       }
     }
   }
