@@ -19,12 +19,12 @@ const CONTINUE_BUTTON = '#btnContinue'
 const DETAILS = 'Check your details'
 const CONTENT = 'Farmer name'
 const REVIEW = 'Which livestock do you want a review for?'
-//select livestock page
+// select livestock page
 const WHICH_REVIEW = '.govuk-fieldset__heading'
 const LIVESTOCK_TYPE = '[data-module="govuk-radios"]'
 const SELECT_ANIMAL = '#whichReview-3'
 const LIVESTOCK = 'Sheep'
-//eligibility page
+// eligibility page
 const REQUIRE_LIVESTOCK_NUMBER = '#eligibleSpecies-hint'
 const CONFIRM_ELIGIBILITY = '#eligibleSpecies'
 const DECLARATION = '[role="button"]'
@@ -102,13 +102,13 @@ class SelectBusinessPage extends CommonActions {
     await this.elementToContainText(LIVESTOCK_TYPE, LIVESTOCK)
   }
 
-  async livestockToReview () {await this.clickOn(SELECT_ANIMAL)}
+  async livestockToReview () { await this.clickOn(SELECT_ANIMAL) }
 
-  async continueTheApplication () {await this.clickOn(CONTINUE_BUTTON)}
+  async continueTheApplication () { await this.clickOn(CONTINUE_BUTTON) }
 
-//eligible livestock
+  // eligible livestock
   async minimumRequirement () {
-    await this.elementToContainText(REQUIRE_LIVESTOCK_NUMBER,LIVESTOCK_NUMBER)
+    await this.elementToContainText(REQUIRE_LIVESTOCK_NUMBER, LIVESTOCK_NUMBER)
   }
 
   async accurateLivestockNumber () {
@@ -126,31 +126,38 @@ class SelectBusinessPage extends CommonActions {
   async goToDeclaration () {
     await this.clickOn(DECLARATION)
   }
-//COMPLETE JOURNEY
-  async declarationUrl(){
+
+  // COMPLETE JOURNEY
+  async declarationUrl () {
     await this.urlContain(AGREED)
   }
-  async agreementReview(){
-    await this.elementToContainText(CHECK_DETAILS,REVIEW_AGREED)
+
+  async agreementReview () {
+    await this.elementToContainText(CHECK_DETAILS, REVIEW_AGREED)
   }
-  async conditionTab(){
+
+  async conditionTab () {
     await this.clickOn(TERMS_CONDITIONS)
   }
-  async termsAndConditionTitle(){
-    await this.elementToContainText(CHECK_DETAILS,TERMS)
+
+  async termsAndConditionTitle () {
+    await this.elementToContainText(CHECK_DETAILS, TERMS)
   }
-  async agreeToTerms(){
+
+  async agreeToTerms () {
     await this.clickOn(DECLARATION)
   }
-  async termsCheckBox(){
+
+  async termsCheckBox () {
     await this.clickOn(TERMS_AND_CONDITION_BOX)
   }
 
-  async applicationCompleted(){
+  async applicationCompleted () {
     await this.clickOn(COMPLETE_APPLICATION)
   }
-  async successfulMessage(){
-    await this.elementToContainText(SUCCESS_MESSAGE,MESSAGE)
+
+  async successfulMessage () {
+    await this.elementToContainText(SUCCESS_MESSAGE, MESSAGE)
   }
 }
 

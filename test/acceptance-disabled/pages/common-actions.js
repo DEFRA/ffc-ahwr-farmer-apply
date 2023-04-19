@@ -1,13 +1,12 @@
 require('webdriverio/build/commands/browser/$')
 const { expect } = require('chai')
 require('constants')
-require("dotenv").config({path:`.env.${process.env.ENV}`})
+require('dotenv').config({ path: `.env.${process.env.ENV}` })
 
 class CommonActions {
   async open (path) {
     const url = process.env.TEST_ENVIRONMENT_ROOT_URL + path
     await browser.url(url)
-
   }
 
   async clickOn (element) {
@@ -39,7 +38,6 @@ class CommonActions {
     const actualUrl = await browser.getUrl()
     expect(actualUrl).to.include(expectedUrl)
   }
-
 }
 
 module.exports = CommonActions

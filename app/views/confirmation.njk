@@ -37,6 +37,14 @@
     <p>Have your agreement number with you when you call or include it in your email.</p>
 
     {{ rpaContactDetails({email: ruralPaymentsAgency.email, callChargesUri: ruralPaymentsAgency.callChargesUri, telephone: ruralPaymentsAgency.telephone}) }}
+
+    <br/>
+    <p>
+      <a class='govuk-link' target='_blank' href={{ applySurveyUri }}>
+        What did you think of this service?
+      </a>
+      (takes 30 seconds)
+    </p>
   </div>
 </div>
 {% endblock %}

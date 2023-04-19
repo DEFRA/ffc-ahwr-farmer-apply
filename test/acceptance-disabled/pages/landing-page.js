@@ -25,10 +25,11 @@ class LandingPageActions extends CommonActions {
   }
 
   async verifyErrorMessage () {
-    await this.elementToContainText(ERROR_MESSAGE,"Enter an email address in the correct format")
+    await this.elementToContainText(ERROR_MESSAGE, 'Enter an email address in the correct format')
   }
-  async magicLinkMessage(){
-    await this.elementToContainText(LINK_MESSAGE,"Check your email")
+
+  async magicLinkMessage () {
+    await this.elementToContainText(LINK_MESSAGE, 'Check your email')
   }
 }
 

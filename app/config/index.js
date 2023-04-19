@@ -51,6 +51,9 @@ const schema = Joi.object({
     email: Joi.string().email().default('ruralpayments@defra.gov.uk'),
     telephone: Joi.string().default('03000 200 301')
   },
+  customerSurvey: {
+    uri: Joi.string().uri().optional()
+  },
   registerYourInterest: {
     enabled: Joi.bool().default(true)
   },
@@ -99,6 +102,9 @@ const config = {
     callChargesUri: 'https://www.gov.uk/call-charges',
     email: 'ruralpayments@defra.gov.uk',
     telephone: '03000 200 301'
+  },
+  customerSurvey: {
+    uri: 'https://defragroup.eu.qualtrics.com/jfe/form/SV_0lxBrd2XeDnn2hU'
   },
   registerYourInterest: {
     enabled: process.env.REGISTER_YOUR_INTEREST_ENABLED
