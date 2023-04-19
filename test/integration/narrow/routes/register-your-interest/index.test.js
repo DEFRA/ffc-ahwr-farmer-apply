@@ -126,7 +126,7 @@ describe('Farmer apply "Enter your business email address" page', () => {
 
         const res = await global.__SERVER__.inject(options)
         expect(res.statusCode).toBe(302)
-        expect(res.headers.location).toEqual('registration-complete')
+        expect(res.headers.location).toEqual('register-your-interest/registration-complete')
       })
 
       test.each([
