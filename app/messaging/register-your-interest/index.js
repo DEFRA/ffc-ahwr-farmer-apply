@@ -11,6 +11,17 @@ async function sendRegisterYourInterestMessage (sbi, crn, email) {
   )
 }
 
+async function sendDefraIdRegisterYourInterestMessage (email) {
+  const message = { email }
+  console.log(`Sending register your interest message to queue for email(${email}) - ${registerYourInterestRequestQueue.address}`)
+  await sendMessage(
+    message,
+    registerYourInterestRequestQueue.messageType,
+    registerYourInterestRequestQueue
+  )
+}
+
 module.exports = {
-  sendRegisterYourInterestMessage
+  sendRegisterYourInterestMessage,
+  sendDefraIdRegisterYourInterestMessage
 }

@@ -14,9 +14,8 @@ When(/^user apply with (.*)$/, async function (credential) {
 })
 
 Then(/^an email error is displayed$/, async function () {
- await landingPage.verifyErrorMessage()
+  await landingPage.verifyErrorMessage()
 })
 Then(/^magic link is sent to user email$/, async function () {
-await landingPage.magicLinkMessage()
+  await landingPage.magicLinkMessage()
 })
-

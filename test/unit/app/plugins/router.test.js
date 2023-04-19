@@ -18,7 +18,7 @@ describe('routes plugin test', () => {
     server.table().forEach(element => {
       routePaths.push(element.path)
     })
-    expect(routePaths).not.toContain('/apply/register-your-interest/register-your-interest')
+    expect(routePaths).not.toContain('/apply/register-your-interest/index')
     expect(routePaths).not.toContain('/apply/register-your-interest/enter-your-crn')
     expect(routePaths).not.toContain('/apply/register-your-interest/enter-your-sbi')
     expect(routePaths).not.toContain('/apply/register-your-interest/enter-your-email-address')

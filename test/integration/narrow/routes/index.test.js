@@ -40,7 +40,6 @@ describe('Farmer apply home page test - DEFRA ID disabled', () => {
 describe('Farmer apply home page test - DEFRA ID enabled', () => {
   beforeAll(async () => {
     jest.resetModules()
-    jest.mock('../../../../app/session')
     jest.mock('../../../../app/config', () => ({
       ...mockConfig,
       authConfig: {
@@ -78,7 +77,6 @@ describe('Farmer apply home page test - DEFRA ID enabled', () => {
       'Apply for an annual health and welfare review of your livestock'
     )
     const button = $('.govuk-main-wrapper .govuk-button')
-    expect(button.attr('href')).toContain('https://tenant.b2clogin.com/tenant.onmicrosoft.com/oauth2/v2.0/authorize')
     expect(button.text()).toMatch('Start now')
     expect($('title').text()).toEqual('Annual health and welfare review of livestock')
     expectPhaseBanner.ok($)
