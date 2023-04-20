@@ -51,3 +51,4 @@ services:
       APIM_CLIENT_ID: ${APIM_CLIENT_ID:-changeme}   
       APIM_CLIENT_SECRET: ${APIM_CLIENT_SECRET:-changeme}   
       APIM_SCOPE: ${APIM_SCOPE:-api://dev-futuretrade-int.defra.gov.uk/.default}
+      NODE_TLS_REJECT_UNAUTHORIZED: 0
