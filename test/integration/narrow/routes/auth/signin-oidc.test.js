@@ -7,6 +7,8 @@ const personMock = require('../../../../../app/api-requests/rpa-api/person')
 jest.mock('../../../../../app/api-requests/rpa-api/person')
 const organisationMock = require('../../../../../app/api-requests/rpa-api/organisation')
 jest.mock('../../../../../app/api-requests/rpa-api/organisation')
+const cphNumbersMock = require('../../../../../app/api-requests/rpa-api/cph-numbers')
+jest.mock('../../../../../app/api-requests/rpa-api/cph-numbers')
 
 const businessEligibleToApplyMock = require('../../../../../app/api-requests/business-eligble-to-apply')
 jest.mock('../../../../../app/api-requests/business-eligble-to-apply')
@@ -143,6 +145,10 @@ describe('FarmerApply defra ID redirection test', () => {
         }
       })
 
+      cphNumbersMock.mockResolvedValueOnce([
+        '08/178/0064'
+      ])
+
       businessEligibleToApplyMock.mockResolvedValueOnce(true)
 
       const res = await global.__SERVER__.inject(options)
@@ -248,6 +254,10 @@ describe('FarmerApply defra ID redirection test', () => {
         }
       })
 
+      cphNumbersMock.mockResolvedValueOnce([
+        '08/178/0064'
+      ])
+
       const res = await global.__SERVER__.inject(options)
       expect(res.statusCode).toBe(400)
       expect(authMock.authenticate).toBeCalledTimes(1)
@@ -329,6 +339,10 @@ describe('FarmerApply defra ID redirection test', () => {
           email: 'org1@testemail.com'
         }
       })
+
+      cphNumbersMock.mockResolvedValueOnce([
+        '08/178/0064'
+      ])
 
       const res = await global.__SERVER__.inject(options)
       expect(res.statusCode).toBe(400)
