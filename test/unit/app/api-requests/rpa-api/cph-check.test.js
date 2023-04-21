@@ -1,4 +1,4 @@
-const cphCheck = require('../../../../../../ffc-ahwr-farmer-apply/app/api-requests/rpa-api/cph-check')
+const cphCheck = require('../../../../../app/api-requests/rpa-api/cph-check')
 
 describe('CPH check', () => {
   test.each([

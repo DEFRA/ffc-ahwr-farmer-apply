@@ -21,6 +21,7 @@ describe('Auth config', () => {
         rpaGetPersonSummaryUrl: 'dummy-get-person-summary-url',
         rpaGetOrganisationPermissionsUrl: 'dummy-get-organisation-permissions-url',
         rpaGetOrganisationUrl: 'dummy-get-organisation-url',
+        rpaGetCphNumbersUrl: 'dummy-get-cph-numbers-url',
         apimOcpSubscriptionKey: 'dummy-ocp-subscription-key',
         apimHostname: 'dummy-host-name',
         apimOAuthPath: 'dummy-oauth-path',
@@ -46,7 +47,8 @@ describe('Auth config', () => {
           hostname: 'dummy-host-name',
           getPersonSummaryUrl: 'dummy-get-person-summary-url',
           getOrganisationPermissionsUrl: 'dummy-get-organisation-permissions-url',
-          getOrganisationUrl: 'dummy-get-organisation-url'
+          getOrganisationUrl: 'dummy-get-organisation-url',
+          getCphNumbersUrl: 'dummy-get-cph-numbers-url'
         },
         apim: {
           ocpSubscriptionKey: 'dummy-ocp-subscription-key',
@@ -71,6 +73,7 @@ describe('Auth config', () => {
     process.env.RPA_GET_PERSON_SUMMARY_URL = testCase.processEnv.rpaGetPersonSummaryUrl
     process.env.RPA_GET_ORGANISATION_PERMISSIONS_URL = testCase.processEnv.rpaGetOrganisationPermissionsUrl
     process.env.RPA_GET_ORGANISATION_URL = testCase.processEnv.rpaGetOrganisationUrl
+    process.env.RPA_GET_CPH_NUMBERS_URL = testCase.processEnv.rpaGetCphNumbersUrl
     process.env.APIM_OCP_SUBSCRIPTION_KEY = testCase.processEnv.apimOcpSubscriptionKey
     process.env.APIM_HOST_NAME = testCase.processEnv.apimHostname
     process.env.APIM_OAUTH_PATH = testCase.processEnv.apimOAuthPath
