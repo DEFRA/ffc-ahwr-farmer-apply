@@ -4,9 +4,9 @@ const auth = require('../../auth')
 const sessionKeys = require('../../session/keys')
 const config = require('../../config')
 const { farmerApply } = require('../../constants/user-types')
-const { getPersonSummary, getPersonName, organisationIsEligible, getOrganisationAddress } = require('../../api-requests/rpa-api')
+const { getPersonSummary, getPersonName, organisationIsEligible, getOrganisationAddress, getCphNumbers, cphCheck, DoesNotHaveAnyValidCph } = require('../../api-requests/rpa-api')
 const businessEligibleToApply = require('../../api-requests/business-eligble-to-apply')
-const { InvalidPermissionsError, AlreadyAppliedError, NoEligibleCphError } = require('../../exceptions')
+const { InvalidPermissionsError, AlreadyAppliedError } = require('../../exceptions')
 
 function setOrganisationSessionData (request, personSummary, organisationSummary) {
   const organisation = {
@@ -54,6 +54,9 @@ module.exports = [{
         const organisationSummary = await organisationIsEligible(request, personSummary.id, apimAccessToken)
         setOrganisationSessionData(request, personSummary, organisationSummary)
 
+        const cphNumbers = await getCphNumbers(request, apimAccessToken)
+        cphCheck.customerMustHaveAtLeastOneValidCph(cphNumbers)
+
         const businessCanApply = await businessEligibleToApply(organisationSummary.organisation.sbi)
 
         if (!businessCanApply) {
@@ -68,7 +71,7 @@ module.exports = [{
         return h.redirect(`${config.urlPrefix}/org-review`)
       } catch (err) {
         console.error(`Received error with name ${err.name} and message ${err.message}.`)
-        if (err instanceof AlreadyAppliedError || err instanceof InvalidPermissionsError || err instanceof NoEligibleCphError) {
+        if (err instanceof AlreadyAppliedError || err instanceof InvalidPermissionsError || err instanceof DoesNotHaveAnyValidCph) {
           const attachedToMultipleBusinesses = session.getCustomer(request, sessionKeys.customer.attachedToMultipleBusinesses)
           const organisation = session.getFarmerApplyData(request, sessionKeys.farmerApplyData.organisation)
 
@@ -76,7 +79,7 @@ module.exports = [{
             ruralPaymentsAgency: config.ruralPaymentsAgency,
             alreadyAppliedError: err instanceof AlreadyAppliedError,
             permissionError: err instanceof InvalidPermissionsError,
-            cphError: err instanceof NoEligibleCphError,
+            cphError: err instanceof DoesNotHaveAnyValidCph,
             hasMultipleBusineses: attachedToMultipleBusinesses,
             backLink: auth.requestAuthorizationCodeUrl(session, request),
             sbi: organisation?.sbi,
