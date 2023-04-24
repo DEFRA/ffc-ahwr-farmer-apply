@@ -73,6 +73,7 @@ container:
   rpaGetPersonSummaryUrl:
   rpaGetOrganisationPermissionsUrl:
   rpaGetOrganisationUrl:
+  rpaGetCphNumbersUrl:
   apimOcpSubscriptionKey:
   apimHostname:
   apimOAuthPath:

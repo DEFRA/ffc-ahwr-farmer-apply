@@ -1,11 +1,11 @@
 const InvalidPermissionsError = require('./InvalidPermissionsError')
 const AlreadyAppliedError = require('./AlreadyAppliedError')
-const NoEligibleCphError = require('./NoEligibleCphError')
 const InvalidStateError = require('./InvalidStateError')
+const NoEligibleCphError = require('./NoEligibleCphError')
 
 module.exports = {
   InvalidPermissionsError,
-  NoEligibleCphError,
   AlreadyAppliedError,
-  InvalidStateError
+  InvalidStateError,
+  NoEligibleCphError
 }
