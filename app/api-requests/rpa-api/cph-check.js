@@ -1,4 +1,4 @@
-const DoesNotHaveAnyValidCph = require('./does-not-have-any-valid-cph')
+const NoEligibleCphError = require('../../exceptions/NoEligibleCphError')
 
 const between = (x, min, max) => {
   return x >= min && x <= max
@@ -24,13 +24,13 @@ const restrictedToCattlePigAndSheepLivestock = (cphNumber) => {
 
 const customerMustHaveAtLeastOneValidCph = (cphNumbers) => {
   if (typeof cphNumbers === 'undefined' || !Array.isArray(cphNumbers)) {
-    throw new DoesNotHaveAnyValidCph('Customer must have at least one valid CPH')
+    throw new NoEligibleCphError('Customer must have at least one valid CPH')
   }
   const hasAtLeastOneValidCph = cphNumbers.some(
     cphNumber => inEngland(cphNumber) && restrictedToCattlePigAndSheepLivestock(cphNumber)
   )
   if (!hasAtLeastOneValidCph) {
-    throw new DoesNotHaveAnyValidCph('Customer must have at least one valid CPH')
+    throw new NoEligibleCphError('Customer must have at least one valid CPH')
   }
   return hasAtLeastOneValidCph
 }

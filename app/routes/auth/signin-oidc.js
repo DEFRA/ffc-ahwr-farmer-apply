@@ -4,9 +4,9 @@ const auth = require('../../auth')
 const sessionKeys = require('../../session/keys')
 const config = require('../../config')
 const { farmerApply } = require('../../constants/user-types')
-const { getPersonSummary, getPersonName, organisationIsEligible, getOrganisationAddress, getCphNumbers, cphCheck, DoesNotHaveAnyValidCph } = require('../../api-requests/rpa-api')
+const { getPersonSummary, getPersonName, organisationIsEligible, getOrganisationAddress, getCphNumbers, cphCheck } = require('../../api-requests/rpa-api')
 const businessEligibleToApply = require('../../api-requests/business-eligble-to-apply')
-const { InvalidPermissionsError, AlreadyAppliedError } = require('../../exceptions')
+const { InvalidPermissionsError, AlreadyAppliedError, NoEligibleCphError } = require('../../exceptions')
 
 function setOrganisationSessionData (request, personSummary, organisationSummary) {
   const organisation = {
@@ -71,7 +71,7 @@ module.exports = [{
         return h.redirect(`${config.urlPrefix}/org-review`)
       } catch (err) {
         console.error(`Received error with name ${err.name} and message ${err.message}.`)
-        if (err instanceof AlreadyAppliedError || err instanceof InvalidPermissionsError || err instanceof DoesNotHaveAnyValidCph) {
+        if (err instanceof AlreadyAppliedError || err instanceof InvalidPermissionsError || err instanceof NoEligibleCphError) {
           const attachedToMultipleBusinesses = session.getCustomer(request, sessionKeys.customer.attachedToMultipleBusinesses)
           const organisation = session.getFarmerApplyData(request, sessionKeys.farmerApplyData.organisation)
 
@@ -79,7 +79,7 @@ module.exports = [{
             ruralPaymentsAgency: config.ruralPaymentsAgency,
             alreadyAppliedError: err instanceof AlreadyAppliedError,
             permissionError: err instanceof InvalidPermissionsError,
-            cphError: err instanceof DoesNotHaveAnyValidCph,
+            cphError: err instanceof NoEligibleCphError,
             hasMultipleBusineses: attachedToMultipleBusinesses,
             backLink: auth.requestAuthorizationCodeUrl(session, request),
             sbi: organisation?.sbi,
