@@ -4,6 +4,8 @@ const { serviceName, urlPrefix } = require('../../../../../app/config')
 const getCrumbs = require('../../../../utils/get-crumbs')
 const mockConfig = require('../../../../../app/config')
 
+jest.mock('ffc-messaging')
+
 describe('Farmer apply "Enter your business email address" page', () => {
   describe('Defra ID disabled', () => {
     beforeAll(async () => {

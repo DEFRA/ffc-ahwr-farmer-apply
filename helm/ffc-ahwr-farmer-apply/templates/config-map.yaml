@@ -36,6 +36,7 @@ data:
   RPA_GET_PERSON_SUMMARY_URL: {{ quote .Values.container.rpaGetPersonSummaryUrl }}
   RPA_GET_ORGANISATION_PERMISSIONS_URL: {{ quote .Values.container.rpaGetOrganisationPermissionsUrl }}
   RPA_GET_ORGANISATION_URL: {{ quote .Values.container.rpaGetOrganisationUrl }}
+  RPA_GET_CPH_NUMBERS_URL: {{ quote .Values.container.rpaGetCphNumbersUrl }}
   APIM_HOST_NAME: {{ quote .Values.container.apimHostname }}
   APIM_OAUTH_PATH: {{ quote .Values.container.apimOAuthPath }}
   APIM_SCOPE: {{ quote .Values.container.apimScope }}

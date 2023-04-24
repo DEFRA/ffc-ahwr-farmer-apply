@@ -18,7 +18,8 @@ const authSchema = Joi.object({
     hostname: Joi.string(),
     getPersonSummaryUrl: Joi.string(),
     getOrganisationPermissionsUrl: Joi.string(),
-    getOrganisationUrl: Joi.string()
+    getOrganisationUrl: Joi.string(),
+    getCphNumbersUrl: Joi.string()
   },
   apim: {
     hostname: Joi.string(),
@@ -48,7 +49,8 @@ const authConfig = {
     hostname: process.env.RPA_HOST_NAME,
     getPersonSummaryUrl: process.env.RPA_GET_PERSON_SUMMARY_URL,
     getOrganisationPermissionsUrl: process.env.RPA_GET_ORGANISATION_PERMISSIONS_URL,
-    getOrganisationUrl: process.env.RPA_GET_ORGANISATION_URL
+    getOrganisationUrl: process.env.RPA_GET_ORGANISATION_URL,
+    getCphNumbersUrl: process.env.RPA_GET_CPH_NUMBERS_URL
   },
   apim: {
     hostname: process.env.APIM_HOST_NAME,
