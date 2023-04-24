@@ -1,3 +1,4 @@
+const rpaApi = require('../../api-requests/rpa-api')
 const NoEligibleCphError = require('../../exceptions/NoEligibleCphError')
 
 const between = (x, min, max) => {
@@ -22,17 +23,21 @@ const restrictedToCattlePigAndSheepLivestock = (cphNumber) => {
   return !between(cphNumber.slice(-4), slaughterHousesOrPoultry.MIN, slaughterHousesOrPoultry.MAX)
 }
 
-const customerMustHaveAtLeastOneValidCph = (cphNumbers) => {
+const containAtLeastOneValidCph = (cphNumbers) => {
   if (typeof cphNumbers === 'undefined' || !Array.isArray(cphNumbers)) {
-    throw new NoEligibleCphError('Customer must have at least one valid CPH')
+    return false
   }
-  const hasAtLeastOneValidCph = cphNumbers.some(
+  const containAtLeastOneValidCph = cphNumbers.some(
     cphNumber => inEngland(cphNumber) && restrictedToCattlePigAndSheepLivestock(cphNumber)
   )
-  if (!hasAtLeastOneValidCph) {
+  return containAtLeastOneValidCph
+}
+
+const customerMustHaveAtLeastOneValidCph = async (request, apimAccessToken) => {
+  const cphNumbers = await rpaApi.getCphNumbers(request, apimAccessToken)
+  if (!containAtLeastOneValidCph(cphNumbers)) {
     throw new NoEligibleCphError('Customer must have at least one valid CPH')
   }
-  return hasAtLeastOneValidCph
 }
 
 module.exports = {

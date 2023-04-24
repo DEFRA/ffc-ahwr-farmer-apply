@@ -4,7 +4,7 @@ const auth = require('../../auth')
 const sessionKeys = require('../../session/keys')
 const config = require('../../config')
 const { farmerApply } = require('../../constants/user-types')
-const { getPersonSummary, getPersonName, organisationIsEligible, getOrganisationAddress, getCphNumbers, cphCheck } = require('../../api-requests/rpa-api')
+const { getPersonSummary, getPersonName, organisationIsEligible, getOrganisationAddress, cphCheck } = require('../../api-requests/rpa-api')
 const businessEligibleToApply = require('../../api-requests/business-eligble-to-apply')
 const { InvalidPermissionsError, AlreadyAppliedError, NoEligibleCphError } = require('../../exceptions')
 
@@ -54,8 +54,7 @@ module.exports = [{
         const organisationSummary = await organisationIsEligible(request, personSummary.id, apimAccessToken)
         setOrganisationSessionData(request, personSummary, organisationSummary)
 
-        const cphNumbers = await getCphNumbers(request, apimAccessToken)
-        cphCheck.customerMustHaveAtLeastOneValidCph(cphNumbers)
+        cphCheck.customerMustHaveAtLeastOneValidCph(request, apimAccessToken)
 
         const businessCanApply = await businessEligibleToApply(organisationSummary.organisation.sbi)
 
