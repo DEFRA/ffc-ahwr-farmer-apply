@@ -1,5 +1,5 @@
 const NoEligibleCphError = require('../../exceptions/NoEligibleCphError')
-const rpaApi = require('.')
+const getCphNumbers = require('./cph-numbers')
 
 const between = (x, min, max) => {
   return x >= min && x <= max
@@ -34,7 +34,7 @@ const containAtLeastOneValidCph = (cphNumbers) => {
 }
 
 const customerMustHaveAtLeastOneValidCph = async (request, apimAccessToken) => {
-  const cphNumbers = await rpaApi.getCphNumbers(request, apimAccessToken)
+  const cphNumbers = await getCphNumbers(request, apimAccessToken)
   if (!containAtLeastOneValidCph(cphNumbers)) {
     throw new NoEligibleCphError('Customer must have at least one valid CPH')
   }
