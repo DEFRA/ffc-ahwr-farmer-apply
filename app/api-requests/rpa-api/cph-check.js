@@ -1,5 +1,5 @@
-const rpaApi = require('../../api-requests/rpa-api')
 const NoEligibleCphError = require('../../exceptions/NoEligibleCphError')
+const rpaApi = require('.')
 
 const between = (x, min, max) => {
   return x >= min && x <= max
