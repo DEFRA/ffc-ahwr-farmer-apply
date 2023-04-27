@@ -54,7 +54,7 @@ module.exports = [{
         const organisationSummary = await organisationIsEligible(request, personSummary.id, apimAccessToken)
         setOrganisationSessionData(request, personSummary, organisationSummary)
 
-        cphCheck.customerMustHaveAtLeastOneValidCph(request, apimAccessToken)
+        await cphCheck.customerMustHaveAtLeastOneValidCph(request, apimAccessToken)
 
         const businessCanApply = await businessEligibleToApply(organisationSummary.organisation.sbi)
 
