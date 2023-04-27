@@ -8,7 +8,7 @@
     <h1 class="govuk-heading-l">You cannot apply for a livestock review for this business</h1>
 
     {% if alreadyAppliedError %}
-      <p class="govuk-body">{{ organisationName }} - SBI {{ sbi }} has already applied for an annual health and welfare review of livestock.</p>
+      <p class="govuk-body">{{ organisationName }}{{ sbiText }} has already applied for an annual health and welfare review of livestock.</p>
     
       <h2 class="govuk-heading-m">What to do next</h2>
       
@@ -16,7 +16,7 @@
     {% endif %}
 
     {% if permissionError %}
-      <p class="govuk-body">You do not have the required permission to act for {{ organisationName }} - SBI {{ sbi }}.</p>
+      <p class="govuk-body">You do not have the required permission to act for {{ organisationName }}{{ sbiText }}.</p>
     
       <h2 class="govuk-heading-m">What to do next</h2>
 
@@ -28,7 +28,7 @@
     {% endif %}
 
     {% if cphError %}
-      <p class="govuk-body">{{ organisationName }} - SBI {{ sbi }} has no eligible county parish holding (CPH) number registered to it.</p>
+      <p class="govuk-body">{{ organisationName }}{{ sbiText }} has no eligible county parish holding (CPH) number registered to it.</p>
     
       <p class="govuk-body">To be eligible a CPH must be registered in England.</p>
       <p class="govuk-body">The CPH number cannot be:</p>
