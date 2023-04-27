@@ -6,7 +6,9 @@ const notifySchema = Joi.object({
   apiKey: Joi.string().pattern(notifyApiKeyRegex),
   emailTemplates: {
     applyLogin: Joi.string().uuid(),
-    registerYourInterest: Joi.string().uuid()
+    registerYourInterest: Joi.string().uuid(),
+    accessGranted: Joi.string().uuid(),
+    accessNotGranted: Joi.string().uuid()
   },
   testToken: Joi.string().uuid().optional()
 })
@@ -15,7 +17,9 @@ const notifyConfig = {
   apiKey: process.env.NOTIFY_API_KEY,
   emailTemplates: {
     applyLogin: process.env.NOTIFY_TEMPLATE_ID_FARMER_APPLY_LOGIN,
-    registerYourInterest: (process.env.DEFRA_ID_ENABLED === true) ? process.env.NOTIFY_TEMPLATE_ID_DEFRA_ID_REGISTER_INTEREST : process.env.NOTIFY_TEMPLATE_ID_FARMER_REGISTER_INTEREST
+    registerYourInterest: (process.env.DEFRA_ID_ENABLED === true) ? process.env.NOTIFY_TEMPLATE_ID_DEFRA_ID_REGISTER_INTEREST : process.env.NOTIFY_TEMPLATE_ID_FARMER_REGISTER_INTEREST,
+    accessGranted: process.env.NOTIFY_TEMPLATE_ID_FARMER_ACCESS_GRANTED,
+    accessNotGranted: process.env.NOTIFY_TEMPLATE_ID_FARMER_ACCESS_NOT_GRANTED
   },
   testToken: process.env.TEST_TOKEN
 }

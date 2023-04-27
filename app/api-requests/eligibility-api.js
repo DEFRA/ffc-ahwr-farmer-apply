@@ -47,7 +47,28 @@ async function getEligibleBusinesses (businessEmail) {
   }
 }
 
+async function checkDuplicateRegistration (businessEmail) {
+  console.log(`${new Date().toISOString()} Checking duplicate registration: ${JSON.stringify({ businessEmail })}`)
+  try {
+    const response = await Wreck.get(
+        `${config.eligibilityApi.uri}/waiting-list/check-duplicate-registration?emailAddress=${businessEmail}`,
+        { json: true }
+    )
+    if (response.res.statusCode !== 200 && response.res.statusCode !== 302) {
+      throw new Error(`HTTP ${response.res.statusCode} (${response.res.statusMessage})`)
+    }
+    console.log(`${new Date().toISOString()} Checking duplicate registration returned: ${JSON.stringify(response.payload)}`)
+    return response.payload
+  } catch (error) {
+    console.error(`${new Date().toISOString()} Checking duplicate registration failed: ${JSON.stringify({
+        businessEmail
+      })}`, error)
+    return []
+  }
+}
+
 module.exports = {
+  checkDuplicateRegistration,
   getEligibility,
   getEligibleBusinesses
 }
