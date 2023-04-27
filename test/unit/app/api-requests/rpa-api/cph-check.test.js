@@ -173,11 +173,11 @@ describe('CPH check', () => {
       })
 
     if (testCase.expect.error) {
-      expect(
+      await expect(
         () => cphCheck.customerMustHaveAtLeastOneValidCph(testCase.given.request, testCase.given.apimAccessToken)
       ).rejects.toThrowError(testCase.expect.error)
     } else {
-      expect(
+      await expect(
         cphCheck.customerMustHaveAtLeastOneValidCph(testCase.given.request, testCase.given.apimAccessToken)
       ).resolves.toEqual(undefined)
     }
