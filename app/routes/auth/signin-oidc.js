@@ -10,7 +10,7 @@ const { InvalidPermissionsError, AlreadyAppliedError, NoEligibleCphError } = req
 
 function setOrganisationSessionData (request, personSummary, organisationSummary) {
   const organisation = {
-    sbi: organisationSummary.organisation.sbi.toString(),
+    sbi: organisationSummary.organisation.sbi?.toString(),
     farmerName: getPersonName(personSummary),
     name: organisationSummary.organisation.name,
     email: organisationSummary.organisation.email ? organisationSummary.organisation.email : personSummary.email,
@@ -54,7 +54,9 @@ module.exports = [{
         const organisationSummary = await organisationIsEligible(request, personSummary.id, apimAccessToken)
         setOrganisationSessionData(request, personSummary, organisationSummary)
 
-        await cphCheck.customerMustHaveAtLeastOneValidCph(request, apimAccessToken)
+        if (!organisationSummary.organisationPermission) {
+          throw new InvalidPermissionsError(`Person id ${personSummary.id} does not have the required permissions for organisation id ${organisationSummary.organisation.id}`)
+        }
 
         const businessCanApply = await businessEligibleToApply(organisationSummary.organisation.sbi)
 
@@ -62,9 +64,7 @@ module.exports = [{
           throw new AlreadyAppliedError(`Business with SBI ${organisationSummary.organisation.sbi} is not eligble to apply`)
         }
 
-        if (!organisationSummary.organisationPermission) {
-          throw new InvalidPermissionsError(`Person id ${personSummary.id} does not have the required permissions for organisation id ${organisationSummary.organisation.id}`)
-        }
+        await cphCheck.customerMustHaveAtLeastOneValidCph(request, apimAccessToken)
 
         auth.setAuthCookie(request, personSummary.email, farmerApply)
         return h.redirect(`${config.urlPrefix}/org-review`)
@@ -81,7 +81,7 @@ module.exports = [{
             cphError: err instanceof NoEligibleCphError,
             hasMultipleBusineses: attachedToMultipleBusinesses,
             backLink: auth.requestAuthorizationCodeUrl(session, request),
-            sbi: organisation?.sbi,
+            sbiText: organisation?.sbi !== undefined ? ` - SBI ${organisation.sbi}` : null,
             organisationName: organisation?.name
           }).code(400).takeover()
         }
