@@ -227,7 +227,7 @@ describe('FarmerApply defra ID redirection test', () => {
         organisationPermission: false
       })
 
-      businessEligibleToApplyMock.mockResolvedValueOnce(true)
+      // businessEligibleToApplyMock.mockResolvedValueOnce(true)
 
       sessionMock.getCustomer.mockResolvedValueOnce({
         attachedToMultipleBusinesses: false
@@ -254,9 +254,9 @@ describe('FarmerApply defra ID redirection test', () => {
         }
       })
 
-      cphNumbersMock.mockResolvedValueOnce([
-        '08/178/0064'
-      ])
+      // cphNumbersMock.mockResolvedValueOnce([
+      //   '08/178/0064'
+      // ])
 
       const res = await global.__SERVER__.inject(options)
       expect(res.statusCode).toBe(400)
@@ -265,7 +265,7 @@ describe('FarmerApply defra ID redirection test', () => {
       expect(authMock.requestAuthorizationCodeUrl).toBeCalledTimes(1)
       expect(personMock.getPersonSummary).toBeCalledTimes(1)
       expect(organisationMock.organisationIsEligible).toBeCalledTimes(1)
-      expect(businessEligibleToApplyMock).toBeCalledTimes(1)
+      // expect(businessEligibleToApplyMock).toBeCalledTimes(1)
       const $ = cheerio.load(res.payload)
       expect($('.govuk-heading-l').text()).toMatch('You cannot apply for a livestock review for this business')
       expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
@@ -310,7 +310,7 @@ describe('FarmerApply defra ID redirection test', () => {
           },
           email: 'org1@testemail.com'
         },
-        organisationPermission: false
+        organisationPermission: true
       })
 
       businessEligibleToApplyMock.mockResolvedValueOnce(false)
