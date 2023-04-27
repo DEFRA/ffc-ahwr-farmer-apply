@@ -309,4 +309,127 @@ describe('Eligibility API', () => {
       expect(response).toStrictEqual([])
     })
   })
+
+  describe('checkDuplicateRegistration', () => {
+    test('given a business email address it returns an object containing registration data', async () => {
+      const expectedResponse = {
+        payload: {
+          alreadyRegistered: false,
+          accessGranted: false
+        },
+        res: {
+          statusCode: 200
+        }
+      }
+      const options = {
+        json: true
+      }
+      const BUSINESS_EMAIL_ADDRESS = 'test@test.com'
+      when(Wreck.get)
+        .calledWith(
+    `${mockEligibilityApiUri}/waiting-list/check-duplicate-registration?emailAddress=${BUSINESS_EMAIL_ADDRESS}`,
+    options
+        )
+        .mockResolvedValue(expectedResponse)
+      const response = await eligibilityApi.checkDuplicateRegistration(BUSINESS_EMAIL_ADDRESS)
+
+      expect(response).not.toBeNull()
+      expect(response).toBe(expectedResponse.payload)
+      expect(Wreck.get).toHaveBeenCalledTimes(1)
+      expect(Wreck.get).toHaveBeenCalledWith(
+      `${mockEligibilityApiUri}/waiting-list/check-duplicate-registration?emailAddress=${BUSINESS_EMAIL_ADDRESS}`,
+      options
+      )
+    })
+
+    test('when an invalid response is returned it logs the issue and returns empty array', async () => {
+      const expectedResponse = {
+        payload: {
+          isDuplicate: false
+        },
+        res: {
+          statusCode: 400
+        }
+      }
+      const options = {
+        json: true
+      }
+      const BUSINESS_EMAIL_ADDRESS = 'test@test.com'
+      when(Wreck.get)
+        .calledWith(
+        `${mockEligibilityApiUri}/waiting-list/check-duplicate-registration?emailAddress=${BUSINESS_EMAIL_ADDRESS}`,
+        options
+        )
+        .mockResolvedValue(expectedResponse)
+
+      const response = await eligibilityApi.checkDuplicateRegistration(BUSINESS_EMAIL_ADDRESS)
+
+      expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
+      expect(consoleErrorSpy).toHaveBeenCalledWith(`${MOCK_NOW.toISOString()} Checking duplicate registration failed: ${JSON.stringify({
+      businessEmail: BUSINESS_EMAIL_ADDRESS
+    })}`, expect.anything())
+      expect(response).toStrictEqual([])
+      expect(Wreck.get).toHaveBeenCalledTimes(1)
+      expect(Wreck.get).toHaveBeenCalledWith(
+      `${mockEligibilityApiUri}/waiting-list/check-duplicate-registration?emailAddress=${BUSINESS_EMAIL_ADDRESS}`,
+      options
+      )
+    })
+
+    test('when Wreck.get throws an error it logs the error and returns empty array', async () => {
+      const expectedError = new Error('msg')
+      const options = {
+        json: true
+      }
+      const BUSINESS_EMAIL_ADDRESS = 'test@test.com'
+      when(Wreck.get)
+        .calledWith(
+        `${mockEligibilityApiUri}/waiting-list/check-duplicate-registration?emailAddress=${BUSINESS_EMAIL_ADDRESS}`,
+        options
+        )
+        .mockRejectedValue(expectedError)
+
+      const response = await eligibilityApi.checkDuplicateRegistration(BUSINESS_EMAIL_ADDRESS)
+
+      expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
+      expect(consoleErrorSpy).toHaveBeenCalledWith(`${MOCK_NOW.toISOString()} Checking duplicate registration failed: ${JSON.stringify({
+      businessEmail: BUSINESS_EMAIL_ADDRESS
+    })}`, expectedError)
+      expect(response).toStrictEqual([])
+    })
+
+    test('when Wreck.get returns 400 it logs the issue and returns null', async () => {
+      const statusCode = 400
+      const statusMessage = 'A valid email address must be specified.'
+      const expectedResponse = {
+        payload: {
+          statusCode,
+          error: 'Bad Request',
+          message: new Error('HTTP 400 (A valid email address must be specified.)')
+        },
+        res: {
+          statusCode,
+          statusMessage
+        }
+      }
+      const options = {
+        json: true
+      }
+      const businessEmailAddress = 'name@email.com'
+      when(Wreck.get)
+        .calledWith(
+        `${mockEligibilityApiUri}/waiting-list/check-duplicate-registration?emailAddress=${businessEmailAddress}`,
+        options
+        )
+        .mockResolvedValue(expectedResponse)
+
+      const response = await eligibilityApi.checkDuplicateRegistration(businessEmailAddress)
+
+      expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
+      expect(consoleErrorSpy).toHaveBeenCalledWith(`${MOCK_NOW.toISOString()} Checking duplicate registration failed: ${JSON.stringify({
+      businessEmail: businessEmailAddress
+    })}`, expectedResponse.payload.message)
+      expect(response).toStrictEqual([])
+    })
+  })
 })
