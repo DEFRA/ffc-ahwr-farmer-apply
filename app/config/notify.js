@@ -15,7 +15,7 @@ const notifyConfig = {
   apiKey: process.env.NOTIFY_API_KEY,
   emailTemplates: {
     applyLogin: process.env.NOTIFY_TEMPLATE_ID_FARMER_APPLY_LOGIN,
-    registerYourInterest: (process.env.DEFRA_ID_ENABLED === true) ? process.env.NOTIFY_TEMPLATE_ID_DEFRA_ID_REGISTER_INTEREST : process.env.NOTIFY_TEMPLATE_ID_FARMER_REGISTER_INTEREST
+    registerYourInterest: process.env.DEFRA_ID_ENABLED === 'true' ? process.env.NOTIFY_TEMPLATE_ID_DEFRA_ID_REGISTER_INTEREST : process.env.NOTIFY_TEMPLATE_ID_FARMER_REGISTER_INTEREST
   },
   testToken: process.env.TEST_TOKEN
 }
