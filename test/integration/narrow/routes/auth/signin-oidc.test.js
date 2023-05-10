@@ -86,7 +86,7 @@ describe('FarmerApply defra ID redirection test', () => {
       expect($('.govuk-heading-l').text()).toMatch('Login failed')
     })
 
-    test('returns 400 and login failed view when state mismatch', async () => {
+    test('redirects to defra id when state mismatch', async () => {
       const baseUrl = `${url}?code=432432&state=83d2b160-74ce-4356-9709-3f8da7868e35`
       const options = {
         method: 'GET',
@@ -98,11 +98,9 @@ describe('FarmerApply defra ID redirection test', () => {
       })
 
       const res = await global.__SERVER__.inject(options)
-      expect(res.statusCode).toBe(400)
+      expect(res.statusCode).toBe(302)
       expect(authMock.authenticate).toBeCalledTimes(1)
       expect(authMock.requestAuthorizationCodeUrl).toBeCalledTimes(1)
-      const $ = cheerio.load(res.payload)
-      expect($('.govuk-heading-l').text()).toMatch('Login failed')
     })
 
     test('returns 302 and redirected to org view when authenticate successful', async () => {

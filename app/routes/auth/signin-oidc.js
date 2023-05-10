@@ -6,7 +6,7 @@ const config = require('../../config')
 const { farmerApply } = require('../../constants/user-types')
 const { getPersonSummary, getPersonName, organisationIsEligible, getOrganisationAddress, cphCheck } = require('../../api-requests/rpa-api')
 const businessEligibleToApply = require('../../api-requests/business-eligble-to-apply')
-const { InvalidPermissionsError, AlreadyAppliedError, NoEligibleCphError } = require('../../exceptions')
+const { InvalidPermissionsError, AlreadyAppliedError, NoEligibleCphError, InvalidStateError } = require('../../exceptions')
 
 function setOrganisationSessionData (request, personSummary, organisationSummary) {
   const organisation = {
@@ -70,25 +70,29 @@ module.exports = [{
         return h.redirect(`${config.urlPrefix}/org-review`)
       } catch (err) {
         console.error(`Received error with name ${err.name} and message ${err.message}.`)
-        if (err instanceof AlreadyAppliedError || err instanceof InvalidPermissionsError || err instanceof NoEligibleCphError) {
-          const attachedToMultipleBusinesses = session.getCustomer(request, sessionKeys.customer.attachedToMultipleBusinesses)
-          const organisation = session.getFarmerApplyData(request, sessionKeys.farmerApplyData.organisation)
-
-          return h.view('defra-id/cannot-apply-for-livestock-review-exception', {
-            ruralPaymentsAgency: config.ruralPaymentsAgency,
-            alreadyAppliedError: err instanceof AlreadyAppliedError,
-            permissionError: err instanceof InvalidPermissionsError,
-            cphError: err instanceof NoEligibleCphError,
-            hasMultipleBusineses: attachedToMultipleBusinesses,
-            backLink: auth.requestAuthorizationCodeUrl(session, request),
-            sbiText: organisation?.sbi !== undefined ? ` - SBI ${organisation.sbi}` : null,
-            organisationName: organisation?.name
-          }).code(400).takeover()
+        const attachedToMultipleBusinesses = session.getCustomer(request, sessionKeys.customer.attachedToMultipleBusinesses)
+        const organisation = session.getFarmerApplyData(request, sessionKeys.farmerApplyData.organisation)
+        switch (true) {
+          case err instanceof InvalidStateError:
+            return h.redirect(auth.requestAuthorizationCodeUrl(session, request))
+          case err instanceof AlreadyAppliedError:
+          case err instanceof InvalidPermissionsError:
+          case err instanceof NoEligibleCphError:
+            return h.view('defra-id/cannot-apply-for-livestock-review-exception', {
+              ruralPaymentsAgency: config.ruralPaymentsAgency,
+              alreadyAppliedError: err instanceof AlreadyAppliedError,
+              permissionError: err instanceof InvalidPermissionsError,
+              cphError: err instanceof NoEligibleCphError,
+              hasMultipleBusineses: attachedToMultipleBusinesses,
+              backLink: auth.requestAuthorizationCodeUrl(session, request),
+              sbiText: organisation?.sbi !== undefined ? ` - SBI ${organisation.sbi}` : null,
+              organisationName: organisation?.name
+            }).code(400).takeover()
+          default:
+            return h.view('verify-login-failed', {
+              backLink: auth.requestAuthorizationCodeUrl(session, request)
+            }).code(400).takeover()
         }
-
-        return h.view('verify-login-failed', {
-          backLink: auth.requestAuthorizationCodeUrl(session, request)
-        }).code(400).takeover()
       }
     }
   }
