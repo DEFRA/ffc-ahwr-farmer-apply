@@ -1,7 +1,7 @@
 @smoke
 Feature: select business
 
-  Scenario: : user navigate to business email to fetch magic link
+  Scenario: user navigate to business email to fetch magic link
     Given user navigate to the magic link containing the businessEmail
     When user confirm the magic link page
 

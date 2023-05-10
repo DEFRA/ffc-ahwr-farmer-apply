@@ -2,6 +2,8 @@ const browserstack = require('browserstack-local')
 const { ReportAggregator, HtmlReporter } = require('@rpii/wdio-html-reporter')
 const log4js = require('@log4js-node/log4js-api')
 const logger = log4js.getLogger('default')
+const _ = require('lodash')
+const timeStamp = new Date().toLocaleString()
 const envRoot = (process.env.TEST_ENVIRONMENT_ROOT_URL || 'http://host.docker.internal:3000')
 const chromeArgs = process.env.CHROME_ARGS ? process.env.CHROME_ARGS.split(' ') : []
 const maxInstances = process.env.MAX_INSTANCES ? Number(process.env.MAX_INSTANCES) : 5
@@ -35,7 +37,91 @@ exports.config = {
         args: chromeArgs
       }
     }
-    // ,
+
+    //,
+    // {
+    //   // firefox 112
+    //   os: 'Windows',
+    //   osVersion: '10',
+    //   'buildName': 'Firefox 112 compatibility - ' + timeStamp,
+    //   'projectName': 'DEFRA/ffc-ahwr/Vet-Visit/apply',
+    //   browserVersion: '112',
+    //   browserName: 'Firefox',
+    //   'debug': true,
+    //   'networkLogs': true,
+    //   'video': true,
+    //   'browserstack.local': true,
+    //   acceptInsecureCerts: true,
+    //   acceptSslCerts: true
+    // },
+    //
+    // {
+    //   // Windows Edge 112
+    //   os: 'Windows',
+    //   osVersion: '10',
+    //   'buildName': 'Edge 112 compatibility - ' + timeStamp,
+    //   'projectName': 'DEFRA/ffc-ahwr/Vet-Visit/apply',
+    //   browserVersion: '112',
+    //   browserName: 'Edge',
+    //   'browserstack.local': true,
+    //   'debug': true,
+    //   'networkLogs': true,
+    //   'video': true,
+    //   acceptInsecureCerts: true,
+    //   acceptSslCerts: true,
+    //   'browserstack.selenium_version': '4.0.0-alpha-6'
+    // },
+    //
+    // {
+    //   // Chrome 111
+    //   os: 'Windows',
+    //   osVersion: '10',
+    //   'buildName': 'Chrome 111 compatibility - ' + timeStamp,
+    //   'projectName': 'DEFRA/ffc-ahwr/Vet-Visit/apply',
+    //   browserVersion: '111',
+    //   browserName: 'Chrome',
+    //   'browserstack.local': true,
+    //   'debug': true,
+    //   'networkLogs': true,
+    //   'video': true,
+    //   acceptInsecureCerts: true,
+    //   acceptSslCerts: true,
+    //   'browserstack.selenium_version': '4.0.0-alpha-6'
+    // },
+    //
+    // {
+    //   // firefox 111
+    //   os: 'Windows',
+    //   osVersion: '10',
+    //   'buildName': 'Firefox 111 compatibility - ' + timeStamp,
+    //   'projectName': 'DEFRA/ffc-ahwr/Vet-Visit/apply',
+    //   browserVersion: '111',
+    //   browserName: 'Firefox',
+    //   'debug': true,
+    //   'networkLogs': true,
+    //   'video': true,
+    //   'browserstack.local': true,
+    //   acceptInsecureCerts: true,
+    //   acceptSslCerts: true
+    // },
+    //
+    // {
+    //   // Windows Edge 111
+    //   os: 'Windows',
+    //   osVersion: '10',
+    //   'buildName': 'Edge 111 compatibility - ' + timeStamp,
+    //   'projectName': 'DEFRA/ffc-ahwr/Vet-Visit/apply',
+    //   browserVersion: '111',
+    //   browserName: 'Edge',
+    //   'browserstack.local': true,
+    //   'debug': true,
+    //   'networkLogs': true,
+    //   'video': true,
+    //   acceptInsecureCerts: true,
+    //   acceptSslCerts: true,
+    //   'browserstack.selenium_version': '4.0.0-alpha-6'
+    // },
+
     // {
     //   os: 'Windows',
     //   osVersion: '10',

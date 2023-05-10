@@ -6,7 +6,7 @@ const BUSINESS_EMAIL = 'ibrahim.adekanmi@kainos.com'
 const RPA_CONTACT = '.govuk-details'
 const PAGE_TITLE = 'Annual health and welfare review of livestock'
 const SELECT_BUSINESS = 'Which business'
-const BUSINESS_NAME = 'Ibrahim Farm'
+const BUSINESS_NAME = 'Farm'
 const CONTACT = 'Telephone'
 const BUSINESS_CHECK_BUTTON = '#whichBusiness'
 const NO_BUSINESS_CONTENT = '.govuk-details__text'
@@ -42,7 +42,7 @@ const LIVESTOCK_NUMBER = 'eligible for funding'
 class SelectBusinessPage extends CommonActions {
   async magicLinkUrl () {
     const sleep = (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitTimeInMs))
-    await sleep(20000)
+    await sleep(10000)
     const magicLink = await getMagicLink(BUSINESS_EMAIL)
     await browser.url(magicLink)
     await this.urlContain(BUSINESS_EMAIL)
