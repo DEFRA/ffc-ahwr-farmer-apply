@@ -11,20 +11,20 @@ let apimToken
 
 function getOrganisationAddress (address) {
   return [
-    address.address1,
-    address.address2,
-    address.address3,
-    address.address4,
-    address.address5,
-    address.pafOrganisationName,
-    address.flatName,
-    address.buildingNumberRange,
-    address.buildingName,
-    address.street,
-    address.city,
-    address.county,
-    address.postalCode,
-    address.country
+    address?.address1,
+    address?.address2,
+    address?.address3,
+    address?.address4,
+    address?.address5,
+    address?.pafOrganisationName,
+    address?.flatName,
+    address?.buildingNumberRange,
+    address?.buildingName,
+    address?.street,
+    address?.city,
+    address?.county,
+    address?.postalCode,
+    address?.country
   ].filter(Boolean).join(',')
 }
 
