@@ -58,13 +58,13 @@ module.exports = [{
           throw new InvalidPermissionsError(`Person id ${personSummary.id} does not have the required permissions for organisation id ${organisationSummary.organisation.id}`)
         }
 
+        await cphCheck.customerMustHaveAtLeastOneValidCph(request, apimAccessToken)
+
         const businessCanApply = await businessEligibleToApply(organisationSummary.organisation.sbi)
 
         if (!businessCanApply) {
           throw new AlreadyAppliedError(`Business with SBI ${organisationSummary.organisation.sbi} is not eligble to apply`)
         }
-
-        await cphCheck.customerMustHaveAtLeastOneValidCph(request, apimAccessToken)
 
         auth.setAuthCookie(request, personSummary.email, farmerApply)
         return h.redirect(`${config.urlPrefix}/org-review`)
