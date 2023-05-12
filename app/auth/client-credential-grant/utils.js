@@ -15,13 +15,15 @@ const setExpiryDate = (expiresIn) => {
 const cacheClientCredentialToken = async (request, token) => {
   const { clientCredentialCache } = request.server.app
   const expiryDate = setExpiryDate(token.expires_in)
+  console.log(`Setting APIM token in cache with expiry of ${expiryDate}.`)
   await clientCredentialCache.set(clientCredentialCacheKey, { token, expiry_date: expiryDate })
 }
 
 const hasExpired = (clientCredentialExpiryDate) => {
-  const currentDate = new Date().getTime()
+  const currentDate = new Date()
   const expiryDate = new Date(clientCredentialExpiryDate)
-  return expiryDate.getTime() < currentDate
+  console.log(`Comparing current date ${currentDate} to expiry date of APIM access token ${expiryDate}.`)
+  return expiryDate.getTime() < currentDate.getTime()
 }
 
 const clientCredentialsValid = (clientCredentials) => {
