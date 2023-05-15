@@ -170,14 +170,14 @@ describe('FarmerApply defra ID redirection test', () => {
       }
 
       authMock.authenticate.mockResolvedValueOnce({ accessToken: '2323' })
-      authMock.getClientCredentials.mockImplementation(() => {
+      authMock.retrieveApimAccessToken.mockImplementation(() => {
         throw new Error('APIM Access Token Retrieval Failed')
       })
 
       const res = await global.__SERVER__.inject(options)
       expect(res.statusCode).toBe(400)
       expect(authMock.authenticate).toBeCalledTimes(1)
-      expect(authMock.getClientCredentials).toBeCalledTimes(1)
+      expect(authMock.retrieveApimAccessToken).toBeCalledTimes(1)
       const $ = cheerio.load(res.payload)
       expect($('.govuk-heading-l').text()).toMatch('Login failed')
       expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
@@ -194,7 +194,7 @@ describe('FarmerApply defra ID redirection test', () => {
       }
 
       authMock.authenticate.mockResolvedValueOnce({ accessToken: '2323' })
-      authMock.getClientCredentials.mockResolvedValueOnce('Bearer 2323')
+      authMock.retrieveApimAccessToken.mockResolvedValueOnce('Bearer 2323')
       personMock.getPersonSummary.mockResolvedValueOnce({
         firstName: 'Bill',
         middleName: null,
@@ -253,7 +253,7 @@ describe('FarmerApply defra ID redirection test', () => {
       const res = await global.__SERVER__.inject(options)
       expect(res.statusCode).toBe(400)
       expect(authMock.authenticate).toBeCalledTimes(1)
-      expect(authMock.getClientCredentials).toBeCalledTimes(1)
+      expect(authMock.retrieveApimAccessToken).toBeCalledTimes(1)
       expect(authMock.requestAuthorizationCodeUrl).toBeCalledTimes(1)
       expect(personMock.getPersonSummary).toBeCalledTimes(1)
       expect(organisationMock.organisationIsEligible).toBeCalledTimes(1)
@@ -273,7 +273,7 @@ describe('FarmerApply defra ID redirection test', () => {
       }
 
       authMock.authenticate.mockResolvedValueOnce({ accessToken: '2323' })
-      authMock.getClientCredentials.mockResolvedValueOnce('Bearer 2323')
+      authMock.retrieveApimAccessToken.mockResolvedValueOnce('Bearer 2323')
       personMock.getPersonSummary.mockResolvedValueOnce({
         firstName: 'Bill',
         middleName: null,
@@ -338,7 +338,7 @@ describe('FarmerApply defra ID redirection test', () => {
       const res = await global.__SERVER__.inject(options)
       expect(res.statusCode).toBe(400)
       expect(authMock.authenticate).toBeCalledTimes(1)
-      expect(authMock.getClientCredentials).toBeCalledTimes(1)
+      expect(authMock.retrieveApimAccessToken).toBeCalledTimes(1)
       expect(authMock.requestAuthorizationCodeUrl).toBeCalledTimes(1)
       expect(personMock.getPersonSummary).toBeCalledTimes(1)
       expect(organisationMock.organisationIsEligible).toBeCalledTimes(1)
