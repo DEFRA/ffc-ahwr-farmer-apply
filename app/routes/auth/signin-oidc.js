@@ -86,7 +86,8 @@ module.exports = [{
               hasMultipleBusineses: attachedToMultipleBusinesses,
               backLink: auth.requestAuthorizationCodeUrl(session, request),
               sbiText: organisation?.sbi !== undefined ? ` - SBI ${organisation.sbi}` : null,
-              organisationName: organisation?.name
+              organisationName: organisation?.name,
+              guidanceLink: config.serviceUri
             }).code(400).takeover()
           default:
             return h.view('verify-login-failed', {
