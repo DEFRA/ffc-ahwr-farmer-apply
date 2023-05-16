@@ -175,7 +175,7 @@ describe('Farmer apply "Enter your business email address" page', () => {
 
         expect(res.statusCode).toBe(400)
         expect($('div.govuk-error-summary ul.govuk-list li a').attr('href')).toEqual('#emailAddress')
-        expect($('div.govuk-error-summary ul.govuk-list li a').text().trim()).toEqual('You need to enter an email address')
+        expect($('div.govuk-error-summary ul.govuk-list li a').text().trim()).toEqual(testCase.expectedErrors.emailAddress)
         expect($('p.govuk-error-message').text().trim()).toEqual(testCase.expectedErrors.emailAddress)
       })
     })
