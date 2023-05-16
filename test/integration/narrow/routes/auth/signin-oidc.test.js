@@ -18,6 +18,7 @@ const { InvalidPermissionsError, InvalidStateError, AlreadyAppliedError } = requ
 describe('FarmerApply defra ID redirection test', () => {
   jest.mock('../../../../../app/config', () => ({
     ...jest.requireActual('../../../../../app/config'),
+    serviceUri: 'http://localhost:3000/apply',
     authConfig: {
       defraId: {
         enabled: true
@@ -345,6 +346,7 @@ describe('FarmerApply defra ID redirection test', () => {
       expect(businessEligibleToApplyMock).toBeCalledTimes(1)
       const $ = cheerio.load(res.payload)
       expect($('.govuk-heading-l').text()).toMatch('You cannot apply for a livestock review for this business')
+      expect($('#guidanceLink').attr('href')).toMatch('http://localhost:3000/apply')
       expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
       expect(consoleErrorSpy).toHaveBeenCalledWith(`Received error with name AlreadyAppliedError and message ${expectedError.message}.`)
     })
