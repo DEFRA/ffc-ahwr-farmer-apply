@@ -113,14 +113,12 @@ describe('FarmerApply defra ID redirection test', () => {
 
       authMock.authenticate.mockResolvedValueOnce({ accessToken: '2323' })
       personMock.getPersonSummary.mockResolvedValueOnce({
-        _data: {
-          firstName: 'Bill',
-          middleName: null,
-          lastName: 'Smith',
-          email: 'billsmith@testemail.com',
-          id: 1234567,
-          customerReferenceNumber: '1103452436'
-        }
+        firstName: 'Bill',
+        middleName: 'sss',
+        lastName: 'Smith',
+        email: 'billsmith@testemail.com',
+        id: 1234567,
+        customerReferenceNumber: '1103452436'
       })
       organisationMock.organisationIsEligible.mockResolvedValueOnce({
         organisationPermission: true,
@@ -153,7 +151,66 @@ describe('FarmerApply defra ID redirection test', () => {
       const res = await global.__SERVER__.inject(options)
       expect(res.statusCode).toBe(302)
       expect(res.headers.location).toEqual('/apply/org-review')
-      expect(sessionMock.setFarmerApplyData).toBeCalledTimes(1)
+      expect(sessionMock.setFarmerApplyData).toBeCalledWith(expect.anything(), 'organisation', expect.objectContaining({
+        email: 'billsmith@testemail.com'
+      }))
+      expect(businessEligibleToApplyMock).toBeCalledTimes(1)
+      expect(authMock.authenticate).toBeCalledTimes(1)
+      expect(personMock.getPersonSummary).toBeCalledTimes(1)
+      expect(organisationMock.organisationIsEligible).toBeCalledTimes(1)
+      expect(authMock.setAuthCookie).toBeCalledTimes(1)
+    })
+
+    test('returns 302 and organisation email set in session when customer email missing', async () => {
+      const baseUrl = `${url}?code=432432&state=83d2b160-74ce-4356-9709-3f8da7868e35`
+      const options = {
+        method: 'GET',
+        url: baseUrl
+      }
+
+      authMock.authenticate.mockResolvedValueOnce({ accessToken: '2323' })
+      personMock.getPersonSummary.mockResolvedValueOnce({
+        firstName: 'Bill',
+        middleName: 'sss',
+        lastName: 'Smith',
+        email: null,
+        id: 1234567,
+        customerReferenceNumber: '1103452436'
+      })
+      organisationMock.organisationIsEligible.mockResolvedValueOnce({
+        organisationPermission: true,
+        organisation: {
+          id: 7654321,
+          name: 'Mrs Gill Black',
+          sbi: 101122201,
+          address: {
+            address1: 'The Test House',
+            address2: 'Test road',
+            address3: 'Wicklewood',
+            buildingNumberRange: '11',
+            buildingName: 'TestHouse',
+            street: 'Test ROAD',
+            city: 'Test City',
+            postalCode: 'TS1 1TS',
+            country: 'United Kingdom',
+            dependentLocality: 'Test Local'
+          },
+          email: 'org1@testemail.com'
+        }
+      })
+
+      cphNumbersMock.mockResolvedValueOnce([
+        '08/178/0064'
+      ])
+
+      businessEligibleToApplyMock.mockResolvedValueOnce(true)
+
+      const res = await global.__SERVER__.inject(options)
+      expect(res.statusCode).toBe(302)
+      expect(res.headers.location).toEqual('/apply/org-review')
+      expect(sessionMock.setFarmerApplyData).toBeCalledWith(expect.anything(), 'organisation', expect.objectContaining({
+        email: 'org1@testemail.com'
+      }))
       expect(businessEligibleToApplyMock).toBeCalledTimes(1)
       expect(authMock.authenticate).toBeCalledTimes(1)
       expect(personMock.getPersonSummary).toBeCalledTimes(1)

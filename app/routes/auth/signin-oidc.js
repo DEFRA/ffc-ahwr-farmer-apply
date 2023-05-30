@@ -13,7 +13,7 @@ function setOrganisationSessionData (request, personSummary, organisationSummary
     sbi: organisationSummary.organisation.sbi?.toString(),
     farmerName: getPersonName(personSummary),
     name: organisationSummary.organisation.name,
-    email: organisationSummary.organisation.email ? organisationSummary.organisation.email : personSummary.email,
+    email: personSummary.email ? personSummary.email : organisationSummary.organisation.email,
     address: getOrganisationAddress(organisationSummary.organisation.address)
   }
   session.setFarmerApplyData(
