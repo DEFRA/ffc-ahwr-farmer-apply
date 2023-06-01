@@ -7,6 +7,7 @@ const { farmerApply } = require('../../constants/user-types')
 const { getPersonSummary, getPersonName, organisationIsEligible, getOrganisationAddress, cphCheck } = require('../../api-requests/rpa-api')
 const businessEligibleToApply = require('../../api-requests/business-eligble-to-apply')
 const { InvalidPermissionsError, AlreadyAppliedError, NoEligibleCphError, InvalidStateError } = require('../../exceptions')
+const { sendExceptionEvent } = require('../../event')
 
 function setOrganisationSessionData (request, personSummary, organisationSummary) {
   const organisation = {
@@ -22,6 +23,8 @@ function setOrganisationSessionData (request, personSummary, organisationSummary
     organisation
   )
 }
+
+let event
 
 module.exports = [{
   method: 'GET',
@@ -54,6 +57,15 @@ module.exports = [{
         const organisationSummary = await organisationIsEligible(request, personSummary.id, apimAccessToken)
         setOrganisationSessionData(request, personSummary, organisationSummary)
 
+        console.log(JSON.stringify(personSummary))
+        console.log(JSON.stringify(organisationSummary))
+
+        event = {
+          id: request.yar.id,
+          sbi: organisationSummary.organisation.sbi,
+          crn: organisationSummary.organisation.crn
+        }
+
         if (!organisationSummary.organisationPermission) {
           throw new InvalidPermissionsError(`Person id ${personSummary.id} does not have the required permissions for organisation id ${organisationSummary.organisation.id}`)
         }
@@ -76,8 +88,11 @@ module.exports = [{
           case err instanceof InvalidStateError:
             return h.redirect(auth.requestAuthorizationCodeUrl(session, request))
           case err instanceof AlreadyAppliedError:
+            sendExceptionEvent(event.id, event.sbi, event.crn, 'AlreadyApplied')
           case err instanceof InvalidPermissionsError:
+            sendExceptionEvent(event.id, event.sbi, event.crn, 'InvalidPermissions')
           case err instanceof NoEligibleCphError:
+            sendExceptionEvent(event.id, event.sbi, event.crn, 'InvalidCPH')
             return h.view('defra-id/cannot-apply-for-livestock-review-exception', {
               ruralPaymentsAgency: config.ruralPaymentsAgency,
               alreadyAppliedError: err instanceof AlreadyAppliedError,
