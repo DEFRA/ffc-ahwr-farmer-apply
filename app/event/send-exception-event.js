@@ -6,7 +6,7 @@ const sendExceptionEvent = async (sessionId, sbi, crn, exception, status = 'aler
       id: sessionId,
       sbi,
       cph: 'n/a',
-      email: 'temporary@email.com',
+      email: 'unknown',
       name: 'send-exception-event',
       type: 'exception-event',
       message: `Apply: ${exception}`,

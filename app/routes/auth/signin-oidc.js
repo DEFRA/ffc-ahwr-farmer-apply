@@ -57,9 +57,6 @@ module.exports = [{
         const organisationSummary = await organisationIsEligible(request, personSummary.id, apimAccessToken)
         setOrganisationSessionData(request, personSummary, organisationSummary)
 
-        console.log(JSON.stringify(personSummary))
-        console.log(JSON.stringify(organisationSummary))
-
         event = {
           id: request.yar.id,
           sbi: organisationSummary.organisation.sbi,
