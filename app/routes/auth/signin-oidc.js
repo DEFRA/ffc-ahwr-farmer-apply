@@ -90,8 +90,30 @@ module.exports = [{
             return h.redirect(auth.requestAuthorizationCodeUrl(session, request))
           case err instanceof AlreadyAppliedError:
             sendExceptionEvent(event.id, event.sbi, event.crn, 'AlreadyApplied')
+            return h.view('defra-id/cannot-apply-for-livestock-review-exception', {
+              ruralPaymentsAgency: config.ruralPaymentsAgency,
+              alreadyAppliedError: err instanceof AlreadyAppliedError,
+              permissionError: err instanceof InvalidPermissionsError,
+              cphError: err instanceof NoEligibleCphError,
+              hasMultipleBusineses: attachedToMultipleBusinesses,
+              backLink: auth.requestAuthorizationCodeUrl(session, request),
+              sbiText: organisation?.sbi !== undefined ? ` - SBI ${organisation.sbi}` : null,
+              organisationName: organisation?.name,
+              guidanceLink: config.serviceUri
+            }).code(400).takeover()
           case err instanceof InvalidPermissionsError:
             sendExceptionEvent(event.id, event.sbi, event.crn, 'InvalidPermissions')
+            return h.view('defra-id/cannot-apply-for-livestock-review-exception', {
+              ruralPaymentsAgency: config.ruralPaymentsAgency,
+              alreadyAppliedError: err instanceof AlreadyAppliedError,
+              permissionError: err instanceof InvalidPermissionsError,
+              cphError: err instanceof NoEligibleCphError,
+              hasMultipleBusineses: attachedToMultipleBusinesses,
+              backLink: auth.requestAuthorizationCodeUrl(session, request),
+              sbiText: organisation?.sbi !== undefined ? ` - SBI ${organisation.sbi}` : null,
+              organisationName: organisation?.name,
+              guidanceLink: config.serviceUri
+            }).code(400).takeover()
           case err instanceof NoEligibleCphError:
             sendExceptionEvent(event.id, event.sbi, event.crn, 'InvalidCPH')
             return h.view('defra-id/cannot-apply-for-livestock-review-exception', {
