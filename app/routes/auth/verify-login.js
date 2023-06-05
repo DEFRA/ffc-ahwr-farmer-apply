@@ -31,7 +31,8 @@ module.exports = [{
         })}`)
         sendMonitoringEvent(request.yar.id, error.details[0].message, '', getIp(request))
         return h.view('verify-login-failed', {
-          backLink: `${config.urlPrefix}/login`
+          backLink: `${config.urlPrefix}/login`,
+          ruralPaymentsAgency: config.ruralPaymentsAgency,
         }).code(400).takeover()
       }
     },
@@ -50,7 +51,8 @@ module.exports = [{
         console.error(`Email in the verify login link does not match the cached email for request id ${request.yar.id}.`)
         sendMonitoringEvent(request.yar.id, 'Invalid token', email, getIp(request))
         return h.view('verify-login-failed', {
-          backLink: `${config.urlPrefix}/login`
+          backLink: `${config.urlPrefix}/login`,
+          ruralPaymentsAgency: config.ruralPaymentsAgency,
         }).code(400).takeover()
       }
 
