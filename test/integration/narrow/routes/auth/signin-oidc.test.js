@@ -9,8 +9,8 @@ const organisationMock = require('../../../../../app/api-requests/rpa-api/organi
 jest.mock('../../../../../app/api-requests/rpa-api/organisation')
 const cphNumbersMock = require('../../../../../app/api-requests/rpa-api/cph-numbers')
 jest.mock('../../../../../app/api-requests/rpa-api/cph-numbers')
-const sendIneligibilityEventMock = require('../../../../../app/event/send-ineligibility-event')
-jest.mock('../../../../../app/event/send-ineligibility-event')
+const sendIneligibilityEventMock = require('../../../../../app/event/raise-ineligibility-event')
+jest.mock('../../../../../app/event/raise-ineligibility-event')
 const cphCheckMock = require('../../../../../app/api-requests/rpa-api/cph-check').customerMustHaveAtLeastOneValidCph
 jest.mock('../../../../../app/api-requests/rpa-api/cph-check')
 
