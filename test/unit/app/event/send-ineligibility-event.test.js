@@ -1,7 +1,7 @@
 jest.mock('../../../../app/event/raise-event')
 const raiseEvent = require('../../../../app/event/raise-event')
 
-const sendExceptionEvent = require('../../../../app/event/send-exception-event')
+const sendExceptionEvent = require('../../../../app/event/send-ineligibility-event')
 
 let event
 const sessionId = '9e016c50-046b-4597-b79a-ebe4f0bf8505'
@@ -9,7 +9,7 @@ const sbi = '123'
 const crn = 123
 const exception = 'test exception'
 
-describe('Send event on exception', () => {
+describe('Send event on inegibile', () => {
   const MOCK_NOW = new Date()
   jest.useFakeTimers('modern')
   jest.setSystemTime(MOCK_NOW)
@@ -29,8 +29,8 @@ describe('Send event on exception', () => {
       sbi,
       cph: 'n/a',
       email: 'unknown',
-      name: 'send-exception-event',
-      type: 'exception-event',
+      name: 'send-ineligibility-event',
+      type: 'ineligibility-event',
       message: `Apply: ${exception}`,
       data: {
         sbi,
