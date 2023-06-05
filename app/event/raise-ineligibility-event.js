@@ -1,12 +1,12 @@
 const raiseEvent = require('./raise-event')
 
-const sendIneligibilityEvent = async (sessionId, sbi, crn, exception, status = 'alert') => {
+const raiseIneligibilityEvent = async (sessionId, sbi, crn, email, exception, status = 'alert') => {
   if (sessionId && exception) {
     const event = {
       id: sessionId,
-      sbi,
+      sbi: `${sbi}`,
       cph: 'n/a',
-      email: 'unknown',
+      email,
       name: 'send-ineligibility-event',
       type: 'ineligibility-event',
       message: `Apply: ${exception}`,
@@ -23,4 +23,4 @@ const sendIneligibilityEvent = async (sessionId, sbi, crn, exception, status = '
   }
 }
 
-module.exports = sendIneligibilityEvent
+module.exports = raiseIneligibilityEvent

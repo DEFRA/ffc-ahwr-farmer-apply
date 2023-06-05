@@ -7,7 +7,7 @@ const { farmerApply } = require('../../constants/user-types')
 const { getPersonSummary, getPersonName, organisationIsEligible, getOrganisationAddress, cphCheck } = require('../../api-requests/rpa-api')
 const businessEligibleToApply = require('../../api-requests/business-eligble-to-apply')
 const { InvalidPermissionsError, AlreadyAppliedError, NoEligibleCphError, InvalidStateError } = require('../../exceptions')
-const { sendIneligibilityEvent } = require('../../event')
+const { raiseIneligibilityEvent } = require('../../event')
 
 function setOrganisationSessionData (request, personSummary, organisationSummary) {
   const organisation = {
@@ -87,10 +87,11 @@ module.exports = [{
               ruralPaymentsAgency: config.ruralPaymentsAgency
             }).code(400).takeover()
         }
-        sendIneligibilityEvent(
+        raiseIneligibilityEvent(
           request.yar.id,
           organisation?.sbi,
           organisation?.crn,
+          organisation?.email,
           err.name
         )
         return h.view('defra-id/cannot-apply-for-livestock-review-exception', {
