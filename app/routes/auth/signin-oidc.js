@@ -7,13 +7,14 @@ const { farmerApply } = require('../../constants/user-types')
 const { getPersonSummary, getPersonName, organisationIsEligible, getOrganisationAddress, cphCheck } = require('../../api-requests/rpa-api')
 const businessEligibleToApply = require('../../api-requests/business-eligble-to-apply')
 const { InvalidPermissionsError, AlreadyAppliedError, NoEligibleCphError, InvalidStateError } = require('../../exceptions')
+const { raiseIneligibilityEvent } = require('../../event')
 
 function setOrganisationSessionData (request, personSummary, organisationSummary) {
   const organisation = {
     sbi: organisationSummary.organisation.sbi?.toString(),
     farmerName: getPersonName(personSummary),
     name: organisationSummary.organisation.name,
-    email: organisationSummary.organisation.email ? organisationSummary.organisation.email : personSummary.email,
+    email: personSummary.email ? personSummary.email : organisationSummary.organisation.email,
     address: getOrganisationAddress(organisationSummary.organisation.address)
   }
   session.setFarmerApplyData(
@@ -38,7 +39,8 @@ module.exports = [{
       failAction (request, h, err) {
         console.log(`Validation error caught during DEFRA ID redirect - ${err.message}.`)
         return h.view('verify-login-failed', {
-          backLink: auth.requestAuthorizationCodeUrl(session, request)
+          backLink: auth.requestAuthorizationCodeUrl(session, request),
+          ruralPaymentsAgency: config.ruralPaymentsAgency
         }).code(400).takeover()
       }
     },
@@ -72,28 +74,38 @@ module.exports = [{
         console.error(`Received error with name ${err.name} and message ${err.message}.`)
         const attachedToMultipleBusinesses = session.getCustomer(request, sessionKeys.customer.attachedToMultipleBusinesses)
         const organisation = session.getFarmerApplyData(request, sessionKeys.farmerApplyData.organisation)
+        const crn = session.getCustomer(request, sessionKeys.customer.crn)
         switch (true) {
           case err instanceof InvalidStateError:
             return h.redirect(auth.requestAuthorizationCodeUrl(session, request))
           case err instanceof AlreadyAppliedError:
           case err instanceof InvalidPermissionsError:
           case err instanceof NoEligibleCphError:
-            return h.view('defra-id/cannot-apply-for-livestock-review-exception', {
-              ruralPaymentsAgency: config.ruralPaymentsAgency,
-              alreadyAppliedError: err instanceof AlreadyAppliedError,
-              permissionError: err instanceof InvalidPermissionsError,
-              cphError: err instanceof NoEligibleCphError,
-              hasMultipleBusineses: attachedToMultipleBusinesses,
-              backLink: auth.requestAuthorizationCodeUrl(session, request),
-              sbiText: organisation?.sbi !== undefined ? ` - SBI ${organisation.sbi}` : null,
-              organisationName: organisation?.name,
-              guidanceLink: config.serviceUri
-            }).code(400).takeover()
+            break
           default:
             return h.view('verify-login-failed', {
-              backLink: auth.requestAuthorizationCodeUrl(session, request)
+              backLink: auth.requestAuthorizationCodeUrl(session, request),
+              ruralPaymentsAgency: config.ruralPaymentsAgency
             }).code(400).takeover()
         }
+        raiseIneligibilityEvent(
+          request.yar.id,
+          organisation?.sbi,
+          crn,
+          organisation?.email,
+          err.name
+        )
+        return h.view('defra-id/cannot-apply-for-livestock-review-exception', {
+          ruralPaymentsAgency: config.ruralPaymentsAgency,
+          alreadyAppliedError: err instanceof AlreadyAppliedError,
+          permissionError: err instanceof InvalidPermissionsError,
+          cphError: err instanceof NoEligibleCphError,
+          hasMultipleBusineses: attachedToMultipleBusinesses,
+          backLink: auth.requestAuthorizationCodeUrl(session, request),
+          sbiText: organisation?.sbi !== undefined ? ` - SBI ${organisation.sbi}` : null,
+          organisationName: organisation?.name,
+          guidanceLink: config.serviceUri
+        }).code(400).takeover()
       }
     }
   }
