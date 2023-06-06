@@ -2,33 +2,16 @@ const { Given, When, Then } = require('@wdio/cucumber-framework')
 const SelectBusinessPage = require('../pages/select-business-page')
 const selectBusinessPage = new SelectBusinessPage()
 
-Given(/^user navigate to the magic link containing the businessEmail$/, async function () {
-  await selectBusinessPage.magicLinkUrl()
+Given(/^the user is on the (.*) page$/, async function (page) {
+  await selectBusinessPage.getHomePage(page)
 })
+When(/^user start the application$/, async function () {
+  await selectBusinessPage.clickOnStartButton()
 
-When(/^user confirm the magic link page$/, async function () {
-  await selectBusinessPage.pageTitle()
 })
-
-When(/^user is on the business page$/, async function () {
-  await selectBusinessPage.businessPage()
-})
-When(/^user business is listed$/, async function () {
-  await selectBusinessPage.listOfBusiness()
-})
-When(/^user select the business$/, async function () {
-  await selectBusinessPage.selectBusiness()
-})
-When(/^user click on the rpa support tab$/, async function () {
-  await selectBusinessPage.checkContact()
-})
-Then(/^user should see the rpa contact details$/, async function () {
-  await selectBusinessPage.contactDetails()
-})
-
-Then(/^user start application$/, async function () {
-  await selectBusinessPage.startApplication()
-})
+When(/^user login with either email\(for magic link\) or crn and password\(for DefraId\)$/,async function () {
+  await selectBusinessPage.switchBetweenMagicLinkAndDefraId()
+});
 
 // org-review
 When(/^user check the business details$/, async function () {
@@ -95,3 +78,4 @@ Then(/^user complete the application$/, async function () {
 Then(/^user should see successful message$/, async function () {
   await selectBusinessPage.successfulMessage()
 })
+

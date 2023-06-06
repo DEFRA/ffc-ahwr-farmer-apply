@@ -1,17 +1,10 @@
 @smoke
 Feature: select business
 
-  Scenario: : user navigate to business email to fetch magic link
-    Given user navigate to the magic link containing the businessEmail
-    When user confirm the magic link page
-
-  Scenario: user business is listed in select your business page
-    When user is on the business page
-    And user business is listed
-    And user select the business
-    And user click on the rpa support tab
-    Then user should see the rpa contact details
-    Then user start application
+  Scenario: Apply with valid cred
+    Given the user is on the /apply/start page
+    When user start the application
+    And user login with either email(for magic link) or crn and password(for DefraId)
 
   Scenario: org-review page
     When user check the business details
