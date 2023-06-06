@@ -4,5 +4,5 @@ module.exports = Joi
   .string()
   .trim()
   .lowercase()
-  .email()
+  .email({ tlds: false })
   .required()
