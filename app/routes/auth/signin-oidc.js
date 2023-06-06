@@ -74,6 +74,7 @@ module.exports = [{
         console.error(`Received error with name ${err.name} and message ${err.message}.`)
         const attachedToMultipleBusinesses = session.getCustomer(request, sessionKeys.customer.attachedToMultipleBusinesses)
         const organisation = session.getFarmerApplyData(request, sessionKeys.farmerApplyData.organisation)
+        const crn = session.getCustomer(request, sessionKeys.customer.crn)
         switch (true) {
           case err instanceof InvalidStateError:
             return h.redirect(auth.requestAuthorizationCodeUrl(session, request))
@@ -90,7 +91,7 @@ module.exports = [{
         raiseIneligibilityEvent(
           request.yar.id,
           organisation?.sbi,
-          organisation?.crn,
+          crn,
           organisation?.email,
           err.name
         )
