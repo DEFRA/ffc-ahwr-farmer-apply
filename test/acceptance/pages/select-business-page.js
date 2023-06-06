@@ -2,6 +2,8 @@ const CommonActions = require('./common-actions')
 const getMagicLink = require('../support/get-magic-link')
 
 // select business element
+
+const START_BUTTON = 'a[role="button"]'
 const BUSINESS_EMAIL = 'ibrahim.adekanmi@kainos.com'
 const RPA_CONTACT = '.govuk-details'
 const PAGE_TITLE = 'Annual health and welfare review of livestock'
@@ -38,8 +40,25 @@ const REVIEW_AGREED = 'agreement'
 const TERMS = 'Accept the terms'
 const MESSAGE = 'Application complete'
 const LIVESTOCK_NUMBER = 'eligible for funding'
+//DefraID
+const DEFRA_CRN = '#crn'
+const DEFRA_PASSWORD = '#password'
+const CRN_HINT = '[id="crn-hint"]'
+const SIGN_IN_BUTTON = '[type="submit"]'
+const MAGIC_LINK_EMAIL ='ibrahim.adekanmi@kainos.com'
+const EMAIL_INPUT = '#email'
+const ALT_CRN_HINT = '#header'
+const CONTINUE = '#submit'
+const EMAIL_HINT ='[id="email-hint"]'
 
 class SelectBusinessPage extends CommonActions {
+
+  async getHomePage (page) {
+    await this.open(page)
+  }
+  async clickOnStartButton () {
+    await this.clickOn(START_BUTTON)
+  }
   async magicLinkUrl () {
     const sleep = (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitTimeInMs))
     await sleep(20000)
@@ -159,6 +178,43 @@ class SelectBusinessPage extends CommonActions {
   async successfulMessage () {
     await this.elementToContainText(SUCCESS_MESSAGE, MESSAGE)
   }
-}
+  async signInButton () {
+    await this.clickOn(SIGN_IN_BUTTON)
+  }
 
+  async inputValidCrn (crn) {
+    await this.sendKey(DEFRA_CRN, crn)
+  }
+  async inputPassword (password) {
+    await this.sendKey(DEFRA_PASSWORD, password)
+  }
+  async submit(){
+    await this.clickOn(CONTINUE)
+  }
+  async inputCredentials (credential) {
+    await this.sendKey(EMAIL_INPUT, credential)
+  }
+  async switchBetweenMagicLinkAndDefraId () {
+     const sleep = (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitTimeInMs))
+     await sleep(10000)
+
+    if (await this.isElementExist(EMAIL_HINT)){
+      await this.inputCredentials(MAGIC_LINK_EMAIL)
+      await this.submit()
+      await this.magicLinkUrl ()
+      await this.pageTitle ()
+      await this.businessPage ()
+      await this.listOfBusiness ()
+      await this.selectBusiness ()
+      await this.checkContact ()
+      await this.contactDetails ()
+      await this.startApplication ()
+    } else {
+      await this.inputValidCrn(process.env.CRN_USERNAME)
+      await this.inputPassword(process.env.CRN_PASSWORD)
+      await this.signInButton()
+    }
+
+   }
+}
 module.exports = SelectBusinessPage
