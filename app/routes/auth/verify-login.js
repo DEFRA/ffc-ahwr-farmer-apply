@@ -32,7 +32,7 @@ module.exports = [{
         sendMonitoringEvent(request.yar.id, error.details[0].message, '', getIp(request))
         return h.view('verify-login-failed', {
           backLink: `${config.urlPrefix}/login`,
-          ruralPaymentsAgency: config.ruralPaymentsAgency,
+          ruralPaymentsAgency: config.ruralPaymentsAgency
         }).code(400).takeover()
       }
     },
@@ -52,7 +52,7 @@ module.exports = [{
         sendMonitoringEvent(request.yar.id, 'Invalid token', email, getIp(request))
         return h.view('verify-login-failed', {
           backLink: `${config.urlPrefix}/login`,
-          ruralPaymentsAgency: config.ruralPaymentsAgency,
+          ruralPaymentsAgency: config.ruralPaymentsAgency
         }).code(400).takeover()
       }
 
