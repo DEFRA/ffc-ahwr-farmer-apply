@@ -195,7 +195,6 @@ class SelectBusinessPage extends CommonActions {
     await this.sendKey(EMAIL_INPUT, credential)
   }
   async switchBetweenMagicLinkAndDefraId () {
-    console.log('................'+await this.isElementExist(CRN_HINT))
      const sleep = (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitTimeInMs))
      await sleep(10000)
 
