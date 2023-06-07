@@ -42,12 +42,50 @@ if (cookieContainer) {
   })
 
   function submitPreference (accepted) {
-  const xhr = new XMLHttpRequest() // eslint-disable-line
+    const xhr = new XMLHttpRequest() // eslint-disable-line
     xhr.open('POST', '/apply/cookies', true)
     xhr.setRequestHeader('Content-Type', 'application/json')
     xhr.send(JSON.stringify({
       analytics: accepted,
       async: true
     }))
+    xhr.onload = async () => {
+      if (xhr.status === 200) {
+        const modifyCrumbValues = (crumbCookieValue) => {
+          const crumbs = document.querySelectorAll('[name="crumb"]')
+          crumbs.forEach(crumb => {
+            crumb.value = crumbCookieValue
+          })
+        }
+        const waitForCookie = async (cookieName, timeout = 5000) => {
+          return new Promise((resolve, reject) => {
+            const startTime = new Date().getTime()
+            const checkCookie = () => {
+              const cookies = document.cookie.split(';')
+              for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim()
+                if (cookie.startsWith(cookieName + '=')) {
+                  resolve(cookie.split('=')[1])
+                  return
+                }
+              }
+              const currentTime = new Date().getTime()
+              if (currentTime - startTime >= timeout) {
+                reject(new Error('Timeout waiting for cookie'))
+                return
+              }
+              setTimeout(checkCookie, 100)
+            }
+            checkCookie()
+          })
+        }
+        try {
+          const crumbCookieValue = await waitForCookie('crumb')
+          modifyCrumbValues(crumbCookieValue)
+        } catch (error) {
+          modifyCrumbValues('Error waiting for crumb cookie')
+        }
+      }
+    }
   }
 }

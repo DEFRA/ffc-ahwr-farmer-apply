@@ -4,7 +4,8 @@ module.exports = {
   plugin: require('@hapi/crumb'),
   options: {
     cookieOptions: {
-      isSecure: cookieConfig.isSecure
+      isSecure: cookieConfig.isSecure,
+      isHttpOnly: false
     }
   }
 }
