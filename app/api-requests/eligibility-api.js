@@ -49,22 +49,15 @@ async function getEligibleBusinesses (businessEmail) {
 
 async function checkWaitingList (businessEmail) {
   console.log(`${new Date().toISOString()} Checking waiting list for : ${JSON.stringify({ businessEmail })}`)
-  try {
-    const response = await Wreck.get(
-        `${config.eligibilityApi.uri}/waiting-list?emailAddress=${businessEmail}`,
-        { json: true }
-    )
-    if (response.res.statusCode !== 200 && response.res.statusCode !== 302) {
-      throw new Error(`HTTP ${response.res.statusCode} (${response.res.statusMessage})`)
-    }
-    console.log(`${new Date().toISOString()} waiting list API returned: ${JSON.stringify(response.payload)}`)
-    return response.payload
-  } catch (error) {
-    console.error(`${new Date().toISOString()} Request to the waiting list API failed: ${JSON.stringify({
-        businessEmail
-      })}`, error)
-    return []
+  const response = await Wreck.get(
+      `${config.eligibilityApi.uri}/waiting-list?emailAddress=${businessEmail}`,
+      { json: true }
+  )
+  if (!response || response.res.statusCode !== 200) {
+    throw new Error(`HTTP ${response?.res.statusCode} (${response?.res.statusMessage})`)
   }
+  console.log(`${new Date().toISOString()} waiting list API returned: ${JSON.stringify(response.payload)}`)
+  return response.payload
 }
 
 module.exports = {

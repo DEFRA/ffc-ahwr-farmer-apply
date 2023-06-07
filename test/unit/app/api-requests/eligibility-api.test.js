@@ -342,17 +342,15 @@ describe('Eligibility API', () => {
       )
     })
 
-    test('when an invalid response is returned it logs the issue and returns empty array', async () => {
-      const expectedResponse = {
-        payload: {
-          isDuplicate: false
-        },
-        res: {
-          statusCode: 400
-        }
-      }
+    test('when a non 200 response is returned from the waiting list api and error is thrown', async () => {
       const options = {
         json: true
+      }
+      const expectedResponse = {
+        res: {
+          statusCode: 400,
+          statusMessage: 'some problem'
+        }
       }
       const BUSINESS_EMAIL_ADDRESS = 'test@test.com'
       when(Wreck.get)
@@ -360,15 +358,9 @@ describe('Eligibility API', () => {
         `${mockEligibilityApiUri}/waiting-list?emailAddress=${BUSINESS_EMAIL_ADDRESS}`,
         options
         )
-        .mockResolvedValue(expectedResponse)
+        .mockResolvedValueOnce(expectedResponse)
 
-      const response = await eligibilityApi.checkWaitingList(BUSINESS_EMAIL_ADDRESS)
-
-      expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
-      expect(consoleErrorSpy).toHaveBeenCalledWith(`${MOCK_NOW.toISOString()} Request to the waiting list API failed: ${JSON.stringify({
-      businessEmail: BUSINESS_EMAIL_ADDRESS
-    })}`, expect.anything())
-      expect(response).toStrictEqual([])
+      await expect(eligibilityApi.checkWaitingList(BUSINESS_EMAIL_ADDRESS)).rejects.toThrow('HTTP 400 (some problem)')
       expect(Wreck.get).toHaveBeenCalledTimes(1)
       expect(Wreck.get).toHaveBeenCalledWith(
       `${mockEligibilityApiUri}/waiting-list?emailAddress=${BUSINESS_EMAIL_ADDRESS}`,
@@ -376,10 +368,12 @@ describe('Eligibility API', () => {
       )
     })
 
-    test('when Wreck.get throws an error it logs the error and returns empty array', async () => {
-      const expectedError = new Error('msg')
+    test('when an undefined response is returned from the waiting list api and error is thrown', async () => {
       const options = {
         json: true
+      }
+      const expectedResponse = {
+        res: undefined
       }
       const BUSINESS_EMAIL_ADDRESS = 'test@test.com'
       when(Wreck.get)
@@ -387,49 +381,14 @@ describe('Eligibility API', () => {
         `${mockEligibilityApiUri}/waiting-list?emailAddress=${BUSINESS_EMAIL_ADDRESS}`,
         options
         )
-        .mockRejectedValue(expectedError)
+        .mockResolvedValueOnce(expectedResponse)
 
-      const response = await eligibilityApi.checkWaitingList(BUSINESS_EMAIL_ADDRESS)
-
-      expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
-      expect(consoleErrorSpy).toHaveBeenCalledWith(`${MOCK_NOW.toISOString()} Request to the waiting list API failed: ${JSON.stringify({
-      businessEmail: BUSINESS_EMAIL_ADDRESS
-    })}`, expectedError)
-      expect(response).toStrictEqual([])
-    })
-
-    test('when Wreck.get returns 400 it logs the issue and returns null', async () => {
-      const statusCode = 400
-      const statusMessage = 'A valid email address must be specified.'
-      const expectedResponse = {
-        payload: {
-          statusCode,
-          error: 'Bad Request',
-          message: new Error('HTTP 400 (A valid email address must be specified.)')
-        },
-        res: {
-          statusCode,
-          statusMessage
-        }
-      }
-      const options = {
-        json: true
-      }
-      const businessEmailAddress = 'name@email.com'
-      when(Wreck.get)
-        .calledWith(
-        `${mockEligibilityApiUri}/waiting-list?emailAddress=${businessEmailAddress}`,
-        options
-        )
-        .mockResolvedValue(expectedResponse)
-
-      const response = await eligibilityApi.checkWaitingList(businessEmailAddress)
-
-      expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
-      expect(consoleErrorSpy).toHaveBeenCalledWith(`${MOCK_NOW.toISOString()} Request to the waiting list API failed: ${JSON.stringify({
-      businessEmail: businessEmailAddress
-    })}`, expectedResponse.payload.message)
-      expect(response).toStrictEqual([])
+      await expect(eligibilityApi.checkWaitingList(BUSINESS_EMAIL_ADDRESS)).rejects.toThrow(Error)
+      expect(Wreck.get).toHaveBeenCalledTimes(1)
+      expect(Wreck.get).toHaveBeenCalledWith(
+      `${mockEligibilityApiUri}/waiting-list?emailAddress=${BUSINESS_EMAIL_ADDRESS}`,
+      options
+      )
     })
   })
 })

@@ -193,12 +193,30 @@ describe('Farmer apply "Enter your business email address" page', () => {
             testCase.payload.emailAddress,
             {
               personalisation: {
-                applyGuidanceUrl: mockConfig.serviceUri
+                applyGuidanceUrl: 'http://localhost:3000/apply',
+                applyVetGuidanceUrl: 'http://localhost:3000/apply/guidance-for-vet'
               }
             }
           )
           expect(sendDefraIdRegisterYourInterestMessage).toHaveBeenCalledTimes(0)
         }
+      })
+
+      test('internal server error when registration of interest fails', async () => {
+        const options = {
+          method: 'POST',
+          url: `${urlPrefix}/register-your-interest`,
+          payload: { crumb, emailAddress: 'name@example.com' },
+          headers: { cookie: `crumb=${crumb}` }
+        }
+
+        when(checkWaitingList)
+          .calledWith(options.payload.emailAddress)
+          .mockRejectedValueOnce(new Error('some error'))
+
+        const res = await global.__SERVER__.inject(options)
+
+        expect(res.statusCode).toBe(500)
       })
 
       test.each([
