@@ -38,6 +38,11 @@ class CommonActions {
     const actualUrl = await browser.getUrl()
     expect(actualUrl).to.include(expectedUrl)
   }
+  async isElementExist (element) {
+    const locator = await browser.$(element)
+    return locator.isExisting()
+  }
+
 }
 
 module.exports = CommonActions

@@ -205,7 +205,7 @@ describe('Farmer apply "Enter your business email address" page', () => {
         {
           payload: {},
           expectedErrors: {
-            emailAddress: 'Error: Enter your business email address'
+            emailAddress: 'Enter your business email address'
           }
         },
         {
@@ -213,7 +213,7 @@ describe('Farmer apply "Enter your business email address" page', () => {
             emailAddress: ''
           },
           expectedErrors: {
-            emailAddress: 'Error: Enter your business email address'
+            emailAddress: 'Enter your business email address'
           }
         },
         {
@@ -221,7 +221,7 @@ describe('Farmer apply "Enter your business email address" page', () => {
             emailAddress: 1
           },
           expectedErrors: {
-            emailAddress: 'Error: Enter your business email address'
+            emailAddress: 'Enter your business email address'
           }
         },
         {
@@ -229,7 +229,7 @@ describe('Farmer apply "Enter your business email address" page', () => {
             emailAddress: 'name'
           },
           expectedErrors: {
-            emailAddress: 'Error: Enter your email address in the correct format, like name@example.com'
+            emailAddress: 'Enter your email address in the correct format, like name@example.com'
           }
         }
       ])('when wrong $payload then expect 400 and $expectedErrors', async (testCase) => {
@@ -244,7 +244,9 @@ describe('Farmer apply "Enter your business email address" page', () => {
         const $ = cheerio.load(res.payload)
 
         expect(res.statusCode).toBe(400)
-        expect($('#emailAddress-error').text().trim()).toEqual(testCase.expectedErrors.emailAddress)
+        expect($('div.govuk-error-summary ul.govuk-list li a').attr('href')).toEqual('#emailAddress')
+        expect($('div.govuk-error-summary ul.govuk-list li a').text().trim()).toEqual(testCase.expectedErrors.emailAddress)
+        expect($('p.govuk-error-message').text().trim()).toEqual(testCase.expectedErrors.emailAddress)
       })
     })
   })

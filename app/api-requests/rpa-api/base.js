@@ -23,7 +23,6 @@ const get = async (hostname, url, request, headers = {}) => {
     return response?.payload
   } catch (error) {
     console.log(`${new Date().toISOString()} Response message from RPA: ${JSON.stringify(error.message)}`)
-    console.error(error)
     throw error
   }
 }
