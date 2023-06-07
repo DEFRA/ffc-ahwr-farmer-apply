@@ -310,7 +310,7 @@ describe('Eligibility API', () => {
     })
   })
 
-  describe('checkDuplicateRegistration', () => {
+  describe('checkWaitingList', () => {
     test('given a business email address it returns an object containing registration data', async () => {
       const expectedResponse = {
         payload: {
@@ -331,7 +331,7 @@ describe('Eligibility API', () => {
     options
         )
         .mockResolvedValue(expectedResponse)
-      const response = await eligibilityApi.checkDuplicateRegistration(BUSINESS_EMAIL_ADDRESS)
+      const response = await eligibilityApi.checkWaitingList(BUSINESS_EMAIL_ADDRESS)
 
       expect(response).not.toBeNull()
       expect(response).toBe(expectedResponse.payload)
@@ -362,7 +362,7 @@ describe('Eligibility API', () => {
         )
         .mockResolvedValue(expectedResponse)
 
-      const response = await eligibilityApi.checkDuplicateRegistration(BUSINESS_EMAIL_ADDRESS)
+      const response = await eligibilityApi.checkWaitingList(BUSINESS_EMAIL_ADDRESS)
 
       expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
       expect(consoleErrorSpy).toHaveBeenCalledWith(`${MOCK_NOW.toISOString()} Checking duplicate registration failed: ${JSON.stringify({
@@ -389,7 +389,7 @@ describe('Eligibility API', () => {
         )
         .mockRejectedValue(expectedError)
 
-      const response = await eligibilityApi.checkDuplicateRegistration(BUSINESS_EMAIL_ADDRESS)
+      const response = await eligibilityApi.checkWaitingList(BUSINESS_EMAIL_ADDRESS)
 
       expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
       expect(consoleErrorSpy).toHaveBeenCalledWith(`${MOCK_NOW.toISOString()} Checking duplicate registration failed: ${JSON.stringify({
@@ -423,7 +423,7 @@ describe('Eligibility API', () => {
         )
         .mockResolvedValue(expectedResponse)
 
-      const response = await eligibilityApi.checkDuplicateRegistration(businessEmailAddress)
+      const response = await eligibilityApi.checkWaitingList(businessEmailAddress)
 
       expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
       expect(consoleErrorSpy).toHaveBeenCalledWith(`${MOCK_NOW.toISOString()} Checking duplicate registration failed: ${JSON.stringify({
