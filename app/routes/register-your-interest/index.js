@@ -3,7 +3,7 @@ const ruralPaymentsAgency = require('../../config/index').ruralPaymentsAgency
 const defraIdConfig = require('../../config').authConfig.defraId
 const BUSINESS_EMAIL_SCHEMA = require('../../schemas/business-email.schema.js')
 const { sendDefraIdRegisterYourInterestMessage } = require('../../messaging/register-your-interest')
-const { checkDuplicateRegistration } = require('../../api-requests/eligibility-api')
+const { checkWaitingList } = require('../../api-requests/eligibility-api')
 const sendEmail = require('../../lib/email/send-email')
 const config = require('../../config')
 const Joi = require('joi')
@@ -59,18 +59,19 @@ module.exports = [
       }
     },
     handler: async (request, h) => {
-      const { alreadyRegistered, accessGranted } = await checkDuplicateRegistration(request.payload.emailAddress)
+      const { alreadyRegistered, accessGranted } = await checkWaitingList(request.payload.emailAddress)
       const emailTemplate = alreadyRegistered && accessGranted ? config.notifyConfig.emailTemplates.accessGranted : config.notifyConfig.emailTemplates.accessNotGranted
       if (!alreadyRegistered) {
-        await sendEmail(config.notifyConfig.emailTemplates.registerYourInterest, request.payload.emailAddress)
-        await sendDefraIdRegisterYourInterestMessage(request.payload.emailAddress)
+        sendEmail(config.notifyConfig.emailTemplates.registerYourInterest, request.payload.emailAddress)
+        sendDefraIdRegisterYourInterestMessage(request.payload.emailAddress)
       } else {
-        await sendEmail(
+        sendEmail(
           emailTemplate,
           request.payload.emailAddress,
           {
             personalisation: {
-              applyGuidanceUrl: config.serviceUri
+              applyGuidanceUrl: config.serviceUri,
+              applyVetGuidanceUrl: config.serviceUri + '/guidance-for-vet'
             }
           }
         )

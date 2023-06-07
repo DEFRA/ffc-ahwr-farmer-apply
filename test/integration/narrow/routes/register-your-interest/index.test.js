@@ -58,7 +58,7 @@ describe('Farmer apply "Enter your business email address" page', () => {
   })
 
   describe('Defra ID enabled', () => {
-    let checkDuplicateRegistration
+    let checkWaitingList
     let sendEmail
     let sendDefraIdRegisterYourInterestMessage
 
@@ -93,9 +93,9 @@ describe('Farmer apply "Enter your business email address" page', () => {
         },
         serviceUri: 'http://localhost:3000/apply'
       }))
-      checkDuplicateRegistration = require('../../../../../app/api-requests/eligibility-api').checkDuplicateRegistration
+      checkWaitingList = require('../../../../../app/api-requests/eligibility-api').checkWaitingList
       jest.mock('../../../../../app/api-requests/eligibility-api', () => ({
-        checkDuplicateRegistration: jest.fn()
+        checkWaitingList: jest.fn()
       }))
       sendEmail = require('../../../../../app/lib//email/send-email')
       jest.mock('../../../../../app/lib//email/send-email', () => jest.fn())
@@ -168,7 +168,7 @@ describe('Farmer apply "Enter your business email address" page', () => {
           headers: { cookie: `crumb=${crumb}` }
         }
 
-        when(checkDuplicateRegistration)
+        when(checkWaitingList)
           .calledWith(testCase.payload.emailAddress)
           .mockResolvedValue({ alreadyRegistered: testCase.alreadyRegistered, accessGranted: testCase.accessGranted })
 
