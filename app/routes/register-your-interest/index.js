@@ -60,13 +60,12 @@ module.exports = [
     },
     handler: async (request, h) => {
       const { alreadyRegistered, accessGranted } = await checkWaitingList(request.payload.emailAddress)
-      const emailTemplate = alreadyRegistered && accessGranted ? config.notifyConfig.emailTemplates.accessGranted : config.notifyConfig.emailTemplates.accessNotGranted
       if (!alreadyRegistered) {
         sendEmail(config.notifyConfig.emailTemplates.registerYourInterest, request.payload.emailAddress)
         sendDefraIdRegisterYourInterestMessage(request.payload.emailAddress)
       } else {
         sendEmail(
-          emailTemplate,
+          accessGranted ? config.notifyConfig.emailTemplates.accessGranted : config.notifyConfig.emailTemplates.accessNotGranted,
           request.payload.emailAddress,
           {
             personalisation: {
