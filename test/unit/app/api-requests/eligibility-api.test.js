@@ -327,7 +327,7 @@ describe('Eligibility API', () => {
       const BUSINESS_EMAIL_ADDRESS = 'test@test.com'
       when(Wreck.get)
         .calledWith(
-    `${mockEligibilityApiUri}/waiting-list/check-duplicate-registration?emailAddress=${BUSINESS_EMAIL_ADDRESS}`,
+    `${mockEligibilityApiUri}/waiting-list?emailAddress=${BUSINESS_EMAIL_ADDRESS}`,
     options
         )
         .mockResolvedValue(expectedResponse)
@@ -337,7 +337,7 @@ describe('Eligibility API', () => {
       expect(response).toBe(expectedResponse.payload)
       expect(Wreck.get).toHaveBeenCalledTimes(1)
       expect(Wreck.get).toHaveBeenCalledWith(
-      `${mockEligibilityApiUri}/waiting-list/check-duplicate-registration?emailAddress=${BUSINESS_EMAIL_ADDRESS}`,
+      `${mockEligibilityApiUri}/waiting-list?emailAddress=${BUSINESS_EMAIL_ADDRESS}`,
       options
       )
     })
@@ -357,7 +357,7 @@ describe('Eligibility API', () => {
       const BUSINESS_EMAIL_ADDRESS = 'test@test.com'
       when(Wreck.get)
         .calledWith(
-        `${mockEligibilityApiUri}/waiting-list/check-duplicate-registration?emailAddress=${BUSINESS_EMAIL_ADDRESS}`,
+        `${mockEligibilityApiUri}/waiting-list?emailAddress=${BUSINESS_EMAIL_ADDRESS}`,
         options
         )
         .mockResolvedValue(expectedResponse)
@@ -365,13 +365,13 @@ describe('Eligibility API', () => {
       const response = await eligibilityApi.checkWaitingList(BUSINESS_EMAIL_ADDRESS)
 
       expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
-      expect(consoleErrorSpy).toHaveBeenCalledWith(`${MOCK_NOW.toISOString()} Checking duplicate registration failed: ${JSON.stringify({
+      expect(consoleErrorSpy).toHaveBeenCalledWith(`${MOCK_NOW.toISOString()} Request to the waiting list API failed: ${JSON.stringify({
       businessEmail: BUSINESS_EMAIL_ADDRESS
     })}`, expect.anything())
       expect(response).toStrictEqual([])
       expect(Wreck.get).toHaveBeenCalledTimes(1)
       expect(Wreck.get).toHaveBeenCalledWith(
-      `${mockEligibilityApiUri}/waiting-list/check-duplicate-registration?emailAddress=${BUSINESS_EMAIL_ADDRESS}`,
+      `${mockEligibilityApiUri}/waiting-list?emailAddress=${BUSINESS_EMAIL_ADDRESS}`,
       options
       )
     })
@@ -384,7 +384,7 @@ describe('Eligibility API', () => {
       const BUSINESS_EMAIL_ADDRESS = 'test@test.com'
       when(Wreck.get)
         .calledWith(
-        `${mockEligibilityApiUri}/waiting-list/check-duplicate-registration?emailAddress=${BUSINESS_EMAIL_ADDRESS}`,
+        `${mockEligibilityApiUri}/waiting-list?emailAddress=${BUSINESS_EMAIL_ADDRESS}`,
         options
         )
         .mockRejectedValue(expectedError)
@@ -392,7 +392,7 @@ describe('Eligibility API', () => {
       const response = await eligibilityApi.checkWaitingList(BUSINESS_EMAIL_ADDRESS)
 
       expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
-      expect(consoleErrorSpy).toHaveBeenCalledWith(`${MOCK_NOW.toISOString()} Checking duplicate registration failed: ${JSON.stringify({
+      expect(consoleErrorSpy).toHaveBeenCalledWith(`${MOCK_NOW.toISOString()} Request to the waiting list API failed: ${JSON.stringify({
       businessEmail: BUSINESS_EMAIL_ADDRESS
     })}`, expectedError)
       expect(response).toStrictEqual([])
@@ -418,7 +418,7 @@ describe('Eligibility API', () => {
       const businessEmailAddress = 'name@email.com'
       when(Wreck.get)
         .calledWith(
-        `${mockEligibilityApiUri}/waiting-list/check-duplicate-registration?emailAddress=${businessEmailAddress}`,
+        `${mockEligibilityApiUri}/waiting-list?emailAddress=${businessEmailAddress}`,
         options
         )
         .mockResolvedValue(expectedResponse)
@@ -426,7 +426,7 @@ describe('Eligibility API', () => {
       const response = await eligibilityApi.checkWaitingList(businessEmailAddress)
 
       expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
-      expect(consoleErrorSpy).toHaveBeenCalledWith(`${MOCK_NOW.toISOString()} Checking duplicate registration failed: ${JSON.stringify({
+      expect(consoleErrorSpy).toHaveBeenCalledWith(`${MOCK_NOW.toISOString()} Request to the waiting list API failed: ${JSON.stringify({
       businessEmail: businessEmailAddress
     })}`, expectedResponse.payload.message)
       expect(response).toStrictEqual([])
