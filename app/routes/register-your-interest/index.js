@@ -3,9 +3,11 @@ const ruralPaymentsAgency = require('../../config/index').ruralPaymentsAgency
 const defraIdConfig = require('../../config').authConfig.defraId
 const BUSINESS_EMAIL_SCHEMA = require('../../schemas/business-email.schema.js')
 const { sendDefraIdRegisterYourInterestMessage } = require('../../messaging/register-your-interest')
+const { checkWaitingList } = require('../../api-requests/eligibility-api')
 const sendEmail = require('../../lib/email/send-email')
-const { registerYourInterest } = require('../../config').notifyConfig.emailTemplates
+const config = require('../../config')
 const Joi = require('joi')
+const boom = require('@hapi/boom')
 
 const ERROR_MESSAGE = {
   enterYourEmailAddress: 'Enter your business email address',
@@ -58,8 +60,29 @@ module.exports = [
       }
     },
     handler: async (request, h) => {
-      await sendEmail(registerYourInterest, request.payload.emailAddress)
-      await sendDefraIdRegisterYourInterestMessage(request.payload.emailAddress)
+      try {
+        const { alreadyRegistered, accessGranted } = await checkWaitingList(request.payload.emailAddress)
+        if (!alreadyRegistered) {
+          sendEmail(config.notifyConfig.emailTemplates.registerYourInterest, request.payload.emailAddress)
+          sendDefraIdRegisterYourInterestMessage(request.payload.emailAddress)
+        } else {
+          sendEmail(
+            accessGranted ? config.notifyConfig.emailTemplates.accessGranted : config.notifyConfig.emailTemplates.accessNotGranted,
+            request.payload.emailAddress,
+            {
+              personalisation: {
+                applyGuidanceUrl: config.serviceUri,
+                applyVetGuidanceUrl: config.serviceUri + '/guidance-for-vet'
+              }
+            }
+          )
+        }
+      } catch (error) {
+        console.error(`${new Date().toISOString()} Registration of interest submission failed: ${JSON.stringify({
+            businessEmail: request.payload.emailAddress
+          })}`, error)
+        return boom.internal()
+      }
       return h.redirect('register-your-interest/registration-complete', { ruralPaymentsAgency })
     }
   }

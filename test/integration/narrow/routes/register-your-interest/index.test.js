@@ -1,4 +1,5 @@
 const cheerio = require('cheerio')
+const { when, resetAllWhenMocks } = require('jest-when')
 const expectPhaseBanner = require('../../../../utils/phase-banner-expect')
 const { serviceName, urlPrefix } = require('../../../../../app/config')
 const getCrumbs = require('../../../../utils/get-crumbs')
@@ -57,6 +58,10 @@ describe('Farmer apply "Enter your business email address" page', () => {
   })
 
   describe('Defra ID enabled', () => {
+    let checkWaitingList
+    let sendEmail
+    let sendDefraIdRegisterYourInterestMessage
+
     beforeAll(async () => {
       jest.resetAllMocks()
       jest.mock('../../../../../app/config', () => ({
@@ -78,7 +83,25 @@ describe('Farmer apply "Enter your business email address" page', () => {
             getOrganisationPermissionsUrl: 'dummy-get-organisation-permissions-url',
             getOrganisationUrl: 'dummy-get-organisation-url'
           }
-        }
+        },
+        notifyConfig: {
+          emailTemplates: {
+            accessGranted: 'accessGranted',
+            accessNotGranted: 'accessNotGranted',
+            registerYourInterest: 'registerYourInterest'
+          }
+        },
+        serviceUri: 'http://localhost:3000/apply'
+      }))
+      checkWaitingList = require('../../../../../app/api-requests/eligibility-api').checkWaitingList
+      jest.mock('../../../../../app/api-requests/eligibility-api', () => ({
+        checkWaitingList: jest.fn()
+      }))
+      sendEmail = require('../../../../../app/lib//email/send-email')
+      jest.mock('../../../../../app/lib//email/send-email', () => jest.fn())
+      sendDefraIdRegisterYourInterestMessage = require('../../../../../app/messaging/register-your-interest').sendDefraIdRegisterYourInterestMessage
+      jest.mock('../../../../../app/messaging/register-your-interest', () => ({
+        sendDefraIdRegisterYourInterestMessage: jest.fn()
       }))
     })
 
@@ -107,16 +130,35 @@ describe('Farmer apply "Enter your business email address" page', () => {
         crumb = await getCrumbs(global.__SERVER__)
       })
 
+      afterEach(async () => {
+        resetAllWhenMocks()
+        jest.resetAllMocks()
+      })
+
       test.each([
         {
           payload: {
             emailAddress: 'name@example.com'
-          }
+          },
+          alreadyRegistered: false,
+          accessGranted: false,
+          expectedEmailTemplate: 'registerYourInterest'
         },
         {
           payload: {
-            emailAddress: 'nAme@eXample.com'
-          }
+            emailAddress: 'name@example.com'
+          },
+          alreadyRegistered: true,
+          accessGranted: false,
+          expectedEmailTemplate: 'accessNotGranted'
+        },
+        {
+          payload: {
+            emailAddress: 'name@example.com'
+          },
+          alreadyRegistered: true,
+          accessGranted: true,
+          expectedEmailTemplate: 'accessGranted'
         }
       ])('when proper $payload then expect 302 and redirect to "Registration Complete" page', async (testCase) => {
         const options = {
@@ -126,9 +168,55 @@ describe('Farmer apply "Enter your business email address" page', () => {
           headers: { cookie: `crumb=${crumb}` }
         }
 
+        when(checkWaitingList)
+          .calledWith(testCase.payload.emailAddress)
+          .mockResolvedValue({ alreadyRegistered: testCase.alreadyRegistered, accessGranted: testCase.accessGranted })
+
         const res = await global.__SERVER__.inject(options)
+
         expect(res.statusCode).toBe(302)
         expect(res.headers.location).toEqual('register-your-interest/registration-complete')
+        expect(sendEmail).toHaveBeenCalledTimes(1)
+
+        if (testCase.expectedEmailTemplate === 'registerYourInterest') {
+          expect(sendEmail).toHaveBeenCalledWith(
+            testCase.expectedEmailTemplate,
+            testCase.payload.emailAddress
+          )
+          expect(sendDefraIdRegisterYourInterestMessage).toHaveBeenCalledTimes(1)
+          expect(sendDefraIdRegisterYourInterestMessage).toHaveBeenCalledWith(
+            testCase.payload.emailAddress
+          )
+        } else {
+          expect(sendEmail).toHaveBeenCalledWith(
+            testCase.expectedEmailTemplate,
+            testCase.payload.emailAddress,
+            {
+              personalisation: {
+                applyGuidanceUrl: 'http://localhost:3000/apply',
+                applyVetGuidanceUrl: 'http://localhost:3000/apply/guidance-for-vet'
+              }
+            }
+          )
+          expect(sendDefraIdRegisterYourInterestMessage).toHaveBeenCalledTimes(0)
+        }
+      })
+
+      test('internal server error when registration of interest fails', async () => {
+        const options = {
+          method: 'POST',
+          url: `${urlPrefix}/register-your-interest`,
+          payload: { crumb, emailAddress: 'name@example.com' },
+          headers: { cookie: `crumb=${crumb}` }
+        }
+
+        when(checkWaitingList)
+          .calledWith(options.payload.emailAddress)
+          .mockRejectedValueOnce(new Error('some error'))
+
+        const res = await global.__SERVER__.inject(options)
+
+        expect(res.statusCode).toBe(500)
       })
 
       test.each([

@@ -12,6 +12,8 @@ data:
   NOTIFY_TEMPLATE_ID_FARMER_APPLY_LOGIN: {{ quote .Values.container.notifyTemplateIdFarmerApplyLogin }}
   NOTIFY_TEMPLATE_ID_FARMER_REGISTER_INTEREST: {{ quote .Values.container.notifyTemplateIdFarmerRegisterYourInterest }}
   NOTIFY_TEMPLATE_ID_DEFRA_ID_REGISTER_INTEREST: {{ quote .Values.container.notifyTemplateIdFarmerRegisterYourInterestDefraId }} 
+  NOTIFY_TEMPLATE_ID_FARMER_ACCESS_GRANTED: {{ quote .Values.container.notifyTemplateIdFarmerRegisterYourInterestAccessGranted }}
+  NOTIFY_TEMPLATE_ID_FARMER_ACCESS_NOT_GRANTED: {{ quote .Values.container.notifyTemplateIdFarmerRegisterYourInterestAccessNotGranted  }}
   {{- if .Values.container.redisHostname }}
   REDIS_HOSTNAME: {{ quote .Values.container.redisHostname }}
   {{- end }}

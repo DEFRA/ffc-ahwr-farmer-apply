@@ -48,6 +48,8 @@ container:
   notifyTemplateIdFarmerApplyLogin:
   notifyTemplateIdFarmerRegisterYourInterest:
   notifyTemplateIdFarmerRegisterYourInterestDefraId:
+  notifyTemplateIdFarmerRegisterYourInterestAccessGranted:
+  notifyTemplateIdFarmerRegisterYourInterestAccessNotGranted:
   port: 3000
   redisHostname: redis-hostname.default
   redisPartition: ffc-ahwr-farmer-apply
