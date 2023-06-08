@@ -18,7 +18,7 @@ module.exports = [{
       }
       const viewData = getDeclarationData(application)
       session.setFarmerApplyData(request, reference, null)
-      return h.view('declaration', { backLink: `${urlPrefix}/check-answers`, ...viewData })
+      return h.view('declaration', { backLink: `${urlPrefix}/check-answers`, latestTermsAndConditionsUrl: config.latestTermsAndConditionsUrl, ...viewData })
     }
   }
 }, {
@@ -70,7 +70,8 @@ module.exports = [{
       return h.view('confirmation', {
         reference: applicationReference,
         ruralPaymentsAgency: config.ruralPaymentsAgency,
-        applySurveyUri: config.customerSurvey.uri
+        applySurveyUri: config.customerSurvey.uri,
+        latestTermsAndConditionsUrl: config.latestTermsAndConditionsUrl
       })
     }
   }
