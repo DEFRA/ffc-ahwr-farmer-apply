@@ -123,6 +123,7 @@ const result = schema.validate(config, {
 })
 
 if (result.error) {
+  console.log(`value for t and c is ${process.env.TERMS_AND_CONDITIONS_URL} and error is ${result.error.message}`)
   throw new Error(`The server config is invalid. ${result.error.message}`)
 }
 
