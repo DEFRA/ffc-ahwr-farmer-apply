@@ -6,6 +6,6 @@ module.exports = {
     cookieOptions: {
       isSecure: config.cookie.isSecure
     },
-    skip: (request) => request.route.path === `${config.urlPrefix}/cookies` // Exclude from crumb token changes
+    skip: (request) => request.route.path === `${config.urlPrefix}/cookies` && request.method === 'POST' // Exclude from crumb token changes
   }
 }
