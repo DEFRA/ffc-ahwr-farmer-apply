@@ -62,7 +62,8 @@ Please ask a developer for an example `.env` file that you can include in the ro
 | APIM_OAUTH_PATH                       | Azure API management authorisation endpoint path                                                 |
 | APIM_CLIENT_ID                        | Client Id as registered with Azure API management                                                |
 | APIM_CLIENT_SECRET                    | Client Secret as registered with Azure API management                                            |
-| APIM_SCOPE                            | Scope of the access token being requested from Azure API management                              |
+| APIM_SCOPE                            | Scope of the access token being requested from Azure API management    
+| TERMS_AND_CONDITIONS_URL              | URL for latest service terms and conditions
 
 ## Running the application
 
