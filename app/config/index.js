@@ -62,7 +62,7 @@ const schema = Joi.object({
   wreckHttp: {
     timeoutMilliseconds: Joi.number().default(10000)
   },
-  latestTermsAndConditionsUri: Joi.string().uri()
+  latestTermsAndConditionsUri: Joi.string().required()
 })
 
 const config = {
