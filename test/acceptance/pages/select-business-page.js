@@ -30,7 +30,7 @@ const LIVESTOCK = 'Sheep'
 const REQUIRE_LIVESTOCK_NUMBER = '#eligibleSpecies-hint'
 const CONFIRM_ELIGIBILITY = '#eligibleSpecies'
 const DECLARATION = '[role="button"]'
-const TERMS_CONDITIONS = '[href="/apply/terms"]'
+const TERMS_CONDITIONS = `[href="${process.env.TEST_ENVIRONMENT_ROOT_URL}/apply/terms"]`
 const TERMS_AND_CONDITION_BOX = '#terms'
 const COMPLETE_APPLICATION = '[value="accepted"]'
 const SUCCESS_MESSAGE = '.govuk-panel__title'
