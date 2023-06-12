@@ -4,7 +4,7 @@ const getMagicLink = require('../support/get-magic-link')
 // select business element
 
 const START_BUTTON = 'a[role="button"]'
-const BUSINESS_EMAIL = 'ibrahim.adekanmi@kainos.com'
+const BUSINESS_EMAIL = '1105110119@email.com'
 const RPA_CONTACT = '.govuk-details'
 const PAGE_TITLE = 'Annual health and welfare review of livestock'
 const SELECT_BUSINESS = 'Which business'
@@ -45,7 +45,7 @@ const DEFRA_CRN = '#crn'
 const DEFRA_PASSWORD = '#password'
 const CRN_HINT = '[id="crn-hint"]'
 const SIGN_IN_BUTTON = '[type="submit"]'
-const MAGIC_LINK_EMAIL ='ibrahim.adekanmi@kainos.com'
+const MAGIC_LINK_EMAIL ='1105110119@email.com'
 const EMAIL_INPUT = '#email'
 const ALT_CRN_HINT = '#header'
 const CONTINUE = '#submit'
