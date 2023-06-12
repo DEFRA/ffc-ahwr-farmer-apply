@@ -59,6 +59,7 @@ container:
   claimServiceUri:
   testToken:
   urlPrefix: /apply
+  termsAndConditionsUrl:
   eligibilityApiUri:
   applicationApiUri:
   registerYourInterestEnabled:

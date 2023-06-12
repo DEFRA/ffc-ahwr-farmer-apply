@@ -44,4 +44,5 @@ data:
   APIM_OAUTH_PATH: {{ quote .Values.container.apimOAuthPath }}
   APIM_SCOPE: {{ quote .Values.container.apimScope }}
   WRECK_HTTP_TIMEOUT_MILLISECONDS: {{ quote .Values.wreckHttp.timeoutMilliseconds }}
+  TERMS_AND_CONDITIONS_URL: {{ quote .Values.container.termsAndConditionsUrl }}
 {{- end -}}

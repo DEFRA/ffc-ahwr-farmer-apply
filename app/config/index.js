@@ -61,7 +61,8 @@ const schema = Joi.object({
   applicationApi: require('../api-requests/application-api.config.schema'),
   wreckHttp: {
     timeoutMilliseconds: Joi.number().default(10000)
-  }
+  },
+  latestTermsAndConditionsUri: Joi.string().required()
 })
 
 const config = {
@@ -113,7 +114,8 @@ const config = {
   applicationApi: require('../api-requests/application-api.config'),
   wreckHttp: {
     timeoutMilliseconds: process.env.WRECK_HTTP_TIMEOUT_MILLISECONDS
-  }
+  },
+  latestTermsAndConditionsUri: process.env.TERMS_AND_CONDITIONS_URL
 }
 
 const result = schema.validate(config, {

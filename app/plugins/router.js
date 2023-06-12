@@ -15,7 +15,7 @@ const routes = [].concat(
   require('../routes/not-eligible'),
   require('../routes/check-answers'),
   require('../routes/declaration'),
-  require('../routes/terms'),
+  require('../routes/terms-and-conditions'),
   require('../routes/vet-technical'),
   require('../routes/select-your-business'),
   require('../routes/no-business-available-to-apply-for')
