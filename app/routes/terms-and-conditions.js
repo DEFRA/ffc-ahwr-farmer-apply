@@ -7,7 +7,7 @@ module.exports = [
     options: {
       auth: false,
       handler: async (request, h) => {
-        return h.view('terms-and-conditions/private-beta-2', { continueUri: `${serviceUri}/declaration`, showContinueButton:  request.query?.continue === 'true' })
+        return h.view('terms-and-conditions/private-beta-2', { continueUri: `${serviceUri}/declaration`, showContinueButton: request.query?.continue === 'true' })
       }
     }
   },
@@ -16,8 +16,8 @@ module.exports = [
     path: `${urlPrefix}/terms/v2`,
     options: {
       auth: false,
-      handler: async (_, h) => {
-        return h.view('terms-and-conditions/private-beta-2', { continueUri: `${serviceUri}/declaration`, showContinueButton:  request.query?.continue === 'true' })
+      handler: async (request, h) => {
+        return h.view('terms-and-conditions/private-beta-2', { continueUri: `${serviceUri}/declaration`, showContinueButton: request.query?.continue === 'true' })
       }
     }
   },
@@ -26,8 +26,8 @@ module.exports = [
     path: `${urlPrefix}/terms/v3`,
     options: {
       auth: false,
-      handler: async (_, h) => {
-        return h.view('terms-and-conditions/private-beta-3', { continueUri: `${serviceUri}/declaration`, showContinueButton:  request.query?.continue === 'true' })
+      handler: async (request, h) => {
+        return h.view('terms-and-conditions/private-beta-3', { continueUri: `${serviceUri}/declaration`, showContinueButton: request.query?.continue === 'true' })
       }
     }
   }
