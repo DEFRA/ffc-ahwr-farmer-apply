@@ -1,4 +1,4 @@
-const urlPrefix = require('../config/index').urlPrefix
+const { urlPrefix, serviceUri } = require('../config/index')
 
 module.exports = [
   {
@@ -6,8 +6,8 @@ module.exports = [
     path: `${urlPrefix}/terms`,
     options: {
       auth: false,
-      handler: async (_, h) => {
-        return h.view('terms-and-conditions/private-beta-2')
+      handler: async (request, h) => {
+        return h.view('terms-and-conditions/private-beta-2', { continueUri: `${serviceUri}/declaration`, showContinueButton:  request.query?.continue === 'true' })
       }
     }
   },
@@ -17,7 +17,7 @@ module.exports = [
     options: {
       auth: false,
       handler: async (_, h) => {
-        return h.view('terms-and-conditions/private-beta-2')
+        return h.view('terms-and-conditions/private-beta-2', { continueUri: `${serviceUri}/declaration`, showContinueButton:  request.query?.continue === 'true' })
       }
     }
   },
@@ -27,7 +27,7 @@ module.exports = [
     options: {
       auth: false,
       handler: async (_, h) => {
-        return h.view('terms-and-conditions/private-beta-3')
+        return h.view('terms-and-conditions/private-beta-3', { continueUri: `${serviceUri}/declaration`, showContinueButton:  request.query?.continue === 'true' })
       }
     }
   }

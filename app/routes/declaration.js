@@ -18,7 +18,7 @@ module.exports = [{
       }
       const viewData = getDeclarationData(application)
       session.setFarmerApplyData(request, reference, null)
-      return h.view('declaration', { backLink: `${urlPrefix}/check-answers`, latestTermsAndConditionsUri: config.latestTermsAndConditionsUri, ...viewData })
+      return h.view('declaration', { backLink: `${urlPrefix}/check-answers`, latestTermsAndConditionsUri: `${config.latestTermsAndConditionsUri}?continue=true`, ...viewData })
     }
   }
 }, {
@@ -71,7 +71,7 @@ module.exports = [{
         reference: applicationReference,
         ruralPaymentsAgency: config.ruralPaymentsAgency,
         applySurveyUri: config.customerSurvey.uri,
-        latestTermsAndConditionsUri: config.latestTermsAndConditionsUri
+        latestTermsAndConditionsUri: `${config.latestTermsAndConditionsUri}?continue=true`
       })
     }
   }

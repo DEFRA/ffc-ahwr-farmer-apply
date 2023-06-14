@@ -281,11 +281,13 @@
             </ol>
             <p class="govuk-body">16.3  If we close or suspend Beta 3 under condition 16.2, this will not affect existing Beta 3 Agreement holders unless the Agreement is terminated as set out in condition 11.</p>
             <div class="govuk-!-margin-top-6">
+                {% if showContinueButton %}
                 {{ govukButton({
                     text: "Continue",
-                    href: "declaration",
+                    href: continueUri,
                     preventDoubleClick: true
                 }) }}
+                {% endif %}
             </div>
             <br>
             <a class="govuk-link" onclick="window.print()">Print this page</a>
