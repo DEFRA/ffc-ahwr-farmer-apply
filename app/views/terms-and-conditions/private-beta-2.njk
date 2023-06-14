@@ -268,13 +268,17 @@
   </div>
 </div>
 
-<div class="govuk-grid-row">
+{% if showContinueButton %}
+<div class="govuk-grid-row" id="continueButton">
   <div class="govuk-grid-column-two-thirds">
-    {{ govukButton({
-      text: "Continue",
-      href: "declaration",
-      preventDoubleClick: true
-    }) }}
+    {{ 
+        govukButton({
+        text: "Continue",
+        href: continueUri,
+        preventDoubleClick: true
+        }) 
+    }}
   </div>
 </div>
+{% endif %}
 {% endblock %}

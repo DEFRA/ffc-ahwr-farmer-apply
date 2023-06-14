@@ -34,26 +34,18 @@ describe('Farmer apply terms and condition page test', () => {
       jest.resetModules()
     })
 
-    test('GET /terms returns public beta 2 T and C', async () => {
+    test.each([
+      { queryParam: undefined, continueButtonExpectedLength: 0 },
+      { queryParam: '?continue=true', continueButtonExpectedLength: 1 },
+      { queryParam: '?continue=false', continueButtonExpectedLength: 0 }
+    ])('GET /terms returns public beta 2 T and C', async ({ queryParam, continueButtonExpectedLength }) => {
       const options = {
         method: 'GET',
         url: `${urlPrefix}/terms`
       }
 
-      const res = await global.__SERVER__.inject(options)
-
-      expect(res.statusCode).toBe(200)
-      const $ = cheerio.load(res.payload)
-      expect($('.govuk-heading-l').text()).toEqual('Accept the terms and conditions')
-      expect($('title').text()).toEqual(serviceName)
-      expect($('#beta-version').text()).toContain('16. Beta 2 timescale')
-      expectPhaseBanner.ok($)
-    })
-
-    test('GET /terms returns public beta 2 T and C', async () => {
-      const options = {
-        method: 'GET',
-        url: `${urlPrefix}/terms/v2`
+      if (queryParam) {
+        options.url = options.url + queryParam
       }
 
       const res = await global.__SERVER__.inject(options)
@@ -63,6 +55,32 @@ describe('Farmer apply terms and condition page test', () => {
       expect($('.govuk-heading-l').text()).toEqual('Accept the terms and conditions')
       expect($('title').text()).toEqual(serviceName)
       expect($('#beta-version').text()).toContain('16. Beta 2 timescale')
+      expect($('#continueButton').length).toEqual(continueButtonExpectedLength)
+      expectPhaseBanner.ok($)
+    })
+
+    test.each([
+      { queryParam: undefined, continueButtonExpectedLength: 0 },
+      { queryParam: '?continue=true', continueButtonExpectedLength: 1 },
+      { queryParam: '?continue=false', continueButtonExpectedLength: 0 }
+    ])('GET /terms/v2 returns public beta 2 T and C', async ({ queryParam, continueButtonExpectedLength }) => {
+      const options = {
+        method: 'GET',
+        url: `${urlPrefix}/terms/v2`
+      }
+
+      if (queryParam) {
+        options.url = options.url + queryParam
+      }
+
+      const res = await global.__SERVER__.inject(options)
+
+      expect(res.statusCode).toBe(200)
+      const $ = cheerio.load(res.payload)
+      expect($('.govuk-heading-l').text()).toEqual('Accept the terms and conditions')
+      expect($('title').text()).toEqual(serviceName)
+      expect($('#beta-version').text()).toContain('16. Beta 2 timescale')
+      expect($('#continueButton').length).toEqual(continueButtonExpectedLength)
       expectPhaseBanner.ok($)
     })
   })
@@ -96,11 +114,18 @@ describe('Farmer apply terms and condition page test', () => {
     afterAll(async () => {
       jest.resetModules()
     })
-
-    test('GET /terms returns public beta 3 T and C', async () => {
+    test.each([
+      { queryParam: undefined, continueButtonExpectedLength: 0 },
+      { queryParam: '?continue=true', continueButtonExpectedLength: 1 },
+      { queryParam: '?continue=false', continueButtonExpectedLength: 0 }
+    ])('GET /terms/v3 returns public beta 3 T and C', async ({ queryParam, continueButtonExpectedLength }) => {
       const options = {
         method: 'GET',
         url: `${urlPrefix}/terms/v3`
+      }
+
+      if (queryParam) {
+        options.url = options.url + queryParam
       }
 
       const res = await global.__SERVER__.inject(options)
@@ -111,6 +136,7 @@ describe('Farmer apply terms and condition page test', () => {
 
       expect($('title').text()).toEqual(serviceName)
       expect($('#beta-version').text()).toContain('16. Beta 3 timescale')
+      expect($('#continueButton').length).toEqual(continueButtonExpectedLength)
       expectPhaseBanner.ok($)
     })
   })
