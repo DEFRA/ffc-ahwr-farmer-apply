@@ -10,4 +10,4 @@ EXPOSE ${PORT_DEBUG}
 COPY --chown=node:node package*.json ./
 RUN npm install
 COPY --chown=node:node . .
-CMD [ "npm", "run", "test" ]
+CMD [ "npm", "run", "test:local" ]

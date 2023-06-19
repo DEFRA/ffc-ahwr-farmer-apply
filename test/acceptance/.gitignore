@@ -4,4 +4,4 @@ reporter
 /.env.snd
 /.env.dev
 /.env.test
-/.env.pre
+/.env.local
