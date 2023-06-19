@@ -16,6 +16,7 @@ const parallel = process.env.BROWSERSTACK_PARALLEL_RUNS ? Number(process.env.BRO
 
 exports.config = {
   hostname: 'hub-cloud.browserstack.com',
+  protocol: 'https',
   user,
   key,
   specs: ['./features/**/*.feature'],
