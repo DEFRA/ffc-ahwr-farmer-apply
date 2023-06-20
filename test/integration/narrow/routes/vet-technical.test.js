@@ -13,8 +13,8 @@ describe('Vet technical guidance pages', () => {
 
     expect(res.statusCode).toBe(200)
     const $ = cheerio.load(res.payload)
-    expect($('.govuk-panel__title').text()).toEqual(
-      'Test for bovine viral diarrhoea (BVD) in cattle'
+    expect($('.govuk-heading-l').text()).toEqual(
+      'Cattle: testing required for an annual health and welfare review'
     )
     expect($('title').text()).toEqual(`Guidance for vets - ${serviceName}`)
     expectPhaseBanner.ok($)
@@ -45,8 +45,8 @@ describe('Vet technical guidance pages', () => {
 
     expect(res.statusCode).toBe(200)
     const $ = cheerio.load(res.payload)
-    expect($('.govuk-panel__title').text()).toEqual(
-      'Vets: test for the effectiveness of worming treatments in sheep'
+    expect($('.govuk-heading-l').text()).toEqual(
+      'Sheep: testing required for an annual health and welfare review'
     )
     expect($('title').text()).toEqual(`Guidance for vets - ${serviceName}`)
     expectPhaseBanner.ok($)
@@ -77,8 +77,8 @@ describe('Vet technical guidance pages', () => {
 
     expect(res.statusCode).toBe(200)
     const $ = cheerio.load(res.payload)
-    expect($('.govuk-panel__title').text()).toEqual(
-      'Vets: test for porcine reproductive and respiratory syndrome (PRRS) in pigs'
+    expect($('.govuk-heading-l').text()).toEqual(
+      'Pigs: testing required for an annual health and welfare review'
     )
     expect($('title').text()).toEqual(`Guidance for vets - ${serviceName}`)
     expectPhaseBanner.ok($)
