@@ -1,0 +1,114 @@
+{% extends './layouts/layout.njk' %}
+
+{% block pageTitle %}Guidance for farmers - {{ serviceName }}{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <div>
+        <span class="govuk-caption-xl">Guidance</span>
+        <h1 class="govuk-heading-l">How to claim for an annual health and welfare review of livestock</h1>
+        <p class="govuk-body-l">Find out when you can claim, what you'll need and how to claim.</p>
+      </div>
+      <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+      <p class="govuk-body-s">From: <a class="govuk-link govuk-!-font-weight-bold" href="https://www.gov.uk/government/organisations/department-for-environment-food-rural-affairs">Department for Environment, Food &amp; Rural Affairs</a> and <a class="govuk-link govuk-!-font-weight-bold" href="https://www.gov.uk/government/organisations/rural-payments-agency">Rural Payments Agency</a></p>
+    </div>
+  <div class="govuk-grid-column-two-thirds govuk-!-margin-top-6">
+    <section class="gem-c-devolved-nations">
+      <h2 class="govuk-heading-s govuk-!-margin-bottom-0">
+        Applies to England
+      </h2>
+    </section>
+    <h2 class="gem-c-contents-list__title" id="contents">
+      Contents
+    </h2>
+    <ol class="gem-c-contents-list__list">
+        <li class="gem-c-contents-list__list-item gem-c-contents-list__list-item--dashed">
+          <a class="gem-c-contents-list__link govuk-link govuk-link--no-underline" href="#when-to-claim">When to claim</a>
+
+        </li>
+        <li class="gem-c-contents-list__list-item gem-c-contents-list__list-item--dashed">
+          <a class="gem-c-contents-list__link govuk-link govuk-link--no-underline" href="#what-information-youll-need-to-claim">What information you’ll need to claim</a>
+
+        </li>
+        <li class="gem-c-contents-list__list-item gem-c-contents-list__list-item--dashed">
+          <a class="gem-c-contents-list__link govuk-link govuk-link--no-underline" href="#claim-funding">Claim funding</a>
+        </li>
+        <li class="gem-c-contents-list__list-item gem-c-contents-list__list-item--dashed">
+          <a class="gem-c-contents-list__link govuk-link govuk-link--no-underline" href="#get-help-with-your-claim">Get help with your claim</a>
+        </li>        
+    </ol>
+    
+    <div class="gem-c-print-link govuk-!-display-none-print govuk-!-margin-top-0 govuk-!-margin-bottom-6 govuk-!-margin-top-3">
+      <button onclick="window.print()" class="govuk-link govuk-body-s gem-c-print-link__button">Print this page</button>
+    </div>
+
+    <div class="govspeak govuk-!-margin-top-6">
+      <h2 id="when-to-claim" class="govuk-heading-m" >When to claim</h2>
+  
+      <p class="govuk-body">You can claim funding after the vet has visited your farm to carry out the review and given you a written report and a summary of the review.</p>
+  
+      <p class="govuk-body">You must claim within 6 months from the date you accept your agreement offer.</p>
+  
+      <p class="govuk-body">If the review has not taken place and you need more time, contact the Rural Payments Agency (<abbr title="Rural Payments Agency">RPA</abbr>).</p>
+  
+      <p class="govuk-body">If the review has taken place and you have a good reason why you cannot make your claim within 6 months such as illness, contact the <abbr title="Rural Payments Agency">RPA</abbr> as soon as you can.</p>
+  
+      <h2 id="what-information-youll-need-to-claim" class="govuk-heading-m">What information you’ll need to claim</h2>
+      
+      <p class="govuk-body" >When you claim you’ll need to share the:</p>
+      
+      <ul class="govuk-list govuk-list--bullet">
+        <li>date of the vet’s last visit to the farm for the review</li>
+        <li>vet’s name</li>
+        <li>vet’s <abbr title="Royal College of Veterinary Surgeons">RCVS</abbr> number</li>
+        <li>unique reference number for laboratory test results</li>
+      </ul>
+  
+      <p class="govuk-body">The summary the vet will give you will include this information.</p>
+      
+      <h2 id="claim-funding" class="govuk-heading-m">Claim funding</h2>
+
+      <section class="gem-c-devolved-nations">
+        <h2 class="govuk-heading-s govuk-!-margin-bottom-0">
+          <p class="govuk-body">Find out <a rel="external" href={{ claimServiceUri }} class="govuk-link">how to claim funding</a>.</p>
+        </h2>
+     </section>
+      
+      <h2 id="get-help-with-your-claim" class="govuk-heading-m">Get help with your claim</h2>
+  
+      <p class="govuk-body">Contact the <abbr title="Rural Payments Agency">RPA</abbr> if you:</p>
+  
+      <ul class="govuk-list govuk-list--bullet">
+        <li>decide you do not want a review after you have accepted the agreement offer</li>
+        <li>cannot apply or claim online or have a question about your claim</li>
+      </ul>
+  
+      <p class="govuk-body">Have your agreement number with you when you call or include it in your letter or email.</p>
+
+      <div class="govuk-inset-text">
+        <p class="govuk-body">Rural Payments Agency<br>
+        PO Box 352<br>
+        Worksop<br>
+        S80 9FG<br>
+        </p>
+        {{ rpaContactDetails({email: ruralPaymentsAgency.email, callChargesUri: ruralPaymentsAgency.callChargesUri, telephone: ruralPaymentsAgency.telephone}) }}
+      </div>
+
+    <div class="gem-c-print-link govuk-!-display-none-print govuk-!-margin-top-0 govuk-!-margin-bottom-6">
+      <button onclick="window.print()" class="govuk-link govuk-body-s gem-c-print-link__button">Print this page</button>
+    </div>
+
+    <div data-sticky-element="" class="app-c-contents-list-with-body__link-wrapper sticky-element--hidden sticky-element--stuck-to-window sticky-element--enabled">
+      <div class="app-c-contents-list-with-body__link-container">
+        <a class="govuk-link app-c-back-to-top dont-print" href="#contents">
+        <svg class="app-c-back-to-top__icon" xmlns="http://www.w3.org/2000/svg" width="13" height="17" viewBox="0 0 13 17" aria-hidden="true" focusable="false">
+         <path fill="currentColor" d="M6.5 0L0 6.5 1.4 8l4-4v12.7h2V4l4.3 4L13 6.4z"></path>
+        </svg> 
+        Contents
+        </a>
+      </div>
+    </div>        
+    </div>
+  </div>    
+{% endblock %}

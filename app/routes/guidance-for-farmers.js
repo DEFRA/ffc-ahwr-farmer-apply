@@ -1,38 +1,58 @@
-const urlPrefix = require('../config/index').urlPrefix
+const config = require('../config/index')
 module.exports = [{
   method: 'GET',
-  path: `${urlPrefix}`,
+  path: `${config.urlPrefix}`,
   options: {
     auth: false,
     handler: async (_, h) => {
-      return h.view('guidance-for-farmers')
+      return h.view('guidance/landing-page')
     }
   }
-}, {
+},
+{
   method: 'GET',
-  path: `${urlPrefix}/guidance-for-farmers`,
+  path: `${config.urlPrefix}/guidance-for-farmers`,
   options: {
     auth: false,
     handler: async (_, h) => {
-      return h.view('guidance-for-farmers')
+      return h.view('guidance/apply-guidance-for-farmers', {
+        ruralPaymentsAgency: config.ruralPaymentsAgency
+      })
     }
   }
-}, {
+},
+{
   method: 'GET',
-  path: `${urlPrefix}/guidance-for-vet`,
+  path: `${config.urlPrefix}/claim-guidance-for-farmers`,
   options: {
     auth: false,
     handler: async (_, h) => {
-      return h.view('guidance-for-vet')
+      return h.view('guidance/claim-guidance-for-farmers', {
+        claimServiceUri: config.claimServiceUri,
+        ruralPaymentsAgency: config.ruralPaymentsAgency
+      })
     }
   }
-}, {
+},
+{
   method: 'GET',
-  path: `${urlPrefix}/guidance-for-vet-technical`,
+  path: `${config.urlPrefix}/guidance-for-vet`,
   options: {
     auth: false,
     handler: async (_, h) => {
-      return h.view('guidance-for-vet-technical')
+      return h.view('guidance/guidance-for-vet', {
+        ruralPaymentsAgency: config.ruralPaymentsAgency
+      })
+    }
+  }
+},
+{
+  method: 'GET',
+  path: `${config.urlPrefix}/guidance-for-vet-technical`,
+  options: {
+    auth: false,
+    handler: async (_, h) => {
+      return h.view('guidance/guidance-for-vet-technical')
     }
   }
 }]

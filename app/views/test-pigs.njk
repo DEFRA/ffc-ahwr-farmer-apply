@@ -1,89 +1,94 @@
 {% extends './layouts/layout.njk' %}
+
 {% block pageTitle %}Guidance for vets - {{ serviceName }}{% endblock %}
+
 {% block content %}
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-
-    <!-- Logo -->
-    <br><br>
-
-    <!-- Blue box -->
-    <div class="govuk-panel govuk-panel--confirmation govuk-panel--blue govuk-!-text-align-left govuk-!-margin-bottom-7">
-      <div class="govuk-panel__body govuk-!-margin-bottom-3">
-        Guidance
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <div>
+        <span class="govuk-caption-xl">Guidance</span>
+        <h1 class="govuk-heading-l">Pigs: testing required for an annual health and welfare review</h1>
+        <p class="govuk-body-l">Follow this guidance when you test pigs for porcine reproductive and respiratory syndrome (PRRS) as part of an annual health and welfare review.</p>
       </div>
-      <h1 class="govuk-panel__title">Vets: test for porcine reproductive and respiratory syndrome (PRRS) in pigs</h1>
-      <div class="govuk-panel__body">
-        Published 11 July 2022
-      </div>
+      <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+      <p class="govuk-body-s">From: <a class="govuk-link govuk-!-font-weight-bold" href="https://www.gov.uk/government/organisations/department-for-environment-food-rural-affairs">Department for Environment, Food &amp; Rural Affairs</a> and <a class="govuk-link govuk-!-font-weight-bold" href="https://www.gov.uk/government/organisations/rural-payments-agency">Rural Payments Agency</a></p>
     </div>
+  <div class="govuk-grid-column-two-thirds govuk-!-margin-top-6">
+    <section class="gem-c-devolved-nations">
+      <h2 class="govuk-heading-s govuk-!-margin-bottom-0">
+        Applies to England
+      </h2>
+    </section>
 
-    <!-- Intro -->
-    <aside class="navigation-container">
-      <ul class="govuk-list govuk-body-s">
-        <li>Contents</li>
-        <li class="list-item--dashed"><a href="#sampling">Test type and sampling</a></li>
-        <li class="list-item--dashed"><a href="#analysis">Test sample laboratory analysis</a></li>
-        <li class="list-item--dashed"><a href="#testresults">Test results</a></li>
-      </ul>
-    </aside>
-
-    <!-- Main body -->
-    <h2 id="sampling" class="govuk-heading-m">Test type and sampling</h2>
-
-      <p class="govuk-body">
-        We recommend you use an enzyme-linked immunosorbent assay (ELISA) or PRRS polymerase chain reaction (PCR) test.
-      </p>
-      <p class="govuk-body">
-        You should sample up to 30 pigs.
-      </p>
-      <p class="govuk-body">
-        Sequencing is not paid for as part of the review.
-      </p>
-
-      <p class="govuk-body">
-        Follow detailed guidance on  
-        <a class="govuk-link" href="https://ahdb.org.uk/knowledge-library/uk-pig-industry-welfare-training-platform" target="_blank">how to do pig sampling and testing on the Agriculture and Horticulture Development Board</a>.
-      </p>
-
-    <h2 id="analysis" class="govuk-heading-m">Test sample laboratory analysis</h2>
-
-      <p class="govuk-body">
-        You should send the test sample for analysis to a laboratory that is one or both of the following:
-      </p>
-      <ul class="govuk-list govuk-list--bullet">
-        <li>ISO/IEC 17025 accredited</li>
-        <li>UKAS accredited (UK accredited) for an ELISA or PRRS PCR test</li>
-      </ul>
-
-      <p class="govuk-body">
-        <a class="govuk-link" href="labs-pigs">
-          Find a recommended laboratory to test for porcine reproductive and respiratory syndrome (PRRS) in pigs
+  <div class="gem-c-govspeak govspeak govuk-!-padding-bottom-9">  
+    <h2 id="documents" class="govuk-heading-m">Documents</h2>
+    <section class="attachment embedded">
+      <div class="attachment-thumb">
+        <a aria-hidden="true" class="thumbnail" tabindex="-1" href="/apply/labs-pigs">
+          <svg version="1.1" viewBox="0 0 99 140" width="99" height="140" aria-hidden="true">
+            <path d="M30,95h57v9H30V95z M30,77v9h39v-9H30z M30,122h48v-9H30V122z M12,68h9v-9h-9V68z M12,104h9v-9h-9V104z M12,86h9v-9h-9V86z   M12,122h9v-9h-9V122z M87,12v27H12V12H87z M33,17h-4v8h-6v-8h-4v18h4v-7l6,0v7l4,0V17z M49,17H35l0,3h5v15h4V20l5,0V17z M68,17h-4  l-5,6l-5-6h-4v18h4l0-12l5,6l5-6l0,12h4V17z M81,32h-6V17h-4v18h10V32z M30,68h57v-9H30V68z" stroke-width="0"></path>
+          </svg>
         </a>
-      </p>
+      </div>
+      <div class="attachment-details">
+        <h3 class="title govuk-!-font-size-27 govuk-!-font-weight-regular"><a class="govuk-link" href="/apply/labs-pigs">Vets: test for porcine reproductive and respiratory syndrome (PRRS) in pigs</a></h3>
+        <p class="govuk-body metadata">
+          <span class="type">HTML</span>
+        </p>
+      </div>
+    </section>
 
-    <h2 id="testresults" class="govuk-heading-m">Test results</h2>
-
-      <p class="govuk-body">
-        You should:
-      </p>
-      <ul class="govuk-list govuk-list--bullet">
-        <li>discuss the test results and any further action with the farmer as part of the review</li>
-        <li>include test results in the written report you give to the farmer with appropriate recommendations</li>
-      </ul>
-
-      <p class="govuk-body">The farmer can use the test results for other accreditation schemes they are a member of.</p>
-      
-    <!--Footer-->
-    <div class="app-back-to-top" style="margin: 50px 0 20px 0; border-top: 1px solid #b1b4b6; padding-top: 20px;" data-module="app-back-to-top">
-      <a class="govuk-link govuk-link--no-visited-state app-back-to-top__link" href="#top">
-        <svg role="presentation" focusable="false" class="app-back-to-top__icon" xmlns="http://www.w3.org/2000/svg" width="13" height="17" viewBox="0 0 13 17">
-          <path fill="currentColor" d="M6.5 0L0 6.5 1.4 8l4-4v12.7h2V4l4.3 4L13 6.4z"></path>
-        </svg>
-        Back to top
-      </a>
-    </div>
-
+    <section class="attachment embedded">
+      <div class="attachment-thumb">
+        <a aria-hidden="true" class="thumbnail" tabindex="-1" href="/apply/labs-pigs-2">
+          <svg version="1.1" viewBox="0 0 99 140" width="99" height="140" aria-hidden="true">
+            <path d="M30,95h57v9H30V95z M30,77v9h39v-9H30z M30,122h48v-9H30V122z M12,68h9v-9h-9V68z M12,104h9v-9h-9V104z M12,86h9v-9h-9V86z   M12,122h9v-9h-9V122z M87,12v27H12V12H87z M33,17h-4v8h-6v-8h-4v18h4v-7l6,0v7l4,0V17z M49,17H35l0,3h5v15h4V20l5,0V17z M68,17h-4  l-5,6l-5-6h-4v18h4l0-12l5,6l5-6l0,12h4V17z M81,32h-6V17h-4v18h10V32z M30,68h57v-9H30V68z" stroke-width="0"></path>
+          </svg>
+        </a>
+      </div>
+      <div class="attachment-details">
+        <h3 class="title govuk-!-font-size-27 govuk-!-font-weight-regular"><a class="govuk-link" href="/apply/labs-pigs-2">Recommended laboratories to test for porcine reproductive and respiratory syndrome (PRRS) in pigs</a></h3>
+        <p class="govuk-body metadata">
+          <span class="type">HTML</span>
+        </p>
+      </div>
+    </section>
   </div>
-</div>
+
+  <div class="govspeak">
+    <h2 id="details" class="govuk-heading-m">Details</h2>
+
+    <p class="govuk-body">A vet or a team chosen by a vet can carry out porcine reproductive and respiratory syndrome testing as part of the review.</p>
+
+    <p class="govuk-body">When you carry out testing, you should:</p>
+    
+    <ul class="govuk-list govuk-list--bullet">
+      <li>follow the guidance for testing pigs</li>
+      <li>use a laboratory that meets the specifications for review testing</li>
+    </ul>
+
+    <p class="govuk-body">A farmer will not be eligible for funding unless you do both of these things.</p>
+
+    <p class="govuk-body">The guidance tells you:</p>
+    
+    <ul class="govuk-list govuk-list--bullet">
+      <li>which tests to carry out</li>
+      <li>the minimum number of pigs required for testing</li>
+      <li>the sample analysis requirements</li>
+    </ul>
+
+    <p class="govuk-body">Read the guidance on <a href="/apply/guidance-for-vets">how to carry out an annual health and welfare review of livestock</a> guidance before you read this guidance on testing</p>
+
+    <p class="govuk-body">There’s also guidance for other species:</p>
+
+    <ul class="govuk-list govuk-list--bullet">
+      <li><a href="/apply/test-cattle">cattle: testing required for an annual health and welfare review</a></li>
+      <li><a href="/apply/test-sheep">sheep: testing required for an annual health and welfare review</a></li>
+    </ul>
+
+    <div class="gem-c-print-link govuk-!-display-none-print govuk-!-margin-top-0 govuk-!-margin-bottom-6">
+      <button onclick="window.print()" class="govuk-link govuk-body-s gem-c-print-link__button">Print this page</button>
+    </div>
+  </div>
+  </div>    
 {% endblock %}
