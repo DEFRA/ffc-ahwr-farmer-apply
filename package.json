@@ -44,7 +44,7 @@
     "joi": "17.6.4",
     "jsonwebtoken": "^9.0.0",
     "jwk-to-pem": "^2.0.5",
-    "notifications-node-client": "^5.1.1",
+    "notifications-node-client": "^6.0.0",
     "nunjucks": "^3.2.3",
     "uuid": "^8.3.2"
   },
@@ -54,7 +54,8 @@
     },
     "@azure/identity": {
       "jsonwebtoken": "9.0.0"
-    }
+    },
+    "semver" : "7.5.2"
   },
   "devDependencies": {
     "@hapi/catbox-memory": "^5.0.1",
