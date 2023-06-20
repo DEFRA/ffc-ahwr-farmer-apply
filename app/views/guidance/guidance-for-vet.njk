@@ -22,7 +22,7 @@
     <h2 class="gem-c-contents-list__title">
       Contents
     </h2>
-    <ol class="gem-c-contents-list__list">
+    <ol class="gem-c-contents-list__list" id="contents">
         <li class="gem-c-contents-list__list-item gem-c-contents-list__list-item--dashed">
           <a class="gem-c-contents-list__link govuk-link govuk-link--no-underline" href="#what-the-review-is">What the review is</a>
         </li>
@@ -153,7 +153,7 @@
 
       <p class="govuk-body">For external biosecurity, this could include:</p>
 
-      <ul class="govuk-list govuk-list--number">
+      <ul class="govuk-list govuk-list--bullet">
         <li>purchasing policies</li>
         <li>farm visitors and vehicles</li>
         <li>wildlife</li>
@@ -164,7 +164,7 @@
 
       <p class="govuk-body">For internal biosecurity, this could include:</p>
 
-      <ul class="govuk-list govuk-list--number">
+      <ul class="govuk-list govuk-list--bullet">
         <li>feed stores</li>
         <li>contaminated water</li>
         <li>sheds</li>
@@ -204,7 +204,7 @@
 
       <p class="govuk-body">The farmer will only be eligible for funding if your report includes:</p>
 
-      <ul class="govuk-list govuk-list--number">
+      <ul class="govuk-list govuk-list--bullet">
         <li>endemic disease or condition test results from the laboratory</li>
         <li>advice or suggested species-specific health and welfare actions</li>
         <li>other review findings - for example, biosecurity recommendations and medicine usage</li>
@@ -235,6 +235,18 @@
     <div class="gem-c-print-link govuk-!-display-none-print govuk-!-margin-top-0 govuk-!-margin-bottom-6">
       <button onclick="window.print()" class="govuk-link govuk-body-s gem-c-print-link__button">Print this page</button>
     </div>
+
+    <div data-sticky-element="" class="app-c-contents-list-with-body__link-wrapper sticky-element--hidden sticky-element--stuck-to-window sticky-element--enabled">
+      <div class="app-c-contents-list-with-body__link-container">
+        <a class="govuk-link app-c-back-to-top dont-print" href="#contents">
+        <svg class="app-c-back-to-top__icon" xmlns="http://www.w3.org/2000/svg" width="13" height="17" viewBox="0 0 13 17" aria-hidden="true" focusable="false">
+         <path fill="currentColor" d="M6.5 0L0 6.5 1.4 8l4-4v12.7h2V4l4.3 4L13 6.4z"></path>
+        </svg> 
+        Contents
+        </a>
+      </div>
+    </div>
+
     </div>
   </div>    
 {% endblock %}
