@@ -19,18 +19,18 @@ describe('Vet technical guidance pages', () => {
     expect($('title').text()).toEqual(`Guidance for vets - ${serviceName}`)
     expectPhaseBanner.ok($)
   })
-  test('GET /labs-cattle route returns 200 when not logged in', async () => {
+  test('GET technical-guidance-cattle route returns 200 when not logged in', async () => {
     const options = {
       method: 'GET',
-      url: `${urlPrefix}/labs-cattle`
+      url: `${urlPrefix}/vet-technical-guidance-cattle`
     }
 
     const res = await global.__SERVER__.inject(options)
 
     expect(res.statusCode).toBe(200)
     const $ = cheerio.load(res.payload)
-    expect($('.govuk-panel__title').text()).toEqual(
-      'Recommended laboratories to test for bovine viral diarrhoea (BVD) in cattle'
+    expect($('.govuk-heading-xl').text()).toEqual(
+      'Vets: test for bovine viral diarrhoea (BVD) in cattle'
     )
     expect($('title').text()).toEqual(`Guidance for vets - ${serviceName}`)
     expectPhaseBanner.ok($)
@@ -54,15 +54,15 @@ describe('Vet technical guidance pages', () => {
   test('GET /labs-sheep route returns 200 when not logged in', async () => {
     const options = {
       method: 'GET',
-      url: `${urlPrefix}/labs-sheep`
+      url: `${urlPrefix}/vet-technical-guidance-sheep`
     }
 
     const res = await global.__SERVER__.inject(options)
 
     expect(res.statusCode).toBe(200)
     const $ = cheerio.load(res.payload)
-    expect($('.govuk-panel__title').text()).toEqual(
-      'Recommended laboratories to carry out a Worming Treatment Check test in sheep'
+    expect($('.govuk-heading-xl').text()).toEqual(
+      'Vets: test for the effectiveness of worming treatments in sheep'
     )
     expect($('title').text()).toEqual(`Guidance for vets - ${serviceName}`)
     expectPhaseBanner.ok($)
@@ -86,15 +86,15 @@ describe('Vet technical guidance pages', () => {
   test('GET /labs-pigs route returns 200 when not logged in', async () => {
     const options = {
       method: 'GET',
-      url: `${urlPrefix}/labs-pigs`
+      url: `${urlPrefix}/vet-technical-guidance-pigs`
     }
 
     const res = await global.__SERVER__.inject(options)
 
     expect(res.statusCode).toBe(200)
     const $ = cheerio.load(res.payload)
-    expect($('.govuk-panel__title').text()).toEqual(
-      'Recommended laboratories to test for porcine reproductive and respiratory syndrome (PRRS) in pigs'
+    expect($('.govuk-heading-xl').text()).toEqual(
+      'Vets: test for porcine reproductive and respiratory syndrome (PRRS) in pigs'
     )
     expect($('title').text()).toEqual(`Guidance for vets - ${serviceName}`)
     expectPhaseBanner.ok($)

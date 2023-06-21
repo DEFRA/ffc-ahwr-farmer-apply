@@ -45,14 +45,4 @@ module.exports = [{
       })
     }
   }
-},
-{
-  method: 'GET',
-  path: `${config.urlPrefix}/guidance-for-vet-technical`,
-  options: {
-    auth: false,
-    handler: async (_, h) => {
-      return h.view('guidance/guidance-for-vet-technical')
-    }
-  }
 }]
