@@ -41,7 +41,8 @@ module.exports = [
               'any.required': ERROR_MESSAGE.enterYourEmailAddress,
               'string.base': ERROR_MESSAGE.enterYourEmailAddress,
               'string.empty': ERROR_MESSAGE.enterYourEmailAddress,
-              'string.email': ERROR_MESSAGE.enterYourEmailAddressInCorrectFormat
+              'string.email': ERROR_MESSAGE.enterYourEmailAddressInCorrectFormat,
+              'string.pattern.base': ERROR_MESSAGE.enterYourEmailAddressInCorrectFormat
             })
         }),
         failAction: async (request, h, error) => {

@@ -8,6 +8,8 @@ describe('Farmer apply "Enter your business email address" page', () => {
   let session
 
   const URL = `${urlPrefix}/register-your-interest/enter-your-email-address`
+  const emailThatExceedsLocalPartLength = 'a'.repeat(65) + '@email.com'
+  const emailThatExceedsDomainPartLength = 'business@' + 'a'.repeat(256) + '.com'
 
   beforeAll(async () => {
     jest.resetAllMocks()
@@ -119,7 +121,43 @@ describe('Farmer apply "Enter your business email address" page', () => {
           emailAddress: 'name'
         },
         expectedErrors: {
-          emailAddress: 'Error: Enter your email address in the correct format, like name@example.com',
+          emailAddress: 'Error: "emailAddress" with value "name" fails to match the required pattern: /^([a-zA-Z0-9._+-]{1,64})@([a-zA-Z0-9.-]{1,255}\\.[a-zA-Z]{2,})$/',
+          confirmEmailAddress: 'Error: Confirm your email address'
+        }
+      },
+      {
+        payload: {
+          emailAddress: emailThatExceedsLocalPartLength
+        },
+        expectedErrors: {
+          emailAddress: `Error: "emailAddress" with value "${emailThatExceedsLocalPartLength}" fails to match the required pattern: /^([a-zA-Z0-9._+-]{1,64})@([a-zA-Z0-9.-]{1,255}\\.[a-zA-Z]{2,})$/`,
+          confirmEmailAddress: 'Error: Confirm your email address'
+        }
+      },
+      {
+        payload: {
+          emailAddress: emailThatExceedsDomainPartLength
+        },
+        expectedErrors: {
+          emailAddress: `Error: "emailAddress" with value "${emailThatExceedsDomainPartLength}" fails to match the required pattern: /^([a-zA-Z0-9._+-]{1,64})@([a-zA-Z0-9.-]{1,255}\\.[a-zA-Z]{2,})$/`,
+          confirmEmailAddress: 'Error: Confirm your email address'
+        }
+      },
+      {
+        payload: {
+          emailAddress: 'business@email.c'
+        },
+        expectedErrors: {
+          emailAddress: 'Error: "emailAddress" with value "business@email.c" fails to match the required pattern: /^([a-zA-Z0-9._+-]{1,64})@([a-zA-Z0-9.-]{1,255}\\.[a-zA-Z]{2,})$/',
+          confirmEmailAddress: 'Error: Confirm your email address'
+        }
+      },
+      {
+        payload: {
+          emailAddress: 'business£5@email.com'
+        },
+        expectedErrors: {
+          emailAddress: 'Error: "emailAddress" with value "business£5@email.com" fails to match the required pattern: /^([a-zA-Z0-9._+-]{1,64})@([a-zA-Z0-9.-]{1,255}\\.[a-zA-Z]{2,})$/',
           confirmEmailAddress: 'Error: Confirm your email address'
         }
       },

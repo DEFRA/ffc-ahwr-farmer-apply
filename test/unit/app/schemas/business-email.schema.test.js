@@ -76,6 +76,73 @@ describe('business-email.schema', () => {
           }
         }
       }
+    },
+    {
+      toString: () => 'invalid email - local part exceeds maximum length of 64',
+      given: {
+        businessEmail: 'a'.repeat(65) + '@email.com'
+      },
+      expect: {
+        result: {
+          value: 'a'.repeat(65) + '@email.com',
+          error: {
+            message: '"value" must be a valid email'
+          }
+        }
+      }
+    },
+    {
+      toString: () => 'invalid email - domain part exceeds maximum length of 255',
+      given: {
+        businessEmail: 'business@' + 'a'.repeat(256) + '.com'
+      },
+      expect: {
+        result: {
+          value: 'business@' + 'a'.repeat(256) + '.com',
+          error: {
+            message: '"value" must be a valid email'
+          }
+        }
+      }
+    },
+    {
+      toString: () => 'invalid email - tld is below the minimum length of 2',
+      given: {
+        businessEmail: 'business@email.c'
+      },
+      expect: {
+        result: {
+          value: 'business@email.c',
+          error: {
+            message: '"value" with value "business@email.c" fails to match the required pattern: /^([a-zA-Z0-9._+-]{1,64})@([a-zA-Z0-9.-]{1,255}\\.[a-zA-Z]{2,})$/'
+          }
+        }
+      }
+    },
+    {
+      toString: () => 'invalid email - contains invalid special characters',
+      given: {
+        businessEmail: 'business£5@email.com'
+      },
+      expect: {
+        result: {
+          value: 'business£5@email.com',
+          error: {
+            message: '"value" with value "business£5@email.com" fails to match the required pattern: /^([a-zA-Z0-9._+-]{1,64})@([a-zA-Z0-9.-]{1,255}\\.[a-zA-Z]{2,})$/'
+          }
+        }
+      }
+    },
+    {
+      toString: () => 'valid email - contains special characters',
+      given: {
+        businessEmail: 'business.-@email.com'
+      },
+      expect: {
+        result: {
+          value: 'business.-@email.com'
+        }
+      }
     }
   ])('%s', async (testCase) => {
     const result = BUSINESS_EMAIL_SCHEMA.validate(testCase.given.businessEmail)
