@@ -10,7 +10,7 @@ describe('Farmer apply "Enter your business email address" page', () => {
   const URL = `${urlPrefix}/register-your-interest/enter-your-email-address`
   const emailThatExceedsLocalPartLength = 'a'.repeat(65) + '@email.com'
   const emailThatExceedsDomainPartLength = 'business@' + 'a'.repeat(256) + '.com'
-  
+
   beforeAll(async () => {
     jest.resetAllMocks()
     resetAllWhenMocks()
@@ -138,7 +138,7 @@ describe('Farmer apply "Enter your business email address" page', () => {
         payload: {
           emailAddress: emailThatExceedsDomainPartLength
         },
-        expectedErrors: {          
+        expectedErrors: {
           emailAddress: `Error: "emailAddress" with value "${emailThatExceedsDomainPartLength}" fails to match the required pattern: /^([a-zA-Z0-9._+-]{1,64})@([a-zA-Z0-9.-]{1,255}\\.[a-zA-Z]{2,})$/`,
           confirmEmailAddress: 'Error: Confirm your email address'
         }
