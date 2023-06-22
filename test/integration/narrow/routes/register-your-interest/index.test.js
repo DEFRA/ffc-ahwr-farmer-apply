@@ -249,6 +249,38 @@ describe('Farmer apply "Enter your business email address" page', () => {
           expectedErrors: {
             emailAddress: 'Enter your email address in the correct format, like name@example.com'
           }
+        },
+        {
+          payload: {
+            emailAddress: 'a'.repeat(65) + '@example.com'
+          },
+          expectedErrors: {
+            emailAddress: 'Enter your email address in the correct format, like name@example.com'
+          }
+        },
+        {
+          payload: {
+            emailAddress: 'name@' + 'a'.repeat(256) + '.com'
+          },
+          expectedErrors: {
+            emailAddress: 'Enter your email address in the correct format, like name@example.com'
+          }
+        },
+        {
+          payload: {
+            emailAddress: 'name@example.c'
+          },
+          expectedErrors: {
+            emailAddress: 'Enter your email address in the correct format, like name@example.com'
+          }
+        },
+        {
+          payload: {
+            emailAddress: 'business£5@email.com'
+          },
+          expectedErrors: {
+            emailAddress: 'Enter your email address in the correct format, like name@example.com'
+          }
         }
       ])('when wrong $payload then expect 400 and $expectedErrors', async (testCase) => {
         const options = {
