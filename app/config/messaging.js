@@ -37,7 +37,9 @@ const mqConfig = {
     username: process.env.MESSAGE_QUEUE_USER,
     password: process.env.MESSAGE_QUEUE_PASSWORD,
     useCredentialChain: process.env.NODE_ENV === 'production',
-    appInsights: process.env.NODE_ENV === 'production' ? require('applicationinsights') : undefined
+    appInsights: process.env.NODE_ENV === 'production' ? require('applicationinsights') : undefined,
+    retries: 50,
+    retryWaitInMs: 100
   },
   applicationRequestQueue: {
     address: process.env.APPLICATIONREQUEST_QUEUE_ADDRESS,
