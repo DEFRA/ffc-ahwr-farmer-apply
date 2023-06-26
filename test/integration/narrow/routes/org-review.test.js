@@ -159,7 +159,6 @@ describe('Org review page test', () => {
 
     beforeEach(async () => {
       crumb = await getCrumbs(global.__SERVER__)
-      jest.resetAllMocks()
     })
 
     beforeAll(async () => {
@@ -232,7 +231,6 @@ describe('Org review page test', () => {
         expect(res.result).toContain(org.farmerName)
         expect(res.result).toContain(org.address)
         expect(res.result).toContain(org.name)
-        console.log(`res is ${res.request.response.app}`)
       }
     )
   })
