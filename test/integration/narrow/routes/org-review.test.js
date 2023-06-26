@@ -227,6 +227,10 @@ describe('Org review page test', () => {
         expect(res.request.response.source.template).toBe(
           'org-review'
         )
+        expect(res.result).toContain(org.sbi)
+        expect(res.result).toContain(org.farmerName)
+        expect(res.result).toContain(org.address)
+        expect(res.result).toContain(org.name)
       }
     )
   })
