@@ -32,7 +32,7 @@ module.exports = [{
         if (!organisation) {
           return boom.notFound()
         }
-        return h.view('org-review', getOrganisation(request, errorMessage)).code(400).takeover()
+        return h.view('org-review', getOrganisation(request, organisation, errorMessage)).code(400).takeover()
       }
     },
     handler: async (request, h) => {
