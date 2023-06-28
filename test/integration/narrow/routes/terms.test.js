@@ -58,31 +58,6 @@ describe('Farmer apply terms and condition page test', () => {
       expect($('#continueButton').length).toEqual(continueButtonExpectedLength)
       expectPhaseBanner.ok($)
     })
-
-    test.each([
-      { queryParam: undefined, continueButtonExpectedLength: 0 },
-      { queryParam: '?continue=true', continueButtonExpectedLength: 1 },
-      { queryParam: '?continue=false', continueButtonExpectedLength: 0 }
-    ])('GET /terms/v2 returns public beta 2 T and C', async ({ queryParam, continueButtonExpectedLength }) => {
-      const options = {
-        method: 'GET',
-        url: `${urlPrefix}/terms/v2`
-      }
-
-      if (queryParam) {
-        options.url = options.url + queryParam
-      }
-
-      const res = await global.__SERVER__.inject(options)
-
-      expect(res.statusCode).toBe(200)
-      const $ = cheerio.load(res.payload)
-      expect($('.govuk-heading-l').text()).toEqual('Accept the terms and conditions')
-      expect($('title').text()).toEqual(serviceName)
-      expect($('#beta-version').text()).toContain('16. Beta 2 timescale')
-      expect($('#continueButton').length).toEqual(continueButtonExpectedLength)
-      expectPhaseBanner.ok($)
-    })
   })
 
   describe('GET - public beta 2 terms and conditions', () => {
@@ -133,7 +108,7 @@ describe('Farmer apply terms and condition page test', () => {
 
       expect(res.statusCode).toBe(200)
       const $ = cheerio.load(res.payload)
-      expect($('.govuk-heading-l').text()).toEqual('Accept the terms and conditions')
+      expect($('.govuk-heading-l').text()).toEqual('Annual health and welfare review of livestock terms and conditions: 7 February to 13 June 2023')
       expect($('title').text()).toEqual(serviceName)
       expect($('#beta-version').text()).toContain('16. Beta 2 timescale')
       expect($('#continueButton').length).toEqual(continueButtonExpectedLength)
@@ -158,7 +133,7 @@ describe('Farmer apply terms and condition page test', () => {
 
       expect(res.statusCode).toBe(200)
       const $ = cheerio.load(res.payload)
-      expect($('.govuk-heading-l').text()).toEqual('Accept the terms and conditions')
+      expect($('.govuk-heading-l').text()).toEqual('Annual health and welfare review of livestock terms and conditions: 7 February to 13 June 2023')
       expect($('title').text()).toEqual(serviceName)
       expect($('#beta-version').text()).toContain('16. Beta 2 timescale')
       expect($('#continueButton').length).toEqual(continueButtonExpectedLength)
