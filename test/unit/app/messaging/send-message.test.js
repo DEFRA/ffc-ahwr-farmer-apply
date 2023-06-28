@@ -1,5 +1,5 @@
 const createMessage = require('../../../../app/messaging/create-message')
-const createMessageSender = require('../../../../app/messaging/create-message-sender')
+const { createMessageSender } = require('../../../../app/messaging/create-message-sender')
 const sendMessage = require('../../../../app/messaging/send-message')
 
 jest.mock('../../../../app/messaging/create-message')
