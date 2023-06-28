@@ -188,7 +188,7 @@ describe('Farmer apply terms and condition page test', () => {
 
       expect(res.statusCode).toBe(200)
       const $ = cheerio.load(res.payload)
-      expect($('.govuk-heading-l').text()).toEqual('Accept the terms and conditions')
+      expect($('.govuk-heading-l').text()).toEqual('Annual health and welfare review of livestock terms and conditions')
 
       expect($('title').text()).toEqual(serviceName)
       expect($('#beta-version').text()).toContain('16. Beta 3 timescale')
