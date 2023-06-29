@@ -65,7 +65,6 @@ container:
   registerYourInterestEnabled:
   registerYourInterestRequestQueueAddress: ffc-ahwr-register-your-interest-request
   selectYourBusinessEnabled:
-  defraIdEnabled:
   defraIdTenant:
   defraIdRedirectUri:
   defraIdJwtIssuerId:

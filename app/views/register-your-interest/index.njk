@@ -1,61 +1,70 @@
 {% extends './layouts/layout.njk' %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
 {% block pageTitle %}{{serviceName}}{% endblock %}
 
 {% block content %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l">Register your interest in a health and welfare review of your livestock</h1>
-    <p class="govuk-heading-body">To be eligible for a review, you must have one of the following: </p>
-    <ul class="govuk-list govuk-list--bullet">
-      <li>11 or more beef or dairy cattle</li>
-      <li>21 or more sheep</li>
-      <li>51 or more pigs</li>
-    </ul>
-    <p class="govuk-heading-body">The animals must be registered in England and you must be responsible for their welfare.</p>
-    <p class="govuk-heading-body">If you have received the lump sum payment to leave or retire from farming, you’re still eligible for a review.</p>
-    <p class="govuk-heading-body">Your business must have:</p>
-    <ul class="govuk-list govuk-list--bullet">
-      <li>a single business identifier (SBI) linked to a county parish holding (CPH) number registered in England</li>
-      <li>a CPH number that can be permanent or temporary</li>
-    </ul>
-    <p class="govuk-heading-body">You can only apply for a review on a CPH registered in England. You cannot apply for a review on CPHs registered in Wales or Scotland.</p>
-    <p class="govuk-heading-body">The CPH number cannot be:</p>
-    <ul class="govuk-list govuk-list--bullet">
-      <li>an 8000 number used for abattoirs, pet food manufacturers, racing pigeon establishments and showgrounds</li>
-      <li>a 9000 number used for poultry keepers</li>
-    </ul>
-    <p class="govuk-heading-body">During this phase we’re inviting applications from farmers who are one of the following:</p>
-    <ul class="govuk-list govuk-list--bullet">
-      <li>eligible for the Basic Payment Scheme (BPS) - this means the SBI must have at least 5 ha of BPS eligible land and 5 or more BPS entitlements on 16 May 2022</li>
-      <li>anticipating making a 2023 BPS claim</li>
-    </ul>
+    <form method="POST" autocomplete="off" novalidate="novalidate">
+    <input type="hidden" name="crumb" value="{{crumb}}"/>
 
-    <h1 class="govuk-heading-l">Before you register</h1>
-    <p class="govuk-heading-body">You’ll need:</p>
-    <ul class="govuk-list govuk-list--bullet">
-      <li>your customer reference number (CRN)</li>
-      <li>the SBI number of the business registering for the review</li>
-      <li>the main business email linked to your business in the Rural Payments service </li>
-    </ul>
+    {% if errorMessages.emailAddress %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: [
+        {
+          text: errorMessages.emailAddress.text,
+          href: "#emailAddress"
+        }
+      ]
+    }) }}
+    {% endif %}
+
+    <h1 class="govuk-heading-l">Register your interest in a health and welfare review of your livestock</h1>
+
+    <p class="govuk-heading-body">To register your interest in applying for a review, enter the main business email address of the business registering. This is the main business email address linked to the business in your Rural Payments account.</p>
+    <p class="govuk-heading-body">Do not use your personal email address which may also be linked to the business.</p>
+
+    {{ 
+      govukInput({
+        label: {
+          text: "Main business email address",
+          classes: "govuk-label",
+          for: "emailAddress"
+        },
+        classes: "govuk-input govuk-!-width-three-quarters",
+        id: "emailAddress",
+        name: "emailAddress",
+        value: emailAddress
+      }) 
+    }}
+
+    <p class="govuk-error-message">{{errorMessages.emailAddress.text}}</p>
+
+    <p class="govuk-heading-body">The Rural Payments Agency (RPA) will contact you with a link to start your application as soon as possible.</p>
+
+    <h2 class="govuk-heading-m">More than one business linked to customer reference number</h2>
+    
+    <p class="govuk-heading-body">You’ll be able to choose which business you want a review for when you start your application.</p>
 
     {{ 
       govukButton({
         classes: "govuk-!-margin-top-2 govuk-!-margin-bottom-8",
-        href: "/apply/register-your-interest/enter-your-crn",
         isStartButton: true,
-        text: "Register now",
+        text: "Register",
         preventDoubleClick: true
       }) 
     }}
 
-    <h2 class="govuk-heading-m">Get help with registering</h2>
-    <p class="govuk-heading-body">Contact the Rural Payments Agency if you have a question about your registration. They can also help if you need to:</p>
-    <ul class="govuk-list govuk-list--bullet">
-      <li>find your CRN</li>
-      <li>update your SBI or business email address</li>
-    </ul>
+    <h2 class="govuk-heading-m">Help with registering</h2>
+
+    <p>If you need to update your main business email address, <a href="{{ ruralPaymentsAgency.loginUri }}">sign in to the Rural Payments service.</a></p>
+    <p class="govuk-body">If you have another question about your registration, contact the RPA by email or phone:</p>
+
     {{ rpaContactDetails({email: ruralPaymentsAgency.email, callChargesUri: ruralPaymentsAgency.callChargesUri, telephone: ruralPaymentsAgency.telephone}) }}
+    
+    <p>If you do not have an account, <a href="{{ ruralPaymentsAgency.loginUri }}">register with the Rural Payments service.</a></p>
   </div>
 </div>
 {% endblock %}

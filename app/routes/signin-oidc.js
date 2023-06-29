@@ -1,13 +1,13 @@
 const Joi = require('joi')
-const session = require('../../session')
-const auth = require('../../auth')
-const sessionKeys = require('../../session/keys')
-const config = require('../../config')
-const { farmerApply } = require('../../constants/user-types')
-const { getPersonSummary, getPersonName, organisationIsEligible, getOrganisationAddress, cphCheck } = require('../../api-requests/rpa-api')
-const businessEligibleToApply = require('../../api-requests/business-eligble-to-apply')
-const { InvalidPermissionsError, AlreadyAppliedError, NoEligibleCphError, InvalidStateError } = require('../../exceptions')
-const { raiseIneligibilityEvent } = require('../../event')
+const session = require('../session')
+const auth = require('../auth')
+const sessionKeys = require('../session/keys')
+const config = require('../config')
+const { farmerApply } = require('../constants/user-types')
+const { getPersonSummary, getPersonName, organisationIsEligible, getOrganisationAddress, cphCheck } = require('../api-requests/rpa-api')
+const businessEligibleToApply = require('../api-requests/business-eligble-to-apply')
+const { InvalidPermissionsError, AlreadyAppliedError, NoEligibleCphError, InvalidStateError } = require('../exceptions')
+const { raiseIneligibilityEvent } = require('../event')
 
 function setOrganisationSessionData (request, personSummary, organisationSummary) {
   const organisation = {
@@ -95,7 +95,7 @@ module.exports = [{
           organisation?.email,
           err.name
         )
-        return h.view('defra-id/cannot-apply-for-livestock-review-exception', {
+        return h.view('cannot-apply-for-livestock-review-exception', {
           ruralPaymentsAgency: config.ruralPaymentsAgency,
           alreadyAppliedError: err instanceof AlreadyAppliedError,
           permissionError: err instanceof InvalidPermissionsError,
