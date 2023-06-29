@@ -59,7 +59,7 @@ describe('Notify config', () => {
         accessGranted: 'wrong',
         accessNotGranted: 'wrong'
       },
-      errorMessage: 'The notify config is invalid. "apiKey" with value "wrong" fails to match the required pattern: /.*-[\\da-f]{8}\\b-[\\da-f]{4}\\b-[\\da-f]{4}\\b-[\\da-f]{4}\\b-[\\da-f]{12}-[\\da-f]{8}\\b-[\\da-f]{4}\\b-[\\da-f]{4}\\b-[\\da-f]{4}\\b-[\\da-f]{12}/. "emailTemplates.applyLogin" must be a valid GUID. "emailTemplates.registerYourInterest" must be a valid GUID. "emailTemplates.accessGranted" must be a valid GUID. "emailTemplates.accessNotGranted" must be a valid GUID. "testToken" must be a valid GUID'
+      errorMessage: 'The notify config is invalid. \"apiKey\" with value \"wrong\" fails to match the required pattern: /.*-[\\da-f]{8}\\b-[\\da-f]{4}\\b-[\\da-f]{4}\\b-[\\da-f]{4}\\b-[\\da-f]{12}-[\\da-f]{8}\\b-[\\da-f]{4}\\b-[\\da-f]{4}\\b-[\\da-f]{4}\\b-[\\da-f]{12}/. \"emailTemplates.registerYourInterest\" must be a valid GUID. \"emailTemplates.accessGranted\" must be a valid GUID. \"emailTemplates.accessNotGranted\" must be a valid GUID'
     }
   ])('GIVEN $processEnv EXPECT $errorMessage', (testCase) => {
     process.env.NOTIFY_API_KEY = testCase.processEnv.apiKey
