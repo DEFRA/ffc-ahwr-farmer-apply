@@ -11,7 +11,6 @@ describe('Notify config', () => {
       processEnv: {
         apiKey: '-9f9c8021-aec1-4d17-b83d-19d077d48b2b-4670a098-9a0c-408e-914c-1b74dbb84711',
         registerYourInterest: '5d1f260b3ea64a74a8b9d60e5c5a5a5f',
-        farmerRegisterYourInterest: '1f5220f6742a4dd69f7258a9c4a5a5e4',
         accessGranted: '4e4b463dcf6d4fcab277a102dba5a5e9',
         accessNotGranted: '2f6a70fc6db84fc7b29eaa04cba5a5e2'
       },
@@ -28,14 +27,13 @@ describe('Notify config', () => {
       processEnv: {
         apiKey: '-9f9c8021-aec1-4d17-b83d-19d077d48b2b-4670a098-9a0c-408e-914c-1b74dbb84711',
         registerYourInterest: '5d1f260b3ea64a74a8b9d60e5c5a5a5f',
-        farmerRegisterYourInterest: '1f5220f6742a4dd69f7258a9c4a5a5e4',
         accessGranted: '4e4b463dcf6d4fcab277a102dba5a5e9',
         accessNotGranted: '2f6a70fc6db84fc7b29eaa04cba5a5e2'
       },
       config: {
         apiKey: '-9f9c8021-aec1-4d17-b83d-19d077d48b2b-4670a098-9a0c-408e-914c-1b74dbb84711',
         emailTemplates: {
-          registerYourInterest: '1f5220f6742a4dd69f7258a9c4a5a5e4',
+          registerYourInterest: '5d1f260b3ea64a74a8b9d60e5c5a5a5f',
           accessGranted: '4e4b463dcf6d4fcab277a102dba5a5e9',
           accessNotGranted: '2f6a70fc6db84fc7b29eaa04cba5a5e2'
         }
@@ -66,7 +64,6 @@ describe('Notify config', () => {
     process.env.NOTIFY_TEMPLATE_ID_DEFRA_ID_REGISTER_INTEREST = testCase.processEnv.registerYourInterest
     process.env.NOTIFY_TEMPLATE_ID_FARMER_ACCESS_GRANTED = testCase.processEnv.accessGranted
     process.env.NOTIFY_TEMPLATE_ID_FARMER_ACCESS_NOT_GRANTED = testCase.processEnv.accessNotGranted
-    process.env.TEST_TOKEN = testCase.processEnv.testToken
     expect(
       () => require('../../../../app/config/notify')
     ).toThrow(testCase.errorMessage)

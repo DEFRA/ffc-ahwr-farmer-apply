@@ -8,8 +8,7 @@ const notifySchema = Joi.object({
     registerYourInterest: Joi.string().uuid(),
     accessGranted: Joi.string().uuid(),
     accessNotGranted: Joi.string().uuid()
-  },
-  testToken: Joi.string().uuid().optional()
+  }
 })
 
 const notifyConfig = {
@@ -18,8 +17,7 @@ const notifyConfig = {
     registerYourInterest: process.env.NOTIFY_TEMPLATE_ID_DEFRA_ID_REGISTER_INTEREST,
     accessGranted: process.env.NOTIFY_TEMPLATE_ID_FARMER_ACCESS_GRANTED,
     accessNotGranted: process.env.NOTIFY_TEMPLATE_ID_FARMER_ACCESS_NOT_GRANTED
-  },
-  testToken: process.env.TEST_TOKEN
+  }
 }
 const notifyResult = notifySchema.validate(notifyConfig, {
   abortEarly: false
