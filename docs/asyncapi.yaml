@@ -1,0 +1,26 @@
+asyncapi: '2.5.0'
+info:
+  title: Apply Service
+  version: 0.50.0
+  description: Apply and ROI Journey for Animal Health and Welfare Review 
+channels:
+  ffc-ahwr-register-your-interest-request:
+    subscribe:
+      message:
+        $ref: '#/components/messages/RegisterYourInterestRequest'
+components:
+  messages:
+    RegisterYourInterestRequest:
+      payload:
+        type: object
+        properties:
+          sbi:
+            type: string
+            description: Single Business Indentifier            
+          crn:
+            type: string
+            description: Customer reference number
+          email:
+            type: string
+            format: email
+            description: Business email of the farmer
