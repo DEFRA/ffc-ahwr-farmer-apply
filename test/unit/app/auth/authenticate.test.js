@@ -22,23 +22,22 @@ describe('authenticate', () => {
       ...jest.requireActual('../../../../app/config'),
       authConfig: {
         defraId: {
-          hostname: 'https://testtenant.b2clogin.com/testtenant.onmicrosoft.com',
+          hostname: 'https://tenantname.b2clogin.com/tenantname.onmicrosoft.com',
+          tenantName: 'tenantname',
           oAuthAuthorisePath: '/oauth2/v2.0/authorize',
-          policy: 'testpolicy',
+          policy: 'b2c_1a_signupsigninsfi',
           redirectUri: 'http://localhost:3000/apply/signin-oidc',
-          tenantName: 'testtenant',
-          jwtIssuerId: 'dummy_jwt_issuer_id',
-          clientId: 'dummyclientid',
-          clientSecret: 'dummyclientsecret',
-          serviceId: 'dummyserviceid',
-          scope: 'openid dummyclientid offline_access'
+          clientId: 'dummy_client_id',
+          clientSecret: 'dummy_client_secret',
+          serviceId: 'dummy_service_id',
+          scope: 'openid dummy_client_id offline_access',
+          jwtIssuerId: 'jwtissuerid'
         },
         ruralPaymentsAgency: {
           hostname: 'dummy-host-name',
           getPersonSummaryUrl: 'dummy-get-person-summary-url',
           getOrganisationPermissionsUrl: 'dummy-get-organisation-permissions-url',
-          getOrganisationUrl: 'dummy-get-organisation-url',
-          getCphNumbersUrl: 'dummy-get-cph-numbers-url'
+          getOrganisationUrl: 'dummy-get-organisation-url'
         },
         apim: {
           ocpSubscriptionKey: 'dummy-ocp-subscription-key',
@@ -310,7 +309,7 @@ describe('authenticate', () => {
       .mockReturnValue(testCase.when.session.pkcecodes.verifier)
     when(Wreck.post)
       .calledWith(
-        'hostname/policy/oauth2/v2.0/token',
+        'https://tenantname.b2clogin.com/tenantname.onmicrosoft.com/b2c_1a_signupsigninsfi/oauth2/v2.0/token',
         {
           headers: expect.anything(),
           payload: expect.anything(),
@@ -320,7 +319,7 @@ describe('authenticate', () => {
       .mockResolvedValue(testCase.when.redeemResponse)
     when(Wreck.get)
       .calledWith(
-        'hostname/discovery/v2.0/keys?p=policy',
+        'https://tenantname.b2clogin.com/tenantname.onmicrosoft.com/discovery/v2.0/keys?p=b2c_1a_signupsigninsfi',
         { json: true }
       )
       .mockResolvedValue({
