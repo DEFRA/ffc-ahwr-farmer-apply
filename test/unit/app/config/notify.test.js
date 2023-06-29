@@ -10,39 +10,31 @@ describe('Notify config', () => {
     {
       processEnv: {
         apiKey: '-9f9c8021-aec1-4d17-b83d-19d077d48b2b-4670a098-9a0c-408e-914c-1b74dbb84711',
-        applyLogin: '59d16c36f6984a8a9b5d56a5c1a5a5e8',
         registerYourInterest: '5d1f260b3ea64a74a8b9d60e5c5a5a5f',
         farmerRegisterYourInterest: '1f5220f6742a4dd69f7258a9c4a5a5e4',
         accessGranted: '4e4b463dcf6d4fcab277a102dba5a5e9',
-        accessNotGranted: '2f6a70fc6db84fc7b29eaa04cba5a5e2',
-        testToken: '7d7839b1c97a454e93e3c3dc90a5a5e6',
-        defraIdEnabled: true
+        accessNotGranted: '2f6a70fc6db84fc7b29eaa04cba5a5e2'
       },
       config: {
         apiKey: '-9f9c8021-aec1-4d17-b83d-19d077d48b2b-4670a098-9a0c-408e-914c-1b74dbb84711',
         emailTemplates: {
-          applyLogin: '59d16c36f6984a8a9b5d56a5c1a5a5e8',
           registerYourInterest: '5d1f260b3ea64a74a8b9d60e5c5a5a5f',
           accessGranted: '4e4b463dcf6d4fcab277a102dba5a5e9',
           accessNotGranted: '2f6a70fc6db84fc7b29eaa04cba5a5e2'
-        },
-        testToken: '7d7839b1c97a454e93e3c3dc90a5a5e6'
+        }
       }
     },
     {
       processEnv: {
         apiKey: '-9f9c8021-aec1-4d17-b83d-19d077d48b2b-4670a098-9a0c-408e-914c-1b74dbb84711',
-        applyLogin: '59d16c36f6984a8a9b5d56a5c1a5a5e8',
         registerYourInterest: '5d1f260b3ea64a74a8b9d60e5c5a5a5f',
         farmerRegisterYourInterest: '1f5220f6742a4dd69f7258a9c4a5a5e4',
         accessGranted: '4e4b463dcf6d4fcab277a102dba5a5e9',
-        accessNotGranted: '2f6a70fc6db84fc7b29eaa04cba5a5e2',
-        defraIdEnabled: false
+        accessNotGranted: '2f6a70fc6db84fc7b29eaa04cba5a5e2'
       },
       config: {
         apiKey: '-9f9c8021-aec1-4d17-b83d-19d077d48b2b-4670a098-9a0c-408e-914c-1b74dbb84711',
         emailTemplates: {
-          applyLogin: '59d16c36f6984a8a9b5d56a5c1a5a5e8',
           registerYourInterest: '1f5220f6742a4dd69f7258a9c4a5a5e4',
           accessGranted: '4e4b463dcf6d4fcab277a102dba5a5e9',
           accessNotGranted: '2f6a70fc6db84fc7b29eaa04cba5a5e2'
@@ -51,18 +43,9 @@ describe('Notify config', () => {
     }
   ])('GIVEN $processEnv EXPECT $config', (testCase) => {
     process.env.NOTIFY_API_KEY = testCase.processEnv.apiKey
-    process.env.NOTIFY_TEMPLATE_ID_FARMER_APPLY_LOGIN = testCase.processEnv.applyLogin
-    process.env.DEFRA_ID_ENABLED = testCase.processEnv.defraIdEnabled
     process.env.NOTIFY_TEMPLATE_ID_DEFRA_ID_REGISTER_INTEREST = testCase.processEnv.registerYourInterest
-    process.env.NOTIFY_TEMPLATE_ID_FARMER_REGISTER_INTEREST = testCase.processEnv.farmerRegisterYourInterest
     process.env.NOTIFY_TEMPLATE_ID_FARMER_ACCESS_GRANTED = testCase.processEnv.accessGranted
     process.env.NOTIFY_TEMPLATE_ID_FARMER_ACCESS_NOT_GRANTED = testCase.processEnv.accessNotGranted
-    if (testCase.processEnv.testToken) {
-      process.env.TEST_TOKEN = testCase.processEnv.testToken
-    } else {
-      delete process.env.TEST_TOKEN
-    }
-
     const config = require('../../../../app/config/notify')
 
     expect(config).toEqual(testCase.config)
@@ -72,22 +55,15 @@ describe('Notify config', () => {
     {
       processEnv: {
         apiKey: 'wrong',
-        applyLogin: 'wrong',
         registerYourInterest: 'wrong',
-        farmerRegisterYourInterest: 'wrong',
         accessGranted: 'wrong',
-        accessNotGranted: 'wrong',
-        testToken: 'wrong',
-        defraIdEnabled: true
+        accessNotGranted: 'wrong'
       },
       errorMessage: 'The notify config is invalid. "apiKey" with value "wrong" fails to match the required pattern: /.*-[\\da-f]{8}\\b-[\\da-f]{4}\\b-[\\da-f]{4}\\b-[\\da-f]{4}\\b-[\\da-f]{12}-[\\da-f]{8}\\b-[\\da-f]{4}\\b-[\\da-f]{4}\\b-[\\da-f]{4}\\b-[\\da-f]{12}/. "emailTemplates.applyLogin" must be a valid GUID. "emailTemplates.registerYourInterest" must be a valid GUID. "emailTemplates.accessGranted" must be a valid GUID. "emailTemplates.accessNotGranted" must be a valid GUID. "testToken" must be a valid GUID'
     }
   ])('GIVEN $processEnv EXPECT $errorMessage', (testCase) => {
     process.env.NOTIFY_API_KEY = testCase.processEnv.apiKey
-    process.env.NOTIFY_TEMPLATE_ID_FARMER_APPLY_LOGIN = testCase.processEnv.applyLogin
-    process.env.DEFRA_ID_ENABLED = testCase.processEnv.defraIdEnabled
     process.env.NOTIFY_TEMPLATE_ID_DEFRA_ID_REGISTER_INTEREST = testCase.processEnv.registerYourInterest
-    process.env.NOTIFY_TEMPLATE_ID_FARMER_REGISTER_INTEREST = testCase.processEnv.farmerRegisterYourInterest
     process.env.NOTIFY_TEMPLATE_ID_FARMER_ACCESS_GRANTED = testCase.processEnv.accessGranted
     process.env.NOTIFY_TEMPLATE_ID_FARMER_ACCESS_NOT_GRANTED = testCase.processEnv.accessNotGranted
     process.env.TEST_TOKEN = testCase.processEnv.testToken
