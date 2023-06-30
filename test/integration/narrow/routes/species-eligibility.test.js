@@ -3,18 +3,31 @@ const getCrumbs = require('../../../utils/get-crumbs')
 const expectPhaseBanner = require('../../../utils/phase-banner-expect')
 const species = require('../../../../app/constants/species')
 const speciesContent = require('../../../../app/constants/species-content')
-jest.mock('../../../../app/config', () => ({
-  ...jest.requireActual('../../../../app/config'),
-  authConfig: {
-    defraId: {
-      enabled: false
-    }
-  }
-}))
 const config = require('../../../../app/config')
 
 describe('Species eligibility test', () => {
   const auth = { credentials: { reference: '1111', sbi: '111111111' }, strategy: 'cookie' }
+
+  jest.mock('../../../../app/config', () => ({
+    ...jest.requireActual('../../../../app/config'),
+    authConfig: {
+      defraId: {
+        hostname: 'https://tenant.b2clogin.com/tenant.onmicrosoft.com',
+        oAuthAuthorisePath: '/oauth2/v2.0/authorize',
+        policy: 'b2c_1a_signupsigninsfi',
+        redirectUri: 'http://localhost:3000/apply/signin-oidc',
+        clientId: 'dummy_client_id',
+        serviceId: 'dummy_service_id',
+        scope: 'openid dummy_client_id offline_access'
+      },
+      ruralPaymentsAgency: {
+        hostname: 'dummy-host-name',
+        getPersonSummaryUrl: 'dummy-get-person-summary-url',
+        getOrganisationPermissionsUrl: 'dummy-get-organisation-permissions-url',
+        getOrganisationUrl: 'dummy-get-organisation-url'
+      }
+    }
+  }))
 
   describe('GET species eligibility route', () => {
     test.each([
@@ -44,7 +57,7 @@ describe('Species eligibility test', () => {
       { species: species.dairy },
       { species: species.pigs },
       { species: species.sheep }
-    ])('when not logged in redirects to /login', async ({ species }) => {
+    ])('when not logged in redirects to defra id', async ({ species }) => {
       const url = `${config.urlPrefix}/${species}-eligibility`
       const options = {
         method: 'GET',
@@ -54,7 +67,7 @@ describe('Species eligibility test', () => {
       const res = await global.__SERVER__.inject(options)
 
       expect(res.statusCode).toBe(302)
-      expect(res.headers.location).toEqual(`${config.urlPrefix}/login`)
+      expect(res.headers.location.toString()).toEqual(expect.stringContaining('https://tenant.b2clogin.com/tenant.onmicrosoft.com/oauth2/v2.0/authorize'))
     })
   })
 
@@ -130,7 +143,7 @@ describe('Species eligibility test', () => {
       { species: species.dairy },
       { species: species.pigs },
       { species: species.sheep }
-    ])('when not logged in redirects to /login', async ({ species }) => {
+    ])('when not logged in redirects to defra id', async ({ species }) => {
       const url = `${config.urlPrefix}/${species}-eligibility`
       const options = {
         method,
@@ -142,7 +155,7 @@ describe('Species eligibility test', () => {
       const res = await global.__SERVER__.inject(options)
 
       expect(res.statusCode).toBe(302)
-      expect(res.headers.location).toEqual(`${config.urlPrefix}/login`)
+      expect(res.headers.location.toString()).toEqual(expect.stringContaining('https://tenant.b2clogin.com/tenant.onmicrosoft.com/oauth2/v2.0/authorize'))
     })
   })
 })

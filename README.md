@@ -42,10 +42,8 @@ Please ask a developer for an example `.env` file that you can include in the ro
 | NOTIFY_TEMPLATE_ID_VET_LOGIN          | Id of email template used for vet login email                                                    |
 | NOTIFY_TEMPLATE_ID_FARMER_REGISTER_INTEREST          | Id of email template used for registration of interest                                                 |
 | SERVICE_URI                           | URI of service (used in links, in emails) e.g. `http://localhost:3000` or `https://defra.gov.uk` |
-| TEST_TOKEN                            | Test Token for Magic link for getting access to test access                                      |
 | AZURE_STORAGE_CREATE_CONTAINERS       | Set true to use connection string, false to connect using azure credentials for blobstorage      |
 | REGISTER_YOUR_INTEREST_ENABLED        | Feature flag for the register your interest journey                                              |
-| DEFRA_ID_ENABLED                      | Feature flag for Defra Id                                                                        |
 | DEFRA_ID_TENANT                       | The Azure tenant for Defra Id                                                                    |
 | DEFRA_ID_POLICY                       | Defra Id policy                                                                                  |
 | DEFRA_ID_REDIRECT_URI                 | Defra Id redirect URI                                                                            |

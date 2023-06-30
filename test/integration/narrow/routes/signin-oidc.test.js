@@ -1,27 +1,27 @@
 const cheerio = require('cheerio')
-const sessionMock = require('../../../../../app/session')
-jest.mock('../../../../../app/session')
-const authMock = require('../../../../../app/auth')
-jest.mock('../../../../../app/auth')
-const personMock = require('../../../../../app/api-requests/rpa-api/person')
-jest.mock('../../../../../app/api-requests/rpa-api/person')
-const organisationMock = require('../../../../../app/api-requests/rpa-api/organisation')
-jest.mock('../../../../../app/api-requests/rpa-api/organisation')
-const cphNumbersMock = require('../../../../../app/api-requests/rpa-api/cph-numbers')
-jest.mock('../../../../../app/api-requests/rpa-api/cph-numbers')
-const sendIneligibilityEventMock = require('../../../../../app/event/raise-ineligibility-event')
-jest.mock('../../../../../app/event/raise-ineligibility-event')
-const cphCheckMock = require('../../../../../app/api-requests/rpa-api/cph-check').customerMustHaveAtLeastOneValidCph
-jest.mock('../../../../../app/api-requests/rpa-api/cph-check')
+const sessionMock = require('../../../../app/session')
+jest.mock('../../../../app/session')
+const authMock = require('../../../../app/auth')
+jest.mock('../../../../app/auth')
+const personMock = require('../../../../app/api-requests/rpa-api/person')
+jest.mock('../../../../app/api-requests/rpa-api/person')
+const organisationMock = require('../../../../app/api-requests/rpa-api/organisation')
+jest.mock('../../../../app/api-requests/rpa-api/organisation')
+const cphNumbersMock = require('../../../../app/api-requests/rpa-api/cph-numbers')
+jest.mock('../../../../app/api-requests/rpa-api/cph-numbers')
+const sendIneligibilityEventMock = require('../../../../app/event/raise-ineligibility-event')
+jest.mock('../../../../app/event/raise-ineligibility-event')
+const cphCheckMock = require('../../../../app/api-requests/rpa-api/cph-check').customerMustHaveAtLeastOneValidCph
+jest.mock('../../../../app/api-requests/rpa-api/cph-check')
 
-const businessEligibleToApplyMock = require('../../../../../app/api-requests/business-eligble-to-apply')
-jest.mock('../../../../../app/api-requests/business-eligble-to-apply')
+const businessEligibleToApplyMock = require('../../../../app/api-requests/business-eligble-to-apply')
+jest.mock('../../../../app/api-requests/business-eligble-to-apply')
 
-const { InvalidPermissionsError, InvalidStateError, AlreadyAppliedError, NoEligibleCphError } = require('../../../../../app/exceptions')
+const { InvalidPermissionsError, InvalidStateError, AlreadyAppliedError, NoEligibleCphError } = require('../../../../app/exceptions')
 
 describe('FarmerApply defra ID redirection test', () => {
-  jest.mock('../../../../../app/config', () => ({
-    ...jest.requireActual('../../../../../app/config'),
+  jest.mock('../../../../app/config', () => ({
+    ...jest.requireActual('../../../../app/config'),
     serviceUri: 'http://localhost:3000/apply',
     authConfig: {
       defraId: {
@@ -35,7 +35,7 @@ describe('FarmerApply defra ID redirection test', () => {
       }
     }
   }))
-  const configMock = require('../../../../../app/config')
+  const configMock = require('../../../../app/config')
 
   const urlPrefix = configMock.urlPrefix
   const url = `${urlPrefix}/signin-oidc`

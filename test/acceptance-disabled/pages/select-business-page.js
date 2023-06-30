@@ -1,5 +1,4 @@
 const CommonActions = require('./common-actions')
-const getMagicLink = require('../support/get-magic-link')
 
 // select business element
 
@@ -43,13 +42,9 @@ const LIVESTOCK_NUMBER = 'eligible for funding'
 //DefraID
 const DEFRA_CRN = '#crn'
 const DEFRA_PASSWORD = '#password'
-const CRN_HINT = '[id="crn-hint"]'
 const SIGN_IN_BUTTON = '[type="submit"]'
-const MAGIC_LINK_EMAIL ='1105110119@email.com'
 const EMAIL_INPUT = '#email'
-const ALT_CRN_HINT = '#header'
 const CONTINUE = '#submit'
-const EMAIL_HINT ='[id="email-hint"]'
 
 class SelectBusinessPage extends CommonActions {
 
@@ -58,13 +53,6 @@ class SelectBusinessPage extends CommonActions {
   }
   async clickOnStartButton () {
     await this.clickOn(START_BUTTON)
-  }
-  async magicLinkUrl () {
-    const sleep = (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitTimeInMs))
-    await sleep(20000)
-    const magicLink = await getMagicLink(BUSINESS_EMAIL)
-    await browser.url(magicLink)
-    await this.urlContain(BUSINESS_EMAIL)
   }
 
   async pageTitle () {
@@ -194,27 +182,12 @@ class SelectBusinessPage extends CommonActions {
   async inputCredentials (credential) {
     await this.sendKey(EMAIL_INPUT, credential)
   }
-  async switchBetweenMagicLinkAndDefraId () {
-     const sleep = (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitTimeInMs))
-     await sleep(10000)
-
-    if (await this.isElementExist(EMAIL_HINT)){
-      await this.inputCredentials(MAGIC_LINK_EMAIL)
-      await this.submit()
-      await this.magicLinkUrl ()
-      await this.pageTitle ()
-      await this.businessPage ()
-      await this.listOfBusiness ()
-      await this.selectBusiness ()
-      await this.checkContact ()
-      await this.contactDetails ()
-      await this.startApplication ()
-    } else {
-      await this.inputValidCrn(process.env.CRN_USERNAME)
-      await this.inputPassword(process.env.CRN_PASSWORD)
-      await this.signInButton()
-    }
-
+  async signInWithDefraId () {
+    const sleep = (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitTimeInMs))
+    await sleep(10000)
+    await this.inputValidCrn(process.env.CRN_USERNAME)
+    await this.inputPassword(process.env.CRN_PASSWORD)
+    await this.signInButton()
    }
 }
 module.exports = SelectBusinessPage

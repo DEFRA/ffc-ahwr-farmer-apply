@@ -21,85 +21,6 @@ describe('Org review page test', () => {
   describe(`GET ${url} route when logged in`, () => {
     beforeAll(async () => {
       jest.resetAllMocks()
-
-      session = require('../../../../app/session')
-      jest.mock('../../../../app/session')
-
-      jest.mock('../../../../app/config', () => ({
-        ...jest.requireActual('../../../../app/config'),
-        authConfig: {
-          defraId: {
-            enabled: false
-          }
-        }
-      }))
-    })
-
-    test('returns 200', async () => {
-      session.getFarmerApplyData.mockReturnValue(org)
-      const options = {
-        auth,
-        method: 'GET',
-        url
-      }
-
-      const res = await global.__SERVER__.inject(options)
-
-      expect(res.statusCode).toBe(200)
-      const $ = cheerio.load(res.payload)
-      expect($('.govuk-heading-l').text()).toEqual('Check your details')
-      const keys = $('.govuk-summary-list__key')
-      const values = $('.govuk-summary-list__value')
-      expect(keys.eq(0).text()).toMatch('Farmer name')
-      expect(values.eq(0).text()).toMatch(org.farmerName)
-      expect(keys.eq(1).text()).toMatch('Business name')
-      expect(values.eq(1).text()).toMatch(org.name)
-      expect(keys.eq(2).text()).toMatch('SBI number')
-      expect(values.eq(2).text()).toMatch(org.sbi)
-      expect(keys.eq(3).text()).toMatch('Address')
-      expect(values.eq(3).text()).toMatch(org.address)
-      expect($('title').text()).toEqual('Check your details - Annual health and welfare review of livestock')
-      expect($('legend').text().trim()).toEqual('Are your details correct?')
-      expect($('.govuk-radios__item').length).toEqual(2)
-      expectPhaseBanner.ok($)
-    })
-
-    test('returns 404 when no organisation is found', async () => {
-      session.getFarmerApplyData.mockReturnValue(undefined)
-      const options = {
-        auth: {
-          credentials: { reference: '1111', sbi: '111111111' },
-          strategy: 'cookie'
-        },
-        method: 'GET',
-        url
-      }
-
-      const res = await global.__SERVER__.inject(options)
-
-      expect(res.statusCode).toBe(404)
-      const $ = cheerio.load(res.payload)
-      expect($('.govuk-heading-l').text()).toEqual('404 - Not Found')
-    })
-
-    describe(`GET ${url} route when not logged in`, () => {
-      test('redirects to /login', async () => {
-        const options = {
-          method: 'GET',
-          url
-        }
-
-        const res = await global.__SERVER__.inject(options)
-
-        expect(res.statusCode).toBe(302)
-        expect(res.headers.location).toEqual('/apply/login')
-      })
-    })
-  })
-
-  describe(`GET ${url} route when logged in and defra id enabled`, () => {
-    beforeAll(async () => {
-      jest.resetAllMocks()
       jest.resetModules()
 
       session = require('../../../../app/session')
@@ -108,10 +29,19 @@ describe('Org review page test', () => {
         ...jest.requireActual('../../../../app/config'),
         authConfig: {
           defraId: {
-            enabled: true
+            hostname: 'https://tenant.b2clogin.com/tenant.onmicrosoft.com',
+            oAuthAuthorisePath: '/oauth2/v2.0/authorize',
+            policy: 'b2c_1a_signupsigninsfi',
+            redirectUri: 'http://localhost:3000/apply/signin-oidc',
+            clientId: 'dummy_client_id',
+            serviceId: 'dummy_service_id',
+            scope: 'openid dummy_client_id offline_access'
           },
           ruralPaymentsAgency: {
-            hostname: 'somehost'
+            hostname: 'dummy-host-name',
+            getPersonSummaryUrl: 'dummy-get-person-summary-url',
+            getOrganisationPermissionsUrl: 'dummy-get-organisation-permissions-url',
+            getOrganisationUrl: 'dummy-get-organisation-url'
           }
         }
       }))
@@ -166,7 +96,7 @@ describe('Org review page test', () => {
         ...jest.requireActual('../../../../app/config'),
         authConfig: {
           defraId: {
-            enabled: false
+            enabled: true
           }
         }
       }))

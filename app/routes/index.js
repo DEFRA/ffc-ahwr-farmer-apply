@@ -8,14 +8,10 @@ module.exports = {
   options: {
     auth: false,
     handler: async (request, h) => {
-      if (config.authConfig.defraId.enabled) {
-        return h.view('defra-id/index', {
-          defraIdLogin: requestAuthorizationCodeUrl(session, request),
-          ruralPaymentsAgency: config.ruralPaymentsAgency
-        })
-      } else {
-        return h.view('index', { ruralPaymentsAgency: config.ruralPaymentsAgency })
-      }
+      return h.view('index', {
+        defraIdLogin: requestAuthorizationCodeUrl(session, request),
+        ruralPaymentsAgency: config.ruralPaymentsAgency
+      })
     }
   }
 }

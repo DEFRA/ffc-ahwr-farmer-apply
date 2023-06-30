@@ -1,6 +1,5 @@
 const urlPrefix = require('../../config/index').urlPrefix
 const ruralPaymentsAgency = require('../../config/index').ruralPaymentsAgency
-const defraIdConfig = require('../../config').authConfig.defraId
 const BUSINESS_EMAIL_SCHEMA = require('../../schemas/business-email.schema.js')
 const { sendDefraIdRegisterYourInterestMessage } = require('../../messaging/register-your-interest')
 const { checkWaitingList } = require('../../api-requests/eligibility-api')
@@ -21,11 +20,7 @@ module.exports = [
     options: {
       auth: false,
       handler: async (request, h) => {
-        if (defraIdConfig.enabled) {
-          return h.view('defra-id/register-your-interest/index', { ruralPaymentsAgency })
-        } else {
-          return h.view('register-your-interest/index', { ruralPaymentsAgency })
-        }
+        return h.view('register-your-interest/index', { ruralPaymentsAgency })
       }
     }
   },
@@ -50,7 +45,7 @@ module.exports = [
             .details
             .reduce((acc, e) => ({ ...acc, [e.context.label]: { text: e.message } }), {})
           return h.view(
-            'defra-id/register-your-interest/index',
+            'register-your-interest/index',
             {
               ...request.payload,
               ruralPaymentsAgency,

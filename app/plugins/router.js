@@ -17,16 +17,11 @@ const routes = [].concat(
   require('../routes/declaration'),
   require('../routes/terms-and-conditions'),
   require('../routes/vet-technical'),
-  require('../routes/select-your-business'),
-  require('../routes/no-business-available-to-apply-for')
+  require('../routes/signin-oidc')
 )
 
 const registerYourInterestRoutes = [].concat(
   require('../routes/register-your-interest/index'),
-  require('../routes/register-your-interest/enter-your-crn'),
-  require('../routes/register-your-interest/enter-your-sbi'),
-  require('../routes/register-your-interest/enter-your-email-address'),
-  require('../routes/register-your-interest/check-your-answers-and-register-your-interest'),
   require('../routes/register-your-interest/registration-complete')
 )
 
@@ -37,13 +32,6 @@ module.exports = {
       server.route(routes)
       if (config.registerYourInterest.enabled === true) {
         server.route(registerYourInterestRoutes)
-      }
-
-      if (config.authConfig.defraId.enabled === true) {
-        server.route(require('../routes/auth/signin-oidc'))
-      } else {
-        server.route(require('../routes/auth/login'))
-        server.route(require('../routes/auth/verify-login'))
       }
     }
   }

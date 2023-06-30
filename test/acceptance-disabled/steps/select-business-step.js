@@ -9,8 +9,8 @@ When(/^user start the application$/, async function () {
   await selectBusinessPage.clickOnStartButton()
 
 })
-When(/^user login with either email\(for magic link\) or crn and password\(for DefraId\)$/,async function () {
-  await selectBusinessPage.switchBetweenMagicLinkAndDefraId()
+When(/^user login with crn and password\(for DefraId\)$/,async function () {
+  await selectBusinessPage.signInWithDefraId()
 });
 
 // org-review
