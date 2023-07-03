@@ -1,15 +1,15 @@
-const { MessageReceiver } = require('ffc-messaging')
+const { createMessageReceiver } = require('./create-message-receiver')
 
 async function receiveMessage (messageId, config) {
   let result
-  const receiver = new MessageReceiver(config)
-  await receiver.acceptSession(messageId)
-  const messages = await receiver.receiveMessages(1, { maxWaitTimeInMs: 50000 })
+  const receiver = createMessageReceiver(config)
+  const sessionReceiver = await receiver.sbClient.acceptSession(messageId)
+  const messages = await sessionReceiver.receiveMessages(1, { maxWaitTimeInMs: 50000 })
   if (messages.length) {
     result = messages[0].body
-    await receiver.completeMessage(messages[0])
+    await sessionReceiver.completeMessage(messages[0])
   }
-  await receiver.closeConnection()
+  await sessionReceiver.close()
   return result
 }
 
