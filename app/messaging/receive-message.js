@@ -11,7 +11,7 @@ async function receiveMessage (messageId, config) {
     result = messages[0].body
     await receiverCopy.completeMessage(messages[0])
   }
-  await receiverCopy.closeConnection()
+  await receiverCopy.receiver.close()
   return result
 }
 
