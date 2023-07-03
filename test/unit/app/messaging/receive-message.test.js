@@ -29,13 +29,13 @@ describe('receiveMessage', () => {
 
     // Calling the receiveMessage function
     const messageId = 'test-message-id'
-    const config = { /* mock configuration */ }
+    const config = { address: 'abc' }
     const result = await receiveMessage(messageId, config)
 
     // Assertions
     expect(result).toEqual('Test message')
     expect(createMessageReceiver).toHaveBeenCalledWith(config)
-    expect(receiverMock.sbClient.acceptSession).toHaveBeenCalledWith(messageId)
+    expect(receiverMock.sbClient.acceptSession).toHaveBeenCalledWith('abc', messageId)
     expect(sessionReceiverMock.receiveMessages).toHaveBeenCalledWith(1, { maxWaitTimeInMs: 50000 })
     expect(sessionReceiverMock.completeMessage).toHaveBeenCalledWith({ body: 'Test message' })
     expect(sessionReceiverMock.close).toHaveBeenCalled()
