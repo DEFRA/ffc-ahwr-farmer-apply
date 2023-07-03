@@ -11,27 +11,33 @@ describe('receiveMessage', () => {
   })
 
   it('should receive and process a message', async () => {
+    // Mocking the createMessageReceiver function
     const receiverMock = {
-      acceptSession: jest.fn(),
-      receiveMessages: jest.fn().mockResolvedValue([{ body: 'Test message' }]),
-      completeMessage: jest.fn(),
-      receiver: {
-        close: jest.fn()
+      sbClient: {
+        acceptSession: jest.fn().mockResolvedValue({ /* mock sessionReceiver */ })
       }
     }
-
     createMessageReceiver.mockReturnValue(receiverMock)
+
+    // Mocking the sessionReceiver object and its methods
+    const sessionReceiverMock = {
+      receiveMessages: jest.fn().mockResolvedValue([{ body: 'Test message' }]),
+      completeMessage: jest.fn(),
+      close: jest.fn()
+    }
+    receiverMock.sbClient.acceptSession.mockResolvedValue(sessionReceiverMock)
 
     // Calling the receiveMessage function
     const messageId = 'test-message-id'
     const config = { /* mock configuration */ }
     const result = await receiveMessage(messageId, config)
 
+    // Assertions
     expect(result).toEqual('Test message')
     expect(createMessageReceiver).toHaveBeenCalledWith(config)
-    expect(receiverMock.acceptSession).toHaveBeenCalledWith(messageId)
-    expect(receiverMock.receiveMessages).toHaveBeenCalledWith(1, { maxWaitTimeInMs: 50000 })
-    expect(receiverMock.completeMessage).toHaveBeenCalledWith({ body: 'Test message' })
-    expect(receiverMock.receiver.close).toHaveBeenCalled()
+    expect(receiverMock.sbClient.acceptSession).toHaveBeenCalledWith(messageId)
+    expect(sessionReceiverMock.receiveMessages).toHaveBeenCalledWith(1, { maxWaitTimeInMs: 50000 })
+    expect(sessionReceiverMock.completeMessage).toHaveBeenCalledWith({ body: 'Test message' })
+    expect(sessionReceiverMock.close).toHaveBeenCalled()
   })
 })

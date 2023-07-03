@@ -1,43 +1,52 @@
-const { createMessageReceiver } = require('../../../../app/messaging/create-message-receiver')
-const receiveMessage = require('../../../../app/messaging/receive-message')
+const { createMessageReceiver, cachedReceivers, closeAllConnections } = require('../../../../app/messaging/create-message-receiver')
 
-jest.mock('../../../../app/messaging/create-message-receiver', () => ({
-  createMessageReceiver: jest.fn()
-}))
+const MOCK_CLOSE_CONNECTION = jest.fn()
 
-describe('receiveMessage', () => {
-  afterEach(() => {
-    jest.clearAllMocks()
+jest.mock('ffc-messaging', () => {
+  const MockMessageReceiver = jest.fn().mockImplementation(() => ({
+    closeConnection: MOCK_CLOSE_CONNECTION
+  }))
+
+  return {
+    MessageReceiver: MockMessageReceiver
+  }
+})
+
+describe('closeAllConnections', () => {
+  beforeEach(() => {
+    // Clear the cachedSenders object before each test
+    Object.keys(cachedReceivers).forEach((key) => delete cachedReceivers[key])
   })
 
-  it('should receive and process a message', async () => {
-    // Mocking the createMessageReceiver function
-    const receiverMock = {
-      sbClient: {
-        acceptSession: jest.fn().mockResolvedValue({ /* mock sessionReceiver */ })
-      }
-    }
-    createMessageReceiver.mockReturnValue(receiverMock)
+  test('should close all connections and clear cachedSenders', async () => {
+    createMessageReceiver({
+      address: 'abc'
+    })
+    createMessageReceiver({
+      address: 'abcd'
+    })
+    expect(Object.keys(cachedReceivers)).toHaveLength(2)
+    createMessageReceiver({
+      address: 'abcde'
+    })
+    expect(Object.keys(cachedReceivers)).toHaveLength(3)
+    createMessageReceiver({
+      address: 'abcde'
+    })
+    expect(Object.keys(cachedReceivers)).toHaveLength(3)
 
-    // Mocking the sessionReceiver object and its methods
-    const sessionReceiverMock = {
-      receiveMessages: jest.fn().mockResolvedValue([{ body: 'Test message' }]),
-      completeMessage: jest.fn(),
-      close: jest.fn()
-    }
-    receiverMock.sbClient.acceptSession.mockResolvedValue(sessionReceiverMock)
+    await closeAllConnections()
 
-    // Calling the receiveMessage function
-    const messageId = 'test-message-id'
-    const config = { /* mock configuration */ }
-    const result = await receiveMessage(messageId, config)
+    expect(MOCK_CLOSE_CONNECTION).toHaveBeenCalledTimes(3)
+    expect(Object.keys(cachedReceivers)).toHaveLength(0)
+  })
 
-    // Assertions
-    expect(result).toEqual('Test message')
-    expect(createMessageReceiver).toHaveBeenCalledWith(config)
-    expect(receiverMock.sbClient.acceptSession).toHaveBeenCalledWith(messageId)
-    expect(sessionReceiverMock.receiveMessages).toHaveBeenCalledWith(1, { maxWaitTimeInMs: 50000 })
-    expect(sessionReceiverMock.completeMessage).toHaveBeenCalledWith({ body: 'Test message' })
-    expect(sessionReceiverMock.close).toHaveBeenCalled()
+  test('should do nothing when cachedSenders is empty', async () => {
+    // Call closeAllConnections when cachedSenders is empty
+    await closeAllConnections()
+
+    // Expect no errors to be thrown
+    // Expect cachedSenders to remain empty
+    expect(Object.keys(cachedReceivers)).toHaveLength(0)
   })
 })
