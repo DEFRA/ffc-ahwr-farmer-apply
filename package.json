@@ -1,6 +1,6 @@
 {
   "name": "ffc-ahwr-farmer-apply",
-  "version": "0.50.3",
+  "version": "0.50.4",
   "description": "Web frontend for the farmer apply journey",
   "homepage": "https://github.com/DEFRA/ffc-ahwr-farmer-apply",
   "main": "app/index.js",
@@ -46,6 +46,7 @@
     "jwk-to-pem": "^2.0.5",
     "notifications-node-client": "^6.0.0",
     "nunjucks": "^3.2.3",
+    "rfdc": "^1.3.0",
     "uuid": "^8.3.2"
   },
   "overrides": {
@@ -55,7 +56,7 @@
     "@azure/identity": {
       "jsonwebtoken": "9.0.0"
     },
-    "semver" : "7.5.2"
+    "semver": "7.5.2"
   },
   "devDependencies": {
     "@hapi/catbox-memory": "^5.0.1",
