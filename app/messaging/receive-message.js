@@ -1,17 +1,15 @@
-const cloneDeep = require('rfdc')()
 const { createMessageReceiver } = require('./create-message-receiver')
 
 async function receiveMessage (messageId, config) {
   let result
   const receiver = createMessageReceiver(config)
-  const receiverCopy = cloneDeep(receiver)
-  await receiverCopy.acceptSession(messageId)
-  const messages = await receiverCopy.receiveMessages(1, { maxWaitTimeInMs: 50000 })
+  const sessionReceiver = await receiver.sbClient.acceptSession(messageId)
+  const messages = await sessionReceiver.receiveMessages(1, { maxWaitTimeInMs: 50000 })
   if (messages.length) {
     result = messages[0].body
-    await receiverCopy.completeMessage(messages[0])
+    await sessionReceiver.completeMessage(messages[0])
   }
-  await receiverCopy.receiver.close()
+  await sessionReceiver.close()
   return result
 }
 
