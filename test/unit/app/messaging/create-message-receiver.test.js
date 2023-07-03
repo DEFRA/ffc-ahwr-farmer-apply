@@ -3,12 +3,12 @@ const { createMessageReceiver, cachedReceivers, closeAllConnections } = require(
 const MOCK_CLOSE_CONNECTION = jest.fn()
 
 jest.mock('ffc-messaging', () => {
-  const MockMessageSender = jest.fn().mockImplementation(() => ({
+  const MockMessageReceiver = jest.fn().mockImplementation(() => ({
     closeConnection: MOCK_CLOSE_CONNECTION
   }))
 
   return {
-    MessageSender: MockMessageSender
+    MessageReceiver: MockMessageReceiver
   }
 })
 
