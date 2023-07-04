@@ -38,7 +38,7 @@ describe('Server', () => {
     jest.clearAllMocks()
   })
 
-  it('should start the server and perform cleanup on SIGINT', async () => {
+  it('should stop the server and perform cleanup on SIGINT', async () => {
     expect(createServer).toHaveBeenCalled()
     expect(server.start).toHaveBeenCalled()
 
