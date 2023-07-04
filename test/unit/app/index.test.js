@@ -75,7 +75,7 @@ describe('Server', () => {
     expect(process.exit).toHaveBeenCalledWith(0)
   })
 
-  it('should log and exit on stop the server failure', async () => {
+  it('should log and exit with error on stop the server failure', async () => {
     const error = new Error('Server stop failed')
     server = {
       start: jest.fn(),
