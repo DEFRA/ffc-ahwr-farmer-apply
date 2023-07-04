@@ -2,7 +2,9 @@ const createServer = require('../../../app/server')
 const MessageSenders = require('../../../app/messaging/create-message-sender')
 const MessageReceivers = require('../../../app/messaging/create-message-receiver')
 
-jest.mock('../../../app/server')
+jest.mock('../../../app/server', () => ({
+  default: jest.fn()
+}))
 jest.mock('../../../app/messaging/create-message-sender')
 jest.mock('../../../app/messaging/create-message-receiver')
 
