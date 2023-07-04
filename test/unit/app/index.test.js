@@ -26,7 +26,8 @@ describe('Server', () => {
   beforeEach(() => {
     server = {
       start: jest.fn(),
-      stop: jest.fn().mockResolvedValue()
+      stop: jest.fn().mockResolvedValue(),
+      initialize: jest.fn().mockResolvedValue()
     }
     createServer.mockResolvedValue(server)
     MessageSenders.closeAllConnections = jest.fn()
