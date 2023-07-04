@@ -7,18 +7,18 @@ const createMessageReceiver = (config) => {
     return cachedReceivers[config.address]
   }
 
-  const sender = new MessageReceiver(config)
-  cachedReceivers[config.address] = sender
+  const receiver = new MessageReceiver(config)
+  cachedReceivers[config.address] = receiver
 
-  return sender
+  return receiver
 }
 
 const closeAllConnections = async () => {
-  const senderKeys = Object.keys(cachedReceivers)
+  const receiverKeys = Object.keys(cachedReceivers)
 
-  for (const key of senderKeys) {
-    const sender = cachedReceivers[key]
-    await sender.closeConnection()
+  for (const key of receiverKeys) {
+    const receiver = cachedReceivers[key]
+    await receiver.closeConnection()
     delete cachedReceivers[key]
   }
 }

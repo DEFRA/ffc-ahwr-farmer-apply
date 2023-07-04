@@ -13,7 +13,7 @@ const sendSessionEvent = async (organisation, sessionId, entryKey, key, value, i
       data: { [key]: value },
       ip
     }
-    await raiseEvent(event)
+    raiseEvent(event)
   }
 }
 
