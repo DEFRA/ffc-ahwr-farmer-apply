@@ -26,10 +26,10 @@ deployment:
   cpuThreshold: 80
   memoryThreshold: 80
   minReadySeconds: 0
-  minReplicas: 1
+  minReplicas: 2
   maxReplicas: 4
   priorityClassName: high
-  replicas: 1
+  replicas: 2
   restartPolicy: Always
 
 container:

@@ -2,6 +2,14 @@
 
 {% block pageTitle %}{{ serviceName }}{% endblock %}
 
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "/apply/terms/v3",
+	  attributes: {id: "back"}
+  }) }}
+{% endblock %}
+
 {% block content %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
@@ -91,12 +99,12 @@
       <li>test at least six (6) beef cattle for Bovine Viral Diarrhoea (BVD) using a blood (serum) antibody test;</li>
       <li>test any number of dairy cattle for BVD using an antibody bulk milk test or a polymerase chain reaction (PCR) bulk milk test or a blood (serum) antibody test;</li>
       <li>test at least ten (10) sheep for the effectiveness of worming treatments containing one (1) of the following active chemicals:</li>
-      <ul class="govuk-list govuk-list--bullet">
-        <li>Benzimidazole (BZ)</li>
-        <li>Levamisole (LV)</li>
-        <li>Macrocyclic lactones (ML)</li>
-        <li>Amino-acetonitrile derivatives (AD) </li>
-        <li>Spiroindoles (SI) </li>
+      <ul class="govuk-list">
+        <li>i. Benzimidazole (BZ)</li>
+        <li>ii. Levamisole (LV)</li>
+        <li>iii. Macrocyclic lactones (ML)</li>
+        <li>iv. Amino-acetonitrile derivatives (AD) </li>
+        <li>v. Spiroindoles (SI) </li>
       </ul>
       <li>test at least thirty (30) pigs for Porcine Reproductive and Respiratory Syndrome (PRRS) using an enzyme-linked immunosorbent assay (ELISA) or PRRS PCR test.</li>
     </ol>
@@ -185,8 +193,8 @@
       <li>review your Records</li>
       <li>take copies of such Records</li>
     </ol>
-    <p class="govuk-body">You must provide your Records to us upon request. In addition, you shall provide the Records to any other duly authorised public authority (or their authorised representatives or auditors) upon request.</p>
-    <p class="govuk-body">If you do not provide your Records on request this may result in your Payment being declined or withheld.</p>
+    <p class="govuk-body">8.5 You must provide your Records to us upon request. In addition, you shall provide the Records to any other duly authorised public authority (or their authorised representatives or auditors) upon request.</p>
+    <p class="govuk-body">8.6 If you do not provide your Records on request this may result in your Payment being declined or withheld.</p>
 
     <h2 class="govuk-heading-m">9. Data Protection</h2>
     <p class="govuk-body">9.1 We and you must always comply with any respective obligations under "Data Protection Legislation". We may be required to provide personal information to Defra. Data Protection Legislation means (a) the UK GDPR, (b) the Data Protection Act 2018 to the extent that it relates to processing of personal data and privacy and (c) all applicable Law about the processing of personal data and privacy.</p>
