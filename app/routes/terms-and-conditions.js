@@ -37,7 +37,7 @@ module.exports = [
     options: {
       auth: false,
       handler: async (request, h) => {
-        return h.view('terms-and-conditions/private-beta-3', { continueUri: `${serviceUri}/declaration`, showContinueButton: request.query?.continue === 'true' })
+        return h.view('terms-and-conditions/private-beta-3', { backLink: request.query?.backLink, continueUri: `${serviceUri}/declaration`, showContinueButton: request.query?.continue === 'true' })
       }
     }
   }

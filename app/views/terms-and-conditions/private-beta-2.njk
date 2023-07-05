@@ -2,6 +2,14 @@
 
 {% block pageTitle %}{{ serviceName }}{% endblock %}
 
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "/apply/terms/v3",
+	  attributes: {id: "back"}
+  }) }}
+{% endblock %}
+
 {% block content %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
@@ -65,7 +73,7 @@
       <li>The Agreement Start Date and Agreement End Date are shown on the agreement summary referred to in condition 6.2.</li>
     </ol>
 
-    <h2 class="govuk-heading-m">A Review under Beta 2 </h2>
+    <h2 class="govuk-heading-m">3.0 A Review under Beta 2 </h2>
     <p class="govuk-body">3.1 You must ask a Royal College of Veterinary Surgeons (RCVS) registered vet (“Vet”) to complete a Review of the Single Species under Beta 2.</p>
     <p class="govuk-body">3.2 You must tell the Vet about the requirements for a Review under Beta 2, there is accompanying Beta 2 Vet guidance that will assist the Vet to carry out this AWHR. It is your responsibility to make sure that the Review completed by the Vet complies with these Terms and Conditions.</p>
     <p class="govuk-body">3.3 You must have the following minimum number of the relevant Single Species present on the date or dates the Vet carries out the Review:</p>
@@ -91,7 +99,7 @@
       <li>test at least six (6) beef cattle for Bovine Viral Diarrhoea (BVD) using a blood (serum) antibody test;</li>
       <li>test any number of dairy cattle for BVD using an antibody bulk milk test or a polymerase chain reaction (PCR) bulk milk test or a blood (serum) antibody test;</li>
       <li>test at least ten (10) sheep for the effectiveness of worming treatments containing one (1) of the following active chemicals:</li>
-      <ul class="govuk-list govuk-list--bullet">
+      <ul class="govuk-list">
         <li>i. Benzimidazole (BZ)</li>
         <li>ii. Levamisole (LV)</li>
         <li>iii. Macrocyclic lactones (ML)</li>
