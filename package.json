@@ -55,7 +55,7 @@
     "@azure/identity": {
       "jsonwebtoken": "9.0.0"
     },
-    "semver" : "7.5.2"
+    "semver": "7.5.2"
   },
   "devDependencies": {
     "@hapi/catbox-memory": "^5.0.1",

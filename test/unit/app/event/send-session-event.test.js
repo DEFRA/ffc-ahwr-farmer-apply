@@ -30,12 +30,12 @@ describe('Send event on session set', () => {
     jest.resetAllMocks()
   })
 
-  test('should call raiseEvent when a valid event is received', async () => {
-    await sendSessionEvent(organisation, sessionId, entryKey, key, value, ip)
+  test('should call raiseEvent when a valid event is received', () => {
+    sendSessionEvent(organisation, sessionId, entryKey, key, value, ip)
     expect(raiseEvent).toHaveBeenCalled()
   })
 
-  test('should call raiseEvent with event including sessionId', async () => {
+  test('should call raiseEvent with event including sessionId', () => {
     event = {
       ...event,
       sbi: organisation.sbi,
@@ -46,17 +46,17 @@ describe('Send event on session set', () => {
       ip
     }
 
-    await sendSessionEvent(organisation, sessionId, entryKey, key, value, ip)
+    sendSessionEvent(organisation, sessionId, entryKey, key, value, ip)
     expect(raiseEvent).toHaveBeenCalledWith(event)
   })
 
-  test('should not call raiseEvent when an event with a null sessionId is received', async () => {
-    await sendSessionEvent(organisation, null, entryKey, key, value, ip)
+  test('should not call raiseEvent when an event with a null sessionId is received', () => {
+    sendSessionEvent(organisation, null, entryKey, key, value, ip)
     expect(raiseEvent).not.toHaveBeenCalled()
   })
 
-  test('should not call raiseEvent when an event with a null organisation is received', async () => {
-    await sendSessionEvent(null, sessionId, entryKey, key, value, ip)
+  test('should not call raiseEvent when an event with a null organisation is received', () => {
+    sendSessionEvent(null, sessionId, entryKey, key, value, ip)
     expect(raiseEvent).not.toHaveBeenCalled()
   })
 })
