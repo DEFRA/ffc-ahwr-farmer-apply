@@ -3,7 +3,7 @@
 {% block pageTitle %}{{ serviceName }}{% endblock %}
 
 {% block beforeContent %}
-{% if showContinueButton %}
+{% if backLink %}
   {{ govukBackLink({
     text: "Back",
     href: backLink,

@@ -70,7 +70,7 @@ module.exports = [{
         reference: applicationReference,
         ruralPaymentsAgency: config.ruralPaymentsAgency,
         applySurveyUri: config.customerSurvey.uri,
-        latestTermsAndConditionsUri: `${config.latestTermsAndConditionsUri}?continue=true&backLink=${config.urlPrefix}/declaration`
+        latestTermsAndConditionsUri: config.latestTermsAndConditionsUri
       })
     }
   }
