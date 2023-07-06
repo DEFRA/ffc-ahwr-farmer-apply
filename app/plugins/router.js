@@ -17,7 +17,8 @@ const routes = [].concat(
   require('../routes/declaration'),
   require('../routes/terms-and-conditions'),
   require('../routes/vet-technical'),
-  require('../routes/signin-oidc')
+  require('../routes/signin-oidc'),
+  require('../routes/session-timeout')
 )
 
 const registerYourInterestRoutes = [].concat(

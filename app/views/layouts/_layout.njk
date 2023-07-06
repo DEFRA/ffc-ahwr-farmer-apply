@@ -21,9 +21,11 @@
 
 {% from "../macros/search-box.njk"                       import searchBox %}
 {% from "../macros/rpa-contact-details.njk"              import rpaContactDetails %}
+{% from "../timeout-warning/macro.njk"                   import govukTimeoutWarning %}
 
 {% block pageTitle %}{{ serviceName }} - GOV.UK{% endblock %}
 {% set urlPrefix = "<%= htmlWebpackPlugin.options.metadata.urlPrefix %>" %}
+{% set timeoutPath = urlPrefix + "/session-timeout" %}
 
 {% block head %}
   {% if cookiesPolicy.analytics %}
@@ -56,6 +58,13 @@
       html: 'This is a new service'
     }) }}
   </div>
+  {% if showTimeout %}
+    {{govukTimeoutWarning({
+      "modalIdleTime": sessionTimeoutInMin,
+      "modalVisibleTime": 0.5, 
+      "redirectUrl": timeoutPath
+    })}}
+  {% endif %}
 {% endblock %}
 
 {% block bodyStart %}

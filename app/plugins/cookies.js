@@ -1,5 +1,7 @@
 const { cookie: { cookieNameCookiePolicy }, cookiePolicy } = require('../config')
 const { getCurrentPolicy } = require('../cookies')
+const session = require('../session')
+const sessionKeys = require('../session/keys')
 
 module.exports = {
   plugin: {
@@ -18,6 +20,8 @@ module.exports = {
           const cookiesPolicy = getCurrentPolicy(request, h)
           request.response.source.manager._context.cookiesPolicy =
             cookiesPolicy
+          request.response.source.manager._context.showTimeout = typeof session.getCustomer(request, sessionKeys.customer.crn) !== 'undefined'
+          request.response.source.manager._context.sessionTimeoutInMin = 1
         }
         return h.continue
       })
