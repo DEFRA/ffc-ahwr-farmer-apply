@@ -79,6 +79,7 @@ container:
   apimClientId:
   apimClientSecret:
   apimScope:
+  buildNumber:
  
 ingress:
   class: nginx

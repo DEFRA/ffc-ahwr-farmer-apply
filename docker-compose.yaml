@@ -8,6 +8,7 @@ services:
     image: ffc-ahwr-farmer-apply
     container_name: ffc-ahwr-farmer-apply
     environment:
+      BUILD_NUMBER: ${BUILD_NUMBER}
       APPINSIGHTS_CLOUDROLE: ffc-ahwr-farmer-apply-local
       APPLICATIONINSIGHTS_CONNECTION_STRING: ${APPLICATIONINSIGHTS_CONNECTION_STRING}
       APPLICATIONREQUEST_QUEUE_ADDRESS: ${APPLICATIONREQUEST_QUEUE_ADDRESS:-ffc-ahwr-application-request}${MESSAGE_QUEUE_SUFFIX}
