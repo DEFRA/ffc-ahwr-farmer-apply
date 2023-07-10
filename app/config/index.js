@@ -5,7 +5,7 @@ const authConfig = require('./auth')
 const urlPrefix = '/apply'
 
 const schema = Joi.object({
-  buildNumber: Joi.string().optional(),
+  namespace: Joi.string().optional(),
   appInsights: Joi.object(),
   cache: {
     expiresIn: Joi.number().default(1000 * 3600 * 24 * 3), // 3 days
@@ -67,7 +67,7 @@ const schema = Joi.object({
 })
 
 const config = {
-  buildNumber: process.env.BUILD_NUMBER,
+  namespace: process.env.NAMESPACE,
   appInsights: require('applicationinsights'),
   cache: {
     options: {

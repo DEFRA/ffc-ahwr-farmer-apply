@@ -15,7 +15,6 @@ const getSecurityPolicy = () => "default-src 'self';" +
 "img-src 'self' *.google-analytics.com *.googletagmanager.com;"
 
 async function createServer () {
-  console.warn(`build number is - ${config.buildNumber}`)
   const server = Hapi.server({
     cache: [{
       provider: {
