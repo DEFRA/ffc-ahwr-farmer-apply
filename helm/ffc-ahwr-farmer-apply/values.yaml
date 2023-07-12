@@ -79,6 +79,7 @@ container:
   apimClientId:
   apimClientSecret:
   apimScope:
+  dateOfTestingEnabled:
  
 ingress:
   class: nginx

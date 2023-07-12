@@ -62,7 +62,10 @@ const schema = Joi.object({
   wreckHttp: {
     timeoutMilliseconds: Joi.number().default(10000)
   },
-  latestTermsAndConditionsUri: Joi.string().required()
+  latestTermsAndConditionsUri: Joi.string().required(),
+  dateOfTesting: {
+    enabled: Joi.bool().default(false)
+  }
 })
 
 const config = {
@@ -115,7 +118,10 @@ const config = {
   wreckHttp: {
     timeoutMilliseconds: process.env.WRECK_HTTP_TIMEOUT_MILLISECONDS
   },
-  latestTermsAndConditionsUri: process.env.TERMS_AND_CONDITIONS_URL
+  latestTermsAndConditionsUri: process.env.TERMS_AND_CONDITIONS_URL,
+  dateOfTesting: {
+    enabled: process.env.DATE_OF_TESTING_ENABLED
+  }
 }
 
 const result = schema.validate(config, {
