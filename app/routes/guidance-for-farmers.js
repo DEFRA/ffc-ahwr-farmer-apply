@@ -29,7 +29,8 @@ module.exports = [{
     handler: async (_, h) => {
       return h.view('guidance/claim-guidance-for-farmers', {
         claimServiceUri: config.claimServiceUri,
-        ruralPaymentsAgency: config.ruralPaymentsAgency
+        ruralPaymentsAgency: config.ruralPaymentsAgency,
+        dateOfTestingEnabled: config.dateOfTesting.enabled
       })
     }
   }

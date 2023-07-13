@@ -28,8 +28,11 @@
 
         </li>
         <li class="gem-c-contents-list__list-item gem-c-contents-list__list-item--dashed">
-          <a class="gem-c-contents-list__link govuk-link govuk-link--no-underline" href="#what-information-youll-need-to-claim">What information you’ll need to claim</a>
-
+          {% if dateOfTestingEnabled %}
+            <a class="gem-c-contents-list__link govuk-link govuk-link--no-underline" href="#information-youll-need-to-provide">Information you’ll need to provide</a>
+          {% else %}
+            <a class="gem-c-contents-list__link govuk-link govuk-link--no-underline" href="#what-information-youll-need-to-claim">What information you’ll need to claim</a>
+          {% endif %}
         </li>
         <li class="gem-c-contents-list__list-item gem-c-contents-list__list-item--dashed">
           <a class="gem-c-contents-list__link govuk-link govuk-link--no-underline" href="#claim-funding">Claim funding</a>
@@ -54,16 +57,30 @@
   
       <p class="govuk-body">If the review has taken place and you have a good reason why you cannot make your claim within 6 months such as illness, contact the RPA as soon as you can.</p>
   
-      <h2 id="what-information-youll-need-to-claim" class="govuk-heading-m">What information you’ll need to claim</h2>
-      
-      <p class="govuk-body" >When you claim you’ll need to share the:</p>
-      
-      <ul class="govuk-list govuk-list--bullet">
-        <li>date of the vet’s last visit to the farm for the review</li>
-        <li>vet’s name</li>
-        <li>vet’s RCVS number</li>
-        <li>unique reference number for laboratory test results</li>
-      </ul>
+		  {% if dateOfTestingEnabled %}
+          <h2 id="information-youll-need-to-provide" class="govuk-heading-m">Information you’ll need to provide</h2>
+
+          <p class="govuk-body" >When you claim you’ll need to share the:</p>
+
+          <ul class="govuk-list govuk-list--bullet">
+            <li>date when the vet last visited the farm to carry out the review</li>
+            <li>date the vet completed endemic disease or condition testing</li>
+            <li>vet’s name</li>
+            <li>vet’s RCVS number</li>
+            <li>laboratory unique reference number (URN) for the test results</li>
+          </ul>
+        {% else %}
+          <h2 id="what-information-youll-need-to-claim" class="govuk-heading-m">What information you’ll need to claim</h2>
+
+          <p class="govuk-body" >When you claim you’ll need to share the:</p>
+
+          <ul class="govuk-list govuk-list--bullet">
+            <li>date of the vet’s last visit to the farm for the review</li>
+            <li>vet’s name</li>
+            <li>vet’s RCVS number</li>
+            <li>unique reference number for laboratory test results</li>
+          </ul>
+        {% endif %}
   
       <p class="govuk-body">The summary the vet will give you will include this information.</p>
       
