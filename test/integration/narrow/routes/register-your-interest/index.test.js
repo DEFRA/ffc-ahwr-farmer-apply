@@ -66,7 +66,7 @@ describe('Farmer apply "Enter your business email address" page', () => {
 
       expect(res.statusCode).toBe(200)
       const $ = cheerio.load(res.payload)
-      expect($('.govuk-heading-l').first().text()).toEqual('Register your interest in a health and welfare review of your livestock')
+      expect($('.govuk-heading-l').first().text()).toEqual('Register your interest in an annual health and welfare review of your livestock')
       expect($('.govuk-heading-body').first().text()).toEqual('To register your interest in applying for a review, enter the main business email address of the business registering. This is the main business email address linked to the business in your Rural Payments account.')
       expect($('title').text()).toEqual(serviceName)
       expectPhaseBanner.ok($)
