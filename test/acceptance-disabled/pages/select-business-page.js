@@ -36,7 +36,7 @@ const SUCCESS_MESSAGE = '.govuk-panel__title'
 const ACCURATE_ANSWER = 'Check your answers'
 const AGREED = 'declaration'
 const REVIEW_AGREED = 'agreement'
-const TERMS = 'Accept the terms'
+const TERMS = 'Annual health and welfare review of livestock terms and conditions'
 const MESSAGE = 'Application complete'
 const LIVESTOCK_NUMBER = 'eligible for funding'
 //DefraID
