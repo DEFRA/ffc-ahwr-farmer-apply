@@ -18,7 +18,7 @@ Optional:
 
 - Kubernetes
 - Helm
-
+### Checked sign commit
 ### Environment variables
 
 The following environment variables are required by the application.

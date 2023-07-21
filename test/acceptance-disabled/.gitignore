@@ -5,3 +5,4 @@ reporter
 /.env.dev
 /.env.test
 /.env.pre
+/.env
