@@ -9,7 +9,7 @@ When(/^user start the application$/, async function () {
   await selectBusinessPage.clickOnStartButton()
 
 })
-When(/^user login with either email\(for magic link\) or crn and password\(for DefraId\)$/,async function () {
+When(/^user login with crn and password\(for DefraId\)$/, async function () {
   await selectBusinessPage.signInWithDefraId()
 });
 
@@ -78,4 +78,3 @@ Then(/^user complete the application$/, async function () {
 Then(/^user should see successful message$/, async function () {
   await selectBusinessPage.successfulMessage()
 })
-
