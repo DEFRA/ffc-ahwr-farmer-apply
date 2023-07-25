@@ -3,6 +3,9 @@
   "version": "0.33.0",
   "description": "Acceptance tests for FFC Farmer Apply Service",
   "homepage": "https://github.com/DEFRA/ffc-ahwr-farmer-apply",
+  "contributors": [
+    "Ibrahim Adekanmi ibrahim.adekanmi@kainos.com"
+  ],
   "keywords": [
     "wdio",
     "webdriver",
@@ -16,7 +19,7 @@
     "test:smoke:snd": "ENV=snd wdio wdio.config.js  --cucumberOpts.tagExpression='@smoke'",
     "test:smoke:dev": "ENV=dev wdio wdio.config.js  --cucumberOpts.tagExpression='@smoke'",
     "test:smoke:test": "ENV=test wdio wdio.config.js  --cucumberOpts.tagExpression='@smoke'",
-    "test:smoke:pre": "ENV=pre wdio wdio.config.js  --cucumberOpts.tagExpression='@smoke'",
+    "test:a11y": "ENV=test wdio wdio.config.js  --cucumberOpts.tagExpression='@accessibility'",
     "generate-report:allure": "allure generate allure-results --clean",
     "generate-report:cucumber-html": "node reporter/cucumber-report.js",
     "test:debug": "node --inspect-brk=0.0.0.0 ./node_modules/@wdio/cli/bin/wdio.js wdio.bs.config.js"
@@ -26,7 +29,7 @@
     "@babel/plugin-proposal-export-default-from": "^7.5.2",
     "@babel/preset-env": "^7.4.2",
     "@babel/register": "^7.4.0",
-    "@cucumber/cucumber": "^9.0.0",
+    "@cucumber/cucumber": "^9.0.1",
     "@hapi/wreck": "^18.0.1",
     "@log4js-node/log4js-api": "^1.0.2",
     "@rpii/wdio-report-events": "^0.2.0",
@@ -59,7 +62,7 @@
     "@rpii/wdio-html-reporter": "^7.0.0",
     "@wdio/allure-reporter": "^7.16.3",
     "@wdio/cli": "^7.14.0",
-    "@wdio/cucumber-framework": "^7.13.2",
+    "@wdio/cucumber-framework": "^7.18.0",
     "@wdio/local-runner": "^7.13.2",
     "@wdio/spec-reporter": "^7.13.2",
     "allure-commandline": "^2.13.8",

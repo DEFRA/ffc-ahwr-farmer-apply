@@ -30,7 +30,7 @@ exports.config = {
         osVersion: '10',
         browserVersion: '112.0',
         browserName: 'Chrome',
-        'buildName': 'Chrome 112 compatibility - ' + timeStamp,
+        'buildName': 'Chrome 112' + timeStamp,
         local: true,
         networkLogs: true,
         seleniumVersion: '3.14.0',

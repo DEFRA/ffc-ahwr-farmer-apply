@@ -10,7 +10,7 @@ When(/^user start the application$/, async function () {
 
 })
 When(/^user login with either email\(for magic link\) or crn and password\(for DefraId\)$/,async function () {
-  await selectBusinessPage.switchBetweenMagicLinkAndDefraId()
+  await selectBusinessPage.signInWithDefraId()
 });
 
 // org-review

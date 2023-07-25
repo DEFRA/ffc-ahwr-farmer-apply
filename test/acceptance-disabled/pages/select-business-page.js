@@ -1,19 +1,9 @@
 const CommonActions = require('./common-actions')
-const getMagicLink = require('../support/get-magic-link')
 require('dotenv').config({ path: `.env.${process.env.ENV}` })
 
 // select business element
 
 const START_BUTTON = 'a[role="button"]'
-const BUSINESS_EMAIL = '1105110119@email.com'
-const RPA_CONTACT = '.govuk-details'
-const PAGE_TITLE = 'Annual health and welfare review of livestock'
-const SELECT_BUSINESS = 'Which business'
-const BUSINESS_NAME = 'Farm'
-const CONTACT = 'Telephone'
-const BUSINESS_CHECK_BUTTON = '#whichBusiness'
-const NO_BUSINESS_CONTENT = '.govuk-details__text'
-const BUSINESS_LIST = '[for="whichBusiness"]'
 // org-review element
 const CHECK_DETAILS = '.govuk-heading-l'
 const FARMER_DETAILS = '.govuk-summary-list'
@@ -38,19 +28,14 @@ const SUCCESS_MESSAGE = '.govuk-panel__title'
 const ACCURATE_ANSWER = 'Check your answers'
 const AGREED = 'declaration'
 const REVIEW_AGREED = 'agreement'
-const TERMS = 'Accept the terms'
+const TERMS = 'Annual health and welfare review of livestock terms and conditions'
 const MESSAGE = 'Application complete'
 const LIVESTOCK_NUMBER = 'eligible for funding'
 //DefraID
 const DEFRA_CRN = '#crn'
 const DEFRA_PASSWORD = '#password'
-const CRN_HINT = '[id="crn-hint"]'
 const SIGN_IN_BUTTON = '[type="submit"]'
-const MAGIC_LINK_EMAIL ='1105110119@email.com'
-const EMAIL_INPUT = '#email'
-const ALT_CRN_HINT = '#header'
 const CONTINUE = '#submit'
-const EMAIL_HINT ='[id="email-hint"]'
 
 class SelectBusinessPage extends CommonActions {
 
@@ -59,41 +44,6 @@ class SelectBusinessPage extends CommonActions {
   }
   async clickOnStartButton () {
     await this.clickOn(START_BUTTON)
-  }
-  async magicLinkUrl () {
-    const sleep = (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitTimeInMs))
-    await sleep(20000)
-    const magicLink = await getMagicLink(BUSINESS_EMAIL)
-    await browser.url(magicLink)
-    await this.urlContain(BUSINESS_EMAIL)
-  }
-
-  async pageTitle () {
-    await this.getPageTitle(PAGE_TITLE)
-  }
-
-  async businessPage () {
-    await this.elementToContainText(CHECK_DETAILS, SELECT_BUSINESS)
-  }
-
-  async listOfBusiness () {
-    await this.elementToContainText(BUSINESS_LIST, BUSINESS_NAME)
-  }
-
-  async selectBusiness () {
-    await this.clickOn(BUSINESS_CHECK_BUTTON)
-  }
-
-  async checkContact () {
-    await this.clickOn(RPA_CONTACT)
-  }
-
-  async contactDetails () {
-    await this.elementToContainText(NO_BUSINESS_CONTENT, CONTACT)
-  }
-
-  async startApplication () {
-    await this.clickOn(CONTINUE_BUTTON)
   }
 
   // org review
@@ -192,29 +142,13 @@ class SelectBusinessPage extends CommonActions {
   async submit(){
     await this.clickOn(CONTINUE)
   }
-  async inputCredentials (credential) {
-    await this.sendKey(EMAIL_INPUT, credential)
-  }
-  async switchBetweenMagicLinkAndDefraId () {
-    const sleep = (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitTimeInMs))
-    await sleep(20000)
-    if (await this.isElementExist(EMAIL_HINT)){
-      await this.inputCredentials(MAGIC_LINK_EMAIL)
-      await this.submit()
-      await this.magicLinkUrl ()
-      await this.pageTitle ()
-      await this.businessPage ()
-      await this.listOfBusiness ()
-      await this.selectBusiness ()
-      await this.checkContact ()
-      await this.contactDetails ()
-      await this.startApplication ()
-    } else {
-      await this.inputValidCrn(process.env.CRN_USERNAME)
-      await this.inputPassword(process.env.CRN_PASSWORD)
-      await this.signInButton()
-    }
 
-   }
+  async signInWithDefraId () {
+    const sleep = (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitTimeInMs))
+    await sleep(10000)
+    await this.inputValidCrn(process.env.CRN_USERNAME)
+    await this.inputPassword(process.env.CRN_PASSWORD)
+    await this.signInButton()
+  }
 }
 module.exports = SelectBusinessPage
