@@ -1,6 +1,3 @@
 resources:
   queues:
-    - name: applicationRequest
-    - name: applicationResponse
-      enableSessions: true
     - name: event
