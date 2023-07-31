@@ -29,6 +29,9 @@ describe('Farmer apply "Registration complete" page', () => {
             getPersonSummaryUrl: 'dummy-get-person-summary-url',
             getOrganisationPermissionsUrl: 'dummy-get-organisation-permissions-url',
             getOrganisationUrl: 'dummy-get-organisation-url'
+          },
+          registerYourInterest: {
+            enabled: true
           }
         }
       }))
@@ -70,6 +73,9 @@ describe('Farmer apply "Registration complete" page', () => {
             getPersonSummaryUrl: 'dummy-get-person-summary-url',
             getOrganisationPermissionsUrl: 'dummy-get-organisation-permissions-url',
             getOrganisationUrl: 'dummy-get-organisation-url'
+          },
+          registerYourInterest: {
+            enabled: true
           }
         }
       }))
