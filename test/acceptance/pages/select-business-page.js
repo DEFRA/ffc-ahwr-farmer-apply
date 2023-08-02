@@ -85,6 +85,8 @@ class SelectBusinessPage extends CommonActions {
 
   // org review
   async singleUserBusinessDetail () {
+    const sleep = (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitTimeInMs))
+    await sleep(10000)
     await this.elementTextShouldBe(CHECK_DETAILS, DETAILS)
   }
 
