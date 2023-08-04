@@ -23,7 +23,9 @@ const REVIEW = 'Which livestock do you want a review for?'
 // select livestock page
 const WHICH_REVIEW = '.govuk-fieldset__heading'
 const LIVESTOCK_TYPE = '[data-module="govuk-radios"]'
-const SELECT_ANIMAL = '#whichReview-3'
+const SHEEP = '#whichReview-3'
+const DAIRY_CATTLE = '#whichReview-2'
+const BEEF_CATTLE = '#whichReview'
 const LIVESTOCK = 'Sheep'
 // eligibility page
 const REQUIRE_LIVESTOCK_NUMBER = '#eligibleSpecies-hint'
@@ -111,7 +113,9 @@ class SelectBusinessPage extends CommonActions {
     await this.elementToContainText(LIVESTOCK_TYPE, LIVESTOCK)
   }
 
-  async livestockToReview () { await this.clickOn(SELECT_ANIMAL) }
+  async sheepReview() { await this.clickOn(SHEEP) }
+  async beefCattleReview () { await this.clickOn(BEEF_CATTLE) }
+  async dairyCattleReview () { await this.clickOn(DAIRY_CATTLE) }
 
   async continueTheApplication () { await this.clickOn(CONTINUE_BUTTON) }
 
