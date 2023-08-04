@@ -15,7 +15,7 @@ Feature: select business
   Scenario: user select the livestock to apply
     When user is on the livestock page
     And user check if livestock are listed
-    And user choose sheep for review
+    And user choose dairy cattle for review
     Then User continue the application
 
   Scenario: users animal eligibility
