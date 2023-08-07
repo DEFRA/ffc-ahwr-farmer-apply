@@ -32,6 +32,8 @@ module.exports = {
       server.route(routes)
       if (config.registerYourInterest.enabled === true) {
         server.route(registerYourInterestRoutes)
+      } else {
+        server.route(require('../routes/register-your-interest/index'))
       }
     }
   }

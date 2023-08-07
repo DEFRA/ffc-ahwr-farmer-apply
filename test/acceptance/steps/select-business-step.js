@@ -36,8 +36,14 @@ When(/^user is on the livestock page$/, async function () {
 When(/^user check if livestock are listed$/, async function () {
   await selectBusinessPage.livestockList()
 })
-When(/^user choose the livestock to review$/, async function () {
-  await selectBusinessPage.livestockToReview()
+When(/^user choose dairy cattle for review$/, async function () {
+  await selectBusinessPage.sheepReview()
+})
+When(/^user choose beef cattle for review$/, async function () {
+  await selectBusinessPage.beefCattleReview ()
+})
+When(/^user choose sheep for review$/, async function () {
+  await selectBusinessPage.dairyCattleReview ()
 })
 Then(/^User continue the application$/, async function () {
   await selectBusinessPage.continueTheApplication()
