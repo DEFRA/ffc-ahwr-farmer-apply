@@ -79,6 +79,8 @@ module.exports = [{
           case err instanceof InvalidStateError:
             return h.redirect(auth.requestAuthorizationCodeUrl(session, request))
           case err instanceof AlreadyAppliedError:
+            // Raise event 
+            // Return user to new view (with data)
           case err instanceof InvalidPermissionsError:
           case err instanceof NoEligibleCphError:
             break

@@ -66,7 +66,10 @@ const schema = Joi.object({
   latestTermsAndConditionsUri: Joi.string().required(),
   dateOfTesting: {
     enabled: Joi.bool().default(false)
-  }
+  },
+  tenMonthRule: {
+    enabled: Joi.bool().default(false)
+  },
 })
 
 const config = {
@@ -123,6 +126,9 @@ const config = {
   latestTermsAndConditionsUri: process.env.TERMS_AND_CONDITIONS_URL,
   dateOfTesting: {
     enabled: process.env.DATE_OF_TESTING_ENABLED
+  },
+  tenMonthRule: {
+    enabled: process.env.TEN_MONTH_RULE_ENABLED
   }
 }
 
