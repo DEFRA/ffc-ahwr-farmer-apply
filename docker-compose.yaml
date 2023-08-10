@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   ffc-ahwr-farmer-apply:
@@ -44,15 +44,14 @@ services:
       RPA_GET_ORGANISATION_PERMISSIONS_URL: ${RPA_GET_ORGANISATION_PERMISSIONS_URL:-/rural-payments-vet-visits/v1/SitiAgriApi/authorisation/organisation/organisationId/authorisation}
       RPA_GET_ORGANISATION_URL: ${RPA_GET_ORGANISATION_URL:-/rural-payments-vet-visits/v1/organisation/organisationId}
       RPA_GET_CPH_NUMBERS_URL: ${RPA_GET_CPH_NUMBERS_URL:-/rural-payments-vet-visits/v1/SitiAgriApi/cph/organisation/organisationId/cph-numbers}
-      APIM_OCP_SUBSCRIPTION_KEY: ${APIM_OCP_SUBSCRIPTION_KEY:-changeme}  
-      APIM_HOST_NAME: ${APIM_HOST_NAME:-https://login.microsoftonline.com}    
-      APIM_OAUTH_PATH: ${APIM_OAUTH_PATH:-/c9d74090-b4e6-4b04-981d-e6757a160812/oauth2/v2.0/token}     
-      APIM_CLIENT_ID: ${APIM_CLIENT_ID:-changeme}   
-      APIM_CLIENT_SECRET: ${APIM_CLIENT_SECRET:-changeme}   
+      APIM_OCP_SUBSCRIPTION_KEY: ${APIM_OCP_SUBSCRIPTION_KEY:-changeme}
+      APIM_HOST_NAME: ${APIM_HOST_NAME:-https://login.microsoftonline.com}
+      APIM_OAUTH_PATH: ${APIM_OAUTH_PATH:-/c9d74090-b4e6-4b04-981d-e6757a160812/oauth2/v2.0/token}
+      APIM_CLIENT_ID: ${APIM_CLIENT_ID:-changeme}
+      APIM_CLIENT_SECRET: ${APIM_CLIENT_SECRET:-changeme}
       APIM_SCOPE: ${APIM_SCOPE:-api://dev-futuretrade-int.defra.gov.uk/.default}
       NOTIFY_TEMPLATE_ID_FARMER_ACCESS_GRANTED: ${NOTIFY_TEMPLATE_ID_FARMER_ACCESS_GRANTED:-77d4fc21-1c23-42a3-8bbb-123a31e4a356}
       NOTIFY_TEMPLATE_ID_FARMER_ACCESS_NOT_GRANTED: ${NOTIFY_TEMPLATE_ID_FARMER_ACCESS_NOT_GRANTED:-79037e4a-7bfc-4369-825d-b41127118d1f}
       TERMS_AND_CONDITIONS_URL: ${TERMS_AND_CONDITIONS_URL:-http://localhost:3000/apply/terms/v3}
       DATE_OF_TESTING_ENABLED: ${DATE_OF_TESTING_ENABLED:-false}
-      TEN_MONTH_RULE: ${TEN_MONTH_RULE"-false}
-      
+      TEN_MONTH_RULE: ${TEN_MONTH_RULE:-false}
