@@ -69,7 +69,7 @@ const schema = Joi.object({
   },
   tenMonthRule: {
     enabled: Joi.bool().default(false)
-  },
+  }
 })
 
 const config = {
