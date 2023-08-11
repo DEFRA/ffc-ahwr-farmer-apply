@@ -17,6 +17,7 @@
     "test:smoke:dev": "ENV=dev wdio wdio.config.js  --cucumberOpts.tagExpression='@smoke'",
     "test:smoke:test": "ENV=test wdio wdio.config.js  --cucumberOpts.tagExpression='@smoke'",
     "test:smoke:pre": "ENV=pre wdio wdio.config.js  --cucumberOpts.tagExpression='@smoke'",
+    "test:a11y": "ENV=test wdio wdio.config.js  --cucumberOpts.tagExpression='@accessibility'",
     "generate-report:allure": "allure generate allure-results --clean",
     "generate-report:cucumber-html": "node reporter/cucumber-report.js",
     "test:debug": "node --inspect-brk=0.0.0.0 ./node_modules/@wdio/cli/bin/wdio.js wdio.bs.config.js"
@@ -45,6 +46,7 @@
     "ecstatic": "^4.1.4",
     "hosted-git-info": "^4.0.2",
     "joi": "^17.9.1",
+    "lodash": "^4.17.21",
     "moment": "^2.29.4",
     "selenium": "^2.20.0",
     "selenium-server": "^3.141.59",
@@ -54,6 +56,7 @@
     "ws": "^7.2.0"
   },
   "devDependencies": {
+    "@axe-core/webdriverio": "^4.7.3",
     "@babel/core": "^7.4.0",
     "@rpii/wdio-html-reporter": "^7.0.0",
     "@wdio/allure-reporter": "^7.16.3",

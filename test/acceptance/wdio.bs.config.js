@@ -8,6 +8,7 @@ const _ = require('lodash')
 const timeStamp = new Date().toLocaleString()
 const envRoot = (process.env.TEST_ENVIRONMENT_ROOT_URL || 'http://host.docker.internal:3004')
 const chromeArgs = process.env.CHROME_ARGS ? process.env.CHROME_ARGS.split(' ') : []
+require('dotenv').config({ path: `.env.${process.env.ENV}` })
 const maxInstances = process.env.MAX_INSTANCES ? Number(process.env.MAX_INSTANCES) : 5
 const user = process.env.BROWSERSTACK_USERNAME
 const key = process.env.BROWSERSTACK_ACCESS_KEY

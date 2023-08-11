@@ -1,4 +1,5 @@
 const CommonActions = require('./common-actions')
+require('dotenv').config({ path: `.env.${process.env.ENV}` })
 
 // select business element
 
@@ -183,8 +184,7 @@ class SelectBusinessPage extends CommonActions {
     await this.sendKey(EMAIL_INPUT, credential)
   }
   async signInWithDefraId () {
-    const sleep = (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitTimeInMs))
-    await sleep(10000)
+
     await this.inputValidCrn(process.env.CRN_USERNAME)
     await this.inputPassword(process.env.CRN_PASSWORD)
     await this.signInButton()
