@@ -243,7 +243,7 @@ exports.config = {
   // Hooks
   // =====
   onPrepare: function (config, capabilities) {
-    if (automationEnabled == false) {
+    if (automationEnabled === 'false') {
       console.log('Automation tests disable, exiting tests.')
       process.exit(0)
     }
