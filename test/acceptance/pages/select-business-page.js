@@ -26,7 +26,7 @@ const LIVESTOCK_TYPE = '[data-module="govuk-radios"]'
 const SHEEP = '#whichReview-3'
 const DAIRY_CATTLE = '#whichReview-2'
 const BEEF_CATTLE = '#whichReview'
-const PIG= '#whichReview4'
+const PIG= '#whichReview-4'
 const LIVESTOCK = 'Sheep'
 // eligibility page
 const REQUIRE_LIVESTOCK_NUMBER = '#eligibleSpecies-hint'
