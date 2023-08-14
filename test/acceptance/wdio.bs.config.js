@@ -244,7 +244,7 @@ exports.config = {
   // =====
   onPrepare: function (config, capabilities) {
     console.log(`automationEnabled is ${automationEnabled}`)
-    if (!automationEnabled) {
+    if (automationEnabled === false) {
       console.log('Turning off automation')
       process.exit(0)
     }
