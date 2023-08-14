@@ -26,7 +26,7 @@ const LIVESTOCK_TYPE = '[data-module="govuk-radios"]'
 const SHEEP = '#whichReview-3'
 const DAIRY_CATTLE = '#whichReview-2'
 const BEEF_CATTLE = '#whichReview'
-const PIG= '#whichReview-4'
+const PIGS = '#whichReview-4'
 const LIVESTOCK = 'Sheep'
 // eligibility page
 const REQUIRE_LIVESTOCK_NUMBER = '#eligibleSpecies-hint'
@@ -117,7 +117,7 @@ class SelectBusinessPage extends CommonActions {
   async sheepReview() { await this.clickOn(SHEEP) }
   async beefCattleReview () { await this.clickOn(BEEF_CATTLE) }
   async dairyCattleReview () { await this.clickOn(DAIRY_CATTLE) }
-  async pigCattleReview () { await this.clickOn(PIG) }
+  async pigsReview () { await this.clickOn(PIGS) }
 
   async continueTheApplication () { await this.clickOn(CONTINUE_BUTTON) }
 
