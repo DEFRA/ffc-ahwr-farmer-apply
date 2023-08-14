@@ -244,6 +244,10 @@ exports.config = {
   // =====
   onPrepare: function (config, capabilities) {
     console.log(`automationEnabled is ${automationEnabled}`)
+    if (!automationEnabled) {
+      console.log('Turning off automation')
+      process.exit(0)
+    }
     const reportAggregator = new ReportAggregator({
       outputDir: './html-reports/',
       filename: 'acceptance-test-suite-report.html',
