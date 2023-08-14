@@ -243,8 +243,8 @@ exports.config = {
   // Hooks
   // =====
   onPrepare: function (config, capabilities) {
-    console.log(`automationEnabled is ${automationEnabled}`)
-    if (automationEnabled === false) {
+    console.log(`automationEnabled is ${typeof automationEnabled}  ${automationEnabled}`)
+    if (automationEnabled === 'false') {
       console.log('Turning off automation')
       process.exit(0)
     }
