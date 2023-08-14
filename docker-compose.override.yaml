@@ -8,7 +8,9 @@ services:
     build:
       target: development
     image: ffc-ahwr-farmer-apply-development
-    container_name: ffc-ahwr-farmer-apply-development    
+    container_name: ffc-ahwr-farmer-apply-development
+    environment:
+      NODE_TLS_REJECT_UNAUTHORIZED: 0        
     ports:
       - "3000:3000"
       - "9229:9229"    
