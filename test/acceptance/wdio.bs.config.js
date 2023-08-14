@@ -243,9 +243,8 @@ exports.config = {
   // Hooks
   // =====
   onPrepare: function (config, capabilities) {
-    console.log(`automationEnabled is ${typeof automationEnabled}  ${automationEnabled}`)
-    if (automationEnabled === 'false') {
-      console.log('Turning off automation')
+    if (automationEnabled == false) {
+      console.log('Automation tests disable, exiting tests.')
       process.exit(0)
     }
     const reportAggregator = new ReportAggregator({
