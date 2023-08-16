@@ -24,6 +24,7 @@ const REVIEW = 'Which livestock do you want a review for?'
 const WHICH_REVIEW = '.govuk-fieldset__heading'
 const LIVESTOCK_TYPE = '[data-module="govuk-radios"]'
 const SHEEP = '#whichReview-3'
+const PIGS = '#whichReview-4'
 const DAIRY_CATTLE = '#whichReview-2'
 const BEEF_CATTLE = '#whichReview'
 const LIVESTOCK = 'Sheep'
@@ -116,6 +117,7 @@ class SelectBusinessPage extends CommonActions {
   async sheepReview() { await this.clickOn(SHEEP) }
   async beefCattleReview () { await this.clickOn(BEEF_CATTLE) }
   async dairyCattleReview () { await this.clickOn(DAIRY_CATTLE) }
+  async pigsReview () { await this.clickOn(PIGS) }
 
   async continueTheApplication () { await this.clickOn(CONTINUE_BUTTON) }
 
