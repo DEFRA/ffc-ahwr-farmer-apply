@@ -20,12 +20,12 @@ function applicationForBusinessInStateToApply (latestApplicationsForSbi) {
   }
   const latestApplication = getLatestApplication(latestApplicationsForSbi)
   if (validStatusForApplication.includes(latestApplication.statusId)) {
-    // latest application is either WITHDRAWN or IN_CHECK so okay to continue
+    // latest application is either WITHDRAWN or NOT_AGREED so okay to continue
     console.log(`${new Date().toISOString()} Business is eligible to apply : ${JSON.stringify({
         sbi: latestApplication.sbi
       })}`)
   } else if (latestApplication.statusId === status.AGREED) {
-    // if agreement is still AGREED customer must claim or WITHDRAW
+    // if agreement is still AGREED customer must claim or withdraw
     throw new OutstandingAgreementError('Customer must claim or withdraw agreement before creating another.')
   } else {
     // for any other status check 10 month rule
@@ -50,7 +50,7 @@ function tenMonthRule(latestApplication) {
       console.log(`${new Date().toISOString()} Business is not eligible to apply due to 10 month restrictions: ${JSON.stringify({
         sbi: latestApplication.sbi
       })}`)
-      throw new CannotApplyBeforeTenMonthsError('ahhhhhh', endDate)
+      throw new CannotApplyBeforeTenMonthsError('Business is not eligible to apply due to 10 month restrictions since the last agreement.', endDate)
     }
   }
 }
