@@ -1,70 +1,53 @@
 const applicationApi = require('./application-api')
 const config = require('../config')
 const status = require('../constants/status')
-const { TenMonthEligibleApplicationError } = require('../exceptions')
-// const validStatusForApplication = config.tenMonthRule.enabled === true ? [status.WITHDRAWN] : [status.NOT_AGREED, status.WITHDRAWN]
 const validStatusForApplication = [status.NOT_AGREED, status.WITHDRAWN]
+const { CannotReapplyTimeLimitError, OutstandingAgreementError } = require('../exceptions')
+const tenMonthRuleFeature = require('../config').tenMonthRule
 
 async function businessEligibleToApply (sbi) {
   const latestApplicationsForSbi = await applicationApi.getLatestApplicationsBySbi(sbi)
   if (latestApplicationsForSbi && Array.isArray(latestApplicationsForSbi)) {
-    const businessIsEligible = latestApplicationsForSbi.length === 0 ? true : applicationForBusinessInStateToApply(getLatestApplication(latestApplicationsForSbi))
-    return businessIsEligible
+    applicationForBusinessInStateToApply(latestApplicationsForSbi)
   } else {
-    return false
+    throw new Error('Bad response from API')
   }
 }
 
-async function businessEligibleToApplyWithDate (sbi) {
-  const latestApplicationsForSbi = await applicationApi.getLatestApplicationsBySbi(sbi)
-  let businessIsEligible
-  let dateCanReapply
-  if (latestApplicationsForSbi && Array.isArray(latestApplicationsForSbi)) {
-    const latestApplication = getLatestApplication(latestApplicationsForSbi)
-    // This logic to be expanded...
-    businessIsEligible = applicationPastReapplyTimeLimit(latestApplication) && applicationForBusinessInStateToApply(latestApplication)
-    dateCanReapply = applicationPastReapplyTimeLimit(latestApplication) ? calcReapplicationDate(latestApplication) : new Date()
-  } 
-  
-  if(!businessIsEligible)
-  {
-    throw new TenMonthEligibleApplicationError('Blah Blah 10 month error',businessIsEligible, dateCanReapply )
+function applicationForBusinessInStateToApply (latestApplicationsForSbi) {
+  if (latestApplicationsForSbi.length === 0) {
+    // no existing applications so continue
+    return
   }
-}
-
-// Need to update and / or add log about date
-function applicationForBusinessInStateToApply (latestApplication) {
+  const latestApplication = getLatestApplication(latestApplicationsForSbi)
   if (validStatusForApplication.includes(latestApplication.statusId)) {
+    // latest application is either WITHDRAWN or NOT_AGREED so okay to continue
     console.log(`${new Date().toISOString()} Business is eligible to apply : ${JSON.stringify({
         sbi: latestApplication.sbi
       })}`)
-    return true
+  } else if (latestApplication.statusId === status.AGREED) {
+    // if agreement is still AGREED customer must claim or withdraw
+    throw new OutstandingAgreementError('Customer must claim or withdraw agreement before creating another.')
   } else {
-    console.log(`${new Date().toISOString()} Business is not eligible to apply : ${JSON.stringify({
-        sbi: latestApplication.sbi
-    })}`)
-    return false
+    // for any other status check 10 month rule
+    tenMonthRule(latestApplication)
   }
 }
 
-function applicationPastReapplyTimeLimit (application) {
-  const startDate = new Date(application.createdAt)
-  const endDate = new Date(startDate)
-  endDate.setMonth(endDate.getMonth() + config.reapplyTimeLimitMonths)
-  endDate.setHours(24, 0, 0, 0) // set to midnight of agreement end day
-  console.log(`Checking if agreement with reference ${application.reference}, start date of ${startDate} and end date of ${endDate} has exceeded the application reapply wait time of ${config.reapplyTimeLimitMonths} months.`)
-  return Date.now() > endDate
-}
-
-function calcReapplicationDate (application) {
-  const startDate = new Date(application.createdAt)
-  const endDate = new Date(startDate)
-  endDate.setMonth(endDate.getMonth() + config.reapplyTimeLimitMonths)
-  endDate.setHours(24, 0, 0, 0) // set to midnight of agreement end day
-  console.log(`Checking if agreement with reference ${application.reference}, start date of ${startDate} and end date of ${endDate} has exceeded the application reapply wait time of ${config.reapplyTimeLimitMonths} months.`)
-  const currentDate = Date.now()
-  if (currentDate > endDate) {
-    return endDate
+// can easily abstract to a new function file so it can be easily tested
+function tenMonthRule (latestApplication) {
+  if (tenMonthRuleFeature.enabled) {
+    const startDate = new Date(latestApplication.createdAt)
+    const endDate = new Date(startDate)
+    endDate.setMonth(endDate.getMonth() + config.reapplyTimeLimitMonths)
+    endDate.setHours(24, 0, 0, 0) // set to midnight of agreement end day
+    console.log(`Checking if agreement with reference ${latestApplication.reference}, start date of ${startDate} and end date of ${endDate} has exceeded the application reapply wait time of ${config.reapplyTimeLimitMonths} months.`)
+    if (Date.now() < endDate) {
+      console.log(`${new Date().toISOString()} Business is not eligible to apply due to ${config.reapplyTimeLimitMonths} month restrictions: ${JSON.stringify({
+        sbi: latestApplication.sbi
+      })}`)
+      throw new CannotReapplyTimeLimitError('Business is not eligible to apply due to 10 month restrictions since the last agreement.', endDate)
+    }
   }
 }
 
@@ -75,6 +58,5 @@ function getLatestApplication (latestApplicationsForSbi) {
 }
 
 module.exports = {
-  businessEligibleToApply,
-  businessEligibleToApplyWithDate
+  businessEligibleToApply
 }
