@@ -1,6 +1,6 @@
 let businessEligibleToApply
 
-describe('Business Eligble to Apply Tests', () => {
+describe('Business Eligible to Apply Tests', () => {
   let applicationApiMock
 
   beforeAll(() => {

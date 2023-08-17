@@ -11,10 +11,13 @@
       <p class="govuk-body">{{ organisationName }}{{ sbiText }} has already applied for an annual health and welfare review of livestock.</p>
     
       <h2 class="govuk-heading-m">What to do next</h2>
-      
-      <p>To find out when you can apply again, read the <a id="guidanceLink" href='{{guidanceLink}}'>guidance on getting a funded annual health and welfare review of your livestock</a></p>
-    {% endif %}
-
+        {% if showReapplicationDate %}
+          <p>You'll be eligible to apply for another review on {{ showReapplicationDate }}</a></p>
+        {% else %}
+          <p>To find out when you can apply again, read the <a id="guidanceLink" href='{{guidanceLink}}'>guidance on getting a funded annual health and welfare review of your livestock</a></p>
+        {% endif %}
+      {% endif %}
+    
     {% if permissionError %}
       <p class="govuk-body">You do not have the required permission to act for {{ organisationName }}{{ sbiText }}.</p>
     
