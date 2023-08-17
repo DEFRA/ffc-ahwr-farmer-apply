@@ -39,6 +39,7 @@ function getLatestApplication (latestApplicationsForSbi) {
   })
 }
 
+// can easily abstract to a new function file so it can be easily tested
 function tenMonthRule(latestApplication) {
   if (tenMonthRuleFeature.enabled) {
     const startDate = new Date(latestApplication.createdAt)
