@@ -7,12 +7,20 @@
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l">You cannot apply for a livestock review for this business</h1>
 
-    {% if alreadyAppliedError %}
+    {% if outstandingAgreementError %}
       <p class="govuk-body">{{ organisationName }}{{ sbiText }} has already applied for an annual health and welfare review of livestock.</p>
     
-      <h2 class="govuk-heading-m">What to do next</h2>
+      <p>You either withdraw or complete a claim for this agreement before creating another.</p>
       
-      <p>To find out when you can apply again, read the <a id="guidanceLink" href='{{guidanceLink}}'>guidance on getting a funded annual health and welfare review of your livestock</a></p>
+      <p>Contact the Rural Payments Agenecy (RPA). </p>
+    {% endif %}
+
+    {% if tenMonthRuleError %}
+      <p class="govuk-body">{{ organisationName }}{{ sbiText }} has already applied for an annual health and welfare review of livestock.</p>
+    
+      <p>You'll be eligible to apply for another review on {{nextApplicationDate}}.</p>
+      
+      <p>If you want a review for a different type of livestock, contact the Rural Payments Agenecy (RPA). </p>
     {% endif %}
 
     {% if permissionError %}

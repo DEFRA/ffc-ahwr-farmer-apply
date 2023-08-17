@@ -6,7 +6,7 @@ const config = require('../config')
 const { farmerApply } = require('../constants/user-types')
 const { getPersonSummary, getPersonName, organisationIsEligible, getOrganisationAddress, cphCheck } = require('../api-requests/rpa-api')
 const businessEligibleToApply = require('../api-requests/business-eligble-to-apply')
-const { InvalidPermissionsError, AlreadyAppliedError, NoEligibleCphError, InvalidStateError } = require('../exceptions')
+const { InvalidPermissionsError, AlreadyAppliedError, NoEligibleCphError, InvalidStateError, CannotApplyBeforeTenMonthsError, OutstandingAgreementError } = require('../exceptions')
 const { raiseIneligibilityEvent } = require('../event')
 
 function setOrganisationSessionData (request, personSummary, organisationSummary) {
@@ -62,11 +62,7 @@ module.exports = [{
 
         await cphCheck.customerMustHaveAtLeastOneValidCph(request, apimAccessToken)
 
-        const businessCanApply = await businessEligibleToApply(organisationSummary.organisation.sbi)
-
-        if (!businessCanApply) {
-          throw new AlreadyAppliedError(`Business with SBI ${organisationSummary.organisation.sbi} is not eligble to apply`)
-        }
+        await businessEligibleToApply(organisationSummary.organisation.sbi)
 
         auth.setAuthCookie(request, personSummary.email, farmerApply)
         return h.redirect(`${config.urlPrefix}/org-review`)
@@ -81,6 +77,8 @@ module.exports = [{
           case err instanceof AlreadyAppliedError:
           case err instanceof InvalidPermissionsError:
           case err instanceof NoEligibleCphError:
+          case err instanceof CannotApplyBeforeTenMonthsError:  
+          case err instanceof OutstandingAgreementError:
             break
           default:
             return h.view('verify-login-failed', {
@@ -100,6 +98,9 @@ module.exports = [{
           alreadyAppliedError: err instanceof AlreadyAppliedError,
           permissionError: err instanceof InvalidPermissionsError,
           cphError: err instanceof NoEligibleCphError,
+          tenMonthRuleError: err instanceof CannotApplyBeforeTenMonthsError,
+          outstandingAgreementError: err instanceof OutstandingAgreementError,
+          nextApplicationDate: err.nextApplicationDate,
           hasMultipleBusineses: attachedToMultipleBusinesses,
           backLink: auth.requestAuthorizationCodeUrl(session, request),
           sbiText: organisation?.sbi !== undefined ? ` - SBI ${organisation.sbi}` : null,
