@@ -1,6 +1,7 @@
 const applicationApi = require('./application-api')
 const config = require('../config')
 const status = require('../constants/status')
+const { TenMonthEligibleApplicationError } = require('../exceptions')
 // const validStatusForApplication = config.tenMonthRule.enabled === true ? [status.WITHDRAWN] : [status.NOT_AGREED, status.WITHDRAWN]
 const validStatusForApplication = [status.NOT_AGREED, status.WITHDRAWN]
 
@@ -23,13 +24,11 @@ async function businessEligibleToApplyWithDate (sbi) {
     // This logic to be expanded...
     businessIsEligible = applicationPastReapplyTimeLimit(latestApplication) && applicationForBusinessInStateToApply(latestApplication)
     dateCanReapply = applicationPastReapplyTimeLimit(latestApplication) ? calcReapplicationDate(latestApplication) : new Date()
-  } else {
-    businessIsEligible = false
-    dateCanReapply = new Date()
-  }
-  return {
-    businessIsEligible,
-    dateCanReapply
+  } 
+  
+  if(!businessIsEligible)
+  {
+    throw new TenMonthEligibleApplicationError('Blah Blah 10 month error',businessIsEligible, dateCanReapply )
   }
 }
 

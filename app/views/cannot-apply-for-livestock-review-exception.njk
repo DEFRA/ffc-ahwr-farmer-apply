@@ -16,8 +16,16 @@
         {% else %}
           <p>To find out when you can apply again, read the <a id="guidanceLink" href='{{guidanceLink}}'>guidance on getting a funded annual health and welfare review of your livestock</a></p>
         {% endif %}
-      {% endif %}
+    {% endif %}
     
+    {% if tenMonthRuleError %}
+
+      <h2 class="govuk-heading-m">What to do next</h2>
+      {% if tenMonthRuleError.tenMonthEligibleDate %}
+      {% endif %}
+
+    {% endif %}
+
     {% if permissionError %}
       <p class="govuk-body">You do not have the required permission to act for {{ organisationName }}{{ sbiText }}.</p>
     

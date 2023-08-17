@@ -6,7 +6,7 @@ const config = require('../config')
 const { farmerApply } = require('../constants/user-types')
 const { getPersonSummary, getPersonName, organisationIsEligible, getOrganisationAddress, cphCheck } = require('../api-requests/rpa-api')
 const { businessEligibleToApply, businessEligibleToApplyWithDate } = require('../api-requests/business-eligble-to-apply')
-const { InvalidPermissionsError, AlreadyAppliedError, NoEligibleCphError, InvalidStateError } = require('../exceptions')
+const { InvalidPermissionsError, AlreadyAppliedError, NoEligibleCphError, InvalidStateError, TenMonthEligibleApplicationError } = require('../exceptions')
 const { raiseIneligibilityEvent } = require('../event')
 
 function setOrganisationSessionData (request, personSummary, organisationSummary) {
@@ -84,6 +84,7 @@ module.exports = config.tenMonthRule.enabled === true
                 return h.redirect(auth.requestAuthorizationCodeUrl(session, request))
               case err instanceof AlreadyAppliedError:
               case err instanceof InvalidPermissionsError:
+              case err instanceof TenMonthEligibleApplicationError:
               case err instanceof NoEligibleCphError:
                 break
               default:
@@ -103,7 +104,7 @@ module.exports = config.tenMonthRule.enabled === true
               ruralPaymentsAgency: config.ruralPaymentsAgency,
               alreadyAppliedError: err instanceof AlreadyAppliedError,
               permissionError: err instanceof InvalidPermissionsError,
-              showReapplicationDate: reapplicationDate || null,
+              tenMonthRuleError: err instanceof TenMonthEligibleApplicationError,
               cphError: err instanceof NoEligibleCphError,
               hasMultipleBusineses: attachedToMultipleBusinesses,
               backLink: auth.requestAuthorizationCodeUrl(session, request),
