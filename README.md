@@ -138,3 +138,6 @@ scripts/test -w
 
 This service uses the
 [FFC CI pipeline](https://github.com/DEFRA/ffc-jenkins-pipeline-library)
+
+#Note: Always make sure to include new parameters in the docker-compose.yaml file before adding  to jenkins
+
