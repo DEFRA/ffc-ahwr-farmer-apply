@@ -128,20 +128,26 @@ class SelectBusinessPage extends CommonActions {
     await this.elementToContainText(LIVESTOCK_TYPE, LIVESTOCK)
   }
   async liveStockReview(LiveStockName) {
-    if (LiveStockName == 'Sheep') {
-      await this.clickOn(SHEEP)
-    }
-    else if (LiveStockName == 'Beef') {
-      this.clickOn(BEEF_CATTLE)
-    }
-    else if (LiveStockName == 'Dairy') {
-      await this.clickOn(DAIRY_CATTLE)
-    }
-    else if (LiveStockName == 'Pigs') {
-      await this.clickOn(PIGS)
+    switch (LiveStockName) {
+      case 'Sheep':
+        await this.clickOn(SHEEP);
+        break;
+      case 'Beef':
+        await this.clickOn(BEEF_CATTLE);
+        break;
+      case 'Dairy':
+        await this.clickOn(DAIRY_CATTLE);
+        break;
+      case 'Pigs':
+        await this.clickOn(PIGS);
+        break;
+      default:
+        // Handle the default case if needed
+        break;
     }
   }
 
+ 
   async continueTheApplication() { await this.clickOn(CONTINUE_BUTTON) }
   // eligible livestock
   async minimumRequirement() {
