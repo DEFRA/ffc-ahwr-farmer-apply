@@ -4,7 +4,7 @@ Feature: select multiple business
   Scenario: Apply with valid cred
     Given the user is on the /apply/start page
     When user start the application
-    And user login with multiple business crn and password(for DefraId)
+    And user login with Multiple business crn and password(for DefraId)
 
   Scenario Outline: org-review page
     When select the <business> for application

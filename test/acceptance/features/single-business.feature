@@ -1,4 +1,4 @@
-@smoke
+@test
 Feature: select business
 
   Scenario: Apply with valid cred

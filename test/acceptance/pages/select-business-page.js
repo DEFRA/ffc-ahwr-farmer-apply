@@ -215,10 +215,10 @@ class SelectBusinessPage extends CommonActions {
   async signInWithDefraId(business) {
     const sleep = (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitTimeInMs))
     await sleep(10000)
-    if (business='Single'){
+    if (business=='Single'){
         await this.inputValidCrn(process.env.CRN_USERNAME)
    
-    }else if (business='Multiple'){
+    }else if (business=='Multiple'){
       await this.inputValidCrn(process.env.CRN_MULTI_USERNAME)
     }
     await this.inputPassword(process.env.CRN_PASSWORD)
