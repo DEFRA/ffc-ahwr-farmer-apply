@@ -44,4 +44,5 @@ data:
   WRECK_HTTP_TIMEOUT_MILLISECONDS: {{ quote .Values.wreckHttp.timeoutMilliseconds }}
   TERMS_AND_CONDITIONS_URL: {{ quote .Values.container.termsAndConditionsUrl }}
   DATE_OF_TESTING_ENABLED: {{ quote .Values.container.dateOfTestingEnabled }}
+  TEN_MONTH_RULE_ENABLED: {{ quote .Values.container.tenMonthRuleEnabled }}
 {{- end -}}
