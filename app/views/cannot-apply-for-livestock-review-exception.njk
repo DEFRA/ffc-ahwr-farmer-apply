@@ -16,21 +16,30 @@
     {% endif %}
     
     {% if outstandingAgreementError %}
-    <p class="govuk-body">{{ organisationName }}{{ sbiText }} has already applied for an annual health and welfare review of livestock.</p>
+      <p class="govuk-body">{{ organisationName }}{{ sbiText }} has already applied for an annual health and welfare review of livestock.</p>
 
-    <p>You either withdraw or complete a claim for this agreement before creating another.</p>
+      <p>You either withdraw or complete a claim for this agreement before creating another.</p>
 
-    <p>Contact the Rural Payments Agenecy (RPA). </p>
-  {% endif %}
+      <p>Contact the Rural Payments Agenecy (RPA). </p>
+    {% endif %}
 
-  {% if reapplyTimeLimitError %}
-    <p class="govuk-body">{{ organisationName }}{{ sbiText }} has already applied for an annual health and welfare review of livestock.</p>
+    {% if reapplyTimeLimitError %}
+      <p class="govuk-body">{{ organisationName }}{{ sbiText }} has already applied for an annual health and welfare review of livestock.</p>
 
-    <p>You'll be eligible to apply for another review on {{nextApplicationDate}}.</p>
+      <p>You'll be eligible to apply for another review on {{nextApplicationDate}}.</p>
 
-    <p>If you want a review for a different type of livestock, contact the Rural Payments Agenecy (RPA). </p>
+      <p>If you want a review for a different type of livestock, contact the Rural Payments Agenecy (RPA). </p>
 
       <h2 class="govuk-heading-m">What to do next</h2>
+    {% endif %}
+  
+  {# Can remove when 10 month rule toggle is removed? #}
+    {% if alreadyAppliedError %}
+      <p class="govuk-body">{{ organisationName }}{{ sbiText }} has already applied for an annual health and welfare review of livestock.</p>
+
+      <h2 class="govuk-heading-m">What to do next</h2>
+
+      <p>To find out when you can apply again, read the <a id="guidanceLink" href='{{guidanceLink}}'>guidance on getting a funded annual health and welfare review of your livestock</a></p>
     {% endif %}
 
     {% if permissionError %}

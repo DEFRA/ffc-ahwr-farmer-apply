@@ -57,6 +57,4 @@ function getLatestApplication (latestApplicationsForSbi) {
   })
 }
 
-module.exports = {
-  businessEligibleToApply
-}
+module.exports = businessEligibleToApply
