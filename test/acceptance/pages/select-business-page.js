@@ -219,6 +219,7 @@ class SelectBusinessPage extends CommonActions {
         await this.inputValidCrn(process.env.CRN_USERNAME)
    
     }else if (business=='Multiple'){
+      console.log(process.env.CRN_MULTI_USERNAME)
       await this.inputValidCrn(process.env.CRN_MULTI_USERNAME)
     }
     await this.inputPassword(process.env.CRN_PASSWORD)
