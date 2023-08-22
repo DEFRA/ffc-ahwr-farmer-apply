@@ -1,10 +1,10 @@
-@smoke
-Feature: Beef Cattle Review
+@test
+Feature: select business
 
   Scenario: Apply with valid cred
     Given the user is on the /apply/start page
     When user start the application
-    And user login with crn and password(for DefraId)
+    And user login with Single business crn and password(for DefraId)
 
   Scenario: org-review page
     When user check the business details
@@ -12,12 +12,15 @@ Feature: Beef Cattle Review
     And user agreed the business details is correct
     Then user continue to next page
 
-  Scenario: user select the livestock to apply
+  Scenario Outline: user select the livestock to apply
     When user is on the livestock page
     And user check if livestock are listed
-    And user choose beef cattle for review
+    And user choose <LiveStockName> cattle for review
     Then User continue the application
-
+    Examples:
+      | LiveStockName |
+      | Sheep         |
+  #choose the livestock from the example, eg:Beef, Diary and Pigs
   Scenario: users animal eligibility
     When user check the minimum number of livestock required to qualify for the review
     And user confirm to meet the requirement
@@ -31,6 +34,8 @@ Feature: Beef Cattle Review
     And user accept the terms and conditions
 #    Then user complete the application
 #    Then user should see successful message
+
+
 
 
 
