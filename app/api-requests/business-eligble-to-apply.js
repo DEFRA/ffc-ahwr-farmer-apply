@@ -46,7 +46,7 @@ function tenMonthRule (latestApplication) {
       console.log(`${new Date().toISOString()} Business is not eligible to apply due to ${config.reapplyTimeLimitMonths} month restrictions: ${JSON.stringify({
         sbi: latestApplication.sbi
       })}`)
-      const formattedEndDate = endDate.toLocaleDateString('en-GB', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
+      const formattedEndDate = endDate.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' })
       throw new CannotReapplyTimeLimitError('Business is not eligible to apply due to 10 month restrictions since the last agreement.', formattedEndDate)
     }
   }
