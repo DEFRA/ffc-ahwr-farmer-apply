@@ -8,6 +8,8 @@ const { getPersonSummary, getPersonName, organisationIsEligible, getOrganisation
 const businessEligibleToApply = require('../api-requests/business-eligble-to-apply')
 const { InvalidPermissionsError, AlreadyAppliedError, NoEligibleCphError, InvalidStateError } = require('../exceptions')
 const { raiseIneligibilityEvent } = require('../event')
+const appInsights = require('applicationinsights')
+
 
 function setOrganisationSessionData (request, personSummary, organisationSummary) {
   const organisation = {
@@ -38,6 +40,7 @@ module.exports = [{
       }),
       failAction (request, h, err) {
         console.log(`Validation error caught during DEFRA ID redirect - ${err.message}.`)
+        appInsights.defaultClient.trackException({exception: err})
         return h.view('verify-login-failed', {
           backLink: auth.requestAuthorizationCodeUrl(session, request),
           ruralPaymentsAgency: config.ruralPaymentsAgency
@@ -69,6 +72,11 @@ module.exports = [{
         }
 
         auth.setAuthCookie(request, personSummary.email, farmerApply)
+        appInsights.defaultClient.trackEvent({ name:"login", properties: {
+          "sbi" : organisationSummary.organisation.sbi,
+          "crn" : session.getCustomer(request, sessionKeys.customer.crn),
+          "email" : personSummary.email
+        } })
         return h.redirect(`${config.urlPrefix}/org-review`)
       } catch (err) {
         console.error(`Received error with name ${err.name} and message ${err.message}.`)
