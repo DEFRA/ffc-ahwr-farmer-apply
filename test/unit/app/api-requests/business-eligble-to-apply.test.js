@@ -190,11 +190,9 @@ describe('Business Eligible to Apply Tests', () => {
               ]
             }
           ])('Status is 3, 4, 5, 6, 8, 9 or 10', async ({ latestApplications }) => {
-            // Need to expand this
             const SBI = 123456789
             applicationApiMock.getLatestApplicationsBySbi.mockResolvedValueOnce(latestApplications)
             await expect(businessEligibleToApply(SBI)).rejects.toEqual(new Error('Business is not eligible to apply due to 10 month restrictions since the last agreement.'))
-            // await expect(businessEligibleToApply(SBI)).rejects.toBeTruthy()
           })
         })
 
@@ -221,7 +219,7 @@ describe('Business Eligible to Apply Tests', () => {
     describe('When the previous application was more than 10 months', () => {
       describe('Business is eligible when the last previous application had a status of anything other than WITHDRAWN (2), NOT AGREED (7), AGREED (1)', () => {
         // TODO: write out statuses...
-        describe('Time limit error is returned with status of 3, 4, 5, 6, 8, 9 or 10', () => {
+        describe('Time limit error is not returned with status of 3, 4, 5, 6, 8, 9 or 10', () => {
           test.each([
             {
               latestApplications: [
@@ -327,24 +325,23 @@ describe('Business Eligible to Apply Tests', () => {
             await expect(businessEligibleToApply(SBI)).resolves.not.toThrow(new Error('Business is not eligible to apply due to 10 month restrictions since the last agreement.'))
           })
         })
-
-        test('Business is not eligible when the last previous application was longer than 10 months and has a status of AGREED (1)', async () => {
-          const SBI = 123456789
-          const apiResponse = [
-            {
-              data: {
-                organisation: {
-                  sbi: '122333'
-                }
-              },
-              createdAt: '2020-06-06T13:52:14.207Z',
-              updatedAt: '2020-06-06T13:52:14.207Z',
-              statusId: 1
-            }
-          ]
-          applicationApiMock.getLatestApplicationsBySbi.mockResolvedValueOnce(apiResponse)
-          await expect(businessEligibleToApply(SBI)).rejects.toEqual(new Error('Customer must claim or withdraw agreement before creating another.'))
-        })
+      })
+      test('Business is not eligible when the last previous application was longer than 10 months and has a status of AGREED (1)', async () => {
+        const SBI = 123456789
+        const apiResponse = [
+          {
+            data: {
+              organisation: {
+                sbi: '122333'
+              }
+            },
+            createdAt: '2020-06-06T13:52:14.207Z',
+            updatedAt: '2020-06-06T13:52:14.207Z',
+            statusId: 1
+          }
+        ]
+        applicationApiMock.getLatestApplicationsBySbi.mockResolvedValueOnce(apiResponse)
+        await expect(businessEligibleToApply(SBI)).rejects.toEqual(new Error('Customer must claim or withdraw agreement before creating another.'))
       })
     })
 
