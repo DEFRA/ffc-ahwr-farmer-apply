@@ -347,5 +347,23 @@ describe('Business Eligible to Apply Tests', () => {
         })
       })
     })
+
+    test('Last application and next application dates area returned with a CannotReapplyTimeLimitError', async () => {
+      const SBI = 123456789
+      const apiResponse = [
+        {
+          data: {
+            organisation: {
+              sbi: '122333'
+            }
+          },
+          createdAt: '2024-02-28T13:52:14.207Z',
+          updatedAt: '2024-02-28T13:52:14.207Z',
+          statusId: 4
+        }
+      ]
+      applicationApiMock.getLatestApplicationsBySbi.mockResolvedValueOnce(apiResponse)
+      await expect(businessEligibleToApply(SBI)).rejects.toEqual(new Error('Business is not eligible to apply due to 10 month restrictions since the last agreement.', { lastApplicationDate: '28 February 2024', nextApplicationDate: '29 December 2024'}))
+    })
   })
 })

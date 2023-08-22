@@ -1,8 +1,8 @@
 class CannotReapplyTimeLimitError extends Error {
-  // nextApplicationDate
-  constructor (message, nextApplicationDate) {
+  constructor (message, lastApplicationDate, nextApplicationDate) {
     super(message)
     this.name = 'CannotReapplyTimeLimitError'
+    this.lastApplicationDate = lastApplicationDate
     this.nextApplicationDate = nextApplicationDate
   }
 }

@@ -100,6 +100,7 @@ module.exports = [{
           cphError: err instanceof NoEligibleCphError,
           reapplyTimeLimitError: err instanceof CannotReapplyTimeLimitError,
           outstandingAgreementError: err instanceof OutstandingAgreementError,
+          lastApplicationDate: err.lastApplicationDate,
           nextApplicationDate: err.nextApplicationDate,
           hasMultipleBusineses: attachedToMultipleBusinesses,
           backLink: auth.requestAuthorizationCodeUrl(session, request),
