@@ -40,6 +40,7 @@ describe('Business Eligible to Apply Tests', () => {
   })
 
   describe('When 10 month rule toggle is enabled', () => {
+    // TODO: Add tests for date returned (when appropriate)
     describe('When the previous application was within 10 months', () => {
       test.each([
         {
