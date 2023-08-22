@@ -29,6 +29,12 @@ class CommonActions {
     expect(await locator.getText()).to.equal(text)
   }
 
+  async getChildElement(element){
+    const locator_list = await browser.$$(element)
+    console.log(locator_list)
+    return locator_list
+     }
+
   async getPageTitle (expectedTitle) {
     const actualTitle = await browser.getTitle()
     expect(actualTitle).to.be.equal(expectedTitle)

@@ -7,21 +7,23 @@ Given(/^the user is on the (.*) page$/, async function (page) {
 })
 When(/^user start the application$/, async function () {
   await selectBusinessPage.clickOnStartButton()
-
 })
-When(/^user login with crn and password\(for DefraId\)$/,async function () {
-  await selectBusinessPage.signInWithDefraId()
+When(/^user login with (.*) business crn and password\(for DefraId\)$/, async function (business) {
+  await selectBusinessPage.signInWithDefraId(business)
 });
-
+When(/^select the (.*) for application$/, async function (businessName) {
+  await selectBusinessPage.clickOnBusiness(businessName)
+});
+When(/^click on continue button$/, async function () {
+  await selectBusinessPage.clickOnContinue()
+});
 // org-review
 When(/^user check the business details$/, async function () {
   await selectBusinessPage.singleUserBusinessDetail()
 })
-
 When(/^user confirm the org-review page$/, async function () {
   await selectBusinessPage.checkFarmerDetails()
 })
-
 When(/^user agreed the business details is correct$/, async function () {
   await selectBusinessPage.farmerAcceptDetails()
 })
@@ -32,26 +34,15 @@ Then(/^user continue to next page$/, async function () {
 When(/^user is on the livestock page$/, async function () {
   await selectBusinessPage.livestockPage()
 })
-
 When(/^user check if livestock are listed$/, async function () {
   await selectBusinessPage.livestockList()
 })
-When(/^user choose dairy cattle for review$/, async function () {
-  await selectBusinessPage.sheepReview()
-})
-When(/^user choose beef cattle for review$/, async function () {
-  await selectBusinessPage.beefCattleReview ()
-})
-When(/^user choose sheep for review$/, async function () {
-  await selectBusinessPage.dairyCattleReview ()
-})
-When(/^user choose pigs for review$/, async function () {
-  await selectBusinessPage.pigsReview ()
+When(/^user choose (.*) cattle for review$/, async function (LiveStockName) {
+  await selectBusinessPage.liveStockReview(LiveStockName)
 })
 Then(/^User continue the application$/, async function () {
   await selectBusinessPage.continueTheApplication()
 })
-
 // ANIMAL ELIGIBILITY
 When(/^user check the minimum number of livestock required to qualify for the review$/, async function () {
   await selectBusinessPage.minimumRequirement()
