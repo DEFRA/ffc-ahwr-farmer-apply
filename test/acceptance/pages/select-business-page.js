@@ -42,160 +42,198 @@ const REVIEW_AGREED = 'agreement'
 const TERMS = 'Annual health and welfare review of livestock terms and conditions'
 const MESSAGE = 'Application complete'
 const LIVESTOCK_NUMBER = 'eligible for funding'
+
+//'div.govuk-radios>div.govuk-radios__item>label'
 //DefraID
 const DEFRA_CRN = '#crn'
 const DEFRA_PASSWORD = '#password'
 const SIGN_IN_BUTTON = '[type="submit"]'
 const EMAIL_INPUT = '#email'
 const CONTINUE = '#submit'
+const MUTLIPLE_BUSINESS_CONTINUE = '#continueReplacement'
 
 class SelectBusinessPage extends CommonActions {
 
-  async getHomePage (page) {
+  async getHomePage(page) {
     await this.open(page)
   }
-  async clickOnStartButton () {
+  async clickOnStartButton() {
     await this.clickOn(START_BUTTON)
   }
 
-  async pageTitle () {
+  async pageTitle() {
     await this.getPageTitle(PAGE_TITLE)
   }
 
-  async businessPage () {
+  async businessPage() {
     await this.elementToContainText(CHECK_DETAILS, SELECT_BUSINESS)
   }
 
-  async listOfBusiness () {
+  async listOfBusiness() {
     await this.elementToContainText(BUSINESS_LIST, BUSINESS_NAME)
   }
 
-  async selectBusiness () {
+  async selectBusiness() {
     await this.clickOn(BUSINESS_CHECK_BUTTON)
   }
 
-  async checkContact () {
+  async checkContact() {
     await this.clickOn(RPA_CONTACT)
   }
 
-  async contactDetails () {
+  async contactDetails() {
     await this.elementToContainText(NO_BUSINESS_CONTENT, CONTACT)
   }
 
-  async startApplication () {
+  async startApplication() {
     await this.clickOn(CONTINUE_BUTTON)
   }
 
   // org review
-  async singleUserBusinessDetail () {
+  async singleUserBusinessDetail() {
     const sleep = (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitTimeInMs))
     await sleep(10000)
     await this.elementTextShouldBe(CHECK_DETAILS, DETAILS)
   }
 
-  async checkFarmerDetails () {
+  async checkFarmerDetails() {
     await this.elementToContainText(FARMER_DETAILS, CONTENT)
   }
 
-  async farmerAcceptDetails () {
+  async farmerAcceptDetails() {
     await this.clickOn(DETAILS_BUTTON)
   }
 
-  async proceedWithApplication () {
+  async proceedWithApplication() {
     await this.clickOn(CONTINUE_BUTTON)
   }
 
+  async clickOnBusiness(businessName) {
+    // Define the xPath function
+    function xPath(businessName) {
+      return `//*[@id="resultsContainer"]/div/fieldset/div/div[label[contains(text(),"${businessName}")]]/label`;
+    }
+    // Generate the XPath expression using the xPath function
+    const xPathExpression = xPath(businessName);
+    // Now you can use the xPathExpression in your WebDriverIO code
+    const radio_Button = await $(xPathExpression);
+    await this.clickOn(radio_Button)
+  }
   // which-review
-  async livestockPage () {
+  async livestockPage() {
     await this.elementTextShouldBe(WHICH_REVIEW, REVIEW)
   }
 
-  async livestockList () {
+  async livestockList() {
     await this.elementToContainText(LIVESTOCK_TYPE, LIVESTOCK)
   }
+  async liveStockReview(LiveStockName) {
+    switch (LiveStockName) {
+      case 'Sheep':
+        await this.clickOn(SHEEP);
+        break;
+      case 'Beef':
+        await this.clickOn(BEEF_CATTLE);
+        break;
+      case 'Dairy':
+        await this.clickOn(DAIRY_CATTLE);
+        break;
+      case 'Pigs':
+        await this.clickOn(PIGS);
+        break;
+      default:
+        // Handle the default case if needed
+        break;
+    }
+  }
 
-  async sheepReview() { await this.clickOn(SHEEP) }
-  async beefCattleReview () { await this.clickOn(BEEF_CATTLE) }
-  async dairyCattleReview () { await this.clickOn(DAIRY_CATTLE) }
-  async pigsReview () { await this.clickOn(PIGS) }
-
-  async continueTheApplication () { await this.clickOn(CONTINUE_BUTTON) }
-
+ 
+  async continueTheApplication() { await this.clickOn(CONTINUE_BUTTON) }
   // eligible livestock
-  async minimumRequirement () {
+  async minimumRequirement() {
     await this.elementToContainText(REQUIRE_LIVESTOCK_NUMBER, LIVESTOCK_NUMBER)
   }
 
-  async accurateLivestockNumber () {
+  async accurateLivestockNumber() {
     await this.clickOn(CONFIRM_ELIGIBILITY)
   }
 
-  async next () {
+  async next() {
     await this.clickOn(CONTINUE_BUTTON)
   }
 
-  async checkAnswerToBeAccurate () {
+  async checkAnswerToBeAccurate() {
     await this.elementTextShouldBe(CHECK_DETAILS, ACCURATE_ANSWER)
   }
 
-  async goToDeclaration () {
+  async goToDeclaration() {
     await this.clickOn(DECLARATION)
   }
 
   // COMPLETE JOURNEY
-  async declarationUrl () {
+  async declarationUrl() {
     await this.urlContain(AGREED)
   }
 
-  async agreementReview () {
+  async agreementReview() {
     await this.elementToContainText(CHECK_DETAILS, REVIEW_AGREED)
   }
 
-  async conditionTab () {
+  async conditionTab() {
     await this.clickOn(TERMS_CONDITIONS)
   }
 
-  async termsAndConditionTitle () {
+  async termsAndConditionTitle() {
     await this.elementToContainText(CHECK_DETAILS, TERMS)
   }
 
-  async agreeToTerms () {
+  async agreeToTerms() {
     await this.clickOn(DECLARATION)
   }
 
-  async termsCheckBox () {
+  async termsCheckBox() {
     await this.clickOn(TERMS_AND_CONDITION_BOX)
   }
 
-  async applicationCompleted () {
+  async applicationCompleted() {
     await this.clickOn(COMPLETE_APPLICATION)
   }
 
-  async successfulMessage () {
+  async successfulMessage() {
     await this.elementToContainText(SUCCESS_MESSAGE, MESSAGE)
   }
-  async signInButton () {
+  async signInButton() {
     await this.clickOn(SIGN_IN_BUTTON)
   }
 
-  async inputValidCrn (crn) {
+  async inputValidCrn(crn) {
     await this.sendKey(DEFRA_CRN, crn)
   }
-  async inputPassword (password) {
+  async inputPassword(password) {
     await this.sendKey(DEFRA_PASSWORD, password)
   }
-  async submit(){
+  async submit() {
     await this.clickOn(CONTINUE)
   }
-  async inputCredentials (credential) {
+  async inputCredentials(credential) {
     await this.sendKey(EMAIL_INPUT, credential)
   }
-  async signInWithDefraId () {
+  async signInWithDefraId(business) {
     const sleep = (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitTimeInMs))
     await sleep(10000)
-    await this.inputValidCrn(process.env.CRN_USERNAME)
+    if (business=='Single'){
+        await this.inputValidCrn(process.env.CRN_USERNAME)
+   
+    }else if (business=='Multiple'){
+      console.log(process.env.CRN_MULTI_USERNAME)
+      await this.inputValidCrn(process.env.CRN_MULTI_USERNAME)
+    }
     await this.inputPassword(process.env.CRN_PASSWORD)
     await this.signInButton()
-   }
+    await sleep(10000)
+  }
+  async clickOnContinue() {
+    await this.clickOn(MUTLIPLE_BUSINESS_CONTINUE)
+  }
 }
 module.exports = SelectBusinessPage
