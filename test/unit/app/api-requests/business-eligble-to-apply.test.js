@@ -348,7 +348,7 @@ describe('Business Eligible to Apply Tests', () => {
       })
     })
 
-    test('Last application and next application dates area returned with a CannotReapplyTimeLimitError', async () => {
+    test('Last application and next application dates are returned with a CannotReapplyTimeLimitError', async () => {
       const SBI = 123456789
       const apiResponse = [
         {
