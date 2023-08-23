@@ -2,7 +2,7 @@ const applicationApi = require('./application-api')
 const config = require('../config')
 const status = require('../constants/status')
 const validStatusForApplication = [status.NOT_AGREED, status.WITHDRAWN]
-const { CannotReapplyTimeLimitError, OutstandingAgreementError } = require('../exceptions')
+const { CannotReapplyTimeLimitError, OutstandingAgreementError, AlreadyAppliedError } = require('../exceptions')
 const tenMonthRuleFeature = require('../config').tenMonthRule
 
 async function businessEligibleToApply (sbi) {
@@ -23,33 +23,35 @@ function applicationForBusinessInStateToApply (latestApplicationsForSbi) {
   if (validStatusForApplication.includes(latestApplication.statusId)) {
     // latest application is either WITHDRAWN or NOT_AGREED so okay to continue
     console.log(`${new Date().toISOString()} Business is eligible to apply : ${JSON.stringify({
-        sbi: latestApplication.sbi
+        sbi: latestApplication.data.organisation.sbi
       })}`)
-  } else if (latestApplication.statusId === status.AGREED) {
-    // if agreement is still AGREED customer must claim or withdraw
-    throw new OutstandingAgreementError('Customer must claim or withdraw agreement before creating another.')
-  } else {
-    // for any other status check 10 month rule
-    tenMonthRule(latestApplication)
+  } else if (tenMonthRuleFeature.enabled) {
+      if (latestApplication.statusId === status.AGREED) {
+        // if agreement is still AGREED customer must claim or withdraw
+        throw new OutstandingAgreementError('Customer must claim or withdraw agreement before creating another.')
+      } else {
+        // for any other status check 10 month rule
+        tenMonthRule(latestApplication)
+      }
+    } else {
+      throw new AlreadyAppliedError(`Business with SBI ${latestApplication.data.organisation.sbi} is not eligble to apply`)
+    }
   }
-}
 
 // can easily abstract to a new function file so it can be easily tested
 function tenMonthRule (latestApplication) {
-  if (tenMonthRuleFeature.enabled) {
-    const startDate = new Date(latestApplication.createdAt)
-    const endDate = new Date(startDate)
-    endDate.setMonth(endDate.getMonth() + config.reapplyTimeLimitMonths)
-    endDate.setHours(24, 0, 0, 0) // set to midnight of agreement end day
-    console.log(`Checking if agreement with reference ${latestApplication.reference}, start date of ${startDate} and end date of ${endDate} has exceeded the application reapply wait time of ${config.reapplyTimeLimitMonths} months.`)
-    if (Date.now() < endDate) {
-      console.log(`${new Date().toISOString()} Business is not eligible to apply due to ${config.reapplyTimeLimitMonths} month restrictions: ${JSON.stringify({
-        sbi: latestApplication.sbi
-      })}`)
-      const formattedStartDate = startDate.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' })
-      const formattedEndDate = endDate.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' })
-      throw new CannotReapplyTimeLimitError(`Business is not eligible to apply due to ${config.reapplyTimeLimitMonths} month restrictions since the last agreement.`, formattedStartDate, formattedEndDate)
-    }
+  const startDate = new Date(latestApplication.createdAt)
+  const endDate = new Date(startDate)
+  endDate.setMonth(endDate.getMonth() + config.reapplyTimeLimitMonths)
+  endDate.setHours(24, 0, 0, 0) // set to midnight of agreement end day
+  console.log(`Checking if agreement with reference ${latestApplication.reference}, start date of ${startDate} and end date of ${endDate} has exceeded the application reapply wait time of ${config.reapplyTimeLimitMonths} months.`)
+  if (Date.now() < endDate) {
+    console.log(`${new Date().toISOString()} Business is not eligible to apply due to ${config.reapplyTimeLimitMonths} month restrictions: ${JSON.stringify({
+      sbi: latestApplication.data.organisation.sbi
+    })}`)
+    const formattedStartDate = startDate.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' })
+    const formattedEndDate = endDate.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' })
+    throw new CannotReapplyTimeLimitError(`Business is not eligible to apply due to ${config.reapplyTimeLimitMonths} month restrictions since the last agreement.`, formattedStartDate, formattedEndDate)
   }
 }
 
