@@ -102,7 +102,7 @@ module.exports = [{
           outstandingAgreementError: err instanceof OutstandingAgreementError,
           lastApplicationDate: err.lastApplicationDate,
           nextApplicationDate: err.nextApplicationDate,
-          hasMultipleBusineses: attachedToMultipleBusinesses,
+          hasMultipleBusinesses: attachedToMultipleBusinesses,
           backLink: auth.requestAuthorizationCodeUrl(session, request),
           sbiText: organisation?.sbi !== undefined ? ` - SBI ${organisation.sbi}` : null,
           organisationName: organisation?.name,

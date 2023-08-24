@@ -34,7 +34,7 @@
     
     {# Should only get this error with 10 month rule toggle on #}
     {% if reapplyTimeLimitError %}
-      {% if hasMultipleBusineses %}
+      {% if hasMultipleBusinesses %}
         <p class="govuk-body">{{ organisationName }}{{ sbiText }} applied for an annual health and welfare review of livestock on {{lastApplicationDate}}.</p>
         
         <p class="govuk-body">You can only apply for a review of one eligible type of livestock every 10 months.</p>
@@ -70,7 +70,7 @@
       <h2 class="govuk-heading-m">What to do next</h2>
 
       <p class="govuk-body">To apply for this business, the business owner must give you either:</p>
-      <ul class='govuk-list govuk-list--bullet'>
+      <ul class="govuk-list govuk-list--bullet">
         <li>full permission level for business details</li>
         <li>‘submit’ permission level for the basic payment scheme</li>
       </ul>
@@ -85,7 +85,7 @@
     
       <p class="govuk-body">To be eligible a CPH must be registered in England.</p>
       <p class="govuk-body">The CPH number cannot be:</p>
-      <ul class='govuk-list govuk-list--bullet'>
+      <ul class="govuk-list govuk-list--bullet">
         <li>an 8000 number used for abattoirs, pet food manufacturers, racing pigeon establishments and showgrounds</li>
         <li>a 9000 number used for poultry keepers</li>
       </ul>
@@ -95,9 +95,9 @@
       {{ rpaContactDetails({email: ruralPaymentsAgency.email, callChargesUri: ruralPaymentsAgency.callChargesUri, telephone: ruralPaymentsAgency.telephone}) }}
       {% endif %}
 
-    {% if hasMultipleBusineses and not reapplyTimeLimitError %}
+    {% if hasMultipleBusinesses and not reapplyTimeLimitError %}
         <h2 class="govuk-heading-m">Apply for another business</h2>
-        <p>You can <a href='{{backLink}}'>apply for another business</a> that has registered an interest in the review.</p>
+        <p class="govuk-body">You can <a href='{{backLink}}'>apply for another business</a> that has registered an interest in the review.</p>
     {% endif %}
   </div>
 </div>
