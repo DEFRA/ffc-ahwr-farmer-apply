@@ -367,7 +367,7 @@ describe('Business Eligible to Apply Tests', () => {
       const expectedErrorData = { lastApplicationDate: '28 February 2024', nextApplicationDate: '29 December 2024' }
       const wrongExpectedErrorData = { lastApplicationDate: '28 January 2024', nextApplicationDate: '29 Januaary 2024' }
       applicationApiMock.getLatestApplicationsBySbi.mockResolvedValueOnce(apiResponse)
-      const thrownError = await businessEligibleToApply(SBI).catch( error => {
+      const thrownError = await businessEligibleToApply(SBI).catch(error => {
         return error
       })
       expect(thrownError).toEqual(expectedError)
@@ -428,7 +428,7 @@ describe('Business Eligible to Apply Tests', () => {
           applicationApiMock.getLatestApplicationsBySbi.mockResolvedValueOnce(latestApplications)
           await expect(businessEligibleToApply(SBI)).resolves.not.toThrow(new Error('Bad response from API'))
         })
-  
+
         describe('Business is not eligible when the last previous application had a status of anything other than WITHDRAWN (2), NOT AGREED (7), AGREED (1)', () => {
           // TODO: write out statuses...
           describe('Already Applied error is returned with status of 3, 4, 5, 6, 8, 9 or 10', () => {
@@ -537,7 +537,7 @@ describe('Business Eligible to Apply Tests', () => {
               await expect(businessEligibleToApply(SBI)).rejects.toEqual(new AlreadyAppliedError('Business with SBI 122333 is not eligble to apply'))
             })
           })
-  
+
           test('Business is not eligible when the last previous application was within 10 months and has a status of AGREED (1)', async () => {
             const SBI = 123456789
             const apiResponse = [
@@ -557,7 +557,7 @@ describe('Business Eligible to Apply Tests', () => {
           })
         })
       })
-  
+
       describe('When the previous application was more than 10 months', () => {
         describe('Business is eligible when the last previous application had a status of anything other than WITHDRAWN (2), NOT AGREED (7), AGREED (1)', () => {
           // TODO: write out statuses...

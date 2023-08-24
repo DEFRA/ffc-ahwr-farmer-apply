@@ -6,40 +6,62 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l">You cannot apply for a livestock review for this business</h1>
+    
     {# Can remove when 10 month rule toggle is removed #}
     {% if alreadyAppliedError %}
       <p class="govuk-body">{{ organisationName }}{{ sbiText }} has already applied for an annual health and welfare review of livestock.</p>
 
       <h2 class="govuk-heading-m">What to do next</h2>
 
-      <p>To find out when you can apply again, read the <a id="guidanceLink" href='{{guidanceLink}}'>guidance on getting a funded annual health and welfare review of your livestock</a></p>
+      <p class="govuk-body">To find out when you can apply again, read the <a id="guidanceLink" href='{{guidanceLink}}'>guidance on getting a funded annual health and welfare review of your livestock</a></p>
+      
+      <h2 class="govuk-heading-m">Get help with your application</h2>
+      <p class="govuk-body">If you need help with your application, contact the Rural Payments Agency by email or phone.</p>
+      {{ rpaContactDetails({email: ruralPaymentsAgency.email, callChargesUri: ruralPaymentsAgency.callChargesUri, telephone: ruralPaymentsAgency.telephone}) }}
     {% endif %}
     
+    {# Should only get this error with 10 month rule toggle on #}
     {% if outstandingAgreementError %}
       <p class="govuk-body">{{ organisationName }}{{ sbiText }} has already applied for an annual health and welfare review of livestock.</p>
 
-      <p>You either withdraw or complete a claim for this agreement before creating another.</p>
-
-      <p>Contact the Rural Payments Agenecy (RPA). </p>
-    {% endif %}
-
+      <p class="govuk-body">You must either withdraw or complete a claim for this agreement before creating another.</p>
+    
+      {# What text here? #}
+      <h2 class="govuk-heading-m">Get help with your application</h2>
+      <p class="govuk-body">If you need help with your application, contact the Rural Payments Agency by email or phone.</p>
+      {{ rpaContactDetails({email: ruralPaymentsAgency.email, callChargesUri: ruralPaymentsAgency.callChargesUri, telephone: ruralPaymentsAgency.telephone}) }}
+      {% endif %}
+    
+    {# Should only get this error with 10 month rule toggle on #}
     {% if reapplyTimeLimitError %}
-      <p class="govuk-body">{{ organisationName }}{{ sbiText }} has already applied for an annual health and welfare review of livestock.</p>
+      {% if hasMultipleBusineses %}
+        <p class="govuk-body">{{ organisationName }}{{ sbiText }} applied for an annual health and welfare review of livestock on {{lastApplicationDate}}.</p>
+        
+        <p class="govuk-body">You can only apply for a review of one eligible type of livestock every 10 months.</p>
 
-      <p>You'll be eligible to apply for another review on {{nextApplicationDate}}.</p>
+        <p class="govuk-body">You'll be eligible to apply for another review for {{ organisationName }}{{ sbiText }} on {{nextApplicationDate}}.</p>
 
-      <p>If you want a review for a different type of livestock, contact the Rural Payments Agenecy (RPA). </p>
+        <h2 class="govuk-heading-m">What to do next</h2>
 
-      <h2 class="govuk-heading-m">What to do next</h2>
-    {% endif %}
-  
-  {# Can remove when 10 month rule toggle is removed? #}
-    {% if alreadyAppliedError %}
-      <p class="govuk-body">{{ organisationName }}{{ sbiText }} has already applied for an annual health and welfare review of livestock.</p>
+        <p class="govuk-body">You can either:</p>
 
-      <h2 class="govuk-heading-m">What to do next</h2>
+        <ul class='govuk-list govuk-list--bullet'>
+          <li>Contact the Rural Payments Agency (RPA) if you want a review for a different type of livestock</li>
+          <li><a href='{{backLink}}'>make an application for another business</a> that has not already applied</li>
+        </ul>
+      {% else %}
+        <p class="govuk-body">{{ organisationName }}{{ sbiText }} has already applied for an annual health and welfare review of livestock.</p>
 
-      <p>To find out when you can apply again, read the <a id="guidanceLink" href='{{guidanceLink}}'>guidance on getting a funded annual health and welfare review of your livestock</a></p>
+        <p class="govuk-body">You'll be eligible to apply for another review on {{nextApplicationDate}}.</p>
+
+        <p class="govuk-body">If you want a review for a different type of livestock, contact the Rural Payments Agency (RPA). </p>
+      {% endif %}
+      
+      <h2 class="govuk-heading-m">Contact RPA</h2>
+      
+      <p class="govuk-body">You can contact the RPA by email or phone.</p>
+      {{ rpaContactDetails({email: ruralPaymentsAgency.email, callChargesUri: ruralPaymentsAgency.callChargesUri, telephone: ruralPaymentsAgency.telephone}) }}
+      <p class="govuk-body">Have your agreement number with you when you call or include it with your email.</p>
     {% endif %}
 
     {% if permissionError %}
@@ -52,7 +74,11 @@
         <li>full permission level for business details</li>
         <li>‘submit’ permission level for the basic payment scheme</li>
       </ul>
-    {% endif %}
+
+      <h2 class="govuk-heading-m">Get help with your application</h2>
+      <p class="govuk-body">If you need help with your application, contact the Rural Payments Agency by email or phone.</p>
+      {{ rpaContactDetails({email: ruralPaymentsAgency.email, callChargesUri: ruralPaymentsAgency.callChargesUri, telephone: ruralPaymentsAgency.telephone}) }}
+      {% endif %}
 
     {% if cphError %}
       <p class="govuk-body">{{ organisationName }}{{ sbiText }} has no eligible county parish holding (CPH) number registered to it.</p>
@@ -63,17 +89,16 @@
         <li>an 8000 number used for abattoirs, pet food manufacturers, racing pigeon establishments and showgrounds</li>
         <li>a 9000 number used for poultry keepers</li>
       </ul>
-    {% endif %}
 
-    {% if hasMultipleBusineses %}
+      <h2 class="govuk-heading-m">Get help with your application</h2>
+      <p class="govuk-body">If you need help with your application, contact the Rural Payments Agency by email or phone.</p>
+      {{ rpaContactDetails({email: ruralPaymentsAgency.email, callChargesUri: ruralPaymentsAgency.callChargesUri, telephone: ruralPaymentsAgency.telephone}) }}
+      {% endif %}
+
+    {% if hasMultipleBusineses and not reapplyTimeLimitError %}
         <h2 class="govuk-heading-m">Apply for another business</h2>
         <p>You can <a href='{{backLink}}'>apply for another business</a> that has registered an interest in the review.</p>
     {% endif %}
-
-    <h2 class="govuk-heading-m">Get help with your application</h2>
-    <p class="govuk-body">If you need help with your application, contact the Rural Payments Agency by email or phone.</p>
-   
-    {{ rpaContactDetails({email: ruralPaymentsAgency.email, callChargesUri: ruralPaymentsAgency.callChargesUri, telephone: ruralPaymentsAgency.telephone}) }}
   </div>
 </div>
 {% endblock %}

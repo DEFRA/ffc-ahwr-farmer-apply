@@ -1,3 +1,4 @@
+const config = require('../../../../app/config')
 const cheerio = require('cheerio')
 const sessionMock = require('../../../../app/session')
 jest.mock('../../../../app/session')
@@ -327,6 +328,7 @@ describe('FarmerApply defra ID redirection test', () => {
     })
 
     xtest('returns 400 and exception view when already applied', async () => {
+      config.tenMonthRule.enabled = false
       const consoleErrorSpy = jest.spyOn(console, 'error')
       const expectedError = new AlreadyAppliedError('Business with SBI 101122201 is not eligble to apply')
       const baseUrl = `${url}?code=432432&state=83d2b160-74ce-4356-9709-3f8da7868e35`

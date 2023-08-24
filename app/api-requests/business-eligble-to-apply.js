@@ -25,20 +25,21 @@ function applicationForBusinessInStateToApply (latestApplicationsForSbi) {
     console.log(`${new Date().toISOString()} Business is eligible to apply : ${JSON.stringify({
         sbi: latestApplication.data.organisation.sbi
       })}`)
+  // when toggle is on
   } else if (tenMonthRuleFeature.enabled) {
-      if (latestApplication.statusId === status.AGREED) {
-        // if agreement is still AGREED customer must claim or withdraw
-        throw new OutstandingAgreementError('Customer must claim or withdraw agreement before creating another.')
-      } else {
-        // for any other status check 10 month rule
-        tenMonthRule(latestApplication)
-      }
+    if (latestApplication.statusId === status.AGREED) {
+      // if agreement is still AGREED customer must claim or withdraw
+      throw new OutstandingAgreementError('Customer must claim or withdraw agreement before creating another.')
     } else {
-      throw new AlreadyAppliedError(`Business with SBI ${latestApplication.data.organisation.sbi} is not eligble to apply`)
+      // for any other status check 10 month rule
+      tenMonthRule(latestApplication)
     }
+  } else {
+    // when toggle is off
+    throw new AlreadyAppliedError(`Business with SBI ${latestApplication.data.organisation.sbi} is not eligble to apply`)
   }
+}
 
-// can easily abstract to a new function file so it can be easily tested
 function tenMonthRule (latestApplication) {
   const startDate = new Date(latestApplication.createdAt)
   const endDate = new Date(startDate)
