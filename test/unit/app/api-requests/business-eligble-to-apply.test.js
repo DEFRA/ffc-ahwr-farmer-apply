@@ -101,7 +101,6 @@ describe('Business Eligible to Apply Tests', () => {
       })
 
       describe('Business is not eligible when the last previous application had a status of anything other than WITHDRAWN (2), NOT AGREED (7), AGREED (1)', () => {
-        // TODO: write out statuses...
         describe('Time limit error is returned with status of DATA INPUTTED (3), CLAIMED (4), IN CHECK (5), ACCEPTED (6), PAID (8), READY TO PAY (9) or REJECTED (10)', () => {
           test.each([
             {
@@ -231,7 +230,6 @@ describe('Business Eligible to Apply Tests', () => {
 
     describe('When the previous application was more than 10 months', () => {
       describe('Business is eligible when the last previous application had a status of anything other than WITHDRAWN (2), NOT AGREED (7), AGREED (1)', () => {
-        // TODO: write out statuses...
         describe('Time limit error is not returned with status of DATA INPUTTED (3), CLAIMED (4), IN CHECK (5), ACCEPTED (6), PAID (8), READY TO PAY (9) or REJECTED (10)', () => {
           test.each([
             {
