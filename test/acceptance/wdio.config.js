@@ -131,11 +131,23 @@ exports.config = {
   // Test reporter for stdout.
   // The only one supported by default is 'dot'
   // see also: https://webdriver.io/docs/dot-reporter
-  reporters: ['spec', ['allure', allure_config],
+  // reporters: ['spec', ['allure', allure_config],
 
-    ['cucumberjs-json', {
-      jsonFolder: 'reporter/json/',
-      language: 'en'
+  //   ['cucumberjs-json', {
+  //     jsonFolder: 'reporter/json/',
+  //     language: 'en'
+  //   }]
+  // ],
+
+  reporters: ['spec',
+    [HtmlReporter, {
+      debug: false,
+      outputDir: './html-reports/',
+      filename: 'feature-report.html',
+      reportTitle: 'Feature Test Report',
+      showInBrowser: false,
+      useOnAfterCommandForScreenshot: false,
+      LOG: logger
     }]
   ],
 
