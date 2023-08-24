@@ -3,7 +3,6 @@ const config = require('../config')
 const status = require('../constants/status')
 const validStatusForApplication = [status.NOT_AGREED, status.WITHDRAWN]
 const { CannotReapplyTimeLimitError, OutstandingAgreementError, AlreadyAppliedError } = require('../exceptions')
-const tenMonthRuleFeature = require('../config').tenMonthRule
 
 async function businessEligibleToApply (sbi) {
   const latestApplicationsForSbi = await applicationApi.getLatestApplicationsBySbi(sbi)
@@ -26,7 +25,7 @@ function applicationForBusinessInStateToApply (latestApplicationsForSbi) {
         sbi: latestApplication.data.organisation.sbi
       })}`)
   // when toggle is on
-  } else if (tenMonthRuleFeature.enabled) {
+  } else if (config.tenMonthRule.enabled) {
     if (latestApplication.statusId === status.AGREED) {
       // if agreement is still AGREED customer must claim or withdraw
       throw new OutstandingAgreementError('Customer must claim or withdraw agreement before creating another.')

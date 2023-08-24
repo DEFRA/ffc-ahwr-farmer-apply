@@ -1,14 +1,15 @@
 const config = require('../../../../app/config')
-const CannotReapplyTimeLimitError = require('../../../../app/exceptions/CannotReapplyTimeLimitError')
-const AlreadyAppliedError = require('../../../../app/exceptions/AlreadyAppliedError')
+// const CannotReapplyTimeLimitError = require('../../../../app/exceptions/CannotReapplyTimeLimitError')
+// const AlreadyAppliedError = require('../../../../app/exceptions/AlreadyAppliedError')
+const { CannotReapplyTimeLimitError, OutstandingAgreementError, AlreadyAppliedError } = require ('../../../../app/exceptions')
 
 let businessEligibleToApply
 
 describe('Business Eligible to Apply Tests', () => {
   let applicationApiMock
+  const MOCK_SYSTEM_DATE = '2023-08-24T12:00:00.000Z'
 
   beforeAll(() => {
-    // jest.mock('../../../../app/config')
     applicationApiMock = require('../../../../app/api-requests/application-api')
     jest.mock('../../../../app/api-requests/application-api')
     businessEligibleToApply = require('../../../../app/api-requests/business-eligble-to-apply')
@@ -16,7 +17,13 @@ describe('Business Eligible to Apply Tests', () => {
 
   beforeEach(() => {
     jest.resetAllMocks()
+    jest.useFakeTimers('modern')
+    jest.setSystemTime(Date.parse(MOCK_SYSTEM_DATE))
   })
+
+  afterEach(() => {
+    jest.useRealTimers();
+})
 
   describe('Business is eligible when no existing applications found', () => {
     test('getLatestApplicationsBySbi is called', async () => {
@@ -30,7 +37,7 @@ describe('Business Eligible to Apply Tests', () => {
     test('No error is thrown', async () => {
       const SBI = 123456789
       applicationApiMock.getLatestApplicationsBySbi.mockResolvedValueOnce([])
-      await expect(businessEligibleToApply(SBI)).resolves.not.toThrow(new Error('Bad response from API'))
+      await expect(businessEligibleToApply(SBI)).resolves.not.toThrow(new Error())
     })
   })
 
@@ -44,7 +51,9 @@ describe('Business Eligible to Apply Tests', () => {
   })
 
   describe('When 10 month rule toggle is enabled', () => {
-    // TODO: Add tests for date returned (when appropriate)
+    beforeEach(() => {
+      config.tenMonthRule.enabled = true
+    })
     describe('When the previous application was within 10 months', () => {
       test.each([
         {
@@ -88,12 +97,12 @@ describe('Business Eligible to Apply Tests', () => {
       ])('Business is eligible when the last previous application had a status of WITHDRAWN (2) or NOT AGREED (7)', async ({ latestApplications }) => {
         const SBI = 123456789
         applicationApiMock.getLatestApplicationsBySbi.mockResolvedValueOnce(latestApplications)
-        await expect(businessEligibleToApply(SBI)).resolves.not.toThrow(new Error('Bad response from API'))
+        await expect(businessEligibleToApply(SBI)).resolves.not.toThrow(new Error())
       })
 
       describe('Business is not eligible when the last previous application had a status of anything other than WITHDRAWN (2), NOT AGREED (7), AGREED (1)', () => {
         // TODO: write out statuses...
-        describe('Time limit error is returned with status of 3, 4, 5, 6, 8, 9 or 10', () => {
+        describe('Time limit error is returned with status of DATA INPUTTED (3), CLAIMED (4), IN CHECK (5), ACCEPTED (6), PAID (8), READY TO PAY (9) or REJECTED (10)', () => {
           test.each([
             {
               latestApplications: [
@@ -193,14 +202,14 @@ describe('Business Eligible to Apply Tests', () => {
                 }
               ]
             }
-          ])('Status is 3, 4, 5, 6, 8, 9 or 10', async ({ latestApplications }) => {
+          ])('Status is DATA INPUTTED (3), CLAIMED (4), IN CHECK (5), ACCEPTED (6), PAID (8), READY TO PAY (9) or REJECTED (10)', async ({ latestApplications }) => {
             const SBI = 123456789
             applicationApiMock.getLatestApplicationsBySbi.mockResolvedValueOnce(latestApplications)
-            await expect(businessEligibleToApply(SBI)).rejects.toEqual(new Error('Business is not eligible to apply due to 10 month restrictions since the last agreement.'))
+            await expect(businessEligibleToApply(SBI)).rejects.toEqual(new CannotReapplyTimeLimitError('Business is not eligible to apply due to 10 month restrictions since the last agreement.'))
           })
         })
 
-        test('Business is not eligible when the last previous application was within 10 months and has a status of AGREED (1)', async () => {
+        test('When the last previous application has a status of AGREED (1)', async () => {
           const SBI = 123456789
           const apiResponse = [
             {
@@ -215,7 +224,7 @@ describe('Business Eligible to Apply Tests', () => {
             }
           ]
           applicationApiMock.getLatestApplicationsBySbi.mockResolvedValueOnce(apiResponse)
-          await expect(businessEligibleToApply(SBI)).rejects.toEqual(new Error('Customer must claim or withdraw agreement before creating another.'))
+          await expect(businessEligibleToApply(SBI)).rejects.toEqual(new OutstandingAgreementError('Customer must claim or withdraw agreement before creating another.'))
         })
       })
     })
@@ -223,7 +232,7 @@ describe('Business Eligible to Apply Tests', () => {
     describe('When the previous application was more than 10 months', () => {
       describe('Business is eligible when the last previous application had a status of anything other than WITHDRAWN (2), NOT AGREED (7), AGREED (1)', () => {
         // TODO: write out statuses...
-        describe('Time limit error is not returned with status of 3, 4, 5, 6, 8, 9 or 10', () => {
+        describe('Time limit error is not returned with status of DATA INPUTTED (3), CLAIMED (4), IN CHECK (5), ACCEPTED (6), PAID (8), READY TO PAY (9) or REJECTED (10)', () => {
           test.each([
             {
               latestApplications: [
@@ -323,10 +332,10 @@ describe('Business Eligible to Apply Tests', () => {
                 }
               ]
             }
-          ])('status is 3, 4, 5, 6, 8, 9 or 10', async ({ latestApplications }) => {
+          ])('status is DATA INPUTTED (3), CLAIMED (4), IN CHECK (5), ACCEPTED (6), PAID (8), READY TO PAY (9) or REJECTED (10)', async ({ latestApplications }) => {
             const SBI = 123456789
             applicationApiMock.getLatestApplicationsBySbi.mockResolvedValueOnce(latestApplications)
-            await expect(businessEligibleToApply(SBI)).resolves.not.toThrow(new Error('Business is not eligible to apply due to 10 month restrictions since the last agreement.'))
+            await expect(businessEligibleToApply(SBI)).resolves.not.toThrow(new CannotReapplyTimeLimitError('Business is not eligible to apply due to 10 month restrictions since the last agreement.'))
           })
         })
       })
@@ -345,7 +354,7 @@ describe('Business Eligible to Apply Tests', () => {
           }
         ]
         applicationApiMock.getLatestApplicationsBySbi.mockResolvedValueOnce(apiResponse)
-        await expect(businessEligibleToApply(SBI)).rejects.toEqual(new Error('Customer must claim or withdraw agreement before creating another.'))
+        await expect(businessEligibleToApply(SBI)).rejects.toEqual(new OutstandingAgreementError('Customer must claim or withdraw agreement before creating another.'))
       })
     })
 
@@ -426,12 +435,12 @@ describe('Business Eligible to Apply Tests', () => {
         ])('Business is eligible when the last previous application had a status of WITHDRAWN (2) or NOT AGREED (7)', async ({ latestApplications }) => {
           const SBI = 123456789
           applicationApiMock.getLatestApplicationsBySbi.mockResolvedValueOnce(latestApplications)
-          await expect(businessEligibleToApply(SBI)).resolves.not.toThrow(new Error('Bad response from API'))
+          await expect(businessEligibleToApply(SBI)).resolves.not.toThrow(new Error())
         })
 
         describe('Business is not eligible when the last previous application had a status of anything other than WITHDRAWN (2), NOT AGREED (7), AGREED (1)', () => {
           // TODO: write out statuses...
-          describe('Already Applied error is returned with status of 3, 4, 5, 6, 8, 9 or 10', () => {
+          describe('Already Applied error is returned with status of DATA INPUTTED (3), CLAIMED (4), IN CHECK (5), ACCEPTED (6), PAID (8), READY TO PAY (9) or REJECTED (10)', () => {
             test.each([
               {
                 latestApplications: [
@@ -531,7 +540,7 @@ describe('Business Eligible to Apply Tests', () => {
                   }
                 ]
               }
-            ])('Status is 3, 4, 5, 6, 8, 9 or 10', async ({ latestApplications }) => {
+            ])('Status is DATA INPUTTED (3), CLAIMED (4), IN CHECK (5), ACCEPTED (6), PAID (8), READY TO PAY (9) or REJECTED (10)', async ({ latestApplications }) => {
               const SBI = 123456789
               applicationApiMock.getLatestApplicationsBySbi.mockResolvedValueOnce(latestApplications)
               await expect(businessEligibleToApply(SBI)).rejects.toEqual(new AlreadyAppliedError('Business with SBI 122333 is not eligble to apply'))
@@ -559,9 +568,9 @@ describe('Business Eligible to Apply Tests', () => {
       })
 
       describe('When the previous application was more than 10 months', () => {
-        describe('Business is eligible when the last previous application had a status of anything other than WITHDRAWN (2), NOT AGREED (7), AGREED (1)', () => {
+        describe('Business is not eligible when the last previous application had a status of anything other than WITHDRAWN (2), NOT AGREED (7), AGREED (1)', () => {
           // TODO: write out statuses...
-          describe('Time limit error is not returned with status of 3, 4, 5, 6, 8, 9 or 10', () => {
+          describe('AlreadyAppliedError is returned with status of DATA INPUTTED (3), CLAIMED (4), IN CHECK (5), ACCEPTED (6), PAID (8), READY TO PAY (9) or REJECTED (10)', () => {
             test.each([
               {
                 latestApplications: [
@@ -661,7 +670,7 @@ describe('Business Eligible to Apply Tests', () => {
                   }
                 ]
               }
-            ])('status is 3, 4, 5, 6, 8, 9 or 10', async ({ latestApplications }) => {
+            ])('status is DATA INPUTTED (3), CLAIMED (4), IN CHECK (5), ACCEPTED (6), PAID (8), READY TO PAY (9) or REJECTED (10)', async ({ latestApplications }) => {
               const SBI = 123456789
               applicationApiMock.getLatestApplicationsBySbi.mockResolvedValueOnce(latestApplications)
               await expect(businessEligibleToApply(SBI)).rejects.toEqual(new AlreadyAppliedError('Business with SBI 122333 is not eligble to apply'))
