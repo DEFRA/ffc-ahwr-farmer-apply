@@ -25,5 +25,5 @@ services:
       - ./wdio.conf:/home/node/wdio.conf
       - ./package.json:/home/node/package.json
       - ./html-reports/:/home/node/html-reports/
-      - ./allure-report/:/home/node/allure-report/
+      - ./allure-report/:/home/node/allure-report/index.html
 
