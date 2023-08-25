@@ -5,7 +5,7 @@ require('dotenv').config({ path: `.env.${process.env.ENV}` })
 const envRoot = (process.env.TEST_ENVIRONMENT_ROOT_URL)
 
 const allure_config = {
-  outputDir: './allure-results/',
+  outputDir: 'allure-results',
   disableWebdriverStepsReporting: true,
   disableWebdriverScreenshotsReporting: false,
   useCucumberStepReporter: true,
