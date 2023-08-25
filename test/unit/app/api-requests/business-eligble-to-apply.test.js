@@ -1,7 +1,5 @@
 const config = require('../../../../app/config')
-// const CannotReapplyTimeLimitError = require('../../../../app/exceptions/CannotReapplyTimeLimitError')
-// const AlreadyAppliedError = require('../../../../app/exceptions/AlreadyAppliedError')
-const { CannotReapplyTimeLimitError, OutstandingAgreementError, AlreadyAppliedError } = require ('../../../../app/exceptions')
+const { CannotReapplyTimeLimitError, OutstandingAgreementError, AlreadyAppliedError } = require('../../../../app/exceptions')
 
 let businessEligibleToApply
 
@@ -22,8 +20,8 @@ describe('Business Eligible to Apply Tests', () => {
   })
 
   afterEach(() => {
-    jest.useRealTimers();
-})
+    jest.useRealTimers()
+  })
 
   describe('Business is eligible when no existing applications found', () => {
     test('getLatestApplicationsBySbi is called', async () => {
