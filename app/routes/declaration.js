@@ -2,8 +2,9 @@ const boom = require('@hapi/boom')
 const Joi = require('joi')
 const getDeclarationData = require('./models/declaration')
 const session = require('../session')
-const { declaration, reference, offerStatus } = require('../session/keys').farmerApplyData
+const { declaration, reference, offerStatus, organisation: organisationKey, customer: crn } = require('../session/keys').farmerApplyData
 const { sendApplication } = require('../messaging/application')
+const appInsights = require('applicationinsights')
 const config = require('../config/index')
 
 module.exports = [{
@@ -49,6 +50,15 @@ module.exports = [{
 
         if (applicationReference) {
           session.setFarmerApplyData(request, reference, applicationReference)
+          const organisation = session.getFarmerApplyData(request, organisationKey)
+          appInsights.defaultClient.trackEvent({
+            name: 'agreement-created',
+            properties: {
+              reference: applicationReference,
+              sbi: organisation.sbi,
+              crn: session.getCustomer(request, crn)
+            }
+          })
         }
       }
 
