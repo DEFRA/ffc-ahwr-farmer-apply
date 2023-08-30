@@ -37,6 +37,7 @@ describe('FarmerApply defra ID redirection test', () => {
     }
   }))
   const configMock = require('../../../../app/config')
+  jest.mock('applicationinsights', () => ({ defaultClient: { trackException: jest.fn(), trackEvent: jest.fn() }, dispose: jest.fn() }))
 
   const urlPrefix = configMock.urlPrefix
   const url = `${urlPrefix}/signin-oidc`
