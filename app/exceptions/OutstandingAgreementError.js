@@ -1,8 +1,10 @@
-class OustandingAgreementError extends Error {
-  constructor (message) {
+class OutstandingAgreementError extends Error {
+  constructor (message, lastApplicationDate, nextApplicationDate) {
     super(message)
-    this.name = 'OustandingAgreementError'
+    this.name = 'OutstandingAgreementError'
+    this.lastApplicationDate = lastApplicationDate
+    this.nextApplicationDate = nextApplicationDate
   }
 }
 
-module.exports = OustandingAgreementError
+module.exports = OutstandingAgreementError
