@@ -10,7 +10,7 @@ describe('Business Eligible to Apply Tests', () => {
   beforeAll(() => {
     applicationApiMock = require('../../../../app/api-requests/application-api')
     jest.mock('../../../../app/api-requests/application-api')
-    businessEligibleToApply = require('../../../../app/api-requests/business-eligble-to-apply')
+    businessEligibleToApply = require('../../../../app/api-requests/business-eligible-to-apply')
   })
 
   beforeEach(() => {
@@ -539,7 +539,7 @@ describe('Business Eligible to Apply Tests', () => {
             ])('Status is DATA INPUTTED (3), CLAIMED (4), IN CHECK (5), ACCEPTED (6), PAID (8), READY TO PAY (9) or REJECTED (10)', async ({ latestApplications }) => {
               const SBI = 123456789
               applicationApiMock.getLatestApplicationsBySbi.mockResolvedValueOnce(latestApplications)
-              await expect(businessEligibleToApply(SBI)).rejects.toEqual(new AlreadyAppliedError('Business with SBI 122333 is not eligble to apply'))
+              await expect(businessEligibleToApply(SBI)).rejects.toEqual(new AlreadyAppliedError('Business with SBI 122333 is not eligible to apply'))
             })
           })
 
@@ -558,7 +558,7 @@ describe('Business Eligible to Apply Tests', () => {
               }
             ]
             applicationApiMock.getLatestApplicationsBySbi.mockResolvedValueOnce(apiResponse)
-            await expect(businessEligibleToApply(SBI)).rejects.toEqual(new AlreadyAppliedError('Business with SBI 122333 is not eligble to apply'))
+            await expect(businessEligibleToApply(SBI)).rejects.toEqual(new AlreadyAppliedError('Business with SBI 122333 is not eligible to apply'))
           })
         })
       })
@@ -669,7 +669,7 @@ describe('Business Eligible to Apply Tests', () => {
             ])('status is DATA INPUTTED (3), CLAIMED (4), IN CHECK (5), ACCEPTED (6), PAID (8), READY TO PAY (9) or REJECTED (10)', async ({ latestApplications }) => {
               const SBI = 123456789
               applicationApiMock.getLatestApplicationsBySbi.mockResolvedValueOnce(latestApplications)
-              await expect(businessEligibleToApply(SBI)).rejects.toEqual(new AlreadyAppliedError('Business with SBI 122333 is not eligble to apply'))
+              await expect(businessEligibleToApply(SBI)).rejects.toEqual(new AlreadyAppliedError('Business with SBI 122333 is not eligible to apply'))
             })
           })
         })
@@ -688,7 +688,7 @@ describe('Business Eligible to Apply Tests', () => {
             }
           ]
           applicationApiMock.getLatestApplicationsBySbi.mockResolvedValueOnce(apiResponse)
-          await expect(businessEligibleToApply(SBI)).rejects.toEqual(new AlreadyAppliedError('Business with SBI 122333 is not eligble to apply'))
+          await expect(businessEligibleToApply(SBI)).rejects.toEqual(new AlreadyAppliedError('Business with SBI 122333 is not eligible to apply'))
         })
       })
     })

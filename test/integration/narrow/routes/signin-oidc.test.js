@@ -14,9 +14,8 @@ const sendIneligibilityEventMock = require('../../../../app/event/raise-ineligib
 jest.mock('../../../../app/event/raise-ineligibility-event')
 const cphCheckMock = require('../../../../app/api-requests/rpa-api/cph-check').customerMustHaveAtLeastOneValidCph
 jest.mock('../../../../app/api-requests/rpa-api/cph-check')
-
-const businessEligibleToApplyMock = require('../../../../app/api-requests/business-eligble-to-apply')
-jest.mock('../../../../app/api-requests/business-eligble-to-apply')
+const businessEligibleToApplyMock = require('../../../../app/api-requests/business-eligible-to-apply')
+jest.mock('../../../../app/api-requests/business-eligible-to-apply')
 
 const { InvalidPermissionsError, InvalidStateError, AlreadyAppliedError, NoEligibleCphError } = require('../../../../app/exceptions')
 
@@ -34,7 +33,10 @@ describe('FarmerApply defra ID redirection test', () => {
         getOrganisationPermissionsUrl: 'dummy-get-organisation-permissions-url',
         getOrganisationUrl: 'dummy-get-organisation-url'
       }
-    }
+    },
+    tenMonthRule: {
+      enabled: false
+    },
   }))
   const configMock = require('../../../../app/config')
   jest.mock('applicationinsights', () => ({ defaultClient: { trackException: jest.fn(), trackEvent: jest.fn() }, dispose: jest.fn() }))
@@ -151,8 +153,8 @@ describe('FarmerApply defra ID redirection test', () => {
       cphNumbersMock.mockResolvedValueOnce([
         '08/178/0064'
       ])
-
-      businessEligibleToApplyMock.mockResolvedValueOnce(true)
+      
+      businessEligibleToApplyMock.mockResolvedValueOnce()
 
       const res = await global.__SERVER__.inject(options)
       expect(res.statusCode).toBe(302)
@@ -209,7 +211,7 @@ describe('FarmerApply defra ID redirection test', () => {
         '08/178/0064'
       ])
 
-      businessEligibleToApplyMock.mockResolvedValueOnce(true)
+      businessEligibleToApplyMock.mockResolvedValueOnce()
 
       const res = await global.__SERVER__.inject(options)
       expect(res.statusCode).toBe(302)
@@ -328,10 +330,9 @@ describe('FarmerApply defra ID redirection test', () => {
       expect(consoleErrorSpy).toHaveBeenCalledWith(`Received error with name InvalidPermissionsError and message ${expectedError.message}.`)
     })
 
-    xtest('returns 400 and exception view when already applied', async () => {
-      config.tenMonthRule.enabled = false
+    test('returns 400 and exception view when already applied', async () => {
       const consoleErrorSpy = jest.spyOn(console, 'error')
-      const expectedError = new AlreadyAppliedError('Business with SBI 101122201 is not eligble to apply')
+      const expectedError = new AlreadyAppliedError('Business with SBI 101122201 is not eligible to apply')
       const baseUrl = `${url}?code=432432&state=83d2b160-74ce-4356-9709-3f8da7868e35`
       const options = {
         method: 'GET',
@@ -370,7 +371,7 @@ describe('FarmerApply defra ID redirection test', () => {
         organisationPermission: true
       })
 
-      businessEligibleToApplyMock.mockResolvedValueOnce(false)
+      businessEligibleToApplyMock.mockRejectedValueOnce(expectedError)
 
       sessionMock.getCustomer.mockResolvedValueOnce({
         attachedToMultipleBusinesses: false
@@ -405,7 +406,6 @@ describe('FarmerApply defra ID redirection test', () => {
       expect(res.statusCode).toBe(400)
       expect(authMock.authenticate).toBeCalledTimes(1)
       expect(authMock.retrieveApimAccessToken).toBeCalledTimes(1)
-      expect(authMock.requestAuthorizationCodeUrl).toBeCalledTimes(1)
       expect(personMock.getPersonSummary).toBeCalledTimes(1)
       expect(organisationMock.organisationIsEligible).toBeCalledTimes(1)
       expect(businessEligibleToApplyMock).toBeCalledTimes(1)

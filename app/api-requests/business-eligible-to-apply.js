@@ -37,7 +37,7 @@ function applicationForBusinessInStateToApply (latestApplicationsForSbi) {
     }
   } else {
     // when toggle is off
-    throw new AlreadyAppliedError(`Business with SBI ${latestApplication.data.organisation.sbi} is not eligble to apply`)
+    throw new AlreadyAppliedError(`Business with SBI ${latestApplication.data.organisation.sbi} is not eligible to apply`)
   }
 }
 
