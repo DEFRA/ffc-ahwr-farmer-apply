@@ -33,10 +33,7 @@ describe('FarmerApply defra ID redirection test', () => {
         getOrganisationPermissionsUrl: 'dummy-get-organisation-permissions-url',
         getOrganisationUrl: 'dummy-get-organisation-url'
       }
-    },
-    tenMonthRule: {
-      enabled: false
-    },
+    }
   }))
   const configMock = require('../../../../app/config')
   jest.mock('applicationinsights', () => ({ defaultClient: { trackException: jest.fn(), trackEvent: jest.fn() }, dispose: jest.fn() }))
