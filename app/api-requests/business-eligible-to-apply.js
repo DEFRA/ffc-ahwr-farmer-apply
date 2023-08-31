@@ -30,7 +30,7 @@ function applicationForBusinessInStateToApply (latestApplicationsForSbi) {
     const { startDate, endDate } = dates
     if (latestApplication.statusId === status.AGREED) {
       // if agreement is still AGREED customer must claim or withdraw
-      throw new OutstandingAgreementError('Customer must claim or withdraw agreement before creating another.', formatDate(startDate), formatDate(endDate))
+      throw new OutstandingAgreementError(`Business with SBI ${latestApplication.data.organisation.sbi} must claim or withdraw agreement before creating another.`, formatDate(startDate), formatDate(endDate))
     } else {
       // for any other status check 10 month rule
       timeLimitRule(latestApplication, dates)
@@ -60,7 +60,7 @@ function timeLimitRule (latestApplication, dates) {
     console.log(`${new Date().toISOString()} Business is not eligible to apply due to ${config.reapplyTimeLimitMonths} month restrictions: ${JSON.stringify({
       sbi: latestApplication.data.organisation.sbi
     })}`)
-    throw new CannotReapplyTimeLimitError(`Business is not eligible to apply due to ${config.reapplyTimeLimitMonths} month restrictions since the last agreement.`, formatDate(startDate), formatDate(endDate))
+    throw new CannotReapplyTimeLimitError(`Business with SBI ${latestApplication.data.organisation.sbi} is not eligible to apply due to ${config.reapplyTimeLimitMonths} month restrictions since the last agreement.`, formatDate(startDate), formatDate(endDate))
   }
 }
 
