@@ -2,11 +2,15 @@ require('webdriverio/build/commands/browser/$')
 const { expect } = require('chai')
 require('constants')
 require('dotenv').config({ path: `.env.${process.env.ENV}` })
-
+const { AxeBuilder } = require('@axe-core/webdriverio')
+const fs = require('fs')
+const { remote } = require('webdriverio');
+let url= "";
 class CommonActions {
   async open (path) {
-    const url = process.env.TEST_ENVIRONMENT_ROOT_URL + path
+   url = process.env.TEST_ENVIRONMENT_ROOT_URL + path
     await browser.url(url)
+    
   }
 
   async clickOn (element) {
@@ -29,12 +33,6 @@ class CommonActions {
     expect(await locator.getText()).to.equal(text)
   }
 
-  async getChildElement(element){
-    const locator_list = await browser.$$(element)
-    console.log(locator_list)
-    return locator_list
-     }
-
   async getPageTitle (expectedTitle) {
     const actualTitle = await browser.getTitle()
     expect(actualTitle).to.be.equal(expectedTitle)
@@ -48,7 +46,26 @@ class CommonActions {
     const locator = await browser.$(element)
     return locator.isExisting()
   }
+  
+  async checkAccessibility () {
+
+        const results = await new AxeBuilder({ client:browser }).analyze();
+        //console.log(results);
+        
+    expect (results.violations.length).to.be.greaterThan(0)
+    try {
+      fs.mkdirSync('./accessibility-report', { recursive: true });
+      for (let i = 0; i < results.violations.length; i++) {
+        fs.writeFileSync(`./accessibility-report/accessibility-violation-${i+1}.json` ,JSON.stringify(results.violations[i]))
+      }
+      fs.writeFileSync('./accessibility-report/accessibility-pass.json', JSON.stringify(results.passes))
+    } catch (e) {
+      console.log("*********************************>>>>>>>>>>>>> "+e)
+    }
+   
+  }
 
 }
 
 module.exports = CommonActions
+// Create an instance of CommonActions

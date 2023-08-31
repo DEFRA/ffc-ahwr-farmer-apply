@@ -1,8 +1,9 @@
-@smoke
+@test
 Feature: select business
 
   Scenario: Apply with valid cred
     Given the user is on the /apply/start page
+    When running accessbility tests
     When user start the application
     And user login with Single business crn and password(for DefraId)
 

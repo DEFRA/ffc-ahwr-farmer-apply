@@ -1,9 +1,14 @@
 const { Given, When, Then } = require('@wdio/cucumber-framework')
 const SelectBusinessPage = require('../pages/select-business-page')
+const CommonActions = require('../pages/common-actions')
+const commonPage = new CommonActions()
 const selectBusinessPage = new SelectBusinessPage()
 
 Given(/^the user is on the (.*) page$/, async function (page) {
   await selectBusinessPage.getHomePage(page)
+})
+When(/^running accessbility tests$/,async function(){
+  await commonPage.checkAccessibility()
 })
 When(/^user start the application$/, async function () {
   await selectBusinessPage.clickOnStartButton()
