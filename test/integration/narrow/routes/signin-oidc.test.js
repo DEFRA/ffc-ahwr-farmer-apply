@@ -1,4 +1,3 @@
-const config = require('../../../../app/config')
 const cheerio = require('cheerio')
 const sessionMock = require('../../../../app/session')
 jest.mock('../../../../app/session')
@@ -150,7 +149,7 @@ describe('FarmerApply defra ID redirection test', () => {
       cphNumbersMock.mockResolvedValueOnce([
         '08/178/0064'
       ])
-      
+
       businessEligibleToApplyMock.mockResolvedValueOnce()
 
       const res = await global.__SERVER__.inject(options)
