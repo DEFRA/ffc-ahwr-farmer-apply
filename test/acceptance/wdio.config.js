@@ -1,5 +1,6 @@
 import allureReporter from '@wdio/allure-reporter'
 import cucumberJson from 'wdio-cucumberjs-json-reporter'
+import { ReportAggregator, HtmlReporter} from '@rpii/wdio-html-reporter' ;
 require('dotenv').config({ path: `.env.${process.env.ENV}` })
 const envRoot = (process.env.TEST_ENVIRONMENT_ROOT_URL)
 
@@ -10,6 +11,7 @@ const allure_config = {
   useCucumberStepReporter: true,
   addConsoleLogs: true
 }
+
 
 exports.config = {
   //
@@ -131,25 +133,15 @@ exports.config = {
   // Test reporter for stdout.
   // The only one supported by default is 'dot'
   // see also: https://webdriver.io/docs/dot-reporter
-  // reporters: ['spec', ['allure', allure_config],
+  reporters: ['spec', ['allure', allure_config],
 
-  //   ['cucumberjs-json', {
-  //     jsonFolder: 'reporter/json/',
-  //     language: 'en'
-  //   }]
-  // ],
-
-  reporters: ['spec',
-    [HtmlReporter, {
-      debug: false,
-      outputDir: './html-reports/',
-      filename: 'feature-report.html',
-      reportTitle: 'Feature Test Report',
-      showInBrowser: false,
-      useOnAfterCommandForScreenshot: false,
-      LOG: logger
+    ['cucumberjs-json', {
+      jsonFolder: 'reporter/json/',
+      language: 'en'
     }]
   ],
+
+ 
 
   //
   // If you are using Cucumber you need to specify the location of your step definitions.
