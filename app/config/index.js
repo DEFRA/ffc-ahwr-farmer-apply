@@ -69,7 +69,8 @@ const schema = Joi.object({
   },
   tenMonthRule: {
     enabled: Joi.bool().default(false)
-  }
+  },
+  reapplyTimeLimitMonths: Joi.number()
 })
 
 const config = {
@@ -129,7 +130,8 @@ const config = {
   },
   tenMonthRule: {
     enabled: process.env.TEN_MONTH_RULE_ENABLED
-  }
+  },
+  reapplyTimeLimitMonths: 10
 }
 
 const result = schema.validate(config, {

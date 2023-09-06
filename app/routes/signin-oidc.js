@@ -5,8 +5,8 @@ const sessionKeys = require('../session/keys')
 const config = require('../config')
 const { farmerApply } = require('../constants/user-types')
 const { getPersonSummary, getPersonName, organisationIsEligible, getOrganisationAddress, cphCheck } = require('../api-requests/rpa-api')
-const businessEligibleToApply = require('../api-requests/business-eligble-to-apply')
-const { InvalidPermissionsError, AlreadyAppliedError, NoEligibleCphError, InvalidStateError } = require('../exceptions')
+const businessEligibleToApply = require('../api-requests/business-eligible-to-apply')
+const { InvalidPermissionsError, AlreadyAppliedError, NoEligibleCphError, InvalidStateError, CannotReapplyTimeLimitError, OutstandingAgreementError } = require('../exceptions')
 const { raiseIneligibilityEvent } = require('../event')
 const appInsights = require('applicationinsights')
 
@@ -64,11 +64,7 @@ module.exports = [{
 
         await cphCheck.customerMustHaveAtLeastOneValidCph(request, apimAccessToken)
 
-        const businessCanApply = await businessEligibleToApply(organisationSummary.organisation.sbi)
-
-        if (!businessCanApply) {
-          throw new AlreadyAppliedError(`Business with SBI ${organisationSummary.organisation.sbi} is not eligble to apply`)
-        }
+        await businessEligibleToApply(organisationSummary.organisation.sbi)
 
         auth.setAuthCookie(request, personSummary.email, farmerApply)
         appInsights.defaultClient.trackEvent({
@@ -89,8 +85,14 @@ module.exports = [{
           case err instanceof InvalidStateError:
             return h.redirect(auth.requestAuthorizationCodeUrl(session, request))
           case err instanceof AlreadyAppliedError:
+            break
           case err instanceof InvalidPermissionsError:
+            break
           case err instanceof NoEligibleCphError:
+            break
+          case err instanceof CannotReapplyTimeLimitError:
+            break
+          case err instanceof OutstandingAgreementError:
             break
           default:
             return h.view('verify-login-failed', {
@@ -110,7 +112,11 @@ module.exports = [{
           alreadyAppliedError: err instanceof AlreadyAppliedError,
           permissionError: err instanceof InvalidPermissionsError,
           cphError: err instanceof NoEligibleCphError,
-          hasMultipleBusineses: attachedToMultipleBusinesses,
+          reapplyTimeLimitError: err instanceof CannotReapplyTimeLimitError,
+          outstandingAgreementError: err instanceof OutstandingAgreementError,
+          lastApplicationDate: err.lastApplicationDate,
+          nextApplicationDate: err.nextApplicationDate,
+          hasMultipleBusinesses: attachedToMultipleBusinesses,
           backLink: auth.requestAuthorizationCodeUrl(session, request),
           sbiText: organisation?.sbi !== undefined ? ` - SBI ${organisation.sbi}` : null,
           organisationName: organisation?.name,
