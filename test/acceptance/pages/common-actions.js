@@ -3,6 +3,7 @@ const { expect } = require('chai')
 require('constants')
 require('dotenv').config({ path: `.env.${process.env.ENV}` })
 const { AxeBuilder } = require('@axe-core/webdriverio')
+const axeSource = require('axe-core').source;
 const fs = require('fs')
 const { remote } = require('webdriverio');
 let url= "";
@@ -51,7 +52,6 @@ class CommonActions {
 
         const results = await new AxeBuilder({ client:browser }).analyze();
         //console.log(results);
-        
     expect (results.violations.length).to.be.greaterThan(0)
     try {
       fs.mkdirSync('./accessibility-report', { recursive: true });

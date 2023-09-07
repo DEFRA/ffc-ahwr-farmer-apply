@@ -1,4 +1,4 @@
-@smoke
+@test
 Feature: select multiple business
 
   Scenario: Apply with valid cred
