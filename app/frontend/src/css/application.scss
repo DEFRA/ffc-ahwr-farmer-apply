@@ -143,3 +143,12 @@ $govuk-global-styles: true; // https://frontend.design-system.service.gov.uk/sas
 .govuk-panel--confirmation .govuk-heading-xl {
   color: white;
 }
+
+
+hr.related-content {
+  margin: 0  0 18px 0;
+}
+
+.related-content a {
+  margin: 0  0 12px 0;
+}
