@@ -1,5 +1,6 @@
 import allureReporter from '@wdio/allure-reporter'
 import cucumberJson from 'wdio-cucumberjs-json-reporter'
+import { ReportAggregator, HtmlReporter} from '@rpii/wdio-html-reporter' ;
 require('dotenv').config({ path: `.env.${process.env.ENV}` })
 const envRoot = (process.env.TEST_ENVIRONMENT_ROOT_URL)
 
@@ -10,6 +11,7 @@ const allure_config = {
   useCucumberStepReporter: true,
   addConsoleLogs: true
 }
+
 
 exports.config = {
   //
@@ -138,6 +140,8 @@ exports.config = {
       language: 'en'
     }]
   ],
+
+ 
 
   //
   // If you are using Cucumber you need to specify the location of your step definitions.
