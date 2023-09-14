@@ -66,9 +66,8 @@
       </ul>
       <p>A farmer will not be eligible for funding unless samples are tested at a laboratory that meets at least one of these specifications.</p>
       <p>If you have a question about laboratories used for review testing, or want to be added to this list, contact the RPA by email or phone.</p>
-      <p>Email: <a href="mailto:ruralpayments@defra.gov.uk" class="govuk-link">ruralpayments@defra.gov.uk</a></p>
-      <p>Telephone: 03000 200 301<br> Monday to Friday, 8:30am to 5pm, except bank holidays<br></p>
-      <p><a href="https://www.gov.uk/call-charges" class="govuk-link">Find out about call charges</a></p>
+      
+      {{ rpaContactDetails({email: ruralPaymentsAgency.email, callChargesUri: ruralPaymentsAgency.callChargesUri, telephone: ruralPaymentsAgency.telephone}) }}
 
       <h2 id="apha-penrith" class="govuk-heading-m govuk-!-margin-top-6">APHA Penrith Veterinary Investigation Centre</h2>
 
