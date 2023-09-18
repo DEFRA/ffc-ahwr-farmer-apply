@@ -17,7 +17,7 @@
       
       {% if hasMultipleBusinesses %}
         <h2 class="govuk-heading-m">Apply for another business</h2>
-        <p class="govuk-body">You can <a href='{{backLink}}'>apply for another business</a> that has registered an interest in the review.</p>
+        <p class="govuk-body">You can <a href='{{ backLink }}'>apply for another business</a> that has not already applied.</p>
       {% endif %}
 
       <h2 class="govuk-heading-m">Get help with your application</h2>
@@ -40,7 +40,7 @@
 
         <ul class='govuk-list govuk-list--bullet'>
           <li>contact the Rural Payments Agency (RPA) if you want a review for a different type of livestock</li>
-          <li><a href='{{backLink}}'>make an application for another business</a> that has not already applied</li>
+          <li><a href='{{ backLink }}'>make an application for another business</a> that has not already applied.</li>
         </ul>
       {% else %}
         <p class="govuk-body">{{ organisationName }}{{ sbiText }} has already applied for an annual health and welfare review of livestock.</p>
@@ -70,7 +70,7 @@
 
       {% if hasMultipleBusinesses %}
         <h2 class="govuk-heading-m">Apply for another business</h2>
-        <p class="govuk-body">You can <a href='{{backLink}}'>apply for another business</a> that has registered an interest in the review.</p>
+        <p class="govuk-body">You can <a href='{{ backLink }}'>apply for another business</a> that you have permission to act for.</p>
       {% endif %}
 
       <h2 class="govuk-heading-m">Get help with your application</h2>
@@ -87,10 +87,9 @@
         <li>an 8000 number used for abattoirs, pet food manufacturers, racing pigeon establishments and showgrounds</li>
         <li>a 9000 number used for poultry keepers</li>
       </ul>
-      
       {% if hasMultipleBusinesses %}
         <h2 class="govuk-heading-m">Apply for another business</h2>
-        <p class="govuk-body">You can <a href='{{backLink}}'>apply for another business</a> that has registered an interest in the review.</p>
+        <p class="govuk-body">You can <a href='{{ backLink }}'>apply for another business</a> that does have an eligible CPH.</p>
       {% endif %}
 
       <h2 class="govuk-heading-m">Get help with your application</h2>
