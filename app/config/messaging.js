@@ -23,7 +23,7 @@ const mqSchema = Joi.object({
     address: process.env.EVENT_QUEUE_ADDRESS,
     type: 'queue'
   },
-  fetchApplicationRequestMsgType: `${msgTypePrefix}.fetch.app.request`,
+  fetchApplicationRequestMsgType: `${msgTypePrefix}.fetch.app.request`
 })
 
 const mqConfig = {
@@ -47,7 +47,7 @@ const mqConfig = {
     address: process.env.EVENT_QUEUE_ADDRESS,
     type: 'queue'
   },
-  fetchApplicationRequestMsgType: `${msgTypePrefix}.fetch.app.request`,
+  fetchApplicationRequestMsgType: `${msgTypePrefix}.fetch.app.request`
 }
 
 const mqResult = mqSchema.validate(mqConfig, {
@@ -69,5 +69,5 @@ module.exports = {
   applicationResponseQueue,
   eventQueue,
   fetchApplicationRequestQueue,
-  applicationRequestMsgType,
+  applicationRequestMsgType
 }

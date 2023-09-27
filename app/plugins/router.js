@@ -1,5 +1,3 @@
-const config = require('../config')
-
 const routes = [].concat(
   require('../routes/accessibility'),
   require('../routes/assets'),
