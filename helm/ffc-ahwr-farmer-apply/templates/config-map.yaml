@@ -10,9 +10,6 @@ data:
   EVENT_QUEUE_ADDRESS: {{ .Values.container.eventQueueAddress }}
   GOOGLE_TAG_MANAGER_KEY: {{ quote .Values.container.googleTagManagerKey}}
   MESSAGE_QUEUE_HOST: {{ quote .Values.container.messageQueueHost }}
-  NOTIFY_TEMPLATE_ID_DEFRA_ID_REGISTER_INTEREST: {{ quote .Values.container.notifyTemplateIdFarmerRegisterYourInterestDefraId }} 
-  NOTIFY_TEMPLATE_ID_FARMER_ACCESS_GRANTED: {{ quote .Values.container.notifyTemplateIdFarmerRegisterYourInterestAccessGranted }}
-  NOTIFY_TEMPLATE_ID_FARMER_ACCESS_NOT_GRANTED: {{ quote .Values.container.notifyTemplateIdFarmerRegisterYourInterestAccessNotGranted  }}
   {{- if .Values.container.redisHostname }}
   REDIS_HOSTNAME: {{ quote .Values.container.redisHostname }}
   {{- end }}
@@ -25,8 +22,6 @@ data:
   SERVICE_URI: {{ quote .Values.container.serviceUri }}
   CLAIM_SERVICE_URI: {{ quote .Values.container.claimServiceUri }}
   URL_PREFIX: {{ quote .Values.container.urlPrefix }}
-  REGISTER_YOUR_INTEREST_ENABLED: {{ quote .Values.container.registerYourInterestEnabled }}
-  REGISTER_YOUR_INTEREST_REQUEST_QUEUE_ADDRESS: {{ quote .Values.container.registerYourInterestRequestQueueAddress }}
   ELIGIBILITY_API_URI: {{ quote .Values.container.eligibilityApiUri }}
   APPLICATION_API_URI: {{ quote .Values.container.applicationApiUri }}
   DEFRA_ID_TENANT: {{ quote .Values.container.defraIdTenant }}

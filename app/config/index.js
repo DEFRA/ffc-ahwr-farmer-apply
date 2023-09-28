@@ -55,9 +55,6 @@ const schema = Joi.object({
   customerSurvey: {
     uri: Joi.string().uri().optional()
   },
-  registerYourInterest: {
-    enabled: Joi.bool().default(true)
-  },
   eligibilityApi: require('../api-requests/eligibility-api.config.schema'),
   applicationApi: require('../api-requests/application-api.config.schema'),
   wreckHttp: {
@@ -115,9 +112,6 @@ const config = {
   },
   customerSurvey: {
     uri: 'https://defragroup.eu.qualtrics.com/jfe/form/SV_0lxBrd2XeDnn2hU'
-  },
-  registerYourInterest: {
-    enabled: process.env.REGISTER_YOUR_INTEREST_ENABLED
   },
   eligibilityApi: require('../api-requests/eligibility-api.config'),
   applicationApi: require('../api-requests/application-api.config'),

@@ -3,7 +3,6 @@ const session = require('../../../../app/session')
 describe('session', () => {
   const applicationSectionKey = 'application'
   const farmerApplyDataSectionKey = 'farmerApplyData'
-  const registerYourInterestDataSectionKey = session.entries.registerYourInterestData
   const selectYourBusinessSectionKey = 'selectYourBusiness'
   const tokensSectionKey = 'tokens'
   const customerSectionKey = 'customer'
@@ -15,7 +14,6 @@ describe('session', () => {
   const getFunctionsToTest = [
     { func: 'getApplication', expectedSectionKey: applicationSectionKey },
     { func: 'getFarmerApplyData', expectedSectionKey: farmerApplyDataSectionKey },
-    { func: 'getRegisterYourInterestData', expectedSectionKey: registerYourInterestDataSectionKey },
     { func: 'getSelectYourBusiness', expectedSectionKey: selectYourBusinessSectionKey },
     { func: 'getToken', expectedSectionKey: tokensSectionKey },
     { func: 'getCustomer', expectedSectionKey: customerSectionKey },
@@ -25,7 +23,6 @@ describe('session', () => {
   const setFunctionsToTest = [
     { func: 'setApplication', expectedSectionKey: applicationSectionKey },
     { func: 'setFarmerApplyData', expectedSectionKey: farmerApplyDataSectionKey },
-    { func: 'setRegisterYourInterestData', expectedSectionKey: registerYourInterestDataSectionKey },
     { func: 'setSelectYourBusiness', expectedSectionKey: selectYourBusinessSectionKey },
     { func: 'setToken', expectedSectionKey: tokensSectionKey },
     { func: 'setCustomer', expectedSectionKey: customerSectionKey },
