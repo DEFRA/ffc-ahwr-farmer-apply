@@ -55,7 +55,6 @@ const schema = Joi.object({
   customerSurvey: {
     uri: Joi.string().uri().optional()
   },
-  eligibilityApi: require('../api-requests/eligibility-api.config.schema'),
   applicationApi: require('../api-requests/application-api.config.schema'),
   wreckHttp: {
     timeoutMilliseconds: Joi.number().default(10000)
@@ -113,7 +112,6 @@ const config = {
   customerSurvey: {
     uri: 'https://defragroup.eu.qualtrics.com/jfe/form/SV_0lxBrd2XeDnn2hU'
   },
-  eligibilityApi: require('../api-requests/eligibility-api.config'),
   applicationApi: require('../api-requests/application-api.config'),
   wreckHttp: {
     timeoutMilliseconds: process.env.WRECK_HTTP_TIMEOUT_MILLISECONDS

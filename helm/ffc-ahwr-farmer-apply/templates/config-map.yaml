@@ -22,7 +22,6 @@ data:
   SERVICE_URI: {{ quote .Values.container.serviceUri }}
   CLAIM_SERVICE_URI: {{ quote .Values.container.claimServiceUri }}
   URL_PREFIX: {{ quote .Values.container.urlPrefix }}
-  ELIGIBILITY_API_URI: {{ quote .Values.container.eligibilityApiUri }}
   APPLICATION_API_URI: {{ quote .Values.container.applicationApiUri }}
   DEFRA_ID_TENANT: {{ quote .Values.container.defraIdTenant }}
   DEFRA_ID_POLICY: {{ quote .Values.container.defraIdPolicy }}
