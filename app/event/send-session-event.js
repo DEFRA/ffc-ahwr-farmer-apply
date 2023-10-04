@@ -1,11 +1,12 @@
 const raiseEvent = require('./raise-event')
 
-const sendSessionEvent = (organisation, sessionId, entryKey, key, value, ip) => {
+const sendSessionEvent = (organisation, sessionId, reference, entryKey, key, value, ip) => {
   if (sessionId && organisation) {
     const event = {
       id: sessionId,
       sbi: organisation.sbi,
       cph: 'n/a',
+      reference,
       email: organisation.email,
       name: 'send-session-event',
       type: `${entryKey}-${key}`,
