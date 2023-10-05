@@ -45,9 +45,6 @@ container:
   imagePullPolicy: IfNotPresent
   messageQueueHost: namespace.servicebus.windows.net
   notifyApiKey:
-  notifyTemplateIdFarmerRegisterYourInterestDefraId:
-  notifyTemplateIdFarmerRegisterYourInterestAccessGranted:
-  notifyTemplateIdFarmerRegisterYourInterestAccessNotGranted:
   port: 3000
   redisHostname: redis-hostname.default
   redisPartition: ffc-ahwr-farmer-apply
@@ -59,8 +56,6 @@ container:
   termsAndConditionsUrl:
   eligibilityApiUri:
   applicationApiUri:
-  registerYourInterestEnabled:
-  registerYourInterestRequestQueueAddress: ffc-ahwr-register-your-interest-request
   defraIdTenant:
   defraIdRedirectUri:
   defraIdJwtIssuerId:
