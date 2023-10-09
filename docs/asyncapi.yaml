@@ -4,10 +4,6 @@ info:
   version: 0.50.0
   description: Apply and ROI Journey for Animal Health and Welfare Review 
 channels:
-  ffc-ahwr-register-your-interest-request:
-    subscribe:
-      message:
-        $ref: '#/components/messages/RegisterYourInterestRequest'
   ffc-ahwr-application-request:
     subscribe:
       message:
@@ -18,14 +14,6 @@ channels:
         $ref: '#/components/messages/ApplicationResponse'
 components:
   messages:
-    RegisterYourInterestRequest:
-      payload:
-        type: object
-        properties:
-          email:
-            type: string
-            format: email
-            description: Business email of the farmer
     ApplicationRequest:
       payload:
         type: object

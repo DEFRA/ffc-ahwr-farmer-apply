@@ -1,4 +1,5 @@
 const urlPrefix = require('../config/index').urlPrefix
+const rpaContactDetails = require('../config/index').ruralPaymentsAgency
 module.exports = [{
   method: 'GET',
   path: `${urlPrefix}/test-cattle`,
@@ -42,7 +43,9 @@ module.exports = [{
   options: {
     auth: false,
     handler: async (_, h) => {
-      return h.view('guidance/recommended-cattle-labs')
+      return h.view('guidance/recommended-cattle-labs', {
+        ruralPaymentsAgency: rpaContactDetails
+      })
     }
   }
 },
@@ -62,7 +65,9 @@ module.exports = [{
   options: {
     auth: false,
     handler: async (_, h) => {
-      return h.view('guidance/recommended-pig-labs')
+      return h.view('guidance/recommended-pig-labs', {
+        ruralPaymentsAgency: rpaContactDetails
+      })
     }
   }
 },
@@ -82,7 +87,9 @@ module.exports = [{
   options: {
     auth: false,
     handler: async (_, h) => {
-      return h.view('guidance/recommended-sheep-labs')
+      return h.view('guidance/recommended-sheep-labs', {
+        ruralPaymentsAgency: rpaContactDetails
+      })
     }
   }
 }]

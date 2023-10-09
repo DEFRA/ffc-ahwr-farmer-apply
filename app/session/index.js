@@ -6,7 +6,6 @@ const entries = {
   selectYourBusiness: 'selectYourBusiness',
   organisation: 'organisation',
   answers: 'answers',
-  registerYourInterestData: 'registerYourInterestData',
   pkcecodes: 'pkcecodes',
   tokens: 'tokens',
   customer: 'customer'
@@ -41,7 +40,6 @@ function clear (request) {
   request.yar.clear(entries.application)
   request.yar.clear(entries.organisation)
   request.yar.clear(entries.answers)
-  request.yar.clear(entries.registerYourInterestData)
   request.yar.clear(entries.selectYourBusiness)
   request.yar.clear(entries.customer)
 }
@@ -68,14 +66,6 @@ function getApplication (request, key) {
 
 function getFarmerApplyData (request, key) {
   return get(request, entries.farmerApplyData, key)
-}
-
-function getRegisterYourInterestData (request, key) {
-  return get(request, entries.registerYourInterestData, key)
-}
-
-function setRegisterYourInterestData (request, key, value) {
-  set(request, entries.registerYourInterestData, key, value)
 }
 
 function setToken (request, key, value) {
@@ -110,8 +100,6 @@ module.exports = {
   getFarmerApplyData,
   setApplication,
   setFarmerApplyData,
-  getRegisterYourInterestData,
-  setRegisterYourInterestData,
   getSelectYourBusiness,
   setSelectYourBusiness,
   getToken,
