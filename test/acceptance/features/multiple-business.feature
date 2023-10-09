@@ -1,9 +1,10 @@
 @smoke
+
 Feature: select multiple business
 
   Scenario: Apply with valid cred
     Given the user is on the /apply/start page
-    When user start the application
+   Then start the application
     And user login with Multiple business crn and password(for DefraId)
 
   Scenario Outline: org-review page
@@ -29,7 +30,7 @@ Feature: select multiple business
   Scenario: users animal eligibility
     When user check the minimum number of livestock required to qualify for the review
     And user confirm to meet the requirement
-    And user continue the application
+    Then the user continue the application
     And user check the answer
 
   Scenario: user accept terms and condition to complete the journey
