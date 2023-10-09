@@ -59,8 +59,7 @@ class CommonActions {
 
   async getPageTitle (expectedTitle) {
     const actualTitle = await browser.getTitle()
-    //expect(actualTitle).to.be.equal(expectedTitle)
-    return actualTitle
+      return actualTitle
   }
 
   async urlContain (expectedUrl) {

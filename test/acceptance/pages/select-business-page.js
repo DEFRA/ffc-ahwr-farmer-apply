@@ -79,6 +79,7 @@ const EXCEPTION_ERROR_MESSAGE_EXPECTED = 'You do not have the required permissio
 const EXCEPTION_ERROR_MESSAGE_EXPECTED_NO_CPH = 'Mr M A Burdon - SBI 200259426 has no eligible county parish holding (CPH) number registered to it.'
 const EXCEPTION_ERROR_MESSAGE_EXPECTED_MB_NO_PERMISSION = 'You do not have the required permission to act for Dale Hitchens - SBI 107224622.'
 const EXCEPTION_ERROR_MESSAGE_EXPECTED_MB_NO_CPH = 'Jazzmin Arundell - SBI 114522978 has no eligible county parish holding (CPH) number registered to it.'
+const EXPECTED_ERROR='has already applied for an annual health and welfare review of livestock.'
 const CALL_CHARGES = '.govuk-grid-column-full>p>.govuk-link'
 const CALL_CHARGES_TITLE = 'Call charges and phone numbers - GOV.UK'
 //10 month rule
@@ -404,10 +405,9 @@ console.log(error.message)
         })
         .finally(() => {
           // Close the database connection (optional)
-          pgp.end();
+         
         });
       
-
       } else if (type === 'checkStatus') {
 
         // Define a SQL query to fetch the value from the database
@@ -430,6 +430,29 @@ console.log(error.message)
         // Release the connection
         conn.done();
 
+      }else if (type === 'Incheck') {
+        // Step 3: Update status in the database
+        const updateStatusQuery = `
+        UPDATE public.application
+        SET "statusId" = 5
+        WHERE reference = $1;
+      `;
+      
+      const value =AGREEMENT_NUMBER_VALUE;  // The reference value
+      ;
+      
+      db.none(updateStatusQuery, [value])
+        .then(() => {
+          console.log('Status updated successfully.');
+        })
+        .catch(error => {
+          console.error('Error updating status:', error);
+        })
+        .finally(() => {
+          // Close the database connection (optional)
+          
+        });
+      
       }
     } catch (err) {
       console.error('Error:', err);
@@ -452,6 +475,11 @@ console.log(error.message)
   async validateExistingApplicationErrorMessage() {
 
 
+  }
+
+  async validateIncheckErrormessage(){
+
+    await this.elementToContainText(EXCEPTION_ERROR_MESSAGE,EXPECTED_ERROR)
   }
 
   async closeBrowser1(){
