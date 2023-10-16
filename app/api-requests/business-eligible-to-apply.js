@@ -66,7 +66,7 @@ function timeLimitRule (latestApplication, dates) {
 
 function getLatestApplication (latestApplicationsForSbi) {
   return latestApplicationsForSbi.reduce((a, b) => {
-    return new Date(a.updatedAt) > new Date(b.updatedAt) ? a : b
+    return new Date(a.createdAt) > new Date(b.createdAt) ? a : b
   })
 }
 
