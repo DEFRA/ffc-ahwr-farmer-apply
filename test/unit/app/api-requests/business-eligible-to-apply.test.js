@@ -99,7 +99,7 @@ describe('Business Eligible to Apply Tests', () => {
       })
 
       describe('Business is not eligible when the last previous application had a status of anything other than WITHDRAWN (2), NOT AGREED (7), AGREED (1)', () => {
-        describe('Time limit error is returned with status of DATA INPUTTED (3), CLAIMED (4), IN CHECK (5), ACCEPTED (6), PAID (8), READY TO PAY (9) or REJECTED (10)', () => {
+        describe('Time limit error is returned with status of DATA INPUTTED (3), CLAIMED (4), IN CHECK (5), ACCEPTED (6), PAID (8), READY TO PAY (9), REJECTED (10) or ON HOLD(11)', () => {
           test.each([
             {
               latestApplications: [
@@ -198,8 +198,22 @@ describe('Business Eligible to Apply Tests', () => {
                   statusId: 10
                 }
               ]
+            },
+            {
+              latestApplications: [
+                {
+                  data: {
+                    organisation: {
+                      sbi: '122333'
+                    }
+                  },
+                  createdAt: '2023-06-06T13:52:14.207Z',
+                  updatedAt: '2023-06-06T13:52:14.207Z',
+                  statusId: 11
+                }
+              ]
             }
-          ])('Status is DATA INPUTTED (3), CLAIMED (4), IN CHECK (5), ACCEPTED (6), PAID (8), READY TO PAY (9) or REJECTED (10)', async ({ latestApplications }) => {
+          ])('Status is DATA INPUTTED (3), CLAIMED (4), IN CHECK (5), ACCEPTED (6), PAID (8), READY TO PAY (9), REJECTED (10) or ON HOLD', async ({ latestApplications }) => {
             const SBI = 123456789
             applicationApiMock.getLatestApplicationsBySbi.mockResolvedValueOnce(latestApplications)
             await expect(businessEligibleToApply(SBI)).rejects.toEqual(new CannotReapplyTimeLimitError('Business with SBI 122333 is not eligible to apply due to 10 month restrictions since the last agreement.'))
@@ -228,7 +242,7 @@ describe('Business Eligible to Apply Tests', () => {
 
     describe('When the previous application was more than 10 months', () => {
       describe('Business is eligible when the last previous application had a status of anything other than WITHDRAWN (2), NOT AGREED (7), AGREED (1)', () => {
-        describe('Time limit error is not returned with status of DATA INPUTTED (3), CLAIMED (4), IN CHECK (5), ACCEPTED (6), PAID (8), READY TO PAY (9) or REJECTED (10)', () => {
+        describe('Time limit error is not returned with status of DATA INPUTTED (3), CLAIMED (4), IN CHECK (5), ACCEPTED (6), PAID (8), READY TO PAY (9), REJECTED (10) or ON HOLD (11)', () => {
           test.each([
             {
               latestApplications: [
@@ -327,8 +341,22 @@ describe('Business Eligible to Apply Tests', () => {
                   statusId: 10
                 }
               ]
+            },
+            {
+              latestApplications: [
+                {
+                  data: {
+                    organisation: {
+                      sbi: '122333'
+                    }
+                  },
+                  createdAt: '2020-06-06T13:52:14.207Z',
+                  updatedAt: '2020-06-06T13:52:14.207Z',
+                  statusId: 11
+                }
+              ]
             }
-          ])('status is DATA INPUTTED (3), CLAIMED (4), IN CHECK (5), ACCEPTED (6), PAID (8), READY TO PAY (9) or REJECTED (10)', async ({ latestApplications }) => {
+          ])('status is DATA INPUTTED (3), CLAIMED (4), IN CHECK (5), ACCEPTED (6), PAID (8), READY TO PAY (9), REJECTED (10) or ON HOLD (11)', async ({ latestApplications }) => {
             const SBI = 123456789
             applicationApiMock.getLatestApplicationsBySbi.mockResolvedValueOnce(latestApplications)
             await expect(businessEligibleToApply(SBI)).resolves.not.toThrow(new CannotReapplyTimeLimitError('Business with SBI 122333 is not eligible to apply due to 10 month restrictions since the last agreement.'))
@@ -383,6 +411,7 @@ describe('Business Eligible to Apply Tests', () => {
     })
   })
 
+  // This has not been updated for a status of On Hold because it should be removed with the feature toggle (at some point) 
   describe('When the 10 month rule toggle is not enabled', () => {
     beforeEach(() => {
       config.tenMonthRule.enabled = false
@@ -435,7 +464,6 @@ describe('Business Eligible to Apply Tests', () => {
         })
 
         describe('Business is not eligible when the last previous application had a status of anything other than WITHDRAWN (2), NOT AGREED (7), AGREED (1)', () => {
-          // TODO: write out statuses...
           describe('Already Applied error is returned with status of DATA INPUTTED (3), CLAIMED (4), IN CHECK (5), ACCEPTED (6), PAID (8), READY TO PAY (9) or REJECTED (10)', () => {
             test.each([
               {
