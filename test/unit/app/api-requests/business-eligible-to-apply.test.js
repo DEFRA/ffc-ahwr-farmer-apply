@@ -411,7 +411,7 @@ describe('Business Eligible to Apply Tests', () => {
     })
   })
 
-  // This has not been updated for a status of On Hold because it should be removed with the feature toggle (at some point) 
+  // This has not been updated for a status of On Hold because it should be removed with the feature toggle (at some point)
   describe('When the 10 month rule toggle is not enabled', () => {
     beforeEach(() => {
       config.tenMonthRule.enabled = false
