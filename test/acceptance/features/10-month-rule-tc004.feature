@@ -1,4 +1,4 @@
-@smoke1
+@smoke
 
 
 Feature:10 month rule - Not Agreed - Single business

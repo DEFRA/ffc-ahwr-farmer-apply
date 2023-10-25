@@ -1,4 +1,4 @@
-@smoke1
+@smoke
 #runs first
 
 Feature: Applied notclaimed- single Business

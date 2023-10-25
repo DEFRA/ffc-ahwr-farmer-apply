@@ -1,4 +1,4 @@
-@smoke1
+@smoke
 
 Feature: Applied not claimed- Multi Business
 

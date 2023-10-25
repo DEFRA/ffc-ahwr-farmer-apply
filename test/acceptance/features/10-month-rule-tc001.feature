@@ -1,4 +1,4 @@
-@smoke1
+@smoke
 Feature: select business-withdrawn
 
   Scenario: Apply with valid cred
