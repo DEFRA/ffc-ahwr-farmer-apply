@@ -80,6 +80,7 @@ const EXCEPTION_ERROR_MESSAGE_EXPECTED_NO_CPH = 'Mr M A Burdon - SBI 200259426 h
 const EXCEPTION_ERROR_MESSAGE_EXPECTED_MB_NO_PERMISSION = 'You do not have the required permission to act for Dale Hitchens - SBI 107224622.'
 const EXCEPTION_ERROR_MESSAGE_EXPECTED_MB_NO_CPH = 'Jazzmin Arundell - SBI 114522978 has no eligible county parish holding (CPH) number registered to it.'
 const EXPECTED_ERROR='has already applied for an annual health and welfare review of livestock.'
+const EXPECTED_ERROR_FOR_MULTIPLEBUSINESS='applied for an annual health and welfare review of livestock'
 const CALL_CHARGES = '.govuk-grid-column-full>p>.govuk-link'
 const CALL_CHARGES_TITLE = 'Call charges and phone numbers - GOV.UK'
 //10 month rule
@@ -87,6 +88,7 @@ const AGREEMENT_NUMBER = '.govuk-panel__body>strong'
 const REJECT_OFFER='//*[@id="submitDeclarationForm"]/div[2]/button[2]'
 let checkStatus_query
 let updateStatus_query
+let sbiValue
 let AGREEMENT_NUMBER_VALUE;
 const actualStatus = 1;
 let fetchedValue
@@ -352,6 +354,59 @@ console.log(error.message)
 
   }
   
+ 
+  async updateWithdrawStatus(){
+    const sleep = (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitTimeInMs))
+    await sleep(5000)
+    try {
+      let text= await this.elementGetText(EXCEPTION_ERROR_MESSAGE)
+      const regex = /SBI (\d+)/; // Define a regular expression pattern to match "SBI" followed by numbers.
+  const match = text.match(regex); // Search for the pattern in the text.
+  
+  if (match) {
+    
+   
+    sbiValue = match[1]; // Extract the SBI number from the first capturing group.
+    console.log(sbiValue); // Output the SBI number to the console.
+  } else {
+    console.log("SBI number not found in the text.");
+  
+  }
+// Replace this with your actual SBI value
+
+  // Step 1: Define the Azure SQL Database connection configuration
+  const conn = await db.connect();
+  
+  // Step 3: Update status in the database
+  const updateStatusQuery = `
+    UPDATE public.application
+    SET "statusId" = 2
+    WHERE data->'organisation'->>'sbi' = $1;
+  `;
+  
+  // Execute the query with the SBI value as a parameter
+  db.none(updateStatusQuery, [sbiValue])
+    .then(() => {
+      console.log('Status updated successfully.');
+    })
+    .catch(error => {
+      console.error('Error updating status:', error);
+    })
+    .finally(() => {
+      // Close the database connection (optional)
+      conn.done();
+    });
+     
+             
+      }
+      catch (err) {
+        console.error('Error:', err);
+      }
+      
+      }
+
+
+  
 
   async connectTODatabase(type) {
     const sleep = (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitTimeInMs))
@@ -361,31 +416,8 @@ console.log(error.message)
       const conn = await db.connect();
 
       let query = '';
-      let values = [];
-      //const AGREEMENT_NUMBER_VALUE = 'your_agreement_number'; // Replace with actual value
-
-      if (type === 'updateDate') {
-        // Step 2: Update date in the database
-        query = `
-        UPDATE public.application
-        SET "createdAt" ='2022-09-19T13:40:34.590Z',
-            "updatedAt" = '2023-09-19T13:40:34.637Z'
-        WHERE reference = $1;
-      `;
-        
-
-        db.none(query, AGREEMENT_NUMBER_VALUE)
-        .then(() => {
-          console.log('Status updated successfully.');
-        })
-        .catch(error => {
-          console.error('Error updating status:', error);
-        })
-        .finally(() => {
-          // Close the database connection (optional)
-          pgp.end();
-        });
-      } else if (type === 'updateStatus') {
+     
+          if (type === 'updateStatus') {
         // Step 3: Update status in the database
         const updateStatusQuery = `
         UPDATE public.application
@@ -453,6 +485,29 @@ console.log(error.message)
           
         });
       
+      }else if (type === 'ReadyToPay') {
+        // Step 3: Update status in the database
+        const updateStatusQuery = `
+        UPDATE public.application
+        SET "statusId" = 9
+        WHERE reference = $1;
+      `;
+      
+      const value =AGREEMENT_NUMBER_VALUE;  // The reference value
+      ;
+      
+      db.none(updateStatusQuery, [value])
+        .then(() => {
+          console.log('Status updated successfully.');
+        })
+        .catch(error => {
+          console.error('Error updating status:', error);
+        })
+        .finally(() => {
+          // Close the database connection (optional)
+          
+        });
+      
       }
     } catch (err) {
       console.error('Error:', err);
@@ -461,6 +516,41 @@ console.log(error.message)
     // Close the WebDriverIO browser session when done
     await browser.deleteSession();
  }
+
+
+ async updateDate(createdDate) {
+  const sleep = (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitTimeInMs))
+  await sleep(5000)
+  try {
+    // Step 1: Define the Azure SQL Database connection configuration
+    const conn = await db.connect();
+
+    let query = `
+  UPDATE public.application
+  SET "createdAt" = $2,
+      "updatedAt" = '2023-09-19 13:46:04.3+00'
+  WHERE reference = $1;
+`;
+//AGREEMENT_NUMBER_VALUE='AHWR-8092-E593'
+db.none(query, [AGREEMENT_NUMBER_VALUE, createdDate])
+  .then(() => {
+    console.log('Status updated successfully.');
+  })
+  .catch(error => {
+    console.error('Error updating status:', error);
+  })
+  .finally(() => {
+    // Close the database connection (optional)
+   
+  });
+
+    } catch (err) {
+    console.error('Error:', err);
+  }
+
+  // Close the WebDriverIO browser session when done
+  await browser.deleteSession();
+}
 
   async validAgreedStatus() {
     await this.elementValidateText(fetchedValue, actualStatus)
@@ -472,15 +562,18 @@ console.log(error.message)
     return AGREEMENT_NUMBER_VALUE;
 
   }
-  async validateExistingApplicationErrorMessage() {
+ 
 
-
-  }
-
-  async validateIncheckErrormessage(){
+  async validateApplicationExistsSingleBusiness(){
 
     await this.elementToContainText(EXCEPTION_ERROR_MESSAGE,EXPECTED_ERROR)
   }
+
+  async validateApplicationExistsMultipleBusiness(){
+
+    await this.elementToContainText(EXCEPTION_ERROR_MESSAGE,EXPECTED_ERROR_FOR_MULTIPLEBUSINESS)
+  }
+
 
   async closeBrowser1(){
 
@@ -488,6 +581,29 @@ console.log(error.message)
 // Use the callback interface to close the browser
 await this.closeBrowser()
    
+  }
+
+  async deleteDatabaseEntry(){
+
+    const updateStatusQuery = `
+    DELETE FROM public.application 
+    WHERE data->'organisation'->>'sbi' = $1;
+      `;
+      
+      const value =AGREEMENT_NUMBER_VALUE;  // The reference value
+      ;
+      
+      db.none(updateStatusQuery, [value])
+        .then(() => {
+          console.log('Status updated successfully.');
+        })
+        .catch(error => {
+          console.error('Error updating status:', error);
+        })
+        .finally(() => {
+          // Close the database connection (optional)
+          
+        });
   }
 
 }

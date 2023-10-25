@@ -1,7 +1,7 @@
-@smoke
+@smoke1
 #runs first
 
-Feature: Ready to pay Single Business
+Feature: Applied notclaimed- single Business
 
   Scenario: Apply with valid cred
     Given the user is on the /apply/start page
@@ -38,14 +38,22 @@ Feature: Ready to pay Single Business
     Then user complete the application
     Then user should see successful message
     Then fetch the agreement number
-     #Then close browser
-   
+      
 
-    Scenario Outline: Withdraw the agreed status
-     Then pass the agreement number to updateDate
+  Scenario Outline: Withdraw the agreed status
+     Then agreement number is passed to <updatedate> 
+   Examples:  
+   |updatedate|
+   |2021-12-09 16:46:04.3+00|
+
     
+  Scenario: Apply with valid cred
+     Given the user is on the /apply/start page
+     Then start the application
+     And user login with Single business crn and password(for DefraId)
+     Then validate the error message 
+     Then make the agreement status to withdrawn 
 
-     
 
   Scenario: Apply with valid cred
     Then close browser

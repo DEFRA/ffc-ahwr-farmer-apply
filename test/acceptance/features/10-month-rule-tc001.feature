@@ -1,4 +1,4 @@
-@smoke
+@smoke1
 Feature: select business-withdrawn
 
   Scenario: Apply with valid cred
@@ -74,3 +74,5 @@ Feature: select business-withdrawn
   Scenario: user accept terms and condition to complete the journey
     When user is on the declaration page
     When user view the page title
+
+
