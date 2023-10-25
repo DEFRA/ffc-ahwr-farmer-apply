@@ -3,7 +3,6 @@ Feature: select business
 
   Scenario: Apply with valid cred
     Given the user is on the /apply/start page
-    
     Then start the application
     And user login with Single business crn and password(for DefraId)
 
@@ -29,7 +28,6 @@ Feature: select business
   Scenario: users animal eligibility
     When user check the minimum number of livestock required to qualify for the review
     And user confirm to meet the requirement
-     When running accessbility tests
     Then the user continue the application
     And user check the answer
      When running accessbility tests
@@ -41,6 +39,8 @@ Feature: select business
     # And user accept the terms and conditions
     # Then user complete the application
     # Then user should see successful message
+
+  
     
 
 

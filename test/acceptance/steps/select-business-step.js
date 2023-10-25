@@ -13,9 +13,11 @@ When(/^start the application$/, async function () {
 When(/^user login with (.*) business crn and password\(for DefraId\)$/, async function (business) {
   await selectBusinessPage.signInWithDefraId(business)
 });
+
 When(/^make the agreement status to withdrawn$/, async function () {
   await selectBusinessPage.updateWithdrawStatus()
 });
+
 
 When(/^running accessbility tests$/, async function () {
   await commonPage.checkAccessibility()
@@ -118,6 +120,13 @@ Then(/^validate the error message$/, async function () {
 Then(/^validate the error message for multiple business$/, async function () {
   await selectBusinessPage.validateApplicationExistsMultipleBusiness()
 })
+
+Then(/^close browser$/, async function () {
+  await selectBusinessPage.closeBrowser1()
+})
+
+
+
 Then(/^Confirm that the status is set to Agreed$/, async function () {
   await selectBusinessPage.validAgreedStatus()
 })

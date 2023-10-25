@@ -80,7 +80,9 @@ const EXCEPTION_ERROR_MESSAGE_EXPECTED_NO_CPH = 'Mr M A Burdon - SBI 200259426 h
 const EXCEPTION_ERROR_MESSAGE_EXPECTED_MB_NO_PERMISSION = 'You do not have the required permission to act for Dale Hitchens - SBI 107224622.'
 const EXCEPTION_ERROR_MESSAGE_EXPECTED_MB_NO_CPH = 'Jazzmin Arundell - SBI 114522978 has no eligible county parish holding (CPH) number registered to it.'
 const EXPECTED_ERROR='has already applied for an annual health and welfare review of livestock.'
+
 const EXPECTED_ERROR_FOR_MULTIPLEBUSINESS='applied for an annual health and welfare review of livestock'
+
 const CALL_CHARGES = '.govuk-grid-column-full>p>.govuk-link'
 const CALL_CHARGES_TITLE = 'Call charges and phone numbers - GOV.UK'
 //10 month rule
@@ -353,8 +355,6 @@ console.log(error.message)
     await browser.switchToWindow(windowHandles[0]);
 
   }
-  
- 
   async updateWithdrawStatus(){
     const sleep = (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitTimeInMs))
     await sleep(5000)
@@ -405,9 +405,6 @@ console.log(error.message)
       
       }
 
-
-  
-
   async connectTODatabase(type) {
     const sleep = (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitTimeInMs))
     await sleep(5000)
@@ -416,8 +413,30 @@ console.log(error.message)
       const conn = await db.connect();
 
       let query = '';
-     
-          if (type === 'updateStatus') {
+       if (type === 'updateStatus') {
+      let values = [];
+      //const AGREEMENT_NUMBER_VALUE = 'your_agreement_number'; // Replace with actual value
+
+      if (type === 'updateDate') {
+        // Step 2: Update date in the database
+        query = `
+        UPDATE public.application
+        SET "createdAt" ='2022-09-19T13:40:34.590Z',
+            "updatedAt" = '2023-09-19T13:40:34.637Z'
+        WHERE reference = $1;
+      `;
+        db.none(query, AGREEMENT_NUMBER_VALUE)
+        .then(() => {
+          console.log('Status updated successfully.');
+        })
+        .catch(error => {
+          console.error('Error updating status:', error);
+        })
+        .finally(() => {
+          // Close the database connection (optional)
+          pgp.end();
+        });
+      } else if (type === 'updateStatus') {
         // Step 3: Update status in the database
         const updateStatusQuery = `
         UPDATE public.application
@@ -485,7 +504,7 @@ console.log(error.message)
           
         });
       
-      }else if (type === 'ReadyToPay') {
+     }else if (type === 'ReadyToPay') {
         // Step 3: Update status in the database
         const updateStatusQuery = `
         UPDATE public.application
@@ -508,6 +527,7 @@ console.log(error.message)
           
         });
       
+
       }
     } catch (err) {
       console.error('Error:', err);
@@ -516,6 +536,7 @@ console.log(error.message)
     // Close the WebDriverIO browser session when done
     await browser.deleteSession();
  }
+
 
 
  async updateDate(createdDate) {
@@ -552,6 +573,7 @@ db.none(query, [AGREEMENT_NUMBER_VALUE, createdDate])
   await browser.deleteSession();
 }
 
+
   async validAgreedStatus() {
     await this.elementValidateText(fetchedValue, actualStatus)
   }
@@ -562,8 +584,6 @@ db.none(query, [AGREEMENT_NUMBER_VALUE, createdDate])
     return AGREEMENT_NUMBER_VALUE;
 
   }
- 
-
   async validateApplicationExistsSingleBusiness(){
 
     await this.elementToContainText(EXCEPTION_ERROR_MESSAGE,EXPECTED_ERROR)
@@ -574,6 +594,10 @@ db.none(query, [AGREEMENT_NUMBER_VALUE, createdDate])
     await this.elementToContainText(EXCEPTION_ERROR_MESSAGE,EXPECTED_ERROR_FOR_MULTIPLEBUSINESS)
   }
 
+  async validateIncheckErrormessage(){
+
+    await this.elementToContainText(EXCEPTION_ERROR_MESSAGE,EXPECTED_ERROR)
+  }
 
   async closeBrowser1(){
 
@@ -582,8 +606,7 @@ db.none(query, [AGREEMENT_NUMBER_VALUE, createdDate])
 await this.closeBrowser()
    
   }
-
-  async deleteDatabaseEntry(){
+ async deleteDatabaseEntry(){
 
     const updateStatusQuery = `
     DELETE FROM public.application 
