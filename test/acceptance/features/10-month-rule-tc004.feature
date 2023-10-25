@@ -1,6 +1,5 @@
 @smoke
 
-
 Feature:10 month rule - Not Agreed - Single business
  Scenario: Apply with valid cred
     Given the user is on the /apply/start page
@@ -40,10 +39,11 @@ Feature:10 month rule - Not Agreed - Single business
   Scenario: Re-Apply with valid cred
     Then close browser
     Given the user is on the /apply/start page
-     Then start the application
+    Then start the application
     And user login with Single business crn and password(for DefraId)
 
   Scenario: org-review page
+
     When user check the business details
     And user confirm the org-review page
     And user agreed the business details is correct
@@ -62,9 +62,10 @@ Feature:10 month rule - Not Agreed - Single business
   Scenario: users animal eligibility
     When user check the minimum number of livestock required to qualify for the review
     And user confirm to meet the requirement
-    And user continue the application
+    Then the user continue the application
     And user check the answer
 
   Scenario: user accept terms and condition to complete the journey
     When user is on the declaration page
     When user view the page title
+
