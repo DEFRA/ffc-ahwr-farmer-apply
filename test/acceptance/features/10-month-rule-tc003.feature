@@ -1,8 +1,7 @@
-@smoke1
+@smoke
 
 Feature: Applied not claimed- Multi Business
-
-  
+ 
   Scenario: Apply with valid cred
     Given the user is on the /apply/start page
     Then start the application
@@ -44,7 +43,7 @@ Feature: Applied not claimed- Multi Business
     Then fetch the agreement number
    
 
-    Scenario Outline: Withdraw the agreed status
+  Scenario Outline: Withdraw the agreed status
      Then agreement number is passed to <updatedate> 
    Examples:  
    |updatedate|
@@ -65,6 +64,10 @@ Feature: Applied not claimed- Multi Business
 
   Scenario: Apply with valid cred
     Then close browser
+
+     Then pass the agreement number to updateDate
+
+   Scenario: Apply with valid cred
     Given the user is on the /apply/start page
     Then start the application
     And user login with Multiple business crn and password(for DefraId)

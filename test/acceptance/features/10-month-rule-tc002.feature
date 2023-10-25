@@ -1,7 +1,9 @@
-@smoke1
+
+@smoke
 #runs first
 
 Feature: Applied notclaimed- single Business
+
 
   Scenario: Apply with valid cred
     Given the user is on the /apply/start page
@@ -38,6 +40,7 @@ Feature: Applied notclaimed- single Business
     Then user complete the application
     Then user should see successful message
     Then fetch the agreement number
+
       
 
   Scenario Outline: Withdraw the agreed status
@@ -55,6 +58,11 @@ Feature: Applied notclaimed- single Business
      Then make the agreement status to withdrawn 
 
 
+     #Then close browser
+   
+  Scenario Outline: Withdraw the agreed status
+     Then pass the agreement number to updateDate
+  
   Scenario: Apply with valid cred
     Then close browser
     Given the user is on the /apply/start page
