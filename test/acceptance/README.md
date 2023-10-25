@@ -29,11 +29,17 @@ Docker is used to create a container for each of selenium-hub, chrome-browser an
 
 4. Set the number of Browserstack parallel runs in the environment variable `BROWSERSTACK_PARALLEL_RUNS`
 
-5. From the directory containing the dockerfile run `docker-compose run --rm wdio-cucumber`. This will run an acceptance test against the FFC AHWR apply service. Alternatively, run `./scripts/acceptance` from the root folder of this repository.
+5. Name your .env file `.env.local`.
 
-6. The test reports will be output to `./html-reports`. Note that WSL users need to run `mkdir -m 777 html-reports`. Read more about report configuration in the [rpii/wdio-hmtl-reporter docs](https://github.com/rpii/wdio-html-reporter)
+6. Ask another dev / automation tester for a set of test data.
 
-7. Now you are ready to maintain, extend or write your own features in the `./acceptance/features` directory
+7. From the acceptance directory run `test:smoke:local`.
+
+8. Running `./scripts/acceptance` from the root folder of the apply repository does not currently work.
+
+9. The test reports will be output to `./html-reports`. Note that WSL users need to run `mkdir -m 777 html-reports`. Read more about report configuration in the [rpii/wdio-hmtl-reporter docs](https://github.com/rpii/wdio-html-reporter)
+
+10. Now you are ready to maintain, extend or write your own features in the `./acceptance/features` directory
 
 ## How to write a test
 

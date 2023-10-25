@@ -13,6 +13,7 @@
   ],
   "scripts": {
     "test": "wdio wdio.bs.config.js",
+    "test:smoke:local": "ENV=local wdio wdio.config.js  --cucumberOpts.tagExpression='@smoke'",
     "test:smoke:snd": "ENV=snd wdio wdio.config.js  --cucumberOpts.tagExpression='@smoke'",
     "test:smoke:dev": "ENV=dev wdio wdio.config.js  --cucumberOpts.tagExpression='@smoke'",
     "test:smoke:test": "wdio wdio.config.js  --cucumberOpts.tagExpression='@smoke1'",
@@ -66,7 +67,7 @@
     "@wdio/spec-reporter": "^7.13.2",
     "allure-commandline": "^2.13.8",
     "babel-jest": "^24.8.0",
-    "chromedriver": "^116.0.0",
+    "chromedriver": "^118.0.1",
     "cucumber-html-reporter": "^5.5.0",
     "http-server": "^14.1.1",
     "jest": "^26.6.3",

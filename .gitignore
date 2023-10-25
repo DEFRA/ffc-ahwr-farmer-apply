@@ -1,6 +1,7 @@
 # Test output
 #html-reports
 test-output
+html-reports/
 
 # npm stuff
 .npm/
@@ -11,6 +12,7 @@ npm-debug.log
 helm/**/*.lock
 *.tgz
 .env
+.env.*
 *.log
 
 # Editor stuff
