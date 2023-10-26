@@ -61,12 +61,12 @@
     "@rpii/wdio-html-reporter": "^7.0.0",
     "@wdio/allure-reporter": "^7.16.3",
     "@wdio/cli": "^7.14.0",
-    "@wdio/cucumber-framework": "^8.20.3",
+    "@wdio/cucumber-framework": "^7.13.2",
     "@wdio/local-runner": "^7.13.2",
     "@wdio/spec-reporter": "^7.13.2",
     "allure-commandline": "^2.13.8",
     "babel-jest": "^24.8.0",
-    "chromedriver": "^117.0.3",
+    "chromedriver": "^118.0.1",
     "cucumber-html-reporter": "^5.5.0",
     "http-server": "^14.1.1",
     "jest": "^26.6.3",
@@ -74,7 +74,7 @@
     "pngjs": "^5.0.0",
     "standard": "12.0.1",
     "wdio-chromedriver-service": "^8.1.1",
-    "wdio-cucumberjs-json-reporter": "^5.1.7"
+    "wdio-cucumberjs-json-reporter": "^4.1.4"
   },
   "standard": {
     "globals": [
