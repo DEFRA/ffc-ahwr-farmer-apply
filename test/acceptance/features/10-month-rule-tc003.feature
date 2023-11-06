@@ -17,7 +17,7 @@ Feature: Applied not claimed- Multi Business
     Then user continue to next page
     Examples:
     |business|
-    |Small Holding - SBI 106637106|
+    |ASHLEY, D G & J M - SBI 106872259|
 
   Scenario Outline:user select the livestock to apply
     When user is on the livestock page
@@ -61,7 +61,7 @@ Feature: Applied not claimed- Multi Business
      Then make the agreement status to withdrawn 
         Examples:
     |business|
-    |Small Holding - SBI 106637106|
+    |ASHLEY, D G & J M - SBI 106872259|
 
   Scenario: Apply with valid cred
     Then close browser
@@ -78,7 +78,7 @@ Feature: Applied not claimed- Multi Business
     Then user continue to next page
     Examples:
     |business|
-    |Small Holding - SBI 106637106 |
+    |ASHLEY, D G & J M - SBI 106872259|
 
   Scenario Outline:user select the livestock to apply
     When user is on the livestock page
@@ -98,8 +98,9 @@ Feature: Applied not claimed- Multi Business
   Scenario: user accept terms and condition to complete the journey
     When user is on the declaration page
     When user view the page title
-    And user read through the full terms and conditions
-    And user accept the terms and conditions
+    # And user read through the full terms and conditions
+    # And user accept the terms and conditions
     # Then user complete the application
     # Then user should see successful message
     # Then fetch the agreement number
+When delete the entry

@@ -2,7 +2,7 @@ const browserstack = require('browserstack-local')
 const { ReportAggregator, HtmlReporter } = require('@rpii/wdio-html-reporter')
 const log4js = require('@log4js-node/log4js-api')
 const allureReporter = require('@wdio/allure-reporter')
-const cucumberJson = require('wdio-cucumberjs-json-reporter')
+//const cucumberJson = require('wdio-cucumberjs-json-reporter')
 const logger = log4js.getLogger('default')
 const _ = require('lodash')
 const timeStamp = new Date().toLocaleString()
@@ -307,6 +307,6 @@ exports.config = {
     await allureReporter.addFeature(world.name)
   },
   afterStep: async function (step, scenario, result) {
-    cucumberJson.attach(await browser.takeScreenshot(), 'image/png')
+  //  cucumberJson.attach(await browser.takeScreenshot(), 'image/png')
   }
 }

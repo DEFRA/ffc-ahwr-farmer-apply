@@ -86,4 +86,5 @@ Feature: Applied notclaimed- single Business
   Scenario: user accept terms and condition to complete the journey
     When user is on the declaration page
     When user view the page title
+    When delete the entry
   

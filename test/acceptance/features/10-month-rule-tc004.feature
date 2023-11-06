@@ -1,6 +1,5 @@
 @smoke
 
-
 Feature:10 month rule - Not Agreed - Single business
  Scenario: Apply with valid cred
     Given the user is on the /apply/start page
@@ -64,3 +63,4 @@ Feature:10 month rule - Not Agreed - Single business
     And user confirm to meet the requirement
     Then the user continue the application
     And user check the answer
+    When delete the entry

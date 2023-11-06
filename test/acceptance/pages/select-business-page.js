@@ -91,7 +91,7 @@ let updateStatus_query
 let sbiValue
 let AGREEMENT_NUMBER_VALUE;
 const actualStatus = 1;
-let fetchedValue
+let fetchedValue;
 
 class SelectBusinessPage extends CommonActions {
 
@@ -428,7 +428,7 @@ console.log(error.message)
       const value =AGREEMENT_NUMBER_VALUE;  // The reference value
       ;
       
-      db.none(updateStatusQuery, [value])
+      db.none(updateStatusQuery, AGREEMENT_NUMBER_VALUE)
         .then(() => {
           console.log('Status updated successfully.');
         })
@@ -448,11 +448,13 @@ console.log(error.message)
 `;
        
         // Execute the SQL query to fetch the value
-        db.one(query,AGREEMENT_NUMBER_VALUE)
+        fetchedValue= await db.one(query,AGREEMENT_NUMBER_VALUE)
           .then(result => {
             // 'result' contains the value fetched from the database
-            fetchedValue = result.statusId; // Corrected to access 'statusId' property
-            console.log('Fetched Value:', fetchedValue);
+            //fetchedValue = result.statusId; // Corrected to access 'statusId' property
+            console.log('Fetched Value:', result.statusId);
+            return result.statusId
+            
 
             // You can now use 'fetchedValue' as needed in your code
           })
@@ -515,6 +517,7 @@ console.log(error.message)
 
     // Close the WebDriverIO browser session when done
     await browser.deleteSession();
+
  }
 
 
@@ -583,7 +586,7 @@ await this.closeBrowser()
    
   }
 
-  async deleteDatabaseEntry(){
+  async deleteEntry(){
 
     const updateStatusQuery = `
     DELETE FROM public.application 

@@ -85,6 +85,7 @@ Feature: 10 month rule - In-Check - Single business
   Scenario: user accept terms and condition to complete the journey
     When user is on the declaration page
     When user view the page title
+    When delete the entry
     # And user read through the full terms and conditions
     # And user accept the terms and conditions
 

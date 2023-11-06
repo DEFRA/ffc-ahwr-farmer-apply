@@ -124,3 +124,6 @@ Then(/^Confirm that the status is set to Agreed$/, async function () {
 When(/^fetch the agreement number$/, async function () {
   await selectBusinessPage.getAgreementNumber()
 })
+When(/^delete the entry$/, async function () {
+  await selectBusinessPage.deleteEntry()
+})

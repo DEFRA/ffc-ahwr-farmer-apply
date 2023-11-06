@@ -1,6 +1,6 @@
 import allureReporter from '@wdio/allure-reporter'
-import cucumberJson from 'wdio-cucumberjs-json-reporter'
-import { ReportAggregator, HtmlReporter} from '@rpii/wdio-html-reporter' ;
+//import cucumberJson from 'wdio-cucumberjs-json-reporter'
+//import { ReportAggregator, HtmlReporter} from '@rpii/wdio-html-reporter' ;
 require('dotenv').config({ path: `.env.${process.env.ENV}` })
 const envRoot = (process.env.TEST_ENVIRONMENT_ROOT_URL)
 
@@ -133,13 +133,11 @@ exports.config = {
   // Test reporter for stdout.
   // The only one supported by default is 'dot'
   // see also: https://webdriver.io/docs/dot-reporter
-  reporters: ['spec', ['allure', allure_config],
-
-    ['cucumberjs-json', {
-      jsonFolder: 'reporter/json/',
-      language: 'en'
-    }]
-  ],
+  reporters: [['allure', {
+    outputDir: 'allure-results',
+    disableWebdriverStepsReporting: true,
+    disableWebdriverScreenshotsReporting: true,
+}]],
 
  
 
@@ -267,7 +265,7 @@ exports.config = {
    * @param {number}             result.duration duration of scenario in milliseconds
    */
   afterStep: async function (step, scenario, result) {
-    cucumberJson.attach(await browser.takeScreenshot(), 'image/png')
+   // cucumberJson.attach(await browser.takeScreenshot(), 'image/png')
   }
   /**
    *

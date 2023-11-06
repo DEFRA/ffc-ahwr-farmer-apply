@@ -1,4 +1,4 @@
-@smoke1
+@smoke
 
 
 Feature: 10 month rule - Ready To Pay- Single business
@@ -86,6 +86,7 @@ Feature: 10 month rule - Ready To Pay- Single business
   Scenario: user accept terms and condition to complete the journey
     When user is on the declaration page
     When user view the page title
+    When delete the entry
     # And user read through the full terms and conditions
     # And user accept the terms and conditions
 

@@ -1,4 +1,4 @@
- @smoke1
+ @smoke
 
 
 Feature: 10 month rule - Ready To Pay- Single business
@@ -18,7 +18,7 @@ Feature: 10 month rule - Ready To Pay- Single business
     Then user continue to next page
     Examples:
     |business|
-    |Small Holding - SBI 106637106|
+    |ASHLEY, D G & J M - SBI 106872259|
 
   Scenario Outline:user select the livestock to apply
     When user is on the livestock page
@@ -57,7 +57,7 @@ Feature: 10 month rule - Ready To Pay- Single business
       Then agreement number is passed to <updatedate> 
    Examples:
     |business|updatedate|
-    |Small Holding - SBI 106637106|2021-12-09 16:46:04.3+00| 
+    |ASHLEY, D G & J M - SBI 106872259|2021-12-09 16:46:04.3+00| 
 
 
   #  Scenario Outline: Withdraw the agreed status
@@ -81,7 +81,7 @@ Feature: 10 month rule - Ready To Pay- Single business
     Then user continue to next page
     Examples:
     |business|
-    |Small Holding - SBI 106637106|
+    |ASHLEY, D G & J M - SBI 106872259|
 
      Scenario Outline:user select the livestock to apply
     When user is on the livestock page
@@ -100,6 +100,7 @@ Feature: 10 month rule - Ready To Pay- Single business
   Scenario: user accept terms and condition to complete the journey
     When user is on the declaration page
     When user view the page title
+    When delete the entry
     # And user read through the full terms and conditions
     # And user accept the terms and conditions
    
