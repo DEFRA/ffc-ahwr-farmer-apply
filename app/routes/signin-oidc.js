@@ -48,14 +48,16 @@ module.exports = [{
       }
     },
     handler: async (request, h) => {
+      let tempApplicationId
+      let organisationSummary
       try {
-        const tempApplicationId = createReference()        
+        tempApplicationId = createReference()
         session.setFarmerApplyData(request, sessionKeys.farmerApplyData.reference, tempApplicationId)
         await auth.authenticate(request, session)
         const apimAccessToken = await auth.retrieveApimAccessToken()
         const personSummary = await getPersonSummary(request, apimAccessToken)
         session.setCustomer(request, sessionKeys.customer.id, personSummary.id)
-        const organisationSummary = await organisationIsEligible(request, personSummary.id, apimAccessToken)
+        organisationSummary = await organisationIsEligible(request, personSummary.id, apimAccessToken)
         setOrganisationSessionData(request, personSummary, organisationSummary)
 
         if (!organisationSummary.organisationPermission) {
@@ -103,7 +105,7 @@ module.exports = [{
               }
             })
             break
-          case err instanceof InvalidPermissionsError:            
+          case err instanceof InvalidPermissionsError:
             appInsights.defaultClient.trackEvent({
               name: 'invalid-permission-error',
               properties: {
@@ -113,7 +115,7 @@ module.exports = [{
               }
             })
             break
-          case err instanceof NoEligibleCphError:            
+          case err instanceof NoEligibleCphError:
             appInsights.defaultClient.trackEvent({
               name: 'not-eligible-cph-error',
               properties: {
@@ -133,7 +135,7 @@ module.exports = [{
               }
             })
             break
-          case err instanceof OutstandingAgreementError:            
+          case err instanceof OutstandingAgreementError:
             appInsights.defaultClient.trackEvent({
               name: 'outstanding-agreement-error',
               properties: {
@@ -155,7 +157,7 @@ module.exports = [{
           crn,
           organisation?.email,
           tempApplicationId,
-          err.name 
+          err.name
         )
         return h.view('cannot-apply-for-livestock-review-exception', {
           ruralPaymentsAgency: config.ruralPaymentsAgency,

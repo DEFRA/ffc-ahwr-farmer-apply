@@ -17,7 +17,7 @@ module.exports = [{
         return boom.notFound()
       }
       const viewData = getDeclarationData(application)
-      //session.setFarmerApplyData(request, reference, null)
+      // session.setFarmerApplyData(request, reference, null)
       return h.view('declaration', { backLink: `${config.urlPrefix}/check-answers`, latestTermsAndConditionsUri: `${config.latestTermsAndConditionsUri}?continue=true&backLink=${config.urlPrefix}/declaration`, ...viewData })
     }
   }
@@ -42,7 +42,7 @@ module.exports = [{
     },
     handler: async (request, h) => {
       const application = session.getFarmerApplyData(request)
-      let applicationReference = application[reference] ?? ""
+      let applicationReference = application[reference] ?? ''
       if (applicationReference.substring(0, 4) !== 'TEMP') {
         session.setFarmerApplyData(request, declaration, true)
         session.setFarmerApplyData(request, offerStatus, request.payload.offerStatus)
