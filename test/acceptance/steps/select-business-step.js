@@ -1,16 +1,21 @@
 const { Given, When, Then } = require('@wdio/cucumber-framework')
 const SelectBusinessPage = require('../pages/select-business-page')
 const selectBusinessPage = new SelectBusinessPage()
+const CommonActions = require('../pages/common-actions')
+const commonPage = new CommonActions()
 
 Given(/^the user is on the (.*) page$/, async function (page) {
   await selectBusinessPage.getHomePage(page)
 })
-When(/^user start the application$/, async function () {
+When(/^start the application$/, async function () {
   await selectBusinessPage.clickOnStartButton()
-})
+});
 When(/^user login with (.*) business crn and password\(for DefraId\)$/, async function (business) {
   await selectBusinessPage.signInWithDefraId(business)
 });
+When(/^running accessbility tests$/, async function () {
+  await commonPage.checkAccessibility()
+})
 When(/^select the (.*) for application$/, async function (businessName) {
   await selectBusinessPage.clickOnBusiness(businessName)
 });
@@ -50,7 +55,7 @@ When(/^user check the minimum number of livestock required to qualify for the re
 When(/^user confirm to meet the requirement$/, async function () {
   await selectBusinessPage.accurateLivestockNumber()
 })
-When(/^user continue the application$/, async function () {
+When(/^the user continue the application$/, async function () {
   await selectBusinessPage.next()
 })
 Then(/^user check the answer$/, async function () {
@@ -71,11 +76,39 @@ When(/^user accept the terms and conditions$/, async function () {
   await selectBusinessPage.termsAndConditionTitle()
   await selectBusinessPage.agreeToTerms()
 })
-Then(/^user complete the application$/, async function () {
+Then(/^user (.*) the application$/, async function (type) {
   await selectBusinessPage.termsCheckBox()
-  await selectBusinessPage.applicationCompleted()
+  await selectBusinessPage.applicationCompleted(type)
 })
 Then(/^user should see successful message$/, async function () {
   await selectBusinessPage.successfulMessage()
 })
+//Exception
 
+When(/^validate the error message in the Header$/, async function () {
+  await selectBusinessPage.validateExceptionHeader()
+})
+When(/^validate exception error message for (.*)$/, async function (typeOfException) {
+  await selectBusinessPage.exceptionErrorMessage(typeOfException)
+})
+When(/^validate call charges screen$/, async function () {
+  await selectBusinessPage.validateCallCharges()
+})
+//database connection
+
+When(/^pass the agreement number to (.*)$/, async function (type) {
+  await selectBusinessPage.connectTODatabase(type)
+})
+
+Then(/^close browser$/, async function () {
+  await selectBusinessPage.closeBrowser1()
+})
+
+
+
+Then(/^Confirm that the status is set to Agreed$/, async function () {
+  await selectBusinessPage.validAgreedStatus()
+})
+When(/^fetch the agreement number$/, async function () {
+  await selectBusinessPage.getAgreementNumber()
+})
