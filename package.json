@@ -36,7 +36,7 @@
     "@hapi/wreck": "^18.0.0",
     "@hapi/yar": "^10.1.1",
     "applicationinsights": "^2.5.0",
-    "crypto-js": "^4.1.1",
+    "crypto-js": "4.2.0",
     "ffc-ahwr-event-publisher": "1.0.0",
     "ffc-messaging": "^2.6.2",
     "govuk-frontend": "4.0.1",
@@ -45,7 +45,7 @@
     "jsonwebtoken": "^9.0.0",
     "jwk-to-pem": "^2.0.5",
     "mssql": "^10.0.1",
-    "notifications-node-client": "^6.0.0",
+    "notifications-node-client": "7.0.3",
     "nunjucks": "^3.2.3",
     "pg-promise": "^11.5.4",
     "uuid": "^8.3.2",
@@ -53,7 +53,8 @@
   },
   "overrides": {
     "notifications-node-client": {
-      "jsonwebtoken": "9.0.0"
+      "jsonwebtoken": "9.0.0",
+      "axios":"1.6.0"
     },
     "@azure/identity": {
       "jsonwebtoken": "9.0.0"
