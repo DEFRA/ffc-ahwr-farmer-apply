@@ -45,7 +45,9 @@
     "jsonwebtoken": "^9.0.0",
     "jwk-to-pem": "^2.0.5",
     "mssql": "^10.0.1",
+
     "notifications-node-client": "^7.0.3",
+
     "nunjucks": "^3.2.3",
     "pg-promise": "^11.5.4",
     "uuid": "^8.3.2",
@@ -54,7 +56,9 @@
   "overrides": {
     "notifications-node-client": {
       "jsonwebtoken": "9.0.0",
+
       "axios": "1.6.0"
+
     },
     "@azure/identity": {
       "jsonwebtoken": "9.0.0"
