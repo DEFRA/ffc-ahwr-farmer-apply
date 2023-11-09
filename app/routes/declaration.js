@@ -43,7 +43,6 @@ module.exports = [{
     handler: async (request, h) => {
       const application = session.getFarmerApplyData(request)
       let applicationReference = application[reference] ?? ''
-      if (applicationReference.substring(0, 4) !== 'TEMP') {
         session.setFarmerApplyData(request, declaration, true)
         session.setFarmerApplyData(request, offerStatus, request.payload.offerStatus)
         applicationReference = await sendApplication(application, request.yar.id)
@@ -60,7 +59,7 @@ module.exports = [{
             }
           })
         }
-      }
+      
 
       session.clear(request)
       request.cookieAuth.clear()
