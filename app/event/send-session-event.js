@@ -11,7 +11,7 @@ const sendSessionEvent = (organisation, sessionId, reference, entryKey, key, val
       name: 'send-session-event',
       type: `${entryKey}-${key}`,
       message: `Session set for ${entryKey} and ${key}.`,
-      data: { [key]: value },
+      data: { reference, [key]: value },
       ip
     }
     raiseEvent(event)

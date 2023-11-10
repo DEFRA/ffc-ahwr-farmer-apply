@@ -2,7 +2,7 @@ const boom = require('@hapi/boom')
 const Joi = require('joi')
 const getDeclarationData = require('./models/declaration')
 const session = require('../session')
-const { declaration, reference, offerStatus, organisation: organisationKey, customer: crn } = require('../session/keys').farmerApplyData
+const { declaration, reference, tempReference, offerStatus, organisation: organisationKey, customer: crn } = require('../session/keys').farmerApplyData
 const { sendApplication } = require('../messaging/application')
 const appInsights = require('applicationinsights')
 const config = require('../config/index')
@@ -42,24 +42,24 @@ module.exports = [{
     },
     handler: async (request, h) => {
       const application = session.getFarmerApplyData(request)
-      let applicationReference = application[reference] ?? ''
-        session.setFarmerApplyData(request, declaration, true)
-        session.setFarmerApplyData(request, offerStatus, request.payload.offerStatus)
-        applicationReference = await sendApplication(application, request.yar.id)
+      let tempApplicationReference = application[reference] ?? ''
+      session.setFarmerApplyData(request, declaration, true)
+      session.setFarmerApplyData(request, offerStatus, request.payload.offerStatus)
+      const applicationReference = await sendApplication(application, request.yar.id)
 
-        if (applicationReference) {
-          session.setFarmerApplyData(request, reference, applicationReference)
-          const organisation = session.getFarmerApplyData(request, organisationKey)
-          appInsights.defaultClient.trackEvent({
-            name: 'agreement-created',
-            properties: {
-              reference: applicationReference,
-              sbi: organisation.sbi,
-              crn: session.getCustomer(request, crn)
-            }
-          })
-        }
-      
+      if (applicationReference) {
+        session.set(request, tempReference, tempApplicationReference)
+        session.setFarmerApplyData(request, reference, applicationReference)
+        const organisation = session.getFarmerApplyData(request, organisationKey)
+        appInsights.defaultClient.trackEvent({
+          name: 'agreement-created',
+          properties: {
+            reference: applicationReference,
+            sbi: organisation.sbi,
+            crn: session.getCustomer(request, crn)
+          }
+        })
+      }
 
       session.clear(request)
       request.cookieAuth.clear()
