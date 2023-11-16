@@ -42,7 +42,7 @@ module.exports = [{
     },
     handler: async (request, h) => {
       const application = session.getFarmerApplyData(request)
-      let tempApplicationReference = application[reference] ?? ''
+      const tempApplicationReference = application[reference] ?? ''
       session.setFarmerApplyData(request, declaration, true)
       session.setFarmerApplyData(request, offerStatus, request.payload.offerStatus)
       const applicationReference = await sendApplication(application, request.yar.id)
