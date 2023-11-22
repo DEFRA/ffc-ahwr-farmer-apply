@@ -53,6 +53,7 @@ module.exports = [{
       try {
         tempApplicationId = createReference()
         session.setFarmerApplyData(request, sessionKeys.farmerApplyData.reference, tempApplicationId)
+        session.setFarmerApplyData(request, sessionKeys.farmerApplyData.tempReference, tempApplicationId)
         await auth.authenticate(request, session)
         const apimAccessToken = await auth.retrieveApimAccessToken()
         const personSummary = await getPersonSummary(request, apimAccessToken)
@@ -89,9 +90,7 @@ module.exports = [{
             appInsights.defaultClient.trackEvent({
               name: 'invalid-state-error',
               properties: {
-                reference: tempApplicationId,
-                sbi: organisationSummary.organisation.sbi,
-                crn: session.getCustomer(request, sessionKeys.customer.crn)
+                reference: tempApplicationId
               }
             })
             return h.redirect(auth.requestAuthorizationCodeUrl(session, request))
