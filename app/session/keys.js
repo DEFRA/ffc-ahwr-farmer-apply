@@ -12,7 +12,6 @@ module.exports = {
     whichReview: 'whichReview',
     confirmCheckDetails: 'confirmCheckDetails',
     reference: 'reference',
-    tempReference: 'tempReference',
     offerStatus: 'offerStatus'
   },
   selectYourBusiness: {

@@ -54,7 +54,6 @@ module.exports = [{
         tempApplicationId = createReference()
         // tempApplicationId added to reference to enable session event to report with temp id
         session.setFarmerApplyData(request, sessionKeys.farmerApplyData.reference, tempApplicationId)
-        session.setFarmerApplyData(request, sessionKeys.farmerApplyData.tempReference, tempApplicationId)
         await auth.authenticate(request, session)
         const apimAccessToken = await auth.retrieveApimAccessToken()
         const personSummary = await getPersonSummary(request, apimAccessToken)

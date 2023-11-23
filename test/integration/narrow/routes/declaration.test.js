@@ -1,7 +1,7 @@
 const cheerio = require('cheerio')
 const getCrumbs = require('../../../utils/get-crumbs')
 const expectPhaseBanner = require('../../../utils/phase-banner-expect')
-const { farmerApplyData: { declaration } } = require('../../../../app/session/keys')
+const { farmerApplyData: { declaration, offerStatus, reference } } = require('../../../../app/session/keys')
 const species = require('../../../../app/constants/species')
 const states = require('../../../../app/constants/states')
 
@@ -144,8 +144,8 @@ describe('Declaration test', () => {
       expect(sessionMock.clear).toBeCalledTimes(1)
       expect(sessionMock.setFarmerApplyData).toHaveBeenCalledTimes(3)
       expect(sessionMock.setFarmerApplyData).toHaveBeenNthCalledWith(1, res.request, declaration, true)
-      expect(sessionMock.getFarmerApplyData).toHaveBeenCalledTimes(2)
-      expect(sessionMock.getFarmerApplyData).toHaveBeenCalledWith(res.request)
+      expect(sessionMock.setFarmerApplyData).toHaveBeenNthCalledWith(2, res.request, offerStatus, 'accepted')
+      expect(sessionMock.setFarmerApplyData).toHaveBeenNthCalledWith(3, res.request, reference, null)
       expect(messagingMock.sendMessage).toHaveBeenCalledTimes(1)
     })
 
@@ -177,8 +177,7 @@ describe('Declaration test', () => {
       expect(sessionMock.clear).toBeCalledTimes(1)
       expect(sessionMock.setFarmerApplyData).toHaveBeenCalledTimes(3)
       expect(sessionMock.setFarmerApplyData).toHaveBeenNthCalledWith(1, res.request, declaration, true)
-      expect(sessionMock.getFarmerApplyData).toHaveBeenCalledTimes(2)
-      expect(sessionMock.getFarmerApplyData).toHaveBeenCalledWith(res.request)
+      expect(sessionMock.setFarmerApplyData).toHaveBeenNthCalledWith(2, res.request, offerStatus, 'rejected')
       expect(messagingMock.sendMessage).toHaveBeenCalledTimes(1)
     })
 
