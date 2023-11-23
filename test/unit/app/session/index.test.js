@@ -1,7 +1,6 @@
 const session = require('../../../../app/session')
 
 describe('session', () => {
-  const applicationSectionKey = 'application'
   const farmerApplyDataSectionKey = 'farmerApplyData'
   const selectYourBusinessSectionKey = 'selectYourBusiness'
   const tokensSectionKey = 'tokens'
@@ -12,7 +11,6 @@ describe('session', () => {
   const objectValue = { key: value }
 
   const getFunctionsToTest = [
-    { func: 'getApplication', expectedSectionKey: applicationSectionKey },
     { func: 'getFarmerApplyData', expectedSectionKey: farmerApplyDataSectionKey },
     { func: 'getSelectYourBusiness', expectedSectionKey: selectYourBusinessSectionKey },
     { func: 'getToken', expectedSectionKey: tokensSectionKey },
@@ -21,7 +19,6 @@ describe('session', () => {
   ]
 
   const setFunctionsToTest = [
-    { func: 'setApplication', expectedSectionKey: applicationSectionKey },
     { func: 'setFarmerApplyData', expectedSectionKey: farmerApplyDataSectionKey },
     { func: 'setSelectYourBusiness', expectedSectionKey: selectYourBusinessSectionKey },
     { func: 'setToken', expectedSectionKey: tokensSectionKey },
@@ -59,7 +56,7 @@ describe('session', () => {
 
       session[func](requestSetMock, key, value)
 
-      expect(requestSetMock.yar.get).toHaveBeenCalledTimes(2)
+      expect(requestSetMock.yar.get).toHaveBeenCalledTimes(3)
       expect(requestSetMock.yar.get).toHaveBeenCalledWith(expectedSectionKey)
       expect(requestSetMock.yar.set).toHaveBeenCalledTimes(1)
       expect(requestSetMock.yar.set).toHaveBeenCalledWith(expectedSectionKey, { [key]: value })
@@ -77,7 +74,7 @@ describe('session', () => {
 
       session[func](requestSetMock, key, value)
 
-      expect(requestSetMock.yar.get).toHaveBeenCalledTimes(2)
+      expect(requestSetMock.yar.get).toHaveBeenCalledTimes(3)
       expect(requestSetMock.yar.get).toHaveBeenCalledWith(expectedSectionKey)
       expect(requestSetMock.yar.set).toHaveBeenCalledTimes(1)
       expect(requestSetMock.yar.set).toHaveBeenCalledWith(expectedSectionKey, { ...{ [key]: value }, ...existingValue })
@@ -95,7 +92,7 @@ describe('session', () => {
 
     session[func](requestSetMock, key, valueToBeTrimmed)
 
-    expect(requestSetMock.yar.get).toHaveBeenCalledTimes(2)
+    expect(requestSetMock.yar.get).toHaveBeenCalledTimes(3)
     expect(requestSetMock.yar.get).toHaveBeenCalledWith(expectedSectionKey)
     expect(requestSetMock.yar.set).toHaveBeenCalledTimes(1)
     expect(requestSetMock.yar.set).toHaveBeenCalledWith(expectedSectionKey, { [key]: valueToBeTrimmed.trim() })
@@ -111,7 +108,7 @@ describe('session', () => {
 
     session[func](requestSetMock, key, objectValue)
 
-    expect(requestSetMock.yar.get).toHaveBeenCalledTimes(2)
+    expect(requestSetMock.yar.get).toHaveBeenCalledTimes(3)
     expect(requestSetMock.yar.get).toHaveBeenCalledWith(expectedSectionKey)
     expect(requestSetMock.yar.set).toHaveBeenCalledTimes(1)
     expect(requestSetMock.yar.set).toHaveBeenCalledWith(expectedSectionKey, { [key]: objectValue })

@@ -11,8 +11,8 @@ module.exports = {
     organisation: 'organisation',
     whichReview: 'whichReview',
     confirmCheckDetails: 'confirmCheckDetails',
-    reference: 'reference',
-    tempReference: 'tempReference',
+    applicationRef: 'applicationRef',
+    tempApplicationRef: 'tempApplicationRef',
     offerStatus: 'offerStatus'
   },
   selectYourBusiness: {

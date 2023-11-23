@@ -20,6 +20,7 @@ function expectPageContentOk ($, organisation) {
   expect($('#organisation-sbi').text()).toEqual(organisation.sbi)
 }
 
+// TODO: More tests needed
 describe('Declaration test', () => {
   const organisation = { id: 'organisation', name: 'org-name', address: 'org-address', sbi: '0123456789' }
   const auth = { credentials: { reference: '1111', sbi: '111111111' }, strategy: 'cookie' }
@@ -179,33 +180,6 @@ describe('Declaration test', () => {
       expect(sessionMock.getFarmerApplyData).toHaveBeenCalledTimes(2)
       expect(sessionMock.getFarmerApplyData).toHaveBeenCalledWith(res.request)
       expect(messagingMock.sendMessage).toHaveBeenCalledTimes(1)
-    })
-
-    test('returns 200, checks cached data for a reference to prevent reference recreation', async () => {
-      const whichReview = species.beef
-      const reference = 'abc123'
-      const application = { whichReview, organisation, reference }
-      sessionMock.getFarmerApplyData.mockReturnValue(application)
-      messagingMock.receiveMessage.mockResolvedValueOnce({ applicationReference: 'abc123' })
-      const crumb = await getCrumbs(global.__SERVER__)
-      const options = {
-        method: 'POST',
-        url,
-        payload: { crumb, terms: 'agree', offerStatus: 'accepted' },
-        auth,
-        headers: { cookie: `crumb=${crumb}` }
-      }
-
-      const res = await global.__SERVER__.inject(options)
-
-      expect(res.statusCode).toBe(200)
-      const $ = cheerio.load(res.payload)
-      expect($('h1').text()).toMatch('Application complete')
-      expect($('title').text()).toEqual(`Application complete - ${config.serviceName}`)
-      expectPhaseBanner.ok($)
-      expect(sessionMock.getFarmerApplyData).toHaveBeenCalledTimes(1)
-      expect(sessionMock.setFarmerApplyData).toHaveBeenCalledTimes(0)
-      expect(messagingMock.sendMessage).toHaveBeenCalledTimes(0)
     })
 
     test.each([

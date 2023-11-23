@@ -2,7 +2,7 @@ const boom = require('@hapi/boom')
 const Joi = require('joi')
 const getDeclarationData = require('./models/declaration')
 const session = require('../session')
-const { declaration, reference, tempReference, offerStatus, organisation: organisationKey, customer: crn } = require('../session/keys').farmerApplyData
+const { declaration, applicationRef, tempApplicationRef, offerStatus, organisation: organisationKey, customer: crn } = require('../session/keys').farmerApplyData
 const { sendApplication } = require('../messaging/application')
 const appInsights = require('applicationinsights')
 const config = require('../config/index')
@@ -17,7 +17,6 @@ module.exports = [{
         return boom.notFound()
       }
       const viewData = getDeclarationData(application)
-      // session.setFarmerApplyData(request, reference, null)
       return h.view('declaration', { backLink: `${config.urlPrefix}/check-answers`, latestTermsAndConditionsUri: `${config.latestTermsAndConditionsUri}?continue=true&backLink=${config.urlPrefix}/declaration`, ...viewData })
     }
   }
@@ -41,20 +40,20 @@ module.exports = [{
       }
     },
     handler: async (request, h) => {
-      const application = session.getFarmerApplyData(request)
-      const tempApplicationReference = application[reference] ?? ''
       session.setFarmerApplyData(request, declaration, true)
       session.setFarmerApplyData(request, offerStatus, request.payload.offerStatus)
-      const applicationReference = await sendApplication(application, request.yar.id)
+      const application = session.getFarmerApplyData(request)
+      const tempApplicationReference = application[tempApplicationRef] ?? ''
+      const newApplicationReference = await sendApplication(application, request.yar.id)
 
-      if (applicationReference) {
-        session.set(request, tempReference, tempApplicationReference)
-        session.setFarmerApplyData(request, reference, applicationReference)
+      if (newApplicationReference) {
+        session.setFarmerApplyData(request, applicationRef, newApplicationReference)
         const organisation = session.getFarmerApplyData(request, organisationKey)
         appInsights.defaultClient.trackEvent({
           name: 'agreement-created',
           properties: {
-            reference: applicationReference,
+            reference: newApplicationReference,
+            tempReference: tempApplicationReference,
             sbi: organisation.sbi,
             crn: session.getCustomer(request, crn)
           }
@@ -68,7 +67,7 @@ module.exports = [{
         return h.view('offer-rejected', { ruralPaymentsAgency: config.ruralPaymentsAgency })
       }
 
-      if (!applicationReference) {
+      if (!newApplicationReference) {
         // TODO: this requires a designed error screen for this scenario
         // as opposed to the generic screen that this will redirect to.
         console.log('Apply declaration returned a null application reference.')
@@ -76,7 +75,7 @@ module.exports = [{
       }
 
       return h.view('confirmation', {
-        reference: applicationReference,
+        reference: newApplicationReference,
         ruralPaymentsAgency: config.ruralPaymentsAgency,
         applySurveyUri: config.customerSurvey.uri,
         latestTermsAndConditionsUri: config.latestTermsAndConditionsUri
