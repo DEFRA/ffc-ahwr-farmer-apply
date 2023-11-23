@@ -2,7 +2,7 @@ const boom = require('@hapi/boom')
 const Joi = require('joi')
 const getDeclarationData = require('./models/declaration')
 const session = require('../session')
-const { declaration, applicationRef, tempApplicationRef, offerStatus, organisation: organisationKey, customer: crn } = require('../session/keys').farmerApplyData
+const { declaration, reference, tempReference, offerStatus, organisation: organisationKey, customer: crn } = require('../session/keys').farmerApplyData
 const { sendApplication } = require('../messaging/application')
 const appInsights = require('applicationinsights')
 const config = require('../config/index')
@@ -42,12 +42,13 @@ module.exports = [{
     handler: async (request, h) => {
       session.setFarmerApplyData(request, declaration, true)
       session.setFarmerApplyData(request, offerStatus, request.payload.offerStatus)
+      // remove temp reference from {data} 'reference' before submitting application to application service
+      session.setFarmerApplyData(request, reference, null)
       const application = session.getFarmerApplyData(request)
-      const tempApplicationReference = application[tempApplicationRef] ?? ''
+      const tempApplicationReference = application[tempReference] ?? ''
       const newApplicationReference = await sendApplication(application, request.yar.id)
 
       if (newApplicationReference) {
-        session.setFarmerApplyData(request, applicationRef, newApplicationReference)
         const organisation = session.getFarmerApplyData(request, organisationKey)
         appInsights.defaultClient.trackEvent({
           name: 'agreement-created',

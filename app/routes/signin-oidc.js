@@ -52,6 +52,7 @@ module.exports = [{
       let organisationSummary
       try {
         tempApplicationId = createReference()
+        // tempApplicationId added to reference to enable session event to report with temp id
         session.setFarmerApplyData(request, sessionKeys.farmerApplyData.reference, tempApplicationId)
         session.setFarmerApplyData(request, sessionKeys.farmerApplyData.tempReference, tempApplicationId)
         await auth.authenticate(request, session)

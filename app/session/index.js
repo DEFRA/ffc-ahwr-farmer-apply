@@ -25,10 +25,10 @@ function set (request, entryKey, key, value) {
   entryValue[key] = typeof (value) === 'string' ? value.trim() : value
   request.yar.set(entryKey, entryValue)
   const organisation = getFarmerApplyData(request, entries.organisation)
-  const applicationRef = getFarmerApplyData(request, 'applicationRef')
+  const reference = getFarmerApplyData(request, 'reference')
   const xForwardedForHeader = request.headers['x-forwarded-for']
   const ip = xForwardedForHeader ? xForwardedForHeader.split(',')[0] : request.info.remoteAddress
-  sendSessionEvent(organisation, applicationRef, request.yar.id, entryKey, key, value, ip)
+  sendSessionEvent(organisation, reference, request.yar.id, entryKey, key, value, ip)
 }
 
 function get (request, entryKey, key) {
