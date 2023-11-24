@@ -145,7 +145,8 @@ describe('Declaration test', () => {
       expect(sessionMock.setFarmerApplyData).toHaveBeenCalledTimes(3)
       expect(sessionMock.setFarmerApplyData).toHaveBeenNthCalledWith(1, res.request, declaration, true)
       expect(sessionMock.setFarmerApplyData).toHaveBeenNthCalledWith(2, res.request, offerStatus, 'accepted')
-      expect(sessionMock.setFarmerApplyData).toHaveBeenNthCalledWith(3, res.request, reference, null)
+      expect(sessionMock.setFarmerApplyData).toHaveBeenNthCalledWith(3, res.request, reference, 'abc123')
+      expect(sessionMock.setTempReference).toHaveBeenCalledTimes(1)
       expect(messagingMock.sendMessage).toHaveBeenCalledTimes(1)
     })
 
@@ -157,7 +158,7 @@ describe('Declaration test', () => {
     ])('returns 200, caches data and sends message for rejected request for $whichReview', async ({ whichReview }) => {
       const application = { whichReview, organisation }
       sessionMock.getFarmerApplyData.mockReturnValue(application)
-      messagingMock.receiveMessage.mockResolvedValueOnce({ applicationReference: 'abc123' })
+      messagingMock.receiveMessage.mockResolvedValueOnce({ applicationReference: '' })
       const crumb = await getCrumbs(global.__SERVER__)
       const options = {
         method: 'POST',
@@ -175,10 +176,11 @@ describe('Declaration test', () => {
       expect($('title').text()).toEqual(config.serviceName)
       expectPhaseBanner.ok($)
       expect(sessionMock.clear).toBeCalledTimes(1)
-      expect(sessionMock.setFarmerApplyData).toHaveBeenCalledTimes(3)
+      expect(sessionMock.setFarmerApplyData).toHaveBeenCalledTimes(2)
       expect(sessionMock.setFarmerApplyData).toHaveBeenNthCalledWith(1, res.request, declaration, true)
       expect(sessionMock.setFarmerApplyData).toHaveBeenNthCalledWith(2, res.request, offerStatus, 'rejected')
       expect(messagingMock.sendMessage).toHaveBeenCalledTimes(1)
+      expect(sessionMock.setTempReference).not.toHaveBeenCalled()
     })
 
     test.each([
@@ -242,7 +244,7 @@ describe('Declaration test', () => {
     })
   })
 
-  test('returns 500 when application reference is null', async () => {
+  test('returns 500 when returned application reference is null', async () => {
     const application = { whichReview: species.beef, organisation }
     sessionMock.getFarmerApplyData.mockReturnValue(application)
     messagingMock.receiveMessage.mockResolvedValueOnce({ applicationReference: null })

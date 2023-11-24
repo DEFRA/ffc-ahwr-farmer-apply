@@ -44,10 +44,8 @@ module.exports = [{
       session.setFarmerApplyData(request, declaration, true)
       session.setFarmerApplyData(request, offerStatus, request.payload.offerStatus)
       const tempApplicationReference = session.getFarmerApplyData(request, reference)
-      // remove temp reference before submitting application to application service
-      //session.setFarmerApplyData(request, reference, null)
       const application = session.getFarmerApplyData(request)
-      application.reference = null //Set application ref to null before sending it to store.
+      application.reference = null // Set application ref to null before sending it to store.
 
       const newApplicationReference = await sendApplication(application, request.yar.id)
 

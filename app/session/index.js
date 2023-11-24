@@ -8,7 +8,7 @@ const entries = {
   pkcecodes: 'pkcecodes',
   tokens: 'tokens',
   customer: 'customer',
-  tempReference: 'tempRefernece'
+  tempReference: 'tempReference'
 }
 
 function lacksAny (request, entryKey, keys) {
@@ -84,8 +84,7 @@ const getCustomer = (request, key) => {
   return get(request, entries.customer, key)
 }
 
-const setTempReference = (request, key, value) =>{
-  console.log(key, value)
+const setTempReference = (request, key, value) => {
   set(request, entries.tempReference, key, value)
 }
 
