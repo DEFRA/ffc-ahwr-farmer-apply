@@ -1,9 +1,10 @@
-@smoke
+ @smoke
 
-Feature: Applied not claimed- Multi Business
 
-  
-  Scenario: Apply with valid cred
+Feature: 10 month rule - Ready To Pay- Single business
+ 
+ 
+ Scenario: Apply with valid cred
     Given the user is on the /apply/start page
     Then start the application
     And user login with Multiple business crn and password(for DefraId)
@@ -42,29 +43,31 @@ Feature: Applied not claimed- Multi Business
     Then user complete the application
     Then user should see successful message
     Then fetch the agreement number
-   
 
-    Scenario Outline: Withdraw the agreed status
-     Then agreement number is passed to <updatedate> 
-   Examples:  
-   |updatedate|
-   |2021-12-09 16:46:04.3+00|
+   Scenario Outline: Withdraw the agreed status
+     Then pass the agreement number to ReadyToPay
 
-    
-  Scenario: Apply with valid cred
-     Given the user is on the /apply/start page
-     Then start the application
-     And user login with Multiple business crn and password(for DefraId)
-     When select the <business> for application
-     When click on continue button
-     Then validate the error message for multiple business
-     Then make the agreement status to withdrawn 
-        Examples:
-    |business|
-    |ASHLEY, D G & J M - SBI 106872259|
+   Scenario: Apply with valid cred
+    Given the user is on the /apply/start page
+    Then start the application
+    And user login with Multiple business crn and password(for DefraId)
+    When select the <business> for application
+    When click on continue button
+    Then validate the error message for multiple business
+      Then agreement number is passed to <updatedate> 
+   Examples:
+    |business|updatedate|
+    |ASHLEY, D G & J M - SBI 106872259|2021-12-09 16:46:04.3+00| 
 
-  Scenario: Apply with valid cred
-    Then close browser
+
+  #  Scenario Outline: Withdraw the agreed status
+  #    Then agreement number is passed to <updatedate> 
+  #  Examples:  
+  #  |updatedate|
+  #  |2021-12-09 16:46:04.3+00|  
+
+
+   Scenario: Apply with valid cred
     Given the user is on the /apply/start page
     Then start the application
     And user login with Multiple business crn and password(for DefraId)
@@ -80,9 +83,8 @@ Feature: Applied not claimed- Multi Business
     |business|
     |ASHLEY, D G & J M - SBI 106872259|
 
-  Scenario Outline:user select the livestock to apply
+     Scenario Outline:user select the livestock to apply
     When user is on the livestock page
-    And user check if livestock are listed
     And user choose <LiveStockName> cattle for review
     Then User continue the application
     Examples:
@@ -98,9 +100,8 @@ Feature: Applied not claimed- Multi Business
   Scenario: user accept terms and condition to complete the journey
     When user is on the declaration page
     When user view the page title
+    When delete the entry
     # And user read through the full terms and conditions
     # And user accept the terms and conditions
-    # Then user complete the application
-    # Then user should see successful message
-    # Then fetch the agreement number
-When delete the entry
+   
+  
