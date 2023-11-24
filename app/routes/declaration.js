@@ -3,6 +3,7 @@ const Joi = require('joi')
 const getDeclarationData = require('./models/declaration')
 const session = require('../session')
 const { declaration, reference, offerStatus, organisation: organisationKey, customer: crn } = require('../session/keys').farmerApplyData
+const { tempReference } = require('../session/keys').tempReference
 const { sendApplication } = require('../messaging/application')
 const appInsights = require('applicationinsights')
 const config = require('../config/index')
@@ -44,13 +45,16 @@ module.exports = [{
       session.setFarmerApplyData(request, offerStatus, request.payload.offerStatus)
       const tempApplicationReference = session.getFarmerApplyData(request, reference)
       // remove temp reference before submitting application to application service
-      session.setFarmerApplyData(request, reference, null)
+      //session.setFarmerApplyData(request, reference, null)
       const application = session.getFarmerApplyData(request)
+      application.reference = null //Set application ref to null before sending it to store.
 
       const newApplicationReference = await sendApplication(application, request.yar.id)
 
       if (newApplicationReference) {
         const organisation = session.getFarmerApplyData(request, organisationKey)
+        session.setFarmerApplyData(request, reference, newApplicationReference)
+        session.setTempReference(request, tempReference, tempApplicationReference)
         appInsights.defaultClient.trackEvent({
           name: 'agreement-created',
           properties: {

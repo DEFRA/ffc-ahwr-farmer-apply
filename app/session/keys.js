@@ -34,5 +34,8 @@ module.exports = {
     crn: 'crn',
     organisationId: 'organisationId',
     attachedToMultipleBusinesses: 'attachedToMultipleBusinesses'
+  },
+  tempReference:{
+    tempReference: 'tempReference'
   }
 }

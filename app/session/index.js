@@ -7,7 +7,8 @@ const entries = {
   answers: 'answers',
   pkcecodes: 'pkcecodes',
   tokens: 'tokens',
-  customer: 'customer'
+  customer: 'customer',
+  tempReference: 'tempRefernece'
 }
 
 function lacksAny (request, entryKey, keys) {
@@ -83,6 +84,11 @@ const getCustomer = (request, key) => {
   return get(request, entries.customer, key)
 }
 
+const setTempReference = (request, key, value) =>{
+  console.log(key, value)
+  set(request, entries.tempReference, key, value)
+}
+
 module.exports = {
   entries,
   lacksAny,
@@ -96,5 +102,6 @@ module.exports = {
   getPkcecodes,
   setPkcecodes,
   setCustomer,
-  getCustomer
+  getCustomer,
+  setTempReference
 }
