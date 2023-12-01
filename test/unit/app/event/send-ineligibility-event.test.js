@@ -37,7 +37,57 @@ describe('Send event on inegibile', () => {
         crn,
         exception,
         raisedAt: MOCK_NOW,
-        journey: 'apply'
+        journey: 'apply',
+        reference: ''
+      },
+      status: 'alert'
+    }
+
+    await sendIneligibilityEvent(sessionId, sbi, crn, 'random@email.com', exception)
+    expect(raiseEvent).toHaveBeenCalledWith(event, 'alert')
+  })
+
+  test('should call raiseEvent with event including reference when provided', async () => {
+    const reference = 'ABC123'
+    event = {
+      id: sessionId,
+      sbi,
+      cph: 'n/a',
+      email: 'random@email.com',
+      name: 'send-ineligibility-event',
+      type: 'ineligibility-event',
+      message: `Apply: ${exception}`,
+      data: {
+        sbi,
+        crn,
+        exception,
+        raisedAt: MOCK_NOW,
+        journey: 'apply',
+        reference
+      },
+      status: 'alert'
+    }
+
+    await sendIneligibilityEvent(sessionId, sbi, crn, 'random@email.com', exception, reference)
+    expect(raiseEvent).toHaveBeenCalledWith(event, 'alert')
+  })
+
+  test('should call raiseEvent with event when optional reference is not provided', async () => {
+    event = {
+      id: sessionId,
+      sbi,
+      cph: 'n/a',
+      email: 'random@email.com',
+      name: 'send-ineligibility-event',
+      type: 'ineligibility-event',
+      message: `Apply: ${exception}`,
+      data: {
+        sbi,
+        crn,
+        exception,
+        raisedAt: MOCK_NOW,
+        journey: 'apply',
+        reference: ''
       },
       status: 'alert'
     }
