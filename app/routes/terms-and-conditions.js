@@ -40,5 +40,15 @@ module.exports = [
         return h.view('terms-and-conditions/private-beta-3', { backLink: request.query?.backLink, continueUri: `${serviceUri}/declaration`, showContinueButton: request.query?.continue === 'true' })
       }
     }
+  },
+  {
+    method: 'GET',
+    path: `${urlPrefix}/terms/endemics`,
+    options: {
+      auth: false,
+      handler: async (request, h) => {
+        return h.view('terms-and-conditions/endemics', { backLink: request.query?.backLink, continueUri: `${serviceUri}/declaration`, showContinueButton: request.query?.continue === 'true' })
+      }
+    }
   }
 ]
