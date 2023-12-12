@@ -1,7 +1,8 @@
 const Joi = require('joi')
 const urlPrefix = require('../config/index').urlPrefix
-
-const backLink = `${urlPrefix}/which-review`
+const session = require('../../session')
+const { type } = require('../../session/keys').farmerApplyData
+const backLink = `${urlPrefix}`
 
 module.exports = [
   {
@@ -21,10 +22,11 @@ module.exports = [
     options: {
       validate: {
         payload: Joi.object({
-          [eligibleSpecies]: Joi.string().valid('yes', 'no').required()
+          [species]: Joi.string().valid('yes', 'no').required()
         }),
       },
       handler: async (request, h) => {
+        session.setFarmerApplyData(request, type, 'EE')
         return h.redirect(`${urlPrefix}/${redirect}`)
       }
     }
