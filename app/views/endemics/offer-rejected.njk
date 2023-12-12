@@ -1,0 +1,30 @@
+{% extends './layouts/layout.njk' %}
+
+{% block pageTitle %}Agreement offer rejected - {{ serviceName }}{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <p class="govuk-body">You have rejected the agreement offer and your application has been cancelled.</p>
+    <p>You'll need to start a new application if:</p>
+
+    <ul class="govuk-list govuk-list--bullet">
+      <li>you rejected the agreement by mistake</li>
+      <li>you change your mind and do want to apply</li>
+    </ul>
+
+    <p>If you have any questions about your application, contact the Rural Payments Agency by email or phone.</p>
+
+    {{ rpaContactDetails({email: ruralPaymentsAgency.email, callChargesUri: ruralPaymentsAgency.callChargesUri, telephone: ruralPaymentsAgency.telephone}) }}
+
+    <br/>
+    <p>
+      <a class='govuk-link' href={{ applySurveyUri }}>
+        What did you think of this service?
+      </a>
+      (giving feedback takes about 5 minutes)
+    </p>
+
+  </div>
+</div>
+{% endblock %}

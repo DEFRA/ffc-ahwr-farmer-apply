@@ -48,7 +48,7 @@ module.exports = [{
       request.cookieAuth.clear()
 
       if (request.payload.offerStatus === 'rejected') {
-        return h.view('offer-rejected', { ruralPaymentsAgency: config.ruralPaymentsAgency })
+        return h.view('endemics/offer-rejected', { ruralPaymentsAgency: config.ruralPaymentsAgency })
       }
 
       if (!applicationReference) {
