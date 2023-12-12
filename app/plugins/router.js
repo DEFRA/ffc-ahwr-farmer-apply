@@ -1,4 +1,6 @@
-const routes = [].concat(
+const config = require('../config')
+
+let routes = [].concat(
   require('../routes/accessibility'),
   require('../routes/assets'),
   require('../routes/cookies'),
@@ -17,6 +19,13 @@ const routes = [].concat(
   require('../routes/vet-technical'),
   require('../routes/signin-oidc')
 )
+
+if(config.endemics.enabled){
+  routes.concat(
+    require('../routes/endemics/declaration'),
+    require('../routes/endemics/check-your-eligible')
+  )
+}
 
 module.exports = {
   plugin: {
