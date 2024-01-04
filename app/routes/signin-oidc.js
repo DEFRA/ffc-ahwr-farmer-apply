@@ -73,7 +73,7 @@ module.exports = [{
             email: personSummary.email
           }
         })
-        return h.redirect(`${config.urlPrefix}/org-review`)
+        return h.redirect(`${config.urlPrefix}${config.endemics.enabled ? '/endemics' : ''}/org-review`)
       } catch (err) {
         console.error(`Received error with name ${err.name} and message ${err.message}.`)
         const attachedToMultipleBusinesses = session.getCustomer(request, sessionKeys.customer.attachedToMultipleBusinesses)

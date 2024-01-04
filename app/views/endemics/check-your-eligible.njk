@@ -27,8 +27,8 @@
     <form method="POST" autocomplete="off" novalidate="novalidate" id ="submitDeclarationForm">
       <input type="hidden" name="crumb" value="{{crumb}}"/>
       {{ govukCheckboxes({
-        idPrefix: "species",
-        name: "species",
+        idPrefix: "terms",
+        name: "terms",
         errorMessage: errorMessage,
         items: [{
             value: "agree",
@@ -38,8 +38,8 @@
       <div class="govuk-button-group">
         {{ govukButton({
           text: "Continue",
-          value: "Continue",
-          name: "Continue",
+          value: "continue",
+          name: "continue",
           preventDoubleClick: true
         }) }}
       </div>
