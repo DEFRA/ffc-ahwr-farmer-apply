@@ -17,15 +17,15 @@ let routes = [].concat(
   require('../routes/declaration'),
   require('../routes/terms-and-conditions'),
   require('../routes/vet-technical'),
-  require('../routes/signin-oidc'),
+  require('../routes/signin-oidc')
+)
+
+if (config.endemics.enabled) {
+  routes = routes.concat(
+    require('../routes/endemics/org-review'),
+    require('../routes/endemics/check-your-eligible'),
+    require('../routes/endemics/declaration')
   )
-  
-  if(config.endemics.enabled){
-    routes = routes.concat(
-      require('../routes/endemics/org-review'),
-      require('../routes/endemics/check-your-eligible'),
-      require('../routes/endemics/declaration')
-    )
 }
 
 module.exports = {
