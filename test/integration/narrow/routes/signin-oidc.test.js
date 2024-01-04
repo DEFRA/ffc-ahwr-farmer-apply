@@ -32,6 +32,9 @@ describe('FarmerApply defra ID redirection test', () => {
         getOrganisationPermissionsUrl: 'dummy-get-organisation-permissions-url',
         getOrganisationUrl: 'dummy-get-organisation-url'
       }
+    },
+    endemics: {
+      enabled: false
     }
   }))
   const configMock = require('../../../../app/config')
