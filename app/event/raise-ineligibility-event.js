@@ -21,6 +21,8 @@ const raiseIneligibilityEvent = async (sessionId, sbi, crn, email, exception, re
       status
     }
     await raiseEvent(event, status)
+    event.name = 'send-session-event'
+    await raiseEvent(event, status)
   }
 }
 

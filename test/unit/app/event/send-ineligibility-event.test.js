@@ -1,7 +1,7 @@
 jest.mock('../../../../app/event/raise-event')
 const raiseEvent = require('../../../../app/event/raise-event')
 
-const sendIneligibilityEvent = require('../../../../app/event/raise-ineligibility-event')
+const raiseIneligibilityEvent = require('../../../../app/event/raise-ineligibility-event')
 
 let event
 const sessionId = '9e016c50-046b-4597-b79a-ebe4f0bf8505'
@@ -9,7 +9,7 @@ const sbi = '123'
 const crn = 123
 const exception = 'test exception'
 
-describe('Send event on inegibile', () => {
+describe('Send event on ineligible', () => {
   const MOCK_NOW = new Date()
   jest.useFakeTimers('modern')
   jest.setSystemTime(MOCK_NOW)
@@ -19,7 +19,7 @@ describe('Send event on inegibile', () => {
   })
 
   test('should call raiseEvent when a valid event is received', async () => {
-    await sendIneligibilityEvent(sessionId, sbi, crn, 'random@email.com', exception)
+    await raiseIneligibilityEvent(sessionId, sbi, crn, 'random@email.com', exception)
     expect(raiseEvent).toHaveBeenCalled()
   })
 
@@ -29,7 +29,7 @@ describe('Send event on inegibile', () => {
       sbi,
       cph: 'n/a',
       email: 'random@email.com',
-      name: 'send-ineligibility-event',
+      name: 'send-session-event',
       type: 'ineligibility-event',
       message: `Apply: ${exception}`,
       data: {
@@ -43,7 +43,8 @@ describe('Send event on inegibile', () => {
       status: 'alert'
     }
 
-    await sendIneligibilityEvent(sessionId, sbi, crn, 'random@email.com', exception)
+    await raiseIneligibilityEvent(sessionId, sbi, crn, 'random@email.com', exception)
+    expect(raiseEvent).toHaveBeenCalledTimes(2)
     expect(raiseEvent).toHaveBeenCalledWith(event, 'alert')
   })
 
@@ -54,7 +55,7 @@ describe('Send event on inegibile', () => {
       sbi,
       cph: 'n/a',
       email: 'random@email.com',
-      name: 'send-ineligibility-event',
+      name: 'send-session-event',
       type: 'ineligibility-event',
       message: `Apply: ${exception}`,
       data: {
@@ -68,7 +69,7 @@ describe('Send event on inegibile', () => {
       status: 'alert'
     }
 
-    await sendIneligibilityEvent(sessionId, sbi, crn, 'random@email.com', exception, reference)
+    await raiseIneligibilityEvent(sessionId, sbi, crn, 'random@email.com', exception, reference)
     expect(raiseEvent).toHaveBeenCalledWith(event, 'alert')
   })
 
@@ -78,7 +79,7 @@ describe('Send event on inegibile', () => {
       sbi,
       cph: 'n/a',
       email: 'random@email.com',
-      name: 'send-ineligibility-event',
+      name: 'send-session-event',
       type: 'ineligibility-event',
       message: `Apply: ${exception}`,
       data: {
@@ -92,17 +93,17 @@ describe('Send event on inegibile', () => {
       status: 'alert'
     }
 
-    await sendIneligibilityEvent(sessionId, sbi, crn, 'random@email.com', exception)
+    await raiseIneligibilityEvent(sessionId, sbi, crn, 'random@email.com', exception)
     expect(raiseEvent).toHaveBeenCalledWith(event, 'alert')
   })
 
   test('should not call raiseEvent when an event with a null sessionId is received', async () => {
-    await sendIneligibilityEvent(null, sbi, crn, 'random@email.com', exception)
+    await raiseIneligibilityEvent(null, sbi, crn, 'random@email.com', exception)
     expect(raiseEvent).not.toHaveBeenCalled()
   })
 
   test('should not call raiseEvent when an event with a null exception is received', async () => {
-    await sendIneligibilityEvent(sessionId, sbi, crn, 'random@email.com', null)
+    await raiseIneligibilityEvent(sessionId, sbi, crn, 'random@email.com', null)
     expect(raiseEvent).not.toHaveBeenCalled()
   })
 })

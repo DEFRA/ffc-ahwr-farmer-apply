@@ -150,13 +150,13 @@ module.exports = [{
               ruralPaymentsAgency: config.ruralPaymentsAgency
             }).code(400).takeover()
         }
-        raiseIneligibilityEvent(
+        await raiseIneligibilityEvent(
           request.yar.id,
           organisation?.sbi,
           crn,
           organisation?.email,
-          tempApplicationId,
-          err.name
+          err.name,
+          tempApplicationId
         )
         return h.view('cannot-apply-for-livestock-review-exception', {
           ruralPaymentsAgency: config.ruralPaymentsAgency,
