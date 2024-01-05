@@ -89,9 +89,9 @@ describe('Org review page test', () => {
         method: 'GET',
         url
       }
-  
+
       const res = await global.__SERVER__.inject(options)
-  
+
       expect(res.statusCode).toBe(404)
       const $ = cheerio.load(res.payload)
       expect($('.govuk-heading-l').text()).toEqual('404 - Not Found')
@@ -99,7 +99,6 @@ describe('Org review page test', () => {
       expectPhaseBanner.ok($)
     })
   })
-
 
   describe(`POST ${url} route`, () => {
     let crumb
