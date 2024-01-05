@@ -1,11 +1,11 @@
 const cheerio = require('cheerio')
-const expectPhaseBanner = require('../../../utils/phase-banner-expect')
-const getCrumbs = require('../../../utils/get-crumbs')
+const expectPhaseBanner = require('../../../../utils/phase-banner-expect')
+const getCrumbs = require('../../../../utils/get-crumbs')
 
 describe('Org review page test', () => {
   let session
   let authMock
-  const url = '/apply/org-review'
+  const url = '/apply/endemics/org-review'
   const auth = {
     credentials: { reference: '1111', sbi: '111111111' },
     strategy: 'cookie'
@@ -23,16 +23,19 @@ describe('Org review page test', () => {
       jest.resetAllMocks()
       jest.resetModules()
 
-      session = require('../../../../app/session')
-      jest.mock('../../../../app/session')
-      jest.mock('../../../../app/config', () => ({
-        ...jest.requireActual('../../../../app/config'),
+      session = require('../../../../../app/session')
+      jest.mock('../../../../../app/session')
+      jest.mock('../../../../../app/config', () => ({
+        ...jest.requireActual('../../../../../app/config'),
+        endemics: {
+          enabled: true
+        },
         authConfig: {
           defraId: {
             hostname: 'https://tenant.b2clogin.com/tenant.onmicrosoft.com',
             oAuthAuthorisePath: '/oauth2/v2.0/authorize',
             policy: 'b2c_1a_signupsigninsfi',
-            redirectUri: 'http://localhost:3000/apply/signin-oidc',
+            redirectUri: 'http://localhost:3000/apply/endemics/signin-oidc',
             clientId: 'dummy_client_id',
             serviceId: 'dummy_service_id',
             scope: 'openid dummy_client_id offline_access'
@@ -45,8 +48,8 @@ describe('Org review page test', () => {
           }
         }
       }))
-      jest.mock('../../../../app/auth')
-      authMock = require('../../../../app/auth')
+      jest.mock('../../../../../app/auth')
+      authMock = require('../../../../../app/auth')
     })
 
     test('returns 200', async () => {
@@ -109,8 +112,11 @@ describe('Org review page test', () => {
     })
 
     beforeAll(async () => {
-      jest.mock('../../../../app/config', () => ({
-        ...jest.requireActual('../../../../app/config'),
+      jest.mock('../../../../../app/config', () => ({
+        ...jest.requireActual('../../../../../app/config'),
+        endemics: {
+          enabled: true
+        },
         authConfig: {
           defraId: {
             enabled: true
@@ -131,7 +137,7 @@ describe('Org review page test', () => {
       const res = await global.__SERVER__.inject(options)
 
       expect(res.statusCode).toBe(302)
-      expect(res.headers.location).toEqual('/apply/which-review')
+      expect(res.headers.location).toEqual('/apply/endemics/check-your-eligible')
     })
 
     test('returns 200 with update your details recognised when no is answered', async () => {
@@ -172,7 +178,7 @@ describe('Org review page test', () => {
         expect(res.statusCode).toBe(400)
         expect(res.request.response.variety).toBe('view')
         expect(res.request.response.source.template).toBe(
-          'org-review'
+          'endemics/org-review'
         )
         expect(res.result).toContain(org.sbi)
         expect(res.result).toContain(org.farmerName)

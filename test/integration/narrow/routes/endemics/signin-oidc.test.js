@@ -1,26 +1,26 @@
 const cheerio = require('cheerio')
-const sessionMock = require('../../../../app/session')
-jest.mock('../../../../app/session')
-const authMock = require('../../../../app/auth')
-jest.mock('../../../../app/auth')
-const personMock = require('../../../../app/api-requests/rpa-api/person')
-jest.mock('../../../../app/api-requests/rpa-api/person')
-const organisationMock = require('../../../../app/api-requests/rpa-api/organisation')
-jest.mock('../../../../app/api-requests/rpa-api/organisation')
-const cphNumbersMock = require('../../../../app/api-requests/rpa-api/cph-numbers')
-jest.mock('../../../../app/api-requests/rpa-api/cph-numbers')
-const sendIneligibilityEventMock = require('../../../../app/event/raise-ineligibility-event')
-jest.mock('../../../../app/event/raise-ineligibility-event')
-const cphCheckMock = require('../../../../app/api-requests/rpa-api/cph-check').customerMustHaveAtLeastOneValidCph
-jest.mock('../../../../app/api-requests/rpa-api/cph-check')
-const businessEligibleToApplyMock = require('../../../../app/api-requests/business-eligible-to-apply')
-jest.mock('../../../../app/api-requests/business-eligible-to-apply')
+const sessionMock = require('../../../../../app/session')
+jest.mock('../../../../../app/session')
+const authMock = require('../../../../../app/auth')
+jest.mock('../../../../../app/auth')
+const personMock = require('../../../../../app/api-requests/rpa-api/person')
+jest.mock('../../../../../app/api-requests/rpa-api/person')
+const organisationMock = require('../../../../../app/api-requests/rpa-api/organisation')
+jest.mock('../../../../../app/api-requests/rpa-api/organisation')
+const cphNumbersMock = require('../../../../../app/api-requests/rpa-api/cph-numbers')
+jest.mock('../../../../../app/api-requests/rpa-api/cph-numbers')
+const sendIneligibilityEventMock = require('../../../../../app/event/raise-ineligibility-event')
+jest.mock('../../../../../app/event/raise-ineligibility-event')
+const cphCheckMock = require('../../../../../app/api-requests/rpa-api/cph-check').customerMustHaveAtLeastOneValidCph
+jest.mock('../../../../../app/api-requests/rpa-api/cph-check')
+const businessEligibleToApplyMock = require('../../../../../app/api-requests/business-eligible-to-apply')
+jest.mock('../../../../../app/api-requests/business-eligible-to-apply')
 
-const { InvalidPermissionsError, InvalidStateError, AlreadyAppliedError, NoEligibleCphError, CannotReapplyTimeLimitError, OutstandingAgreementError } = require('../../../../app/exceptions')
+const { InvalidPermissionsError, InvalidStateError, AlreadyAppliedError, NoEligibleCphError, CannotReapplyTimeLimitError, OutstandingAgreementError } = require('../../../../../app/exceptions')
 
 describe('FarmerApply defra ID redirection test', () => {
-  jest.mock('../../../../app/config', () => ({
-    ...jest.requireActual('../../../../app/config'),
+  jest.mock('../../../../../app/config', () => ({
+    ...jest.requireActual('../../../../../app/config'),
     serviceUri: 'http://localhost:3000/apply',
     authConfig: {
       defraId: {
@@ -34,10 +34,10 @@ describe('FarmerApply defra ID redirection test', () => {
       }
     },
     endemics: {
-      enabled: false
+      enabled: true
     }
   }))
-  const configMock = require('../../../../app/config')
+  const configMock = require('../../../../../app/config')
   jest.mock('applicationinsights', () => ({ defaultClient: { trackException: jest.fn(), trackEvent: jest.fn() }, dispose: jest.fn() }))
 
   const urlPrefix = configMock.urlPrefix
@@ -157,7 +157,7 @@ describe('FarmerApply defra ID redirection test', () => {
 
       const res = await global.__SERVER__.inject(options)
       expect(res.statusCode).toBe(302)
-      expect(res.headers.location).toEqual('/apply/org-review')
+      expect(res.headers.location).toEqual('/apply/endemics/org-review')
       expect(sessionMock.setFarmerApplyData).toBeCalledWith(expect.anything(), 'organisation', expect.objectContaining({
         email: 'billsmith@testemail.com'
       }))
@@ -214,7 +214,7 @@ describe('FarmerApply defra ID redirection test', () => {
 
       const res = await global.__SERVER__.inject(options)
       expect(res.statusCode).toBe(302)
-      expect(res.headers.location).toEqual('/apply/org-review')
+      expect(res.headers.location).toEqual('/apply/endemics/org-review')
       expect(sessionMock.setFarmerApplyData).toBeCalledWith(expect.anything(), 'organisation', expect.objectContaining({
         email: 'org1@testemail.com'
       }))

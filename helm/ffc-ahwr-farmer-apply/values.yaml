@@ -76,6 +76,7 @@ container:
   apimScope:
   dateOfTestingEnabled:
   tenMonthRuleEnabled:
+  endemicsEnabled:
  
 ingress:
   class: nginx

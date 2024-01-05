@@ -39,4 +39,5 @@ data:
   TERMS_AND_CONDITIONS_URL: {{ quote .Values.container.termsAndConditionsUrl }}
   DATE_OF_TESTING_ENABLED: {{ quote .Values.container.dateOfTestingEnabled }}
   TEN_MONTH_RULE_ENABLED: {{ quote .Values.container.tenMonthRuleEnabled }}
+  ENDEMICS_ENABLED: {{ quote .Values.container.endemicsEnabled }}
 {{- end -}}

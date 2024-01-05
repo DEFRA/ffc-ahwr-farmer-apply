@@ -1,0 +1,49 @@
+{% extends './layouts/layout.njk' %}
+
+{% block pageTitle %}Review your agreement offer - {{ serviceName }}{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: backLink,
+	  attributes: {id: "back"}
+  }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">Review your agreement offer</h1>
+    <p class="govuk-body">You must have a minimum number of animals when the vet visits your farm to do the review.</p>
+    <p class="govuk-body">You must have one of the following:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>11 or more beef cattle</li>
+      <li>11 or more dairy cattle</li>
+      <li>21 or more sheep</li>
+      <li>51 or more pigs</li>
+    </ul><br>
+    <br>
+
+    <form method="POST" autocomplete="off" novalidate="novalidate" id ="submitDeclarationForm">
+      <input type="hidden" name="crumb" value="{{crumb}}"/>
+      {{ govukCheckboxes({
+        idPrefix: "terms",
+        name: "terms",
+        errorMessage: errorMessage,
+        items: [{
+            value: "agree",
+            text: "I have read, understood how many animals are required to have a review and follow-up visit"
+          }]
+      }) }}
+      <div class="govuk-button-group">
+        {{ govukButton({
+          text: "Continue",
+          value: "continue",
+          name: "continue",
+          preventDoubleClick: true
+        }) }}
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
