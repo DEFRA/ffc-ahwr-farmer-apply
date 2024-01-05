@@ -77,7 +77,7 @@ describe('Declaration test', () => {
       expect(res.headers.location.toString()).toEqual(expect.stringContaining('https://testtenant.b2clogin.com/testtenant.onmicrosoft.com/oauth2/v2.0/authorize'))
     })
 
-    test('returns 400 when no application found', async () => {
+    test('returns 404 when no application found', async () => {
       const options = {
         method: 'GET',
         url,
@@ -89,6 +89,24 @@ describe('Declaration test', () => {
       expect(res.statusCode).toBe(404)
       const $ = cheerio.load(res.payload)
       expect($('.govuk-heading-l').text()).toEqual('404 - Not Found')
+    })
+
+    test('returns 200 when application found', async () => {
+      const application = { organisation }
+      sessionMock.getFarmerApplyData.mockReturnValue(application)
+      const options = {
+        method: 'GET',
+        url,
+        auth
+      }
+
+      const res = await global.__SERVER__.inject(options)
+
+      expect(res.statusCode).toBe(200)
+      const $ = cheerio.load(res.payload)
+      expect($('h1').text()).toMatch('Review your agreement offer')
+      expect($('title').text()).toEqual(`Review your agreement offer - ${config.serviceName}`)
+      expectPhaseBanner.ok($)
     })
   })
 
@@ -112,6 +130,33 @@ describe('Declaration test', () => {
       const $ = cheerio.load(res.payload)
       expect($('h1').text()).toMatch('Application complete')
       expect($('title').text()).toEqual(`Application complete - ${config.serviceName}`)
+      expectPhaseBanner.ok($)
+      expect(sessionMock.clear).toBeCalledTimes(1)
+      expect(sessionMock.setFarmerApplyData).toHaveBeenCalledTimes(3)
+      expect(sessionMock.setFarmerApplyData).toHaveBeenNthCalledWith(1, res.request, declaration, true)
+      expect(sessionMock.getFarmerApplyData).toHaveBeenCalledTimes(2)
+      expect(sessionMock.getFarmerApplyData).toHaveBeenCalledWith(res.request)
+      expect(messagingMock.sendMessage).toHaveBeenCalledTimes(1)
+    })
+
+    test('returns 200, shows offer rejection content on rejection', async () => {
+      const application = { organisation }
+      sessionMock.getFarmerApplyData.mockReturnValue(application)
+      messagingMock.receiveMessage.mockResolvedValueOnce({ applicationReference: 'abc123' })
+      const crumb = await getCrumbs(global.__SERVER__)
+      const options = {
+        method: 'POST',
+        url,
+        payload: { crumb, terms: 'agree', offerStatus: 'rejected' },
+        auth,
+        headers: { cookie: `crumb=${crumb}` }
+      }
+
+      const res = await global.__SERVER__.inject(options)
+
+      expect(res.statusCode).toBe(200)
+      const $ = cheerio.load(res.payload)
+      expect($('title').text()).toEqual(`Agreement offer rejected - ${config.serviceName}`)
       expectPhaseBanner.ok($)
       expect(sessionMock.clear).toBeCalledTimes(1)
       expect(sessionMock.setFarmerApplyData).toHaveBeenCalledTimes(3)
