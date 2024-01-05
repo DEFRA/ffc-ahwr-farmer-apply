@@ -57,7 +57,7 @@
     "notifications-node-client": {
       "jsonwebtoken": "9.0.0",
 
-      "axios": "1.6.0"
+      "axios": "1.6.4"
 
     },
     "@azure/identity": {
