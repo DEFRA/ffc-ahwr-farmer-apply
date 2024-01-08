@@ -66,4 +66,15 @@ describe('Farmer apply guidance page test', () => {
     expect($('[data-testid="warningpay-extrainfo"]').text())
       .toContain('We cannot pay for a review or testing which happened before the agreement start date.')
   })
+
+  test('Guidance must include Require testing guidance.', async () => {
+    const res = await global.__SERVER__.inject(options)
+
+    expect(res.statusCode).toBe(200)
+    const $ = cheerio.load(res.payload)
+    expect($('[data-testid="required-testing-header"]').text())
+      .toContain('Required testing')
+    expect($('[data-testid="required-testing-caption"]').text())
+      .toContain('Depending on the species, you must ask the vet to test for:')
+  })
 })

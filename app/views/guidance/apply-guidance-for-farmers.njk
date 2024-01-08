@@ -1,5 +1,28 @@
 {% extends './layouts/layout.njk' %}
 
+{% set requiredTesting = [
+  [
+    { text: "Beef cattle"},
+    { text: "Bovine viral diarrhoea (BVD) blood (serum antibody test)"},
+    { text: "5 per epidemiological group in up to 2 groups"}
+  ],
+  [
+    { text: "Dairy cattle"},
+    { text: "Bovine viral diarrhoea (BVD) bulk milk test. The farmer can take the bulk milk sample without the vet, if confident in doing so."},
+    { text: "A representative milk sample from the bulk tank"}
+  ],
+  [
+    { text: "Sheep"},
+    { text: "Worming treatment check"},
+    { text: "Minimum of 10 lambs less than 12 months old"}
+  ],
+  [
+    { text: "Pigs"},
+    { text: "Enzyme-linked immunosorbent assay (ELISA) or porcine reproductive and respiratory syndrome (PRRS) polymerase chain reaction (PCR) test"},
+    { text: "Minimum of 30 pigs"}
+  ]
+] %}
+
 {% block pageTitle %}Guidance for farmers - {{ serviceName }}{% endblock %}
 
 {% block content %}
@@ -171,6 +194,20 @@
         <h2 id="during-the-farm-visit" class="govuk-heading-m">During the farm visit</h2>
 
         <p class="govuk-body">During the visit, you must ask the vet to carry out the required testing, and to give you health and welfare advice about your livestock. You may also discuss topics such as biosecurity or medicine usage.</p>
+
+        <h3 data-testid="required-testing-header" class="govuk-heading-s">Required testing</h3>
+
+        <p data-testid="required-testing-caption" class="govuk-body">Depending on the species, you must ask the vet to test for:</p>
+
+        {{ govukTable({
+          firstCellIsHeader: true,
+          head: [
+            { text: "Species"},
+            { text: "Test type"},
+            { text: "Minimum number of animals to test"}
+          ],
+          rows: requiredTesting
+        }) }}
 
         <h3 id="endemic-diseases-condition-testing" class="govuk-heading-s">Endemic diseases and condition testing</h3>
         
