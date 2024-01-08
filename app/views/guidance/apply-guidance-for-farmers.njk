@@ -296,6 +296,10 @@
 
         <p class="govuk-body">When the vet has completed the review, you can claim your funding.</p>
 
+        {{ govukWarningText({ text: "You must claim within 6 months of the date you accept your agreement offer", iconFallbackText: "Warning" }) }}
+
+        <p class="govuk-body" data-testid="warningpay-extrainfo">We cannot pay for a review or testing which happened before the agreement start date.</p>
+
         <p class="govuk-body">Read guidance on <a href="/apply/claim-guidance-for-farmers" class="govuk-link">how to claim for an annual health and welfare review of your livestock.</a></p>
 
         <h2 id="get-help-with-your-application" class="govuk-heading-m">Get help with your application</h2>
