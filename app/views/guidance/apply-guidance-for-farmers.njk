@@ -267,6 +267,7 @@
           <li>confirmation the minimum number of animals being reviewed were on the farm when the vet did the review</li>
           <li>confirmation the vet carried out testing in accordance with the review’s disease and endemic conditions testing guidance</li>
           <li>the date the vet completed disease and endemic condition testing</li>
+          <li>the number of beef cattle, sheep and pigs the vet tested - you do not need to provide the number of dairy cattle tested</li>
           <li>the unique reference number for laboratory test results</li>
           <li>the vet’s name and Royal College of Veterinary Surgeons (RCVS) number</li>
           <li>confirmation the vet has given you a written report</li>
@@ -294,6 +295,10 @@
         <h2 id="how-to-claim-funding" class="govuk-heading-m">How to claim your funding</h2>
 
         <p class="govuk-body">When the vet has completed the review, you can claim your funding.</p>
+
+        {{ govukWarningText({ text: "You must claim within 6 months of the date you accept your agreement offer", iconFallbackText: "Warning" }) }}
+
+        <p class="govuk-body" data-testid="warningpay-extrainfo">We cannot pay for a review or testing which happened before the agreement start date.</p>
 
         <p class="govuk-body">Read guidance on <a href="/apply/claim-guidance-for-farmers" class="govuk-link">how to claim for an annual health and welfare review of your livestock.</a></p>
 
