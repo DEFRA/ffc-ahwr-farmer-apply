@@ -15,7 +15,7 @@
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l">Review your agreement offer</h1>
 
-    <p class="govuk-body">This is an offer of funding for a {{ species }} review for this business:</p>
+    <p class="govuk-body">This is an offer of funding for a livestock health and welfare review and follow-up for this business:</p>
     <div class="govuk-inset-text">
       <span id="organisation-name">{{ organisation.name }}</span><br>
       <span id="organisation-address">{{ organisation.address | safe }}</span><br>
@@ -24,23 +24,21 @@
 
     <p>You must:</p>
     <ul class="govuk-list govuk-list--bullet">
-      <li>complete your review and claim within 6 months of the date of your agreement </li>
-      <li>{{ testText }}</li>
-      <li>share some information with Rural Payments Agency (RPA) including the date of the review, date of testing, the vet's name, their Royal College of Veterinary Surgeons (RCVS) number and the laboratory test results unique reference number (URN)</li>
+      <li>allow a vet to test for diseases relevant to the livestock you choose to claim for </li>
+      <li>share details about the vet and the results the vet gives you with the Rural Payments Agency (RPA)</li>
     </ul><br>
 
     <p>You may need to:</p>
     <ul class="govuk-list govuk-list--bullet">
-      <li>provide the RPA with evidence the review took place such as a review summary</li>
+      <li>provide the RPA with evidence your reviews or follow-ups took place, such as a summary from the vet</li>
     </ul><br>
 
     <p>You confirm that:</p>
     <ul class="govuk-list govuk-list--bullet">
-      <li>your farm or business has a single business identifier (SBI) linked to a county parish holding (CPH) number registered in England - the CPH number can be permanent or temporary not an 8,000 or 9,000</li>
-      <li>you’re the registered keeper</li>
-      <li>you’re applying for a review on a CPH registered in England</li>
-      <li>{{ minNumText }}</li>
-      <li>you have carefully read and accept the <a id="termsAndConditionsUri" href="{{latestTermsAndConditionsUri}}">full terms and conditions</a></li>
+      <li>your reviews and follow-ups will be for the same species</li>
+      <li>you will have the minimum number of livestock needed</li>
+      <li>you will follow the rules for timing of vet visits and claims</li>
+      <li>you have read and accept <a id="termsAndConditionsUri" href="{{latestTermsAndConditionsUri}}">the full terms and conditions</a></li>
     </ul><br>
 
     <form method="POST" autocomplete="off" novalidate="novalidate" id ="submitDeclarationForm">
@@ -54,12 +52,6 @@
             text: "I have read, understood and agree to the terms and conditions."
           }]
       }) }}
-
-      <p class="govuk-body">
-          If you wish to accept this offer for funding, you confirm that you are entering into an agreement with the RPA and confirm you have read and accepted the terms and conditions.
-      </p>
-
-      <p>If you do not wish to accept the offer, select ‘Reject’.</p>
 
       <div class="govuk-button-group">
         {{ govukButton({
@@ -75,6 +67,9 @@
           name: "offerStatus",
           preventDoubleClick: true
         }) }}
+      </div>
+      <div class="gem-c-print-link govuk-!-display-none-print govuk-!-margin-top-6">
+        <button onclick="window.print()" class="govuk-link govuk-body-s gem-c-print-link__button">Print this page</button>
       </div>
     </form>
   </div>
