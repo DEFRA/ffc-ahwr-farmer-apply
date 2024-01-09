@@ -64,7 +64,7 @@ describe('Farmer apply guidance page test', () => {
     expect($('.govuk-warning-text__text').text())
       .toContain('You must claim within 6 months of the date you accept your agreement offer')
     expect($('[data-testid="warningpay-extrainfo"]').text())
-      .toContain('We cannot pay for a review or testing which happened before the agreement start date.')
+      .toContain('We cannot pay for a review which happened either before the agreement start date or after the claim date')
   })
 
   test('Guidance must include Require testing guidance.', async () => {
