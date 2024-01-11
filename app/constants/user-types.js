@@ -1,4 +1,4 @@
-const farmerApply = 'farmerApply';
+const farmerApply = 'farmerApply'
 
 const appliedBefore = {
   OPEN_APPLICATION: 'openApplication',

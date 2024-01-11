@@ -18,7 +18,7 @@ function setOrganisationSessionData (request, personSummary, { organisation: org
     name: org.name,
     email: personSummary.email ? personSummary.email : org.email,
     address: getOrganisationAddress(org.address),
-    appliedBefore,
+    appliedBefore
   }
   session.setFarmerApplyData(
     request,
@@ -51,20 +51,20 @@ module.exports = [{
     handler: async (request, h) => {
       try {
         await auth.authenticate(request, session)
-        
+
         const apimAccessToken = await auth.retrieveApimAccessToken()
         const personSummary = await getPersonSummary(request, apimAccessToken)
         session.setCustomer(request, sessionKeys.customer.id, personSummary.id)
         const organisationSummary = await organisationIsEligible(request, personSummary.id, apimAccessToken)
         const appliedBefore = await businessAppliedBefore(organisationSummary.organisation.sbi)
         setOrganisationSessionData(request, personSummary, { ...organisationSummary, appliedBefore })
-        
+
         if (!organisationSummary.organisationPermission) {
           throw new InvalidPermissionsError(`Person id ${personSummary.id} does not have the required permissions for organisation id ${organisationSummary.organisation.id}`)
         }
-        
+
         await cphCheck.customerMustHaveAtLeastOneValidCph(request, apimAccessToken)
-        
+
         await businessEligibleToApply(organisationSummary.organisation.sbi)
 
         auth.setAuthCookie(request, personSummary.email, farmerApply)

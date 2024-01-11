@@ -2,7 +2,6 @@ const applicationApi = require('./application-api')
 const status = require('../constants/status')
 const { appliedBefore } = require('../constants/user-types')
 
-
 async function businessAppliedBefore (sbi) {
   const latestApplicationsForSbi = await applicationApi.getLatestApplicationsBySbi(sbi)
   if (latestApplicationsForSbi && Array.isArray(latestApplicationsForSbi)) {
