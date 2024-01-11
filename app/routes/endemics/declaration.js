@@ -18,7 +18,7 @@ module.exports = [{
       }
       const viewData = getDeclarationData(application)
       session.setFarmerApplyData(request, reference, null)
-      return h.view('endemics/declaration', { backLink: `${config.urlPrefix}/endemics/check-your-eligible`, latestTermsAndConditionsUri: `${config.latestTermsAndConditionsUri}?continue=true&backLink=${config.urlPrefix}/endemics/declaration`, ...viewData })
+      return h.view('endemics/declaration', { backLink: `${config.urlPrefix}/endemics/timings`, latestTermsAndConditionsUri: `${config.latestTermsAndConditionsUri}?continue=true&backLink=${config.urlPrefix}/endemics/declaration`, ...viewData })
     }
   }
 }, {
@@ -33,8 +33,8 @@ module.exports = [{
       failAction: async (request, h, _) => {
         const application = session.getFarmerApplyData(request)
         const viewData = getDeclarationData(application)
-        return h.view('declaration', {
-          backLink: `${config.urlPrefix}/check-answers`,
+        return h.view('endemics/declaration', {
+          backLink: `${config.urlPrefix}/endemics/timings`,
           ...viewData,
           errorMessage: { text: 'Confirm you have read and agree to the terms and conditions' }
         }).code(400).takeover()
