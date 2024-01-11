@@ -109,7 +109,7 @@ module.exports = [{
           err.name
         )
 
-        return h.view('cannot-apply-for-livestock-review-exception', {
+        return h.view(config.endemics.enabled ? 'endemics/cannot-apply-exception' : 'cannot-apply-for-livestock-review-exception', {
           ruralPaymentsAgency: config.ruralPaymentsAgency,
           alreadyAppliedError: err instanceof AlreadyAppliedError,
           permissionError: err instanceof InvalidPermissionsError,
@@ -120,6 +120,7 @@ module.exports = [{
           nextApplicationDate: err.nextApplicationDate,
           hasMultipleBusinesses: attachedToMultipleBusinesses,
           backLink: auth.requestAuthorizationCodeUrl(session, request),
+          claimLink: config.claimServiceUri,
           sbiText: organisation?.sbi !== undefined ? ` - SBI ${organisation.sbi}` : null,
           organisationName: organisation?.name,
           guidanceLink: config.serviceUri
