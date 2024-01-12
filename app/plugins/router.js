@@ -23,9 +23,10 @@ let routes = [].concat(
 if (config.endemics.enabled) {
   routes = routes.concat(
     require('../routes/endemics/index'),
-    require('../routes/endemics/org-review'),
-    require('../routes/endemics/check-your-eligible'),
-    require('../routes/endemics/declaration')
+    require('../routes/endemics/numbers'),
+    require('../routes/endemics/reviews'),
+    require('../routes/endemics/declaration'),
+    require('../routes/endemics/check-details')
   )
 }
 
