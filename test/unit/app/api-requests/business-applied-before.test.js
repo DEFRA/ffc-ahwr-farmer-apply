@@ -1,7 +1,7 @@
 const config = require('../../../../app/config')
 const status = require('../../../../app/constants/status')
 const { appliedBefore } = require('../../../../app/constants/user-types')
-const { CannotReapplyTimeLimitError, OutstandingAgreementError, AlreadyAppliedError } = require('../../../../app/exceptions')
+const { OutstandingAgreementError, AlreadyAppliedError } = require('../../../../app/exceptions')
 
 let businessAppliedBefore
 
