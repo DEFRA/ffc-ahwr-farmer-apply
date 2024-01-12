@@ -209,7 +209,7 @@ describe('Declaration test', () => {
       expect(res.statusCode).toBe(400)
       const $ = cheerio.load(res.payload)
       expectPageContentOk($, organisation)
-      expect($('#terms-error').text()).toMatch('Confirm you have read and agree to the terms and conditions')
+      expect($('#terms-error').text()).toMatch('Select you have read and agree to the terms and conditions')
       expect(sessionMock.getFarmerApplyData).toHaveBeenCalledTimes(1)
       expect(sessionMock.getFarmerApplyData).toHaveBeenCalledWith(res.request)
     })
