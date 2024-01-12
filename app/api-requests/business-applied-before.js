@@ -1,6 +1,7 @@
 const applicationApi = require('./application-api')
 const status = require('../constants/status')
 const { appliedBefore } = require('../constants/user-types')
+const { OutstandingAgreementError } = require('../exceptions')
 
 async function businessAppliedBefore (sbi) {
   const latestApplicationsForSbi = await applicationApi.getLatestApplicationsBySbi(sbi)
@@ -22,7 +23,7 @@ function applicationForBusinessInStateToApply (latestApplicationsForSbi) {
     return appliedBefore.CLOSED_APPLICATION
   }
 
-  return appliedBefore.OPEN_APPLICATION
+  throw new OutstandingAgreementError(`Business with SBI ${latestApplication.data.organisation.sbi} must claim or withdraw agreement before creating another.`)
 }
 
 function getLatestApplication (latestApplicationsForSbi) {

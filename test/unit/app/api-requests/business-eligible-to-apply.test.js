@@ -11,6 +11,7 @@ describe('Business Eligible to Apply Tests', () => {
     applicationApiMock = require('../../../../app/api-requests/application-api')
     jest.mock('../../../../app/api-requests/application-api')
     businessEligibleToApply = require('../../../../app/api-requests/business-eligible-to-apply')
+    config.endemics.enabled = false
   })
 
   beforeEach(() => {

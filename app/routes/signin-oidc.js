@@ -55,8 +55,6 @@ module.exports = [{
         const personSummary = await getPersonSummary(request, apimAccessToken)
         session.setCustomer(request, sessionKeys.customer.id, personSummary.id)
         const organisationSummary = await organisationIsEligible(request, personSummary.id, apimAccessToken)
-        const appliedBefore = await businessAppliedBefore(organisationSummary.organisation.sbi)
-        setOrganisationSessionData(request, personSummary, { ...organisationSummary, appliedBefore })
 
         if (organisationSummary.organisation.locked) {
           throw new LockedBusinessError(`Organisation id ${organisationSummary.organisation.id} is locked by RPA`)
@@ -67,8 +65,9 @@ module.exports = [{
         }
 
         await cphCheck.customerMustHaveAtLeastOneValidCph(request, apimAccessToken)
-
         await businessEligibleToApply(organisationSummary.organisation.sbi)
+        const appliedBefore = await businessAppliedBefore(organisationSummary.organisation.sbi)
+        setOrganisationSessionData(request, personSummary, { ...organisationSummary, appliedBefore })
 
         auth.setAuthCookie(request, personSummary.email, farmerApply)
         appInsights.defaultClient.trackEvent({
@@ -113,6 +112,10 @@ module.exports = [{
           organisation?.email,
           err.name
         )
+
+        if (config.endemics.enabled && err instanceof AlreadyAppliedError) {
+          h.redirect(config.dashboardServiceUri)
+        }
 
         return h.view(config.endemics.enabled ? 'endemics/cannot-apply-exception' : 'cannot-apply-for-livestock-review-exception', {
           ruralPaymentsAgency: config.ruralPaymentsAgency,

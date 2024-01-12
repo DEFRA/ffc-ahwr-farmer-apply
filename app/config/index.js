@@ -43,6 +43,7 @@ const schema = Joi.object({
   port: Joi.number().default(3000),
   serviceUri: Joi.string().uri(),
   claimServiceUri: Joi.string().uri(),
+  dashboardServiceUri: Joi.string().uri(),
   serviceName: Joi.string().default('Annual health and welfare review of livestock'),
   useRedis: Joi.boolean().default(false),
   urlPrefix: Joi.string().default(urlPrefix),
@@ -104,6 +105,7 @@ const config = {
   port: process.env.PORT,
   serviceUri: process.env.SERVICE_URI,
   claimServiceUri: process.env.CLAIM_SERVICE_URI,
+  dashboardServiceUri: process.env.DASHBOARD_SERVICE_URI,
   useRedis: process.env.NODE_ENV !== 'test',
   urlPrefix: process.env.URL_PREFIX,
   ruralPaymentsAgency: {
