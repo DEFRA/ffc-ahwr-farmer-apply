@@ -5,9 +5,9 @@ const session = require('../../session')
 const { organisation: organisationKey, confirmCheckDetails } =
   require('../../session/keys').farmerApplyData
 const getOrganisation = require('../models/organisation')
-const { checkDetails, reviews } = require('../../config/routes')
+const { endemicsCheckDetails, endemicsReviews } = require('../../config/routes')
 
-const pageUrl = `${config.urlPrefix}/${checkDetails}`
+const pageUrl = `${config.urlPrefix}/${endemicsCheckDetails}`
 const errorMessage = 'Select yes if these details are correct'
 
 module.exports = [
@@ -24,7 +24,7 @@ module.exports = [
           return boom.notFound()
         }
         return h.view(
-          checkDetails,
+          endemicsCheckDetails,
           getOrganisation(request, organisation)
         )
       }
@@ -48,7 +48,7 @@ module.exports = [
           }
           return h
             .view(
-              checkDetails,
+              endemicsCheckDetails,
               getOrganisation(request, organisation, errorMessage)
             )
             .code(400)
@@ -63,7 +63,7 @@ module.exports = [
             confirmCheckDetails,
             request.payload[confirmCheckDetails]
           )
-          return h.redirect(`${config.urlPrefix}/${reviews}`)
+          return h.redirect(`${config.urlPrefix}/${endemicsReviews}`)
         }
         return h.view('update-details', {
           ruralPaymentsAgency: config.ruralPaymentsAgency,

@@ -2,15 +2,15 @@ const session = require('../../session')
 const config = require('../../config/index')
 const urlPrefix = require('../../config/index').urlPrefix
 const {
-  timing,
-  numbers,
-  reviews,
-  offerRejected
+  endemicsTiming,
+  endemicsNumbers,
+  endemicsReviews,
+  endemicsOfferRejected
 } = require('../../config/routes')
 
-const pageUrl = `${urlPrefix}/${numbers}`
-const backLink = `${urlPrefix}/${reviews}`
-const nextPage = `${urlPrefix}/${timing}`
+const pageUrl = `${urlPrefix}/${endemicsNumbers}`
+const backLink = `${urlPrefix}/${endemicsReviews}`
+const nextPage = `${urlPrefix}/${endemicsTiming}`
 
 const agreementStatus = {
   agree: {
@@ -29,7 +29,7 @@ module.exports = [
     path: pageUrl,
     options: {
       handler: async (request, h) => {
-        return h.view(numbers, {
+        return h.view(endemicsNumbers, {
           backLink,
           agreementStatus
         })
@@ -44,7 +44,7 @@ module.exports = [
         if (request.payload.agreementStatus === agreementStatus.notAgree.value) {
           session.clear(request)
 
-          return h.view(offerRejected, {
+          return h.view(endemicsOfferRejected, {
             title: 'Agreement terms rejected',
             ruralPaymentsAgency: config.ruralPaymentsAgency
           })

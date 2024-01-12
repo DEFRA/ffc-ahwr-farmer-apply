@@ -1,8 +1,8 @@
 module.exports = {
-  timing: 'endemics/timing',
-  reviews: 'endemics/reviews',
-  numbers: 'endemics/numbers',
-  declaration: 'endemics/declaration',
-  checkDetails: 'endemics/check-details',
-  offerRejected: 'endemics/offer-rejected'
+  endemicsTiming: 'endemics/timing',
+  endemicsReviews: 'endemics/reviews',
+  endemicsNumbers: 'endemics/numbers',
+  endemicsDeclaration: 'endemics/declaration',
+  endemicsCheckDetails: 'endemics/check-details',
+  endemicsOfferRejected: 'endemics/offer-rejected'
 }

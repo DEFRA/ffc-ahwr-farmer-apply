@@ -1,8 +1,8 @@
 const cheerio = require('cheerio')
 const sessionMock = require('../../../../../app/session')
-const { checkDetails } = require('../../../../../app/config/routes')
+const { endemicsCheckDetails } = require('../../../../../app/config/routes')
 
-const checkDetailsUrl = `/apply/${checkDetails}`
+const endemicsCheckDetailsUrl = `/apply/${endemicsCheckDetails}`
 
 jest.mock('../../../../../app/session')
 const authMock = require('../../../../../app/auth')
@@ -161,7 +161,7 @@ describe('FarmerApply defra ID redirection test', () => {
 
       const res = await global.__SERVER__.inject(options)
       expect(res.statusCode).toBe(302)
-      expect(res.headers.location).toEqual(checkDetailsUrl)
+      expect(res.headers.location).toEqual(endemicsCheckDetailsUrl)
       expect(sessionMock.setFarmerApplyData).toBeCalledWith(expect.anything(), 'organisation', expect.objectContaining({
         email: 'billsmith@testemail.com'
       }))
@@ -218,7 +218,7 @@ describe('FarmerApply defra ID redirection test', () => {
 
       const res = await global.__SERVER__.inject(options)
       expect(res.statusCode).toBe(302)
-      expect(res.headers.location).toEqual(checkDetailsUrl)
+      expect(res.headers.location).toEqual(endemicsCheckDetailsUrl)
       expect(sessionMock.setFarmerApplyData).toBeCalledWith(expect.anything(), 'organisation', expect.objectContaining({
         email: 'org1@testemail.com'
       }))

@@ -1,14 +1,14 @@
 const cheerio = require('cheerio')
 const expectPhaseBanner = require('../../../../utils/phase-banner-expect')
 const getCrumbs = require('../../../../utils/get-crumbs')
-const { checkDetails, reviews } = require('../../../../../app/config/routes')
+const { endemicsCheckDetails, endemicsReviews } = require('../../../../../app/config/routes')
 
-const reviewsUrl = `/apply/${reviews}`
+const endemicsReviewsUrl = `/apply/${endemicsReviews}`
 
 describe('Org review page test', () => {
   let session
   let authMock
-  const url = `/apply/${checkDetails}`
+  const url = `/apply/${endemicsCheckDetails}`
   const auth = {
     credentials: { reference: '1111', sbi: '111111111' },
     strategy: 'cookie'
@@ -140,7 +140,7 @@ describe('Org review page test', () => {
       const res = await global.__SERVER__.inject(options)
 
       expect(res.statusCode).toBe(302)
-      expect(res.headers.location).toEqual(reviewsUrl)
+      expect(res.headers.location).toEqual(endemicsReviewsUrl)
     })
 
     test('returns 200 with update your details recognised when no is answered', async () => {
@@ -180,7 +180,7 @@ describe('Org review page test', () => {
 
         expect(res.statusCode).toBe(400)
         expect(res.request.response.variety).toBe('view')
-        expect(res.request.response.source.template).toBe(`${checkDetails}`)
+        expect(res.request.response.source.template).toBe(`${endemicsCheckDetails}`)
         expect(res.result).toContain(org.sbi)
         expect(res.result).toContain(org.farmerName)
         expect(res.result).toContain(org.address)

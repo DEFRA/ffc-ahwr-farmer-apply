@@ -2,14 +2,14 @@ const cheerio = require('cheerio')
 const getCrumbs = require('../../../../utils/get-crumbs')
 const expectPhaseBanner = require('../../../../utils/phase-banner-expect')
 const {
-  numbers,
-  reviews,
-  checkDetails
+  endemicsNumbers,
+  endemicsReviews,
+  endemicsCheckDetails
 } = require('../../../../../app/config/routes')
 
-const numbersUrl = `/apply/${numbers}`
-const reviewsUrl = `/apply/${reviews}`
-const checkDetailsUrl = `/apply/${checkDetails}`
+const endemicsNumbersUrl = `/apply/${endemicsNumbers}`
+const endemicsReviewsUrl = `/apply/${endemicsReviews}`
+const endemicsCheckDetailsUrl = `/apply/${endemicsCheckDetails}`
 
 describe('Check your eligible page test', () => {
   let session
@@ -28,10 +28,10 @@ describe('Check your eligible page test', () => {
   }
   const options = {
     auth,
-    url: reviewsUrl
+    url: endemicsReviewsUrl
   }
 
-  describe(`GET ${numbers} route when logged in`, () => {
+  describe(`GET ${endemicsNumbers} route when logged in`, () => {
     beforeAll(async () => {
       jest.resetAllMocks()
       jest.resetModules()
@@ -84,12 +84,12 @@ describe('Check your eligible page test', () => {
 
       expect(pageTitleByName).toEqual(fullTitle)
       expect(pageTitleByClassName).toEqual(title)
-      expect(backLinkUrlByClassName).toContain(checkDetailsUrl)
+      expect(backLinkUrlByClassName).toContain(endemicsCheckDetailsUrl)
       expectPhaseBanner.ok($)
     })
   })
 
-  describe(`POST ${reviewsUrl} route`, () => {
+  describe(`POST ${endemicsReviewsUrl} route`, () => {
     let crumb
 
     beforeEach(async () => {
@@ -119,7 +119,7 @@ describe('Check your eligible page test', () => {
       })
 
       expect(res.statusCode).toBe(302)
-      expect(res.headers.location).toEqual(numbersUrl)
+      expect(res.headers.location).toEqual(endemicsNumbersUrl)
     })
 
     test('returns 200 to rejected page when not agree answer given', async () => {
