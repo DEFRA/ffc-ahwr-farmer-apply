@@ -1,8 +1,7 @@
 const farmerApply = 'farmerApply'
 
 const appliedBefore = {
-  OPEN_APPLICATION: 'openApplication',
-  CLOSED_APPLICATION: 'closedApplication',
+  EXISTING_USER: 'existingUser',
   NEW_USER: 'newUser'
 }
 
