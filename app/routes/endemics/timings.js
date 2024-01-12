@@ -17,11 +17,7 @@ module.exports = [
     path: `${urlPrefix}/${endemicsTimings}`,
     options: {
       handler: async (request, h) => {
-<<<<<<< HEAD
-        return h.view(endemicsTimings, {
-=======
         return h.view('endemics/timings', {
->>>>>>> b20cddf (add endimics js file)
           backLink
         })
       }
@@ -43,5 +39,5 @@ module.exports = [
           })
         }
       }
-      }
-    }]
+    }
+  }]
