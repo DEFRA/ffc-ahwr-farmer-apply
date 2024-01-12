@@ -25,10 +25,8 @@ function applicationForBusinessInStateToApply (latestApplicationsForSbi) {
         sbi: latestApplication.data.organisation.sbi
       })}`)
   // when toggle is on
-  } else if (config.endemics.enabled) {
-    if (latestApplication.statusId === status.AGREED && latestApplication.type === 'EE') {
-      throw new AlreadyAppliedError(`Business with SBI ${latestApplication.data.organisation.sbi} already has an endemics agreement`)
-    }
+  } else if (latestApplication.statusId === status.AGREED && latestApplication.type === 'EE') {
+    throw new AlreadyAppliedError(`Business with SBI ${latestApplication.data.organisation.sbi} already has an endemics agreement`)
   } else if (config.tenMonthRule.enabled) {
     const dates = timeLimitDates(latestApplication)
     const { startDate, endDate } = dates
