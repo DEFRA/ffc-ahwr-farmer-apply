@@ -7,7 +7,7 @@ const { farmerApply } = require('../constants/user-types')
 const { getPersonSummary, getPersonName, organisationIsEligible, getOrganisationAddress, cphCheck } = require('../api-requests/rpa-api')
 const businessEligibleToApply = require('../api-requests/business-eligible-to-apply')
 const businessAppliedBefore = require('../api-requests/business-applied-before')
-const { InvalidPermissionsError, AlreadyAppliedError, NoEligibleCphError, InvalidStateError, CannotReapplyTimeLimitError, OutstandingAgreementError } = require('../exceptions')
+const { InvalidPermissionsError, AlreadyAppliedError, NoEligibleCphError, InvalidStateError, CannotReapplyTimeLimitError, OutstandingAgreementError, LockedBusinessError } = require('../exceptions')
 const { raiseIneligibilityEvent } = require('../event')
 const appInsights = require('applicationinsights')
 
@@ -51,13 +51,16 @@ module.exports = [{
     handler: async (request, h) => {
       try {
         await auth.authenticate(request, session)
-
         const apimAccessToken = await auth.retrieveApimAccessToken()
         const personSummary = await getPersonSummary(request, apimAccessToken)
         session.setCustomer(request, sessionKeys.customer.id, personSummary.id)
         const organisationSummary = await organisationIsEligible(request, personSummary.id, apimAccessToken)
         const appliedBefore = await businessAppliedBefore(organisationSummary.organisation.sbi)
         setOrganisationSessionData(request, personSummary, { ...organisationSummary, appliedBefore })
+
+        if (organisationSummary.organisation.locked) {
+          throw new LockedBusinessError(`Organisation id ${organisationSummary.organisation.id} is locked by RPA`)
+        }
 
         if (!organisationSummary.organisationPermission) {
           throw new InvalidPermissionsError(`Person id ${personSummary.id} does not have the required permissions for organisation id ${organisationSummary.organisation.id}`)
@@ -89,6 +92,8 @@ module.exports = [{
             break
           case err instanceof InvalidPermissionsError:
             break
+          case err instanceof LockedBusinessError:
+            break
           case err instanceof NoEligibleCphError:
             break
           case err instanceof CannotReapplyTimeLimitError:
@@ -114,6 +119,7 @@ module.exports = [{
           alreadyAppliedError: err instanceof AlreadyAppliedError,
           permissionError: err instanceof InvalidPermissionsError,
           cphError: err instanceof NoEligibleCphError,
+          lockedBusinessError: err instanceof LockedBusinessError,
           reapplyTimeLimitError: err instanceof CannotReapplyTimeLimitError,
           outstandingAgreementError: err instanceof OutstandingAgreementError,
           lastApplicationDate: err.lastApplicationDate,
