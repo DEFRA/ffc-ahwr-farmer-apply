@@ -1,0 +1,45 @@
+{% extends './layouts/layout.njk' %}
+
+{% block pageTitle %}Minimum number of livestock - {{ serviceName }}{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: backLink,
+	  attributes: {id: "back"}
+  }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">Minimum number of livestock</h1>
+    <p class="govuk-body">Each time you do a review or follow-up, you must have the minimum number of the livestock you choose. The minimums needed are:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>11 cattle</li>
+      <li>21 sheep</li>
+      <li>51 pigs</li>
+    </ul>
+    <br>
+
+    <form method="POST" autocomplete="off" novalidate="novalidate" id ="submitNumbersForm">
+      <input type="hidden" name="crumb" value="{{crumb}}"/>
+      <div class="govuk-button-group">
+        {{ govukButton({
+          text: agreementStatus.agree.text,
+          value: agreementStatus.agree.value,
+          name: "agreementStatus",
+          preventDoubleClick: true
+        }) }}
+        {{ govukButton({
+          text: agreementStatus.notAgree.text,
+          value: agreementStatus.notAgree.value,
+          name: "agreementStatus",
+          preventDoubleClick: true,
+          classes: "govuk-button--secondary"
+        }) }}
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

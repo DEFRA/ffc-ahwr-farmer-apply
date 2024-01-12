@@ -10,6 +10,7 @@ const businessAppliedBefore = require('../api-requests/business-applied-before')
 const { InvalidPermissionsError, AlreadyAppliedError, NoEligibleCphError, InvalidStateError, CannotReapplyTimeLimitError, OutstandingAgreementError, LockedBusinessError } = require('../exceptions')
 const { raiseIneligibilityEvent } = require('../event')
 const appInsights = require('applicationinsights')
+const { endemicsCheckDetails } = require('../config/routes')
 
 function setOrganisationSessionData (request, personSummary, { organisation: org, appliedBefore }) {
   const organisation = {
@@ -78,7 +79,7 @@ module.exports = [{
             email: personSummary.email
           }
         })
-        return h.redirect(`${config.urlPrefix}${config.endemics.enabled ? '/endemics' : ''}/org-review`)
+        return h.redirect(`${config.urlPrefix}${config.endemics.enabled ? `/${endemicsCheckDetails}` : '/org-review'}`)
       } catch (err) {
         console.error(`Received error with name ${err.name} and message ${err.message}.`)
         const attachedToMultipleBusinesses = session.getCustomer(request, sessionKeys.customer.attachedToMultipleBusinesses)

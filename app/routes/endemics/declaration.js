@@ -35,8 +35,9 @@ module.exports = [{
         const viewData = getDeclarationData(application)
         return h.view('endemics/declaration', {
           backLink: `${config.urlPrefix}/endemics/timings`,
-          ...viewData,
-          errorMessage: { text: 'Confirm you have read and agree to the terms and conditions' }
+          latestTermsAndConditionsUri: `${config.latestTermsAndConditionsUri}?continue=true&backLink=${config.urlPrefix}/endemics/declaration`,
+          errorMessage: { text: 'Select you have read and agree to the terms and conditions' },
+          ...viewData
         }).code(400).takeover()
       }
     },
@@ -67,7 +68,10 @@ module.exports = [{
       request.cookieAuth.clear()
 
       if (request.payload.offerStatus === 'rejected') {
-        return h.view('endemics/offer-rejected', { ruralPaymentsAgency: config.ruralPaymentsAgency })
+        return h.view('endemics/offer-rejected', {
+          title: 'Agreement offer rejected',
+          ruralPaymentsAgency: config.ruralPaymentsAgency
+        })
       }
 
       if (!applicationReference) {

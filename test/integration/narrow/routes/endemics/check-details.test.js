@@ -1,10 +1,14 @@
 const cheerio = require('cheerio')
 const expectPhaseBanner = require('../../../../utils/phase-banner-expect')
 const getCrumbs = require('../../../../utils/get-crumbs')
+const { endemicsCheckDetails, endemicsReviews } = require('../../../../../app/config/routes')
 
-describe('Check your eligible page test', () => {
+const endemicsReviewsUrl = `/apply/${endemicsReviews}`
+
+describe('Org review page test', () => {
   let session
-  const url = '/apply/endemics/check-your-eligible'
+  let authMock
+  const url = `/apply/${endemicsCheckDetails}`
   const auth = {
     credentials: { reference: '1111', sbi: '111111111' },
     strategy: 'cookie'
@@ -48,6 +52,7 @@ describe('Check your eligible page test', () => {
         }
       }))
       jest.mock('../../../../../app/auth')
+      authMock = require('../../../../../app/auth')
     })
 
     test('returns 200', async () => {
@@ -58,13 +63,45 @@ describe('Check your eligible page test', () => {
         url
       }
 
+      authMock.requestAuthorizationCodeUrl.mockReturnValueOnce('https://somedefraidlogin')
+
       const res = await global.__SERVER__.inject(options)
 
       expect(res.statusCode).toBe(200)
       const $ = cheerio.load(res.payload)
-      expect($('.govuk-heading-l').text()).toEqual('Review your agreement offer')
-      expect($('title').text()).toEqual('Review your agreement offer - Annual health and welfare review of livestock')
-      expect($('.govuk-back-link').attr('href')).toContain('/apply/endemics/org-review')
+      expect($('.govuk-heading-l').text()).toEqual('Check your details')
+      const keys = $('.govuk-summary-list__key')
+      const values = $('.govuk-summary-list__value')
+      expect(keys.eq(0).text()).toMatch('Farmer name')
+      expect(values.eq(0).text()).toMatch(org.farmerName)
+      expect(keys.eq(1).text()).toMatch('Business name')
+      expect(values.eq(1).text()).toMatch(org.name)
+      expect(keys.eq(2).text()).toMatch('SBI number')
+      expect(values.eq(2).text()).toMatch(org.sbi)
+      expect(keys.eq(3).text()).toMatch('Address')
+      expect(values.eq(3).text()).toMatch(org.address)
+      expect($('title').text()).toEqual('Check your details - Annual health and welfare review of livestock')
+      expect($('.govuk-back-link').attr('href')).toContain('https://somedefraidlogin')
+      expect($('legend').text().trim()).toEqual('Are your details correct?')
+      expect($('.govuk-radios__item').length).toEqual(2)
+      expect(authMock.requestAuthorizationCodeUrl).toBeCalledTimes(1)
+      expectPhaseBanner.ok($)
+    })
+
+    test('returns 404 when no orgranisation', async () => {
+      session.getFarmerApplyData.mockReturnValue(undefined)
+      const options = {
+        auth,
+        method: 'GET',
+        url
+      }
+
+      const res = await global.__SERVER__.inject(options)
+
+      expect(res.statusCode).toBe(404)
+      const $ = cheerio.load(res.payload)
+      expect($('.govuk-heading-l').text()).toEqual('404 - Not Found')
+      expect($('#_404 div p').text()).toEqual('Not Found')
       expectPhaseBanner.ok($)
     })
   })
@@ -95,7 +132,7 @@ describe('Check your eligible page test', () => {
       const options = {
         method,
         url,
-        payload: { crumb, terms: 'agree', continue: 'continue' },
+        payload: { crumb, confirmCheckDetails: 'yes' },
         auth,
         headers: { cookie: `crumb=${crumb}` }
       }
@@ -103,21 +140,38 @@ describe('Check your eligible page test', () => {
       const res = await global.__SERVER__.inject(options)
 
       expect(res.statusCode).toBe(302)
-      expect(res.headers.location).toEqual('/apply/endemics/declaration')
+      expect(res.headers.location).toEqual(endemicsReviewsUrl)
+    })
+
+    test('returns 200 with update your details recognised when no is answered', async () => {
+      const options = {
+        method,
+        url,
+        payload: { crumb, confirmCheckDetails: 'no' },
+        auth,
+        headers: { cookie: `crumb=${crumb}` }
+      }
+
+      const res = await global.__SERVER__.inject(options)
+
+      expect(res.statusCode).toBe(200)
+      const $ = cheerio.load(res.payload)
+      expect($('.govuk-heading-l').text()).toEqual('Update your details')
     })
 
     test.each([
-      { terms: undefined, cont: undefined },
-      { terms: undefined, cont: 'continue' },
-      { terms: 'agree', cont: undefined }
+      { confirmCheckDetails: null },
+      { confirmCheckDetails: undefined },
+      { confirmCheckDetails: 'wrong' },
+      { confirmCheckDetails: '' }
     ])(
       'returns error when unacceptable answer is given',
-      async ({ terms, cont }) => {
+      async ({ confirmCheckDetails }) => {
         session.getFarmerApplyData.mockReturnValue(org)
         const options = {
           method,
           url,
-          payload: { crumb, terms, continue: cont },
+          payload: { crumb, confirmCheckDetails },
           auth,
           headers: { cookie: `crumb=${crumb}` }
         }
@@ -126,10 +180,11 @@ describe('Check your eligible page test', () => {
 
         expect(res.statusCode).toBe(400)
         expect(res.request.response.variety).toBe('view')
-        expect(res.request.response.source.template).toBe(
-          'endemics/check-your-eligible'
-        )
-        expect(res.result).toContain('Confirm you have read and understood what is required to have a review and follow-up visit')
+        expect(res.request.response.source.template).toBe(`${endemicsCheckDetails}`)
+        expect(res.result).toContain(org.sbi)
+        expect(res.result).toContain(org.farmerName)
+        expect(res.result).toContain(org.address)
+        expect(res.result).toContain(org.name)
       }
     )
   })

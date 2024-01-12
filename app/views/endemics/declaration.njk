@@ -1,3 +1,4 @@
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% extends './layouts/layout.njk' %}
 
 {% block pageTitle %}Review your agreement offer - {{ serviceName }}{% endblock %}
@@ -13,6 +14,15 @@
 {% block content %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
+    {% if errorMessage %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList:[{
+            text: errorMessage.text,
+            href: "#terms"
+        }]
+      }) }}
+    {% endif %}
     <h1 class="govuk-heading-l">Review your agreement offer</h1>
 
     <p class="govuk-body">This is an offer of funding for a livestock health and welfare review and follow-up for this business:</p>
@@ -44,6 +54,7 @@
     <form method="POST" autocomplete="off" novalidate="novalidate" id ="submitDeclarationForm">
       <input type="hidden" name="crumb" value="{{crumb}}"/>
       {{ govukCheckboxes({
+        id: "terms",
         idPrefix: "terms",
         name: "terms",
         errorMessage: errorMessage,
