@@ -4,12 +4,12 @@ const expectPhaseBanner = require('../../../../utils/phase-banner-expect')
 const {
   endemicsNumbers,
   endemicsReviews,
-  endemicsTiming
+  endemicsTimings
 } = require('../../../../../app/config/routes')
 
 const endemicsNumbersUrl = `/apply/${endemicsNumbers}`
 const endemicsReviewsUrl = `/apply/${endemicsReviews}`
-const endemicsTimingUrl = `/apply/${endemicsTiming}`
+const endemicsTimingUrl = `/apply/${endemicsTimings}`
 
 describe('Check your eligible page test', () => {
   let session

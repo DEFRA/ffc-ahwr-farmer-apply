@@ -2,7 +2,7 @@ const session = require('../../session')
 const config = require('../../config/index')
 const urlPrefix = require('../../config/index').urlPrefix
 const {
-  endemicsTiming,
+  endemicsTimings,
   endemicsNumbers,
   endemicsReviews,
   endemicsOfferRejected
@@ -10,7 +10,7 @@ const {
 
 const pageUrl = `${urlPrefix}/${endemicsNumbers}`
 const backLink = `${urlPrefix}/${endemicsReviews}`
-const nextPage = `${urlPrefix}/${endemicsTiming}`
+const nextPage = `${urlPrefix}/${endemicsTimings}`
 
 const agreementStatus = {
   agree: {
