@@ -23,7 +23,7 @@ module.exports = [{
       }
       const viewData = getDeclarationData(application)
       session.setFarmerApplyData(request, reference, null)
-      return h.view(endemicsDeclaration, { backLink: `${config.urlPrefix}/${endemicsTimings}`, latestTermsAndConditionsUri: `${config.latestTermsAndConditionsUri}?continue=true&backLink=${config.urlPrefix}/${endemicsDeclaration}`, ...viewData })
+      return h.view(`${endemicsDeclaration}`, { backLink: `${config.urlPrefix}/${endemicsTimings}`, latestTermsAndConditionsUri: `${config.latestTermsAndConditionsUri}?continue=true&backLink=${config.urlPrefix}/${endemicsDeclaration}`, ...viewData })
     }
   }
 }, {
@@ -38,7 +38,7 @@ module.exports = [{
       failAction: async (request, h, _) => {
         const application = session.getFarmerApplyData(request)
         const viewData = getDeclarationData(application)
-        return h.view(endemicsDeclaration, {
+        return h.view(`${endemicsDeclaration}`, {
           backLink: `${config.urlPrefix}/${endemicsTimings}`,
           latestTermsAndConditionsUri: `${config.latestTermsAndConditionsUri}?continue=true&backLink=${config.urlPrefix}/${endemicsDeclaration}`,
           errorMessage: { text: 'Select you have read and agree to the terms and conditions' },
@@ -72,8 +72,8 @@ module.exports = [{
       session.clear(request)
       request.cookieAuth.clear()
 
-      if (request.payload.offerStatus === 'rejected') {
-        return h.view(endemicsOfferRejected, {
+      if (request.payload.offerStatus === 'rejected') {      
+        return h.view(`${endemicsOfferRejected}`, {
           title: 'Agreement offer rejected',
           ruralPaymentsAgency: config.ruralPaymentsAgency
         })

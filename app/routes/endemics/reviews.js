@@ -44,9 +44,8 @@ module.exports = [
         if (
           request.payload.agreementStatus === agreementStatus.notAgree.value
         ) {
-          session.clear(request)
           request.cookieAuth.clear()
-
+          session.clear(request)
           return h.view(endemicsOfferRejected, {
             title: 'Agreement terms rejected',
             ruralPaymentsAgency: config.ruralPaymentsAgency
