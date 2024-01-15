@@ -5,6 +5,7 @@ const { reference, declaration, offerStatus, organisation: organisationKey, cust
 const getDeclarationData = require('../models/declaration')
 const { sendApplication } = require('../../messaging/application')
 const appInsights = require('applicationinsights')
+const { appliedBefore } = require('../../constants/user-types')
 const config = require('../../config/index')
 const {
   endemicsTimings,
@@ -86,8 +87,10 @@ module.exports = [{
         throw boom.internal()
       }
 
+      console.log(application, application.organisation)
       return h.view('endemics/confirmation', {
         reference: applicationReference,
+        newUser: appliedBefore.NEW_USER === application.organisation.appliedBefore,
         ruralPaymentsAgency: config.ruralPaymentsAgency,
         applySurveyUri: config.customerSurvey.uri,
         latestTermsAndConditionsUri: config.latestTermsAndConditionsUri
