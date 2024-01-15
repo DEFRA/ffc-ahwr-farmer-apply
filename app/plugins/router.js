@@ -26,7 +26,8 @@ if (config.endemics.enabled) {
     require('../routes/endemics/numbers'),
     require('../routes/endemics/reviews'),
     require('../routes/endemics/declaration'),
-    require('../routes/endemics/check-details')
+    require('../routes/endemics/check-details'),
+    require('../routes/endemics/timings')
   )
 }
 
