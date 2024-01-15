@@ -2,7 +2,7 @@ const session = require('../../session')
 const config = require('../../config/index')
 const urlPrefix = require('../../config/index').urlPrefix
 const {
-  endemicsTiming,
+  endemicsTimings,
   endemicsNumbers,
   endemicsReviews,
   endemicsOfferRejected
@@ -10,7 +10,7 @@ const {
 
 const pageUrl = `${urlPrefix}/${endemicsNumbers}`
 const backLink = `${urlPrefix}/${endemicsReviews}`
-const nextPage = `${urlPrefix}/${endemicsTiming}`
+const nextPage = `${urlPrefix}/${endemicsTimings}`
 
 const agreementStatus = {
   agree: {
@@ -43,6 +43,7 @@ module.exports = [
       handler: async (request, h) => {
         if (request.payload.agreementStatus === agreementStatus.notAgree.value) {
           session.clear(request)
+          request.cookieAuth.clear()
 
           return h.view(endemicsOfferRejected, {
             title: 'Agreement terms rejected',

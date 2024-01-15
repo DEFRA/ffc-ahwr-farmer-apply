@@ -1,5 +1,5 @@
 module.exports = {
-  endemicsTiming: 'endemics/timing',
+  endemicsTimings: 'endemics/timings',
   endemicsReviews: 'endemics/reviews',
   endemicsNumbers: 'endemics/numbers',
   endemicsDeclaration: 'endemics/declaration',

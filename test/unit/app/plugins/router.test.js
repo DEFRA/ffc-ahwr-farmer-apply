@@ -107,6 +107,7 @@ describe('routes plugin test', () => {
       '/apply/endemics/numbers',
       '/apply/endemics/reviews',
       '/apply/endemics/start',
+      '/apply/endemics/timings',
       '/apply/terms/endemics',
       '/apply/terms/v1',
       '/apply/terms/v2',
@@ -119,7 +120,8 @@ describe('routes plugin test', () => {
       '/apply/endemics/check-details',
       '/apply/endemics/declaration',
       '/apply/endemics/numbers',
-      '/apply/endemics/reviews'
+      '/apply/endemics/reviews',
+      '/apply/endemics/timings'
     ])
   })
 })
