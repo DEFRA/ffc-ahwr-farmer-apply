@@ -11,6 +11,7 @@ describe('Business Eligible to Apply Tests', () => {
     applicationApiMock = require('../../../../app/api-requests/application-api')
     jest.mock('../../../../app/api-requests/application-api')
     businessEligibleToApply = require('../../../../app/api-requests/business-eligible-to-apply')
+    config.endemics.enabled = false
   })
 
   beforeEach(() => {
@@ -62,9 +63,9 @@ describe('Business Eligible to Apply Tests', () => {
                   sbi: '122333'
                 }
               },
-              createdAt: '2023-06-06T13:52:14.207Z',
-              updatedAt: '2023-06-06T13:52:14.207Z',
-              statusId: 2
+              createdAt: '2023-05-06T13:52:14.207Z',
+              updatedAt: '2023-05-06T13:52:14.207Z',
+              statusId: 1
             },
             {
               data: {
@@ -72,9 +73,9 @@ describe('Business Eligible to Apply Tests', () => {
                   sbi: '122333'
                 }
               },
-              createdAt: '2023-05-06T13:52:14.207Z',
-              updatedAt: '2023-05-06T13:52:14.207Z',
-              statusId: 1
+              createdAt: '2023-06-06T13:52:14.207Z',
+              updatedAt: '2023-06-06T13:52:14.207Z',
+              statusId: 2
             }
           ]
         },
@@ -719,6 +720,392 @@ describe('Business Eligible to Apply Tests', () => {
           await expect(businessEligibleToApply(SBI)).rejects.toEqual(new AlreadyAppliedError('Business with SBI 122333 is not eligible to apply'))
         })
       })
+    })
+  })
+  describe('When 10 month rule toggle is enabled and endemics is enabled', () => {
+    beforeEach(() => {
+      config.tenMonthRule.enabled = true
+      config.endemics.enabled = true
+    })
+    describe('When the previous application was within 10 months', () => {
+      test.each([
+        {
+          latestApplications: [
+            {
+              data: {
+                organisation: {
+                  sbi: '122333'
+                }
+              },
+              createdAt: '2023-05-06T13:52:14.207Z',
+              updatedAt: '2023-05-06T13:52:14.207Z',
+              statusId: 1
+            },
+            {
+              data: {
+                organisation: {
+                  sbi: '122333'
+                }
+              },
+              createdAt: '2023-06-06T13:52:14.207Z',
+              updatedAt: '2023-06-06T13:52:14.207Z',
+              statusId: 2
+            }
+          ]
+        },
+        {
+          latestApplications: [
+            {
+              data: {
+                organisation: {
+                  sbi: '122333'
+                }
+              },
+              createdAt: '2023-06-06T13:52:14.207Z',
+              updatedAt: '2023-06-06T13:52:14.207Z',
+              statusId: 7
+            }
+          ]
+        }
+      ])('Business is eligible when the last previous application had a status of WITHDRAWN (2) or NOT AGREED (7)', async ({ latestApplications }) => {
+        const SBI = 123456789
+        applicationApiMock.getLatestApplicationsBySbi.mockResolvedValueOnce(latestApplications)
+        await expect(businessEligibleToApply(SBI)).resolves.not.toThrow(new Error())
+      })
+
+      describe('Business is not eligible when the last previous application had a status of anything other than WITHDRAWN (2), NOT AGREED (7), AGREED (1)', () => {
+        describe('Time limit error is returned with status of DATA INPUTTED (3), CLAIMED (4), IN CHECK (5), ACCEPTED (6), PAID (8), READY TO PAY (9), REJECTED (10) or ON HOLD (11)', () => {
+          test.each([
+            {
+              latestApplications: [
+                {
+                  data: {
+                    organisation: {
+                      sbi: '122333'
+                    }
+                  },
+                  createdAt: '2023-06-06T13:52:14.207Z',
+                  updatedAt: '2023-06-06T13:52:14.207Z',
+                  statusId: 3
+                }
+              ]
+            },
+            {
+              latestApplications: [
+                {
+                  data: {
+                    organisation: {
+                      sbi: '122333'
+                    }
+                  },
+                  createdAt: '2023-06-06T13:52:14.207Z',
+                  updatedAt: '2023-06-06T13:52:14.207Z',
+                  statusId: 4
+                }
+              ]
+            },
+            {
+              latestApplications: [
+                {
+                  data: {
+                    organisation: {
+                      sbi: '122333'
+                    }
+                  },
+                  createdAt: '2023-06-06T13:52:14.207Z',
+                  updatedAt: '2023-06-06T13:52:14.207Z',
+                  statusId: 5
+                }
+              ]
+            },
+            {
+              latestApplications: [
+                {
+                  data: {
+                    organisation: {
+                      sbi: '122333'
+                    }
+                  },
+                  createdAt: '2023-06-06T13:52:14.207Z',
+                  updatedAt: '2023-06-06T13:52:14.207Z',
+                  statusId: 6
+                }
+              ]
+            },
+            {
+              latestApplications: [
+                {
+                  data: {
+                    organisation: {
+                      sbi: '122333'
+                    }
+                  },
+                  createdAt: '2023-06-06T13:52:14.207Z',
+                  updatedAt: '2023-06-06T13:52:14.207Z',
+                  statusId: 8
+                }
+              ]
+            },
+            {
+              latestApplications: [
+                {
+                  data: {
+                    organisation: {
+                      sbi: '122333'
+                    }
+                  },
+                  createdAt: '2023-06-06T13:52:14.207Z',
+                  updatedAt: '2023-06-06T13:52:14.207Z',
+                  statusId: 9
+                }
+              ]
+            },
+            {
+              latestApplications: [
+                {
+                  data: {
+                    organisation: {
+                      sbi: '122333'
+                    }
+                  },
+                  createdAt: '2023-06-06T13:52:14.207Z',
+                  updatedAt: '2023-06-06T13:52:14.207Z',
+                  statusId: 10
+                }
+              ]
+            },
+            {
+              latestApplications: [
+                {
+                  data: {
+                    organisation: {
+                      sbi: '122333'
+                    }
+                  },
+                  createdAt: '2023-06-06T13:52:14.207Z',
+                  updatedAt: '2023-06-06T13:52:14.207Z',
+                  statusId: 11
+                }
+              ]
+            }
+          ])('Status is DATA INPUTTED (3), CLAIMED (4), IN CHECK (5), ACCEPTED (6), PAID (8), READY TO PAY (9), REJECTED (10) or ON HOLD (11)', async ({ latestApplications }) => {
+            const SBI = 123456789
+            applicationApiMock.getLatestApplicationsBySbi.mockResolvedValueOnce(latestApplications)
+            await expect(businessEligibleToApply(SBI)).rejects.toEqual(new CannotReapplyTimeLimitError('Business with SBI 122333 is not eligible to apply due to 10 month restrictions since the last agreement.'))
+          })
+        })
+
+        test('When the last previous application has a status of AGREED (1)', async () => {
+          const SBI = 123456789
+          const apiResponse = [
+            {
+              data: {
+                organisation: {
+                  sbi: '122333'
+                }
+              },
+              createdAt: '2023-06-06T13:52:14.207Z',
+              updatedAt: '2023-06-06T13:52:14.207Z',
+              statusId: 1
+            }
+          ]
+          applicationApiMock.getLatestApplicationsBySbi.mockResolvedValueOnce(apiResponse)
+          await expect(businessEligibleToApply(SBI)).rejects.toEqual(new OutstandingAgreementError('Business with SBI 122333 must claim or withdraw agreement before creating another.'))
+        })
+      })
+    })
+
+    describe('When the previous application was more than 10 months', () => {
+      describe('Business is eligible when the last previous application had a status of anything other than WITHDRAWN (2), NOT AGREED (7), AGREED (1)', () => {
+        describe('Time limit error is not returned with status of DATA INPUTTED (3), CLAIMED (4), IN CHECK (5), ACCEPTED (6), PAID (8), READY TO PAY (9), REJECTED (10) or ON HOLD (11)', () => {
+          test.each([
+            {
+              latestApplications: [
+                {
+                  data: {
+                    organisation: {
+                      sbi: '122333'
+                    }
+                  },
+                  createdAt: '2020-06-06T13:52:14.207Z',
+                  updatedAt: '2020-06-06T13:52:14.207Z',
+                  statusId: 3
+                }
+              ]
+            },
+            {
+              latestApplications: [
+                {
+                  data: {
+                    organisation: {
+                      sbi: '122333'
+                    }
+                  },
+                  createdAt: '2020-06-06T13:52:14.207Z',
+                  updatedAt: '2020-06-06T13:52:14.207Z',
+                  statusId: 4
+                }
+              ]
+            },
+            {
+              latestApplications: [
+                {
+                  data: {
+                    organisation: {
+                      sbi: '122333'
+                    }
+                  },
+                  createdAt: '2020-06-06T13:52:14.207Z',
+                  updatedAt: '2020-06-06T13:52:14.207Z',
+                  statusId: 5
+                }
+              ]
+            },
+            {
+              latestApplications: [
+                {
+                  data: {
+                    organisation: {
+                      sbi: '122333'
+                    }
+                  },
+                  createdAt: '2020-06-06T13:52:14.207Z',
+                  updatedAt: '2020-06-06T13:52:14.207Z',
+                  statusId: 6
+                }
+              ]
+            },
+            {
+              latestApplications: [
+                {
+                  data: {
+                    organisation: {
+                      sbi: '122333'
+                    }
+                  },
+                  createdAt: '2020-06-06T13:52:14.207Z',
+                  updatedAt: '2020-06-06T13:52:14.207Z',
+                  statusId: 8
+                }
+              ]
+            },
+            {
+              latestApplications: [
+                {
+                  data: {
+                    organisation: {
+                      sbi: '122333'
+                    }
+                  },
+                  createdAt: '2020-06-06T13:52:14.207Z',
+                  updatedAt: '2020-06-06T13:52:14.207Z',
+                  statusId: 9
+                }
+              ]
+            },
+            {
+              latestApplications: [
+                {
+                  data: {
+                    organisation: {
+                      sbi: '122333'
+                    }
+                  },
+                  createdAt: '2020-06-06T13:52:14.207Z',
+                  updatedAt: '2020-06-06T13:52:14.207Z',
+                  statusId: 10
+                }
+              ]
+            },
+            {
+              latestApplications: [
+                {
+                  data: {
+                    organisation: {
+                      sbi: '122333'
+                    }
+                  },
+                  createdAt: '2020-06-06T13:52:14.207Z',
+                  updatedAt: '2020-06-06T13:52:14.207Z',
+                  statusId: 11
+                }
+              ]
+            }
+          ])('status is DATA INPUTTED (3), CLAIMED (4), IN CHECK (5), ACCEPTED (6), PAID (8), READY TO PAY (9), REJECTED (10) or ON HOLD (11)', async ({ latestApplications }) => {
+            const SBI = 123456789
+            applicationApiMock.getLatestApplicationsBySbi.mockResolvedValueOnce(latestApplications)
+            await expect(businessEligibleToApply(SBI)).resolves.not.toThrow(new CannotReapplyTimeLimitError('Business with SBI 122333 is not eligible to apply due to 10 month restrictions since the last agreement.'))
+          })
+        })
+      })
+      test('Business is not eligible when the last previous application was longer than 10 months and has a status of AGREED (1)', async () => {
+        const SBI = 123456789
+        const apiResponse = [
+          {
+            data: {
+              organisation: {
+                sbi: '122333'
+              }
+            },
+            createdAt: '2020-06-06T13:52:14.207Z',
+            updatedAt: '2020-06-06T13:52:14.207Z',
+            statusId: 1
+          }
+        ]
+        applicationApiMock.getLatestApplicationsBySbi.mockResolvedValueOnce(apiResponse)
+        await expect(businessEligibleToApply(SBI)).rejects.toEqual(new OutstandingAgreementError('Business with SBI 122333 must claim or withdraw agreement before creating another.'))
+      })
+    })
+
+    test('Last application and next application dates are returned with a CannotReapplyTimeLimitError', async () => {
+      const SBI = 123456789
+      const apiResponse = [
+        {
+          data: {
+            organisation: {
+              sbi: '122333'
+            }
+          },
+          createdAt: '2024-02-28T13:52:14.207Z',
+          updatedAt: '2024-02-28T13:52:14.207Z',
+          statusId: 4
+        }
+      ]
+      const expectedError = new CannotReapplyTimeLimitError('Business with SBI 122333 is not eligible to apply due to 10 month restrictions since the last agreement.')
+      const expectedErrorData = { lastApplicationDate: '28 February 2024', nextApplicationDate: '29 December 2024' }
+      const wrongExpectedErrorData = { lastApplicationDate: '28 January 2024', nextApplicationDate: '29 Januaary 2024' }
+      applicationApiMock.getLatestApplicationsBySbi.mockResolvedValueOnce(apiResponse)
+      const thrownError = await businessEligibleToApply(SBI).catch(error => {
+        return error
+      })
+      expect(thrownError).toEqual(expectedError)
+      expect(thrownError.lastApplicationDate).toEqual(expectedErrorData.lastApplicationDate)
+      expect(thrownError.lastApplicationDate).not.toEqual(wrongExpectedErrorData.lastApplicationDate)
+      expect(thrownError.nextApplicationDate).toEqual(expectedErrorData.nextApplicationDate)
+      expect(thrownError.nextApplicationDate).not.toEqual(wrongExpectedErrorData.nextApplicationDate)
+    })
+
+    test('Last application and next application dates are returned with a CannotReapplyTimeLimitError', async () => {
+      const SBI = 123456789
+      const apiResponse = [
+        {
+          data: {
+            organisation: {
+              sbi: '122333'
+            }
+          },
+          createdAt: '2024-02-28T13:52:14.207Z',
+          updatedAt: '2024-02-28T13:52:14.207Z',
+          statusId: 1,
+          type: 'EE'
+        }
+      ]
+      const expectedError = new AlreadyAppliedError('Business with SBI 122333 already has an endemics agreement')
+      applicationApiMock.getLatestApplicationsBySbi.mockResolvedValueOnce(apiResponse)
+      const thrownError = await businessEligibleToApply(SBI).catch(error => {
+        return error
+      })
+      expect(thrownError).toEqual(expectedError)
     })
   })
 })

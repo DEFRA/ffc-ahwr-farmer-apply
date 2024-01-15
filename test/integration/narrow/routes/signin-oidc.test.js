@@ -15,6 +15,8 @@ const cphCheckMock = require('../../../../app/api-requests/rpa-api/cph-check').c
 jest.mock('../../../../app/api-requests/rpa-api/cph-check')
 const businessEligibleToApplyMock = require('../../../../app/api-requests/business-eligible-to-apply')
 jest.mock('../../../../app/api-requests/business-eligible-to-apply')
+const businessAppliedBeforeMock = require('../../../../app/api-requests/business-applied-before')
+jest.mock('../../../../app/api-requests/business-applied-before')
 
 const { InvalidPermissionsError, InvalidStateError, AlreadyAppliedError, NoEligibleCphError, CannotReapplyTimeLimitError, OutstandingAgreementError } = require('../../../../app/exceptions')
 
@@ -39,6 +41,7 @@ describe('FarmerApply defra ID redirection test', () => {
   }))
   const configMock = require('../../../../app/config')
   jest.mock('applicationinsights', () => ({ defaultClient: { trackException: jest.fn(), trackEvent: jest.fn() }, dispose: jest.fn() }))
+  businessAppliedBeforeMock.mockResolvedValue('')
 
   const urlPrefix = configMock.urlPrefix
   const url = `${urlPrefix}/signin-oidc`

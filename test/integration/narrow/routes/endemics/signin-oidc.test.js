@@ -19,8 +19,10 @@ const cphCheckMock = require('../../../../../app/api-requests/rpa-api/cph-check'
 jest.mock('../../../../../app/api-requests/rpa-api/cph-check')
 const businessEligibleToApplyMock = require('../../../../../app/api-requests/business-eligible-to-apply')
 jest.mock('../../../../../app/api-requests/business-eligible-to-apply')
+const businessAppliedBeforeMock = require('../../../../../app/api-requests/business-applied-before')
+jest.mock('../../../../../app/api-requests/business-applied-before')
 
-const { InvalidPermissionsError, InvalidStateError, AlreadyAppliedError, NoEligibleCphError, CannotReapplyTimeLimitError, OutstandingAgreementError } = require('../../../../../app/exceptions')
+const { InvalidPermissionsError, InvalidStateError, NoEligibleCphError, OutstandingAgreementError, LockedBusinessError } = require('../../../../../app/exceptions')
 
 describe('FarmerApply defra ID redirection test', () => {
   jest.mock('../../../../../app/config', () => ({
@@ -43,6 +45,7 @@ describe('FarmerApply defra ID redirection test', () => {
   }))
   const configMock = require('../../../../../app/config')
   jest.mock('applicationinsights', () => ({ defaultClient: { trackException: jest.fn(), trackEvent: jest.fn() }, dispose: jest.fn() }))
+  businessAppliedBeforeMock.mockResolvedValue('')
 
   const urlPrefix = configMock.urlPrefix
   const url = `${urlPrefix}/signin-oidc`
@@ -328,184 +331,9 @@ describe('FarmerApply defra ID redirection test', () => {
       expect(organisationMock.organisationIsEligible).toBeCalledTimes(1)
       expect(sendIneligibilityEventMock).toBeCalledTimes(1)
       const $ = cheerio.load(res.payload)
-      expect($('.govuk-heading-l').text()).toMatch('You cannot apply for a livestock review for this business')
+      expect($('.govuk-heading-l').text()).toMatch('You cannot apply for reviews or follow-ups for this business')
       expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
       expect(consoleErrorSpy).toHaveBeenCalledWith(`Received error with name InvalidPermissionsError and message ${expectedError.message}.`)
-    })
-
-    // TODO: This test can be removed when the 10 month rule toggle and AlreadyAppliedError are removed
-    test('returns 400 and exception view when already applied', async () => {
-      const consoleErrorSpy = jest.spyOn(console, 'error')
-      const expectedError = new AlreadyAppliedError('Business with SBI 101122201 is not eligible to apply')
-      const baseUrl = `${url}?code=432432&state=83d2b160-74ce-4356-9709-3f8da7868e35`
-      const options = {
-        method: 'GET',
-        url: baseUrl
-      }
-
-      authMock.authenticate.mockResolvedValueOnce({ accessToken: '2323' })
-      authMock.retrieveApimAccessToken.mockResolvedValueOnce('Bearer 2323')
-      personMock.getPersonSummary.mockResolvedValueOnce({
-        firstName: 'Bill',
-        middleName: null,
-        lastName: 'Smith',
-        email: 'billsmith@testemail.com',
-        id: 1234567,
-        customerReferenceNumber: '1103452436'
-      })
-      organisationMock.organisationIsEligible.mockResolvedValueOnce({
-        organisation: {
-          id: 7654321,
-          name: 'Mrs Gill Black',
-          sbi: 101122201,
-          address: {
-            address1: 'The Test House',
-            address2: 'Test road',
-            address3: 'Wicklewood',
-            buildingNumberRange: '11',
-            buildingName: 'TestHouse',
-            street: 'Test ROAD',
-            city: 'Test City',
-            postalCode: 'TS1 1TS',
-            country: 'United Kingdom',
-            dependentLocality: 'Test Local'
-          },
-          email: 'org1@testemail.com'
-        },
-        organisationPermission: true
-      })
-
-      businessEligibleToApplyMock.mockRejectedValueOnce(expectedError)
-
-      sessionMock.getCustomer.mockResolvedValueOnce({
-        attachedToMultipleBusinesses: false
-      })
-
-      sessionMock.getFarmerApplyData.mockResolvedValueOnce({
-        organisation: {
-          id: 7654321,
-          name: 'Mrs Gill Black',
-          sbi: 101122201,
-          address: {
-            address1: 'The Test House',
-            address2: 'Test road',
-            address3: 'Wicklewood',
-            buildingNumberRange: '11',
-            buildingName: 'TestHouse',
-            street: 'Test ROAD',
-            city: 'Test City',
-            postalCode: 'TS1 1TS',
-            country: 'United Kingdom',
-            dependentLocality: 'Test Local'
-          },
-          email: 'org1@testemail.com'
-        }
-      })
-
-      cphNumbersMock.mockResolvedValueOnce([
-        '08/178/0064'
-      ])
-
-      const res = await global.__SERVER__.inject(options)
-      expect(res.statusCode).toBe(400)
-      expect(authMock.authenticate).toBeCalledTimes(1)
-      expect(authMock.retrieveApimAccessToken).toBeCalledTimes(1)
-      expect(personMock.getPersonSummary).toBeCalledTimes(1)
-      expect(organisationMock.organisationIsEligible).toBeCalledTimes(1)
-      expect(businessEligibleToApplyMock).toBeCalledTimes(1)
-      expect(sendIneligibilityEventMock).toBeCalledTimes(1)
-      const $ = cheerio.load(res.payload)
-      expect($('.govuk-heading-l').text()).toMatch('You cannot apply for a livestock review for this business')
-      expect($('#guidanceLink').attr('href')).toMatch('http://localhost:3000/apply')
-      expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
-      expect(consoleErrorSpy).toHaveBeenCalledWith(`Received error with name AlreadyAppliedError and message ${expectedError.message}.`)
-    })
-
-    test('returns 400 and exception view when there is a cannot reapply time limit error', async () => {
-      const consoleErrorSpy = jest.spyOn(console, 'error')
-      const expectedError = new CannotReapplyTimeLimitError('Business with SBI 101122201 is not eligible to apply due to 10 month restrictions since the last agreement.', '1 Jan 2023', '2 Oct 2023')
-      const baseUrl = `${url}?code=432432&state=83d2b160-74ce-4356-9709-3f8da7868e35`
-      const options = {
-        method: 'GET',
-        url: baseUrl
-      }
-
-      authMock.authenticate.mockResolvedValueOnce({ accessToken: '2323' })
-      authMock.retrieveApimAccessToken.mockResolvedValueOnce('Bearer 2323')
-      personMock.getPersonSummary.mockResolvedValueOnce({
-        firstName: 'Bill',
-        middleName: null,
-        lastName: 'Smith',
-        email: 'billsmith@testemail.com',
-        id: 1234567,
-        customerReferenceNumber: '1103452436'
-      })
-      organisationMock.organisationIsEligible.mockResolvedValueOnce({
-        organisation: {
-          id: 7654321,
-          name: 'Mrs Gill Black',
-          sbi: 101122201,
-          address: {
-            address1: 'The Test House',
-            address2: 'Test road',
-            address3: 'Wicklewood',
-            buildingNumberRange: '11',
-            buildingName: 'TestHouse',
-            street: 'Test ROAD',
-            city: 'Test City',
-            postalCode: 'TS1 1TS',
-            country: 'United Kingdom',
-            dependentLocality: 'Test Local'
-          },
-          email: 'org1@testemail.com'
-        },
-        organisationPermission: true
-      })
-
-      businessEligibleToApplyMock.mockRejectedValueOnce(expectedError)
-
-      sessionMock.getCustomer.mockResolvedValueOnce({
-        attachedToMultipleBusinesses: false
-      })
-
-      sessionMock.getFarmerApplyData.mockResolvedValueOnce({
-        organisation: {
-          id: 7654321,
-          name: 'Mrs Gill Black',
-          sbi: 101122201,
-          address: {
-            address1: 'The Test House',
-            address2: 'Test road',
-            address3: 'Wicklewood',
-            buildingNumberRange: '11',
-            buildingName: 'TestHouse',
-            street: 'Test ROAD',
-            city: 'Test City',
-            postalCode: 'TS1 1TS',
-            country: 'United Kingdom',
-            dependentLocality: 'Test Local'
-          },
-          email: 'org1@testemail.com'
-        }
-      })
-
-      cphNumbersMock.mockResolvedValueOnce([
-        '08/178/0064'
-      ])
-
-      const res = await global.__SERVER__.inject(options)
-      expect(res.statusCode).toBe(400)
-      expect(authMock.authenticate).toBeCalledTimes(1)
-      expect(authMock.retrieveApimAccessToken).toBeCalledTimes(1)
-      expect(personMock.getPersonSummary).toBeCalledTimes(1)
-      expect(organisationMock.organisationIsEligible).toBeCalledTimes(1)
-      expect(businessEligibleToApplyMock).toBeCalledTimes(1)
-      expect(sendIneligibilityEventMock).toBeCalledTimes(1)
-      const $ = cheerio.load(res.payload)
-      expect($('.govuk-heading-l').text()).toMatch('You cannot apply for a livestock review for this business')
-      expect($('.govuk-body').text()).toMatch(/ on 2 Oct 2023/)
-      expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
-      expect(consoleErrorSpy).toHaveBeenCalledWith(`Received error with name CannotReapplyTimeLimitError and message ${expectedError.message}.`)
     })
 
     test('returns 400 and exception view when there is an outstanding agreement error', async () => {
@@ -589,7 +417,7 @@ describe('FarmerApply defra ID redirection test', () => {
       expect(businessEligibleToApplyMock).toBeCalledTimes(1)
       expect(sendIneligibilityEventMock).toBeCalledTimes(1)
       const $ = cheerio.load(res.payload)
-      expect($('.govuk-heading-l').text()).toMatch('You cannot apply for a livestock review for this business')
+      expect($('.govuk-heading-l').text()).toMatch('You have an existing agreement for this business')
       expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
       expect(consoleErrorSpy).toHaveBeenCalledWith(`Received error with name OutstandingAgreementError and message ${expectedError.message}.`)
     })
@@ -675,9 +503,95 @@ describe('FarmerApply defra ID redirection test', () => {
       expect(organisationMock.organisationIsEligible).toBeCalledTimes(1)
       expect(sendIneligibilityEventMock).toBeCalledTimes(1)
       const $ = cheerio.load(res.payload)
-      expect($('.govuk-heading-l').text()).toMatch('You cannot apply for a livestock review for this business')
+      expect($('.govuk-heading-l').text()).toMatch('You cannot apply for reviews or follow-ups for this business')
       expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
       expect(consoleErrorSpy).toHaveBeenCalledWith(`Received error with name NoEligibleCphError and message ${expectedError.message}.`)
+    })
+
+    test('returns 400 and exception view when business is locked', async () => {
+      const consoleErrorSpy = jest.spyOn(console, 'error')
+      const expectedError = new LockedBusinessError('Organisation id 7654321 is locked by RPA')
+      const baseUrl = `${url}?code=432432&state=83d2b160-74ce-4356-9709-3f8da7868e35`
+      const options = {
+        method: 'GET',
+        url: baseUrl
+      }
+
+      authMock.authenticate.mockResolvedValueOnce({ accessToken: '2323' })
+      authMock.retrieveApimAccessToken.mockResolvedValueOnce('Bearer 2323')
+      personMock.getPersonSummary.mockResolvedValueOnce({
+        firstName: 'Bill',
+        middleName: null,
+        lastName: 'Smith',
+        email: 'billsmith@testemail.com',
+        id: 1234567,
+        customerReferenceNumber: '1103452436'
+      })
+
+      organisationMock.organisationIsEligible.mockResolvedValueOnce({
+        organisation: {
+          id: 7654321,
+          name: 'Mrs Gill Black',
+          sbi: 101122201,
+          address: {
+            address1: 'The Test House',
+            address2: 'Test road',
+            address3: 'Wicklewood',
+            buildingNumberRange: '11',
+            buildingName: 'TestHouse',
+            street: 'Test ROAD',
+            city: 'Test City',
+            postalCode: 'TS1 1TS',
+            country: 'United Kingdom',
+            dependentLocality: 'Test Local'
+          },
+          email: 'org1@testemail.com',
+          locked: true
+        },
+        organisationPermission: true
+      })
+
+      sessionMock.getCustomer.mockResolvedValueOnce({
+        attachedToMultipleBusinesses: false
+      })
+
+      sessionMock.getFarmerApplyData.mockResolvedValueOnce({
+        organisation: {
+          id: 7654321,
+          name: 'Mrs Gill Black',
+          sbi: 101122201,
+          address: {
+            address1: 'The Test House',
+            address2: 'Test road',
+            address3: 'Wicklewood',
+            buildingNumberRange: '11',
+            buildingName: 'TestHouse',
+            street: 'Test ROAD',
+            city: 'Test City',
+            postalCode: 'TS1 1TS',
+            country: 'United Kingdom',
+            dependentLocality: 'Test Local'
+          },
+          email: 'org1@testemail.com'
+        }
+      })
+
+      cphNumbersMock.mockResolvedValueOnce([
+        '08/178/0064'
+      ])
+
+      const res = await global.__SERVER__.inject(options)
+      expect(res.statusCode).toBe(400)
+      expect(authMock.authenticate).toBeCalledTimes(1)
+      expect(authMock.retrieveApimAccessToken).toBeCalledTimes(1)
+      expect(authMock.requestAuthorizationCodeUrl).toBeCalledTimes(1)
+      expect(personMock.getPersonSummary).toBeCalledTimes(1)
+      expect(organisationMock.organisationIsEligible).toBeCalledTimes(1)
+      expect(sendIneligibilityEventMock).toBeCalledTimes(1)
+      const $ = cheerio.load(res.payload)
+      expect($('.govuk-heading-l').text()).toMatch('You cannot apply for reviews or follow-ups for this business')
+      expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
+      expect(consoleErrorSpy).toHaveBeenCalledWith(`Received error with name LockedBusinessError and message ${expectedError.message}.`)
     })
   })
 })
