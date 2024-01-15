@@ -8,6 +8,7 @@ const {
   endemicsOfferRejected,
   endemicsDeclaration
 } = require('../../config/routes')
+
 const backLink = `${urlPrefix}/${endemicsNumbers}`
 
 module.exports = [
