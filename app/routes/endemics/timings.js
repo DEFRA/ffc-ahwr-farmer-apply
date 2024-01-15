@@ -1,5 +1,6 @@
-const Joi = require('joi')
+const session = require('../../session')
 const urlPrefix = require('../../config/index').urlPrefix
+const config = require('../../config/index')
 const {
   endemicsNumbers,
   endemicsTimings,
@@ -25,17 +26,16 @@ module.exports = [
     method: 'POST',
     path: `${urlPrefix}/${endemicsTimings}`,
     options: {
-      validate: {
-        payload: Joi.object({
-          agreementStatus: Joi.string().required().valid('agree', 'rejected')
-        })
-      },
       handler: async (request, h) => {
-        // session.setFarmerApplyData(request, type, 'EE')
         if (request.payload.agreementStatus === 'agree') {
           return h.redirect(`${urlPrefix}/${endemicsDeclaration}`)
         } else {
-          return h.redirect(`${urlPrefix}/${endemicsOfferRejected}`)
+          request.cookieAuth.clear()
+          session.clear(request)
+          return h.view(endemicsOfferRejected, {
+            title: 'Agreement terms rejected',
+            ruralPaymentsAgency: config.ruralPaymentsAgency
+          })
         }
       }
     }

@@ -3,8 +3,7 @@ const getCrumbs = require('../../../../utils/get-crumbs')
 const expectPhaseBanner = require('../../../../utils/phase-banner-expect')
 const {
   endemicsDeclaration,
-  endemicsTimings,
-  endemicsOfferRejected
+  endemicsTimings
 } = require('../../../../../app/config/routes')
 
 const config = require('../../../../../app/config')
@@ -132,8 +131,7 @@ describe('Declaration test', () => {
         headers: { cookie: `crumb=${crumb}` },
         payload: { crumb, agreementStatus: 'rejected' }
       })
-      expect(res.headers.location).toEqual(`/apply/${endemicsOfferRejected}`)
-      expect(res.statusCode).toBe(302)
+      expect(res.statusCode).toBe(200)
     })
   })
 })

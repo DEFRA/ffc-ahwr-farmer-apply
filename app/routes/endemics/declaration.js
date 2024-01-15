@@ -6,10 +6,15 @@ const getDeclarationData = require('../models/declaration')
 const { sendApplication } = require('../../messaging/application')
 const appInsights = require('applicationinsights')
 const config = require('../../config/index')
+const {
+  endemicsTimings,
+  endemicsOfferRejected,
+  endemicsDeclaration
+} = require('../../config/routes')
 
 module.exports = [{
   method: 'GET',
-  path: `${config.urlPrefix}/endemics/declaration`,
+  path: `${config.urlPrefix}/${endemicsDeclaration}`,
   options: {
     handler: async (request, h) => {
       const application = session.getFarmerApplyData(request)
@@ -18,12 +23,12 @@ module.exports = [{
       }
       const viewData = getDeclarationData(application)
       session.setFarmerApplyData(request, reference, null)
-      return h.view('endemics/declaration', { backLink: `${config.urlPrefix}/endemics/timing`, latestTermsAndConditionsUri: `${config.latestTermsAndConditionsUri}?continue=true&backLink=${config.urlPrefix}/endemics/declaration`, ...viewData })
+      return h.view(`${endemicsDeclaration}`, { backLink: `${config.urlPrefix}/${endemicsTimings}`, latestTermsAndConditionsUri: `${config.latestTermsAndConditionsUri}?continue=true&backLink=${config.urlPrefix}/${endemicsDeclaration}`, ...viewData })
     }
   }
 }, {
   method: 'POST',
-  path: `${config.urlPrefix}/endemics/declaration`,
+  path: `${config.urlPrefix}/${endemicsDeclaration}`,
   options: {
     validate: {
       payload: Joi.object({
@@ -33,9 +38,9 @@ module.exports = [{
       failAction: async (request, h, _) => {
         const application = session.getFarmerApplyData(request)
         const viewData = getDeclarationData(application)
-        return h.view('endemics/declaration', {
-          backLink: `${config.urlPrefix}/endemics/timing`,
-          latestTermsAndConditionsUri: `${config.latestTermsAndConditionsUri}?continue=true&backLink=${config.urlPrefix}/endemics/declaration`,
+        return h.view(`${endemicsDeclaration}`, {
+          backLink: `${config.urlPrefix}/${endemicsTimings}`,
+          latestTermsAndConditionsUri: `${config.latestTermsAndConditionsUri}?continue=true&backLink=${config.urlPrefix}/${endemicsDeclaration}`,
           errorMessage: { text: 'Select you have read and agree to the terms and conditions' },
           ...viewData
         }).code(400).takeover()
@@ -68,7 +73,7 @@ module.exports = [{
       request.cookieAuth.clear()
 
       if (request.payload.offerStatus === 'rejected') {
-        return h.view('endemics/offer-rejected', {
+        return h.view(`${endemicsOfferRejected}`, {
           title: 'Agreement offer rejected',
           ruralPaymentsAgency: config.ruralPaymentsAgency
         })
