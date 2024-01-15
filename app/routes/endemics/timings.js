@@ -1,6 +1,7 @@
 const session = require('../../session')
 const urlPrefix = require('../../config/index').urlPrefix
 const config = require('../../config/index')
+
 const {
   endemicsNumbers,
   endemicsTimings,
@@ -16,7 +17,11 @@ module.exports = [
     path: `${urlPrefix}/${endemicsTimings}`,
     options: {
       handler: async (request, h) => {
+<<<<<<< HEAD
         return h.view(endemicsTimings, {
+=======
+        return h.view('endemics/timings', {
+>>>>>>> b20cddf (add endimics js file)
           backLink
         })
       }
@@ -38,5 +43,5 @@ module.exports = [
           })
         }
       }
-    }
-  }]
+      }
+    }]
