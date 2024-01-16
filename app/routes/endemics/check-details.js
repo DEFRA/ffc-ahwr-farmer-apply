@@ -39,18 +39,30 @@ module.exports = [
           [confirmCheckDetails]: Joi.string().valid('yes', 'no').required()
         }),
         failAction: (request, h, _err) => {
+          const answer = request.payload[confirmCheckDetails]
           const organisation = session.getFarmerApplyData(
             request,
             organisationKey
           )
+          // if (!answer) {
+          //   return h.view(
+          //     endemicsCheckDetails,
+          //     {
+          //       errorMessage: { text: 'Select you have read and agree to the terms and conditions' },
+          //       ...getOrganisation(request, organisation, 'Select if your details are correct')
+          //     }
+          //   )
+          // }
           if (!organisation) {
             return boom.notFound()
           }
-          return h
-            .view(
-              endemicsCheckDetails,
-              getOrganisation(request, organisation, errorMessage)
-            )
+          return h.view(
+            endemicsCheckDetails,
+            {
+              errorMessage: { text: 'Select if your details are correct' },
+              ...getOrganisation(request, organisation, 'Select if your details are correct')
+            }
+          )
             .code(400)
             .takeover()
         }
