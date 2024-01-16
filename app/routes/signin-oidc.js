@@ -115,7 +115,7 @@ module.exports = [{
         )
 
         if (config.endemics.enabled && err instanceof AlreadyAppliedError) {
-          h.redirect(config.dashboardServiceUri)
+          return h.redirect(config.dashboardServiceUri).code(302).takeover()
         }
 
         return h.view(config.endemics.enabled ? 'endemics/cannot-apply-exception' : 'cannot-apply-for-livestock-review-exception', {
