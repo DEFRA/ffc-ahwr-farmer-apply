@@ -1,6 +1,7 @@
 const applicationApi = require('./application-api')
 const config = require('../config')
 const status = require('../constants/status')
+const applicationType = require('../constants/application-type')
 const validStatusForApplication = [status.NOT_AGREED, status.WITHDRAWN]
 const closedApplicationStatuses = [status.WITHDRAWN, status.REJECTED, status.NOT_AGREED, status.READY_TO_PAY]
 const { CannotReapplyTimeLimitError, OutstandingAgreementError, AlreadyAppliedError } = require('../exceptions')
@@ -26,7 +27,7 @@ function applicationForBusinessInStateToApply (latestApplicationsForSbi) {
         sbi: latestApplication.data.organisation.sbi
       })}`)
   } else if (config.endemics.enabled) {
-    if (latestApplication.statusId === status.AGREED && latestApplication.type === 'EE') {
+    if (latestApplication.statusId === status.AGREED && latestApplication.type === applicationType.ENDEMICS) {
       throw new AlreadyAppliedError(`Business with SBI ${latestApplication.data.organisation.sbi} already has an endemics agreement`)
     } else if (!closedApplicationStatuses.includes(latestApplication.statusId)) {
       // Open agreement on the old system must be closed

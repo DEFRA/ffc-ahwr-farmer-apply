@@ -1,4 +1,5 @@
 const config = require('../../../../app/config')
+const applicationType = require('../../../../app/constants/application-type')
 const { CannotReapplyTimeLimitError, OutstandingAgreementError, AlreadyAppliedError } = require('../../../../app/exceptions')
 
 let businessEligibleToApply
@@ -866,7 +867,7 @@ describe('Business Eligible to Apply Tests', () => {
           createdAt: '2024-02-28T13:52:14.207Z',
           updatedAt: '2024-02-28T13:52:14.207Z',
           statusId: 1,
-          type: 'EE'
+          type: applicationType.ENDEMICS
         }
       ]
       const expectedError = new AlreadyAppliedError('Business with SBI 122333 already has an endemics agreement')

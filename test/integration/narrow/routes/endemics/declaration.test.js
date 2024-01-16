@@ -3,6 +3,7 @@ const getCrumbs = require('../../../../utils/get-crumbs')
 const expectPhaseBanner = require('../../../../utils/phase-banner-expect')
 const { farmerApplyData: { declaration } } = require('../../../../../app/session/keys')
 const states = require('../../../../../app/constants/states')
+const { userType } = require('../../../../../app/constants/user-types')
 
 const config = require('../../../../../app/config')
 const sessionMock = require('../../../../../app/session')
@@ -20,7 +21,7 @@ function expectPageContentOk ($, organisation) {
 }
 
 describe('Declaration test', () => {
-  const organisation = { id: 'organisation', name: 'org-name', address: 'org-address', sbi: '0123456789' }
+  const organisation = { id: 'organisation', name: 'org-name', address: 'org-address', sbi: '0123456789', userType: userType.NEW_USER }
   const auth = { credentials: { reference: '1111', sbi: '111111111' }, strategy: 'cookie' }
   const url = `${config.urlPrefix}/endemics/declaration`
 
@@ -111,7 +112,7 @@ describe('Declaration test', () => {
   })
 
   describe(`POST ${url} route`, () => {
-    test('returns 200, caches data and sends message for valid request for $whichReview', async () => {
+    test('returns 200, caches data and sends message for valid request', async () => {
       const application = { organisation }
       sessionMock.getFarmerApplyData.mockReturnValue(application)
       messagingMock.receiveMessage.mockResolvedValueOnce({ applicationReference: 'abc123' })
@@ -166,7 +167,7 @@ describe('Declaration test', () => {
       expect(messagingMock.sendMessage).toHaveBeenCalledTimes(1)
     })
 
-    test('returns 200, checks cached data for a reference to prevent reference recreation', async () => {
+    test('returns 200, checks cached data for a reference to prevent reference recreation - newUser content', async () => {
       const reference = 'abc123'
       const application = { organisation, reference }
       sessionMock.getFarmerApplyData.mockReturnValue(application)
@@ -186,13 +187,41 @@ describe('Declaration test', () => {
       const $ = cheerio.load(res.payload)
       expect($('h1').text()).toMatch('Application complete')
       expect($('title').text()).toEqual(`Application complete - ${config.serviceName}`)
+      expect($('h2').text()).toContain('What you need to do next')
       expectPhaseBanner.ok($)
       expect(sessionMock.getFarmerApplyData).toHaveBeenCalledTimes(1)
       expect(sessionMock.setFarmerApplyData).toHaveBeenCalledTimes(0)
       expect(messagingMock.sendMessage).toHaveBeenCalledTimes(0)
     })
 
-    test('returns 400 when request is not valid for $whichReview', async () => {
+    test('returns 200, checks cached data for a reference to prevent reference recreation - existingUser content', async () => {
+      const reference = 'abc123'
+      const application = { organisation: { ...organisation, userType: userType.EXISTING_USER }, reference }
+      sessionMock.getFarmerApplyData.mockReturnValue(application)
+      messagingMock.receiveMessage.mockResolvedValueOnce({ applicationReference: 'abc123' })
+      const crumb = await getCrumbs(global.__SERVER__)
+      const options = {
+        method: 'POST',
+        url,
+        payload: { crumb, terms: 'agree', offerStatus: 'accepted' },
+        auth,
+        headers: { cookie: `crumb=${crumb}` }
+      }
+
+      const res = await global.__SERVER__.inject(options)
+
+      expect(res.statusCode).toBe(200)
+      const $ = cheerio.load(res.payload)
+      expect($('h1').text()).toMatch('Application complete')
+      expect($('title').text()).toEqual(`Application complete - ${config.serviceName}`)
+      expect($('h2').text()).toContain('We recommend you arrange a funded follow-up by following these steps')
+      expectPhaseBanner.ok($)
+      expect(sessionMock.getFarmerApplyData).toHaveBeenCalledTimes(1)
+      expect(sessionMock.setFarmerApplyData).toHaveBeenCalledTimes(0)
+      expect(messagingMock.sendMessage).toHaveBeenCalledTimes(0)
+    })
+
+    test('returns 400 when request is not valid', async () => {
       const application = { organisation }
       sessionMock.getFarmerApplyData.mockReturnValue(application)
       const crumb = await getCrumbs(global.__SERVER__)

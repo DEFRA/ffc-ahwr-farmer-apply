@@ -13,18 +13,22 @@
     <p class="govuk-body">Your application has been successful.</p>
     <p class="govuk-body">We have sent you a confirmation email and your agreement summary.</p>
 
-    {% if newUser %}
+    {% if isNewUser %}
     <h2 class="govuk-heading-m">What you need to do next</h2>
-    <p class="govuk-body">Contact the vet to arrange a review and give them the agreement number.</p>
-    <p class="govuk-body">Read the guidance about <a href="/apply/guidance-for-farmers">what happens at a livestock health and welfare review.</a> The guidance explains what you must ask the vet to do and what’s optional.</p>
-    <p class="govuk-body">Ask the vet to <a href="/apply">read the guidance on how to review health and welfare of livestock.</a></p>
-    <p class="govuk-body">After the vet has completed the review, you can claim your funding. Read the <a href="/apply/claim-guidance-for-farmers">guidance on how to claim funding to review health and welfare of livestock.</a></p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li class="govuk-body">Contact the vet to arrange a review and give them the agreement number.</li>
+      <li class="govuk-body">Read the guidance about <a href="/apply/guidance-for-farmers">what happens at a livestock health and welfare review.</a> The guidance explains what you must ask the vet to do and what’s optional.</li>
+      <li class="govuk-body">Ask the vet to <a href="/apply">read the guidance on how to review health and welfare of livestock.</a></li>
+      <li class="govuk-body">After the vet has completed the review, you can claim your funding. Read the <a href="/apply/claim-guidance-for-farmers">guidance on how to claim funding to review health and welfare of livestock.</a></li>
+    </ul>
     {% else %}
     <h2 class="govuk-heading-m">We recommend you arrange a funded follow-up by following these steps</h2>
-    <p class="govuk-body">Read the guidance about <a href="/apply/placeholder-link">timing of follow-ups</a> and arrange a vet visit at the advised time. You will need to give them the agreement number.</p>
-    <p class="govuk-body">Read the guidance about <a href="/apply/guidance-for-farmers">what happens at follow-up.</a> The guidance explains what you must ask the vet to do and what’s optional.</p>
-    <p class="govuk-body">Ask the vet to <a href="/apply">read the guidance on how to do a follow-up.</a></p>
-    <p class="govuk-body">After the vet has completed the follow-up, you can claim your funding. Read the <a href="/apply/claim-guidance-for-farmers">guidance on how to claim funding for a follow-up.</a></p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li class="govuk-body">Read the guidance about <a href="/apply/placeholder-link">timing of follow-ups</a> and arrange a vet visit at the advised time. You will need to give them the agreement number.</li>
+      <li class="govuk-body">Read the guidance about <a href="/apply/guidance-for-farmers">what happens at follow-up.</a> The guidance explains what you must ask the vet to do and what’s optional.</li>
+      <li class="govuk-body">Ask the vet to <a href="/apply">read the guidance on how to do a follow-up.</a></li>
+      <li class="govuk-body">After the vet has completed the follow-up, you can claim your funding. Read the <a href="/apply/claim-guidance-for-farmers">guidance on how to claim funding for a follow-up.</a></li>
+    </ul>
 
     <h2 class="govuk-heading-m">If you do not want to have a funded follow-up, you can arrange your next review</h2>
     <p class="govuk-body">Follow-ups help prevent the spread of disease in your livestock. If you choose not to have one, you can arrange your next <a>livestock health and welfare review</a> at the advised time.</p>

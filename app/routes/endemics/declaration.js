@@ -5,12 +5,14 @@ const { reference, declaration, offerStatus, organisation: organisationKey, cust
 const getDeclarationData = require('../models/declaration')
 const { sendApplication } = require('../../messaging/application')
 const appInsights = require('applicationinsights')
-const { appliedBefore } = require('../../constants/user-types')
+const { userType } = require('../../constants/user-types')
+const applicationType = require('../../constants/application-type')
 const config = require('../../config/index')
 const {
   endemicsTimings,
-  endemicsOfferRejected,
-  endemicsDeclaration
+  endemicsDeclaration,
+  endemicsConfirmation,
+  endemicsOfferRejected
 } = require('../../config/routes')
 
 module.exports = [{
@@ -54,7 +56,7 @@ module.exports = [{
         console.log('APPLICATION:', application)
         session.setFarmerApplyData(request, declaration, true)
         session.setFarmerApplyData(request, offerStatus, request.payload.offerStatus)
-        applicationReference = await sendApplication({ ...application, type: 'EE' }, request.yar.id)
+        applicationReference = await sendApplication({ ...application, type: applicationType.ENDEMICS }, request.yar.id)
 
         if (applicationReference) {
           session.setFarmerApplyData(request, reference, applicationReference)
@@ -87,10 +89,9 @@ module.exports = [{
         throw boom.internal()
       }
 
-      console.log(application, application.organisation)
-      return h.view('endemics/confirmation', {
+      return h.view(endemicsConfirmation, {
         reference: applicationReference,
-        newUser: appliedBefore.NEW_USER === application.organisation.appliedBefore,
+        isNewUser: userType.NEW_USER === application.organisation.userType,
         ruralPaymentsAgency: config.ruralPaymentsAgency,
         applySurveyUri: config.customerSurvey.uri,
         latestTermsAndConditionsUri: config.latestTermsAndConditionsUri
