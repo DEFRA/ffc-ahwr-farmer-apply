@@ -53,7 +53,7 @@ module.exports = [{
         console.log('APPLICATION:', application)
         session.setFarmerApplyData(request, declaration, true)
         session.setFarmerApplyData(request, offerStatus, request.payload.offerStatus)
-        applicationReference = await sendApplication(application, request.yar.id)
+        applicationReference = await sendApplication({ ...application, type: 'EE' }, request.yar.id)
 
         if (applicationReference) {
           session.setFarmerApplyData(request, reference, applicationReference)

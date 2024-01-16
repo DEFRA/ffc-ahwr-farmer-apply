@@ -46,7 +46,12 @@ module.exports = [{
       if (!applicationReference) {
         session.setFarmerApplyData(request, declaration, true)
         session.setFarmerApplyData(request, offerStatus, request.payload.offerStatus)
-        applicationReference = await sendApplication(application, request.yar.id)
+
+        if (config.endemics.enabled) {
+          applicationReference = await sendApplication({ ...application, type: 'VV' }, request.yar.id)
+        } else {
+          applicationReference = await sendApplication(application, request.yar.id)
+        }
 
         if (applicationReference) {
           session.setFarmerApplyData(request, reference, applicationReference)
