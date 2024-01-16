@@ -1,6 +1,6 @@
 const config = require('../../../../app/config')
 const status = require('../../../../app/constants/status')
-const { appliedBefore } = require('../../../../app/constants/user-types')
+const { userType } = require('../../../../app/constants/user-types')
 
 let businessAppliedBefore
 
@@ -26,7 +26,7 @@ describe('Business Applied Before Tests', () => {
     test('No error is thrown', async () => {
       const SBI = 123456789
       applicationApiMock.getLatestApplicationsBySbi.mockResolvedValueOnce([])
-      await expect(businessAppliedBefore(SBI)).resolves.toEqual(appliedBefore.NEW_USER)
+      await expect(businessAppliedBefore(SBI)).resolves.toEqual(userType.NEW_USER)
     })
   })
 
@@ -57,6 +57,6 @@ describe('Business Applied Before Tests', () => {
       }
     ]
     applicationApiMock.getLatestApplicationsBySbi.mockResolvedValueOnce(apiResponse)
-    await expect(businessAppliedBefore(SBI)).resolves.toEqual(appliedBefore.EXISTING_USER)
+    await expect(businessAppliedBefore(SBI)).resolves.toEqual(userType.EXISTING_USER)
   })
 })

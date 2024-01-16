@@ -1,6 +1,6 @@
 const applicationApi = require('./application-api')
 const status = require('../constants/status')
-const { appliedBefore } = require('../constants/user-types')
+const { userType } = require('../constants/user-types')
 
 async function businessAppliedBefore (sbi) {
   const latestApplicationsForSbi = await applicationApi.getLatestApplicationsBySbi(sbi)
@@ -13,13 +13,13 @@ async function businessAppliedBefore (sbi) {
 
 function applicationForBusinessInStateToApply (latestApplicationsForSbi) {
   if (latestApplicationsForSbi.length === 0) {
-    return appliedBefore.NEW_USER
+    return userType.NEW_USER
   }
   const latestApplication = getLatestApplication(latestApplicationsForSbi)
 
   const closedApplicationStatuses = [status.WITHDRAWN, status.REJECTED, status.NOT_AGREED, status.READY_TO_PAY]
   if (closedApplicationStatuses.includes(latestApplication.statusId)) {
-    return appliedBefore.EXISTING_USER
+    return userType.EXISTING_USER
   }
 }
 
