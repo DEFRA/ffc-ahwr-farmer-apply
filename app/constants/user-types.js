@@ -1,8 +1,8 @@
 const farmerApply = 'farmerApply'
 
-const appliedBefore = {
+const userType = {
   EXISTING_USER: 'existingUser',
   NEW_USER: 'newUser'
 }
 
-module.exports = { farmerApply, appliedBefore }
+module.exports = { farmerApply, userType }

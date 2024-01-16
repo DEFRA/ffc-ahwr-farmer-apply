@@ -12,14 +12,14 @@ const { raiseIneligibilityEvent } = require('../event')
 const appInsights = require('applicationinsights')
 const { endemicsCheckDetails } = require('../config/routes')
 
-function setOrganisationSessionData (request, personSummary, { organisation: org, appliedBefore }) {
+function setOrganisationSessionData (request, personSummary, { organisation: org, userType }) {
   const organisation = {
     sbi: org.sbi?.toString(),
     farmerName: getPersonName(personSummary),
     name: org.name,
     email: personSummary.email ? personSummary.email : org.email,
     address: getOrganisationAddress(org.address),
-    appliedBefore
+    userType: config.endemics.enabled ? userType : undefined
   }
   session.setFarmerApplyData(
     request,
@@ -67,8 +67,8 @@ module.exports = [{
 
         await cphCheck.customerMustHaveAtLeastOneValidCph(request, apimAccessToken)
         await businessEligibleToApply(organisationSummary.organisation.sbi)
-        const appliedBefore = await businessAppliedBefore(organisationSummary.organisation.sbi)
-        setOrganisationSessionData(request, personSummary, { ...organisationSummary, appliedBefore })
+        const userType = await businessAppliedBefore(organisationSummary.organisation.sbi)
+        setOrganisationSessionData(request, personSummary, { ...organisationSummary, userType })
 
         auth.setAuthCookie(request, personSummary.email, farmerApply)
         appInsights.defaultClient.trackEvent({
