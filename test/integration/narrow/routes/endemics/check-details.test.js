@@ -187,5 +187,21 @@ describe('Org review page test', () => {
         expect(res.result).toContain(org.name)
       }
     )
+
+    test("returns 400 and show error summary if user didn't select answer", async () => {
+      const options = {
+        method,
+        url,
+        payload: { crumb, confirmCheckDetails: '' },
+        auth,
+        headers: { cookie: `crumb=${crumb}` }
+      }
+
+      const res = await global.__SERVER__.inject(options)
+
+      expect(res.statusCode).toBe(400)
+      const $ = cheerio.load(res.payload)
+      expect($('.govuk-error-summary .govuk-list').text().trim()).toEqual('Select if your details are correct')
+    })
   })
 })
