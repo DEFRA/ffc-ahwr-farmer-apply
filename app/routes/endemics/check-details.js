@@ -8,6 +8,7 @@ const getOrganisation = require('../models/organisation')
 const { endemicsCheckDetails, endemicsReviews } = require('../../config/routes')
 
 const pageUrl = `${config.urlPrefix}/${endemicsCheckDetails}`
+const errorMessageText = 'Select if your details are correct'
 
 module.exports = [
   {
@@ -48,8 +49,8 @@ module.exports = [
           return h.view(
             endemicsCheckDetails,
             {
-              errorMessage: { text: 'Select if your details are correct' },
-              ...getOrganisation(request, organisation, 'Select if your details are correct')
+              errorMessage: { text: errorMessageText },
+              ...getOrganisation(request, organisation, errorMessageText)
             }
           )
             .code(400)
