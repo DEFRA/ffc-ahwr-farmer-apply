@@ -8,7 +8,6 @@ const getOrganisation = require('../models/organisation')
 const { endemicsCheckDetails, endemicsReviews } = require('../../config/routes')
 
 const pageUrl = `${config.urlPrefix}/${endemicsCheckDetails}`
-const errorMessage = 'Select yes if these details are correct'
 
 module.exports = [
   {
@@ -39,20 +38,10 @@ module.exports = [
           [confirmCheckDetails]: Joi.string().valid('yes', 'no').required()
         }),
         failAction: (request, h, _err) => {
-          const answer = request.payload[confirmCheckDetails]
           const organisation = session.getFarmerApplyData(
             request,
             organisationKey
           )
-          // if (!answer) {
-          //   return h.view(
-          //     endemicsCheckDetails,
-          //     {
-          //       errorMessage: { text: 'Select you have read and agree to the terms and conditions' },
-          //       ...getOrganisation(request, organisation, 'Select if your details are correct')
-          //     }
-          //   )
-          // }
           if (!organisation) {
             return boom.notFound()
           }
