@@ -52,7 +52,7 @@ describe('Farmer apply guidance page test', () => {
 
     expect(res.statusCode).toBe(200)
     const $ = cheerio.load(res.payload)
-    expect($('.govuk-list:nth-of-type(16) li:nth-child(8)').text())
+    expect($('.govuk-list:nth-of-type(15) li:nth-child(8)').text())
       .toContain('the number of beef cattle, sheep and pigs the vet tested - you do not need to provide the number of dairy cattle tested')
   })
 
