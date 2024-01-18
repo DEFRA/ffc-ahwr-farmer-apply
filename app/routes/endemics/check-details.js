@@ -8,7 +8,7 @@ const getOrganisation = require('../models/organisation')
 const { endemicsCheckDetails, endemicsReviews } = require('../../config/routes')
 
 const pageUrl = `${config.urlPrefix}/${endemicsCheckDetails}`
-const errorMessage = 'Select yes if these details are correct'
+const errorMessageText = 'Select if your details are correct'
 
 module.exports = [
   {
@@ -46,11 +46,13 @@ module.exports = [
           if (!organisation) {
             return boom.notFound()
           }
-          return h
-            .view(
-              endemicsCheckDetails,
-              getOrganisation(request, organisation, errorMessage)
-            )
+          return h.view(
+            endemicsCheckDetails,
+            {
+              errorMessage: { text: errorMessageText },
+              ...getOrganisation(request, organisation, errorMessageText)
+            }
+          )
             .code(400)
             .takeover()
         }
