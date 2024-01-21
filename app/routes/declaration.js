@@ -46,7 +46,7 @@ module.exports = [{
       const tempApplicationReference = session.getFarmerApplyData(request, reference)
       const application = session.getFarmerApplyData(request)
       application.reference = null // Set application ref to null instead of temp ref before sending it to store.
-      
+
       let newApplicationReference
       if (config.endemics.enabled) {
         newApplicationReference = await sendApplication({ ...application, type: 'VV' }, request.yar.id)
