@@ -12,7 +12,8 @@ module.exports = {
     whichReview: 'whichReview',
     confirmCheckDetails: 'confirmCheckDetails',
     reference: 'reference',
-    offerStatus: 'offerStatus'
+    offerStatus: 'offerStatus',
+    type: 'type'
   },
   selectYourBusiness: {
     eligibleBusinesses: 'eligibleBusinesses',

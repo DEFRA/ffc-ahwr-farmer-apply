@@ -1,11 +1,14 @@
 const cheerio = require('cheerio')
-const expectPhaseBanner = require('../../../utils/phase-banner-expect')
-const getCrumbs = require('../../../utils/get-crumbs')
+const expectPhaseBanner = require('../../../../utils/phase-banner-expect')
+const getCrumbs = require('../../../../utils/get-crumbs')
+const { endemicsCheckDetails, endemicsReviews } = require('../../../../../app/config/routes')
+
+const endemicsReviewsUrl = `/apply/${endemicsReviews}`
 
 describe('Org review page test', () => {
   let session
   let authMock
-  const url = '/apply/org-review'
+  const url = `/apply/${endemicsCheckDetails}`
   const auth = {
     credentials: { reference: '1111', sbi: '111111111' },
     strategy: 'cookie'
@@ -23,16 +26,19 @@ describe('Org review page test', () => {
       jest.resetAllMocks()
       jest.resetModules()
 
-      session = require('../../../../app/session')
-      jest.mock('../../../../app/session')
-      jest.mock('../../../../app/config', () => ({
-        ...jest.requireActual('../../../../app/config'),
+      session = require('../../../../../app/session')
+      jest.mock('../../../../../app/session')
+      jest.mock('../../../../../app/config', () => ({
+        ...jest.requireActual('../../../../../app/config'),
+        endemics: {
+          enabled: true
+        },
         authConfig: {
           defraId: {
             hostname: 'https://tenant.b2clogin.com/tenant.onmicrosoft.com',
             oAuthAuthorisePath: '/oauth2/v2.0/authorize',
             policy: 'b2c_1a_signupsigninsfi',
-            redirectUri: 'http://localhost:3000/apply/signin-oidc',
+            redirectUri: 'http://localhost:3000/apply/endemics/signin-oidc',
             clientId: 'dummy_client_id',
             serviceId: 'dummy_service_id',
             scope: 'openid dummy_client_id offline_access'
@@ -45,8 +51,8 @@ describe('Org review page test', () => {
           }
         }
       }))
-      jest.mock('../../../../app/auth')
-      authMock = require('../../../../app/auth')
+      jest.mock('../../../../../app/auth')
+      authMock = require('../../../../../app/auth')
     })
 
     test('returns 200', async () => {
@@ -109,8 +115,11 @@ describe('Org review page test', () => {
     })
 
     beforeAll(async () => {
-      jest.mock('../../../../app/config', () => ({
-        ...jest.requireActual('../../../../app/config'),
+      jest.mock('../../../../../app/config', () => ({
+        ...jest.requireActual('../../../../../app/config'),
+        endemics: {
+          enabled: true
+        },
         authConfig: {
           defraId: {
             enabled: true
@@ -131,7 +140,7 @@ describe('Org review page test', () => {
       const res = await global.__SERVER__.inject(options)
 
       expect(res.statusCode).toBe(302)
-      expect(res.headers.location).toEqual('/apply/which-review')
+      expect(res.headers.location).toEqual(endemicsReviewsUrl)
     })
 
     test('returns 200 with update your details recognised when no is answered', async () => {
@@ -171,14 +180,28 @@ describe('Org review page test', () => {
 
         expect(res.statusCode).toBe(400)
         expect(res.request.response.variety).toBe('view')
-        expect(res.request.response.source.template).toBe(
-          'org-review'
-        )
+        expect(res.request.response.source.template).toBe(`${endemicsCheckDetails}`)
         expect(res.result).toContain(org.sbi)
         expect(res.result).toContain(org.farmerName)
         expect(res.result).toContain(org.address)
         expect(res.result).toContain(org.name)
       }
     )
+
+    test("returns 400 and show error summary if user didn't select answer", async () => {
+      const options = {
+        method,
+        url,
+        payload: { crumb, confirmCheckDetails: '' },
+        auth,
+        headers: { cookie: `crumb=${crumb}` }
+      }
+
+      const res = await global.__SERVER__.inject(options)
+
+      expect(res.statusCode).toBe(400)
+      const $ = cheerio.load(res.payload)
+      expect($('.govuk-error-summary .govuk-list').text().trim()).toEqual('Select if your details are correct')
+    })
   })
 })

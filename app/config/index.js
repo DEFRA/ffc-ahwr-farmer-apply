@@ -43,6 +43,7 @@ const schema = Joi.object({
   port: Joi.number().default(3000),
   serviceUri: Joi.string().uri(),
   claimServiceUri: Joi.string().uri(),
+  dashboardServiceUri: Joi.string().uri(),
   serviceName: Joi.string().default('Annual health and welfare review of livestock'),
   useRedis: Joi.boolean().default(false),
   urlPrefix: Joi.string().default(urlPrefix),
@@ -66,7 +67,10 @@ const schema = Joi.object({
   tenMonthRule: {
     enabled: Joi.bool().default(false)
   },
-  reapplyTimeLimitMonths: Joi.number()
+  reapplyTimeLimitMonths: Joi.number(),
+  endemics: {
+    enabled: Joi.bool().default(false)
+  }
 })
 
 const config = {
@@ -101,6 +105,7 @@ const config = {
   port: process.env.PORT,
   serviceUri: process.env.SERVICE_URI,
   claimServiceUri: process.env.CLAIM_SERVICE_URI,
+  dashboardServiceUri: process.env.DASHBOARD_SERVICE_URI,
   useRedis: process.env.NODE_ENV !== 'test',
   urlPrefix: process.env.URL_PREFIX,
   ruralPaymentsAgency: {
@@ -123,7 +128,10 @@ const config = {
   tenMonthRule: {
     enabled: process.env.TEN_MONTH_RULE_ENABLED
   },
-  reapplyTimeLimitMonths: 10
+  reapplyTimeLimitMonths: 10,
+  endemics: {
+    enabled: process.env.ENDEMICS_ENABLED
+  }
 }
 
 const result = schema.validate(config, {

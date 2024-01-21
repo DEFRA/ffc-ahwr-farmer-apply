@@ -21,6 +21,7 @@ data:
   REDIS_PORT: {{ quote .Values.container.redisPort }}
   SERVICE_URI: {{ quote .Values.container.serviceUri }}
   CLAIM_SERVICE_URI: {{ quote .Values.container.claimServiceUri }}
+  DASHBOARD_SERVICE_URI: {{ quote .Values.container.dashboardServiceUri }}
   URL_PREFIX: {{ quote .Values.container.urlPrefix }}
   APPLICATION_API_URI: {{ quote .Values.container.applicationApiUri }}
   DEFRA_ID_TENANT: {{ quote .Values.container.defraIdTenant }}
@@ -39,4 +40,5 @@ data:
   TERMS_AND_CONDITIONS_URL: {{ quote .Values.container.termsAndConditionsUrl }}
   DATE_OF_TESTING_ENABLED: {{ quote .Values.container.dateOfTestingEnabled }}
   TEN_MONTH_RULE_ENABLED: {{ quote .Values.container.tenMonthRuleEnabled }}
+  ENDEMICS_ENABLED: {{ quote .Values.container.endemicsEnabled }}
 {{- end -}}

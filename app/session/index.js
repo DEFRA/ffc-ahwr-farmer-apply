@@ -8,7 +8,8 @@ const entries = {
   pkcecodes: 'pkcecodes',
   tokens: 'tokens',
   customer: 'customer',
-  tempReference: 'tempReference'
+  tempReference: 'tempReference',
+  type: 'type' // EM or VV
 }
 
 function lacksAny (request, entryKey, keys) {

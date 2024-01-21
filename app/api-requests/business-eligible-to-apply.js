@@ -1,7 +1,9 @@
 const applicationApi = require('./application-api')
 const config = require('../config')
 const status = require('../constants/status')
+const applicationType = require('../constants/application-type')
 const validStatusForApplication = [status.NOT_AGREED, status.WITHDRAWN]
+const closedApplicationStatuses = [status.WITHDRAWN, status.REJECTED, status.NOT_AGREED, status.READY_TO_PAY]
 const { CannotReapplyTimeLimitError, OutstandingAgreementError, AlreadyAppliedError } = require('../exceptions')
 
 async function businessEligibleToApply (sbi) {
@@ -24,7 +26,13 @@ function applicationForBusinessInStateToApply (latestApplicationsForSbi) {
     console.log(`${new Date().toISOString()} Business is eligible to apply : ${JSON.stringify({
         sbi: latestApplication.data.organisation.sbi
       })}`)
-  // when toggle is on
+  } else if (config.endemics.enabled) {
+    if (latestApplication.statusId === status.AGREED && latestApplication.type === applicationType.ENDEMICS) {
+      throw new AlreadyAppliedError(`Business with SBI ${latestApplication.data.organisation.sbi} already has an endemics agreement`)
+    } else if (!closedApplicationStatuses.includes(latestApplication.statusId)) {
+      // Open agreement on the old system must be closed
+      throw new OutstandingAgreementError(`Business with SBI ${latestApplication.data.organisation.sbi} must claim or withdraw agreement before creating another.`)
+    }
   } else if (config.tenMonthRule.enabled) {
     const dates = timeLimitDates(latestApplication)
     const { startDate, endDate } = dates

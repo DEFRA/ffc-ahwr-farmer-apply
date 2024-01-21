@@ -1,0 +1,67 @@
+{% extends './layouts/layout.njk' %}
+
+{% block pageTitle %}{{ serviceName }}{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+      <div class="govuk-notification-banner__header">
+        <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+          Important
+        </h2>
+      </div>
+      <div class="govuk-notification-banner__content">
+        <p class="govuk-notification-banner__heading">
+        This updated service is for farmers who:
+        </p>
+        <ul>
+          <li><h1 class="govuk-heading-m list govuk-list--bullet">are new to the scheme</h1></li>
+          <li><h1 class="govuk-heading-m list govuk-list--bullet">already have an agreement in the old schemes</h1></li>
+        </ul>
+      </div>
+    </div>
+    
+    <h1 class="govuk-heading-l">Apply for funding for livestock health and welfare reviews and follow-ups</h1>
+
+    <p class="govuk-body">Use this service to apply for funding for a vet to visit your farm to:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>improve the health and welfare of your livestock</li>
+      <li>help reduce diseases</li>
+    </ul>
+
+    <p class="govuk-body">If you’re eligible, you can apply for funding for up to 3 of both:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li><a href="#">livestock health and welfare reviews</a></li>
+      <li><a href="#">follow-ups</a></li>
+    </ul>
+
+    <h2 class="govuk-heading-m">If you already have an agreement in the old scheme</h2>
+    <p class="govuk-body">If you have claimed for your last review, start now to sign an agreement for the new scheme.</p>
+    <p class="govuk-body">If you have not claimed for your last review, start now to either:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>claim for your last review</li>
+      <li>withdraw your old agreement</li>
+    </ul>
+
+    <p class="govuk-body">Then you can sign an agreement for the new scheme.</p>
+    <p class="govuk-body">Applying takes around 5 minutes.</p>
+
+    {{ govukButton({
+      classes: "govuk-!-margin-top-2 govuk-!-margin-bottom-8",
+      href: defraIdLogin,
+      isStartButton: true,
+      text: "Start now",
+      preventDoubleClick: true
+    }) }}
+
+    <h2 class="govuk-heading-m">Before you start</h2>
+    <p class="govuk-body">You’ll need your Rural Payments service customer reference number (CRN) and password to sign in.</p>
+    <p class="govuk-body"><a href="/apply">You must be eligible to apply for livestock health and welfare reviews and follow-ups.</a></p>
+
+    <h2 class="govuk-heading-m">Get help with your application</h2>
+    <p class="govuk-body">If you cannot apply online or have a question about your application contact the Rural Payments Agency by email or phone.</p>
+    {{ rpaContactDetails({email: ruralPaymentsAgency.email, callChargesUri: ruralPaymentsAgency.callChargesUri, telephone: ruralPaymentsAgency.telephone}) }}
+  </div>
+</div>
+{% endblock %}
