@@ -1,6 +1,6 @@
 const raiseEvent = require('./raise-event')
 
-const sendSessionEvent = (organisation, reference = '', sessionId, entryKey, key, value, ip) => {
+const sendSessionEvent = (organisation, sessionId, entryKey, key, value, ip, reference = '') => {
   if (sessionId && organisation) {
     const event = {
       id: sessionId,

@@ -32,7 +32,7 @@ describe('Send event on session set', () => {
   })
 
   test('should call raiseEvent when a valid event is received', () => {
-    sendSessionEvent(organisation, reference, sessionId, entryKey, key, value, ip)
+    sendSessionEvent(organisation, sessionId, entryKey, key, value, ip, reference)
     expect(raiseEvent).toHaveBeenCalled()
   })
 
@@ -48,17 +48,17 @@ describe('Send event on session set', () => {
       ip
     }
 
-    sendSessionEvent(organisation, reference, sessionId, entryKey, key, value, ip)
+    sendSessionEvent(organisation, sessionId, entryKey, key, value, ip, reference)
     expect(raiseEvent).toHaveBeenCalledWith(event)
   })
 
   test('should not call raiseEvent when an event with a null sessionId is received', () => {
-    sendSessionEvent(organisation, reference, null, entryKey, key, value, ip)
+    sendSessionEvent(organisation, null, entryKey, key, value, ip, reference)
     expect(raiseEvent).not.toHaveBeenCalled()
   })
 
   test('should not call raiseEvent when an event with a null organisation is received', () => {
-    sendSessionEvent(null, reference, sessionId, entryKey, key, value, ip)
+    sendSessionEvent(null, sessionId, entryKey, key, value, ip, reference)
     expect(raiseEvent).not.toHaveBeenCalled()
   })
 })

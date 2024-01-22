@@ -30,7 +30,7 @@ function set (request, entryKey, key, value) {
   const reference = getFarmerApplyData(request, 'reference')
   const xForwardedForHeader = request.headers['x-forwarded-for']
   const ip = xForwardedForHeader ? xForwardedForHeader.split(',')[0] : request.info.remoteAddress
-  sendSessionEvent(organisation, reference, request.yar.id, entryKey, key, value, ip)
+  sendSessionEvent(organisation, request.yar.id, entryKey, key, value, ip, reference)
 }
 
 function get (request, entryKey, key) {
