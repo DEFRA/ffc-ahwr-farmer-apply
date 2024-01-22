@@ -52,7 +52,6 @@ module.exports = [{
     },
     handler: async (request, h) => {
       let tempApplicationId
-      let organisationSummary
       try {
         tempApplicationId = createReference()
         // tempApplicationId added to reference to enable session event to report with temp id
@@ -61,7 +60,7 @@ module.exports = [{
         const apimAccessToken = await auth.retrieveApimAccessToken()
         const personSummary = await getPersonSummary(request, apimAccessToken)
         session.setCustomer(request, sessionKeys.customer.id, personSummary.id)
-        organisationSummary = await organisationIsEligible(request, personSummary.id, apimAccessToken)
+        const organisationSummary = await organisationIsEligible(request, personSummary.id, apimAccessToken)
         setOrganisationSessionData(request, personSummary, organisationSummary)
 
         if (organisationSummary.organisation.locked) {
@@ -107,7 +106,7 @@ module.exports = [{
               name: 'already-applied-error',
               properties: {
                 reference: tempApplicationId,
-                sbi: organisationSummary.organisation.sbi,
+                sbi: organisation.sbi,
                 crn: session.getCustomer(request, sessionKeys.customer.crn)
               }
             })
@@ -117,7 +116,7 @@ module.exports = [{
               name: 'invalid-permission-error',
               properties: {
                 reference: tempApplicationId,
-                sbi: organisationSummary.organisation.sbi,
+                sbi: organisation.sbi,
                 crn: session.getCustomer(request, sessionKeys.customer.crn)
               }
             })
@@ -129,7 +128,7 @@ module.exports = [{
               name: 'not-eligible-cph-error',
               properties: {
                 reference: tempApplicationId,
-                sbi: organisationSummary.organisation.sbi,
+                sbi: organisation.sbi,
                 crn: session.getCustomer(request, sessionKeys.customer.crn)
               }
             })
@@ -139,7 +138,7 @@ module.exports = [{
               name: 'can-not-reapply-error',
               properties: {
                 reference: tempApplicationId,
-                sbi: organisationSummary.organisation.sbi,
+                sbi: organisation.sbi,
                 crn: session.getCustomer(request, sessionKeys.customer.crn)
               }
             })
@@ -149,7 +148,7 @@ module.exports = [{
               name: 'outstanding-agreement-error',
               properties: {
                 reference: tempApplicationId,
-                sbi: organisationSummary.organisation.sbi,
+                sbi: organisation.sbi,
                 crn: session.getCustomer(request, sessionKeys.customer.crn)
               }
             })
