@@ -77,22 +77,22 @@ exports.config = {
     //   'browserstack.selenium_version': '4.0.0-alpha-6'
     // },
     //
-    // {
-    //   // Chrome 111
-    //   os: 'Windows',
-    //   osVersion: '10',
-    //   'buildName': 'Chrome 111 compatibility - ' + timeStamp,
-    //   'projectName': 'DEFRA/ffc-ahwr/Vet-Visit',
-    //   browserVersion: '111',
-    //   browserName: 'Chrome',
-    //   'browserstack.local': true,
-    //   'debug': true,
-    //   'networkLogs': true,
-    //   'video': true,
-    //   acceptInsecureCerts: true,
-    //   acceptSslCerts: true,
-    //   'browserstack.selenium_version': '4.0.0-alpha-6'
-    // },
+    {
+      // Chrome 111
+      os: 'Windows',
+      osVersion: '10',
+      'buildName': 'Chrome 111 compatibility - ' + timeStamp,
+      'projectName': 'DEFRA/ffc-ahwr/Vet-Visit',
+      browserVersion: '111',
+      browserName: 'Chrome',
+      'browserstack.local': false,
+      'debug': true,
+      'networkLogs': true,
+      'video': true,
+      acceptInsecureCerts: true,
+      acceptSslCerts: true,
+      'browserstack.selenium_version': '4.0.0-alpha-6'
+    },
     //
     // {
     //   // firefox 111
@@ -247,37 +247,37 @@ exports.config = {
       console.log('Automation tests disable, exiting tests.')
       process.exit(0)
     }
-    const reportAggregator = new ReportAggregator({
-      outputDir: './html-reports/',
-      filename: 'acceptance-test-suite-report.html',
-      reportTitle: 'Acceptance Tests Report',
-      browserName: capabilities.browserName
-    })
-    reportAggregator.clean()
-    global.reportAggregator = reportAggregator
-    console.log('Connecting local')
-    return new Promise(function (resolve, reject) {
-      exports.bs_local = new browserstack.Local()
-      const bsLocalArgs = {
-        key,
-        verbose: 'true',
-        onlyAutomate: 'true'
-      }
-      exports.bs_local.start(bsLocalArgs, function (error) {
-        if (error) return reject(error)
-        console.log('Connected. Now testing...')
-        resolve()
-      })
-    })
+    // const reportAggregator = new ReportAggregator({
+    //   outputDir: './html-reports/',
+    //   filename: 'acceptance-test-suite-report.html',
+    //   reportTitle: 'Acceptance Tests Report',
+    //   browserName: capabilities.browserName
+    // })
+    // reportAggregator.clean()
+    // global.reportAggregator = reportAggregator
+    // console.log('Connecting local')
+    // return new Promise(function (resolve, reject) {
+    //   exports.bs_local = new browserstack.Local()
+    //   const bsLocalArgs = {
+    //     key,
+    //     verbose: 'true',
+    //     onlyAutomate: 'true'
+    //   }
+    //   exports.bs_local.start(bsLocalArgs, function (error) {
+    //     if (error) return reject(error)
+    //     console.log('Connected. Now testing...')
+    //     resolve()
+    //   })
+    // })
   },
 
-  onComplete: function (exitCode, config, capabilities, results) {
-    (async () => {
-      await global.reportAggregator.createReport()
-    })()
-    exports.bs_local.stop()
-    console.log('Testing complete, binary closed')
-  },
+  // onComplete: function (exitCode, config, capabilities, results) {
+  //   (async () => {
+  //     await global.reportAggregator.createReport()
+  //   })()
+  //   exports.bs_local.stop()
+  //   console.log('Testing complete, binary closed')
+  // },
 
   beforeSession: function () {
     const chai = require('chai')
