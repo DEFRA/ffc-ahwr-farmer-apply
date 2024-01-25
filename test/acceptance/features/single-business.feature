@@ -9,14 +9,18 @@ Feature: select business
 
   Scenario: org-review page
     When user check the business details
+    When running accessbility tests
     And user confirm the org-review page
+     When running accessbility tests
     And user agreed the business details is correct
     Then user continue to next page
 
   Scenario Outline: user select the livestock to apply
     When user is on the livestock page
     And user check if livestock are listed
+     When running accessbility tests
     And user choose <LiveStockName> cattle for review
+     When running accessbility tests
     Then User continue the application
     Examples:
       | LiveStockName |

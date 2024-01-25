@@ -1,0 +1,88 @@
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% extends './layouts/layout.njk' %}
+
+{% block pageTitle %}Review your agreement offer - {{ serviceName }}{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: backLink,
+	  attributes: {id: "back"}
+  }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    {% if errorMessage %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList:[{
+            text: errorMessage.text,
+            href: "#terms"
+        }]
+      }) }}
+    {% endif %}
+    <h1 class="govuk-heading-l">Review your agreement offer</h1>
+
+    <p class="govuk-body">This is an offer of funding for a livestock health and welfare review and follow-up for this business:</p>
+    <div class="govuk-inset-text">
+      <span id="organisation-name">{{ organisation.name }}</span><br>
+      <span id="organisation-address">{{ organisation.address | safe }}</span><br>
+      SBI: <span id="organisation-sbi">{{ organisation.sbi }}</span>
+    </div>
+
+    <p>You must:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>allow a vet to test for diseases relevant to the livestock you choose to claim for </li>
+      <li>share details about the vet and the results the vet gives you with the Rural Payments Agency (RPA)</li>
+    </ul><br>
+
+    <p>You may need to:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>provide the RPA with evidence your reviews or follow-ups took place, such as a summary from the vet</li>
+    </ul><br>
+
+    <p>You confirm that:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>your reviews and follow-ups will be for the same species</li>
+      <li>you will have the minimum number of livestock needed</li>
+      <li>you will follow the rules for timing of vet visits and claims</li>
+      <li>you have read and accept <a id="termsAndConditionsUri" href="{{latestTermsAndConditionsUri}}">the full terms and conditions</a></li>
+    </ul><br>
+
+    <form method="POST" autocomplete="off" novalidate="novalidate" id ="submitDeclarationForm">
+      <input type="hidden" name="crumb" value="{{crumb}}"/>
+      {{ govukCheckboxes({
+        id: "terms",
+        idPrefix: "terms",
+        name: "terms",
+        errorMessage: errorMessage,
+        items: [{
+            value: "agree",
+            text: "I have read, understood and agree to the terms and conditions."
+          }]
+      }) }}
+
+      <div class="govuk-button-group">
+        {{ govukButton({
+          text: "Accept",
+          value: "accepted",
+          name: "offerStatus",
+          preventDoubleClick: true
+        }) }}
+        {{ govukButton({
+          text: "Reject",
+          classes: "govuk-button--secondary",
+          value: "rejected",
+          name: "offerStatus",
+          preventDoubleClick: true
+        }) }}
+      </div>
+      <div class="gem-c-print-link govuk-!-display-none-print govuk-!-margin-top-6">
+        <button onclick="window.print()" class="govuk-link govuk-body-s gem-c-print-link__button">Print this page</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

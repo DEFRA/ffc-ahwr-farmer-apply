@@ -1,4 +1,5 @@
 const config = require('../../../../app/config')
+const applicationType = require('../../../../app/constants/application-type')
 const { CannotReapplyTimeLimitError, OutstandingAgreementError, AlreadyAppliedError } = require('../../../../app/exceptions')
 
 let businessEligibleToApply
@@ -11,6 +12,7 @@ describe('Business Eligible to Apply Tests', () => {
     applicationApiMock = require('../../../../app/api-requests/application-api')
     jest.mock('../../../../app/api-requests/application-api')
     businessEligibleToApply = require('../../../../app/api-requests/business-eligible-to-apply')
+    config.endemics.enabled = false
   })
 
   beforeEach(() => {
@@ -62,9 +64,9 @@ describe('Business Eligible to Apply Tests', () => {
                   sbi: '122333'
                 }
               },
-              createdAt: '2023-06-06T13:52:14.207Z',
-              updatedAt: '2023-06-06T13:52:14.207Z',
-              statusId: 2
+              createdAt: '2023-05-06T13:52:14.207Z',
+              updatedAt: '2023-05-06T13:52:14.207Z',
+              statusId: 1
             },
             {
               data: {
@@ -72,9 +74,9 @@ describe('Business Eligible to Apply Tests', () => {
                   sbi: '122333'
                 }
               },
-              createdAt: '2023-05-06T13:52:14.207Z',
-              updatedAt: '2023-05-06T13:52:14.207Z',
-              statusId: 1
+              createdAt: '2023-06-06T13:52:14.207Z',
+              updatedAt: '2023-06-06T13:52:14.207Z',
+              statusId: 2
             }
           ]
         },
@@ -719,6 +721,161 @@ describe('Business Eligible to Apply Tests', () => {
           await expect(businessEligibleToApply(SBI)).rejects.toEqual(new AlreadyAppliedError('Business with SBI 122333 is not eligible to apply'))
         })
       })
+    })
+  })
+  describe('When endemics is enabled', () => {
+    beforeEach(() => {
+      config.tenMonthRule.enabled = true
+      config.endemics.enabled = true
+    })
+
+    test.each([
+      {
+        latestApplications: [
+          {
+            data: {
+              organisation: {
+                sbi: '122333'
+              }
+            },
+            createdAt: '2023-05-06T13:52:14.207Z',
+            updatedAt: '2023-05-06T13:52:14.207Z',
+            statusId: 2
+          }
+        ]
+      }, {
+        latestApplications: [
+          {
+            data: {
+              organisation: {
+                sbi: '122333'
+              }
+            },
+            createdAt: '2023-05-06T13:52:14.207Z',
+            updatedAt: '2023-05-06T13:52:14.207Z',
+            statusId: 7
+          }
+        ]
+      }, {
+        latestApplications: [
+          {
+            data: {
+              organisation: {
+                sbi: '122333'
+              }
+            },
+            createdAt: '2023-05-06T13:52:14.207Z',
+            updatedAt: '2023-05-06T13:52:14.207Z',
+            statusId: 9
+          }
+        ]
+      },
+      {
+        latestApplications: [
+          {
+            data: {
+              organisation: {
+                sbi: '122333'
+              }
+            },
+            createdAt: '2023-06-06T13:52:14.207Z',
+            updatedAt: '2023-06-06T13:52:14.207Z',
+            statusId: 10
+          }
+        ]
+      }
+    ])('Business is eligible when the last previous application is VV and is a closed agreement', async ({ latestApplications }) => {
+      const SBI = 123456789
+      applicationApiMock.getLatestApplicationsBySbi.mockResolvedValueOnce(latestApplications)
+      await expect(businessEligibleToApply(SBI)).resolves.not.toThrow(new Error())
+    })
+
+    test.each([
+      {
+        latestApplications: [
+          {
+            data: {
+              organisation: {
+                sbi: '122333'
+              }
+            },
+            createdAt: '2023-05-06T13:52:14.207Z',
+            updatedAt: '2023-05-06T13:52:14.207Z',
+            statusId: 1
+          }
+        ]
+      }, {
+        latestApplications: [
+          {
+            data: {
+              organisation: {
+                sbi: '122333'
+              }
+            },
+            createdAt: '2023-05-06T13:52:14.207Z',
+            updatedAt: '2023-05-06T13:52:14.207Z',
+            statusId: 5
+          }
+        ]
+      }, {
+        latestApplications: [
+          {
+            data: {
+              organisation: {
+                sbi: '122333'
+              }
+            },
+            createdAt: '2023-05-06T13:52:14.207Z',
+            updatedAt: '2023-05-06T13:52:14.207Z',
+            statusId: 6
+          }
+        ]
+      },
+      {
+        latestApplications: [
+          {
+            data: {
+              organisation: {
+                sbi: '122333'
+              }
+            },
+            createdAt: '2023-06-06T13:52:14.207Z',
+            updatedAt: '2023-06-06T13:52:14.207Z',
+            statusId: 11
+          }
+        ]
+      }
+    ])('Last application is an open application so returns a OutstandingAgreementError', async ({ latestApplications }) => {
+      const SBI = 123456789
+      const expectedError = new OutstandingAgreementError('Business with SBI 122333 must claim or withdraw agreement before creating another.')
+      applicationApiMock.getLatestApplicationsBySbi.mockResolvedValueOnce(latestApplications)
+      const thrownError = await businessEligibleToApply(SBI).catch(error => {
+        return error
+      })
+      expect(thrownError).toEqual(expectedError)
+    })
+
+    test('Last application was an Endemics application so returns a AlreadyAppliedError', async () => {
+      const SBI = 123456789
+      const apiResponse = [
+        {
+          data: {
+            organisation: {
+              sbi: '122333'
+            }
+          },
+          createdAt: '2024-02-28T13:52:14.207Z',
+          updatedAt: '2024-02-28T13:52:14.207Z',
+          statusId: 1,
+          type: applicationType.ENDEMICS
+        }
+      ]
+      const expectedError = new AlreadyAppliedError('Business with SBI 122333 already has an endemics agreement')
+      applicationApiMock.getLatestApplicationsBySbi.mockResolvedValueOnce(apiResponse)
+      const thrownError = await businessEligibleToApply(SBI).catch(error => {
+        return error
+      })
+      expect(thrownError).toEqual(expectedError)
     })
   })
 })

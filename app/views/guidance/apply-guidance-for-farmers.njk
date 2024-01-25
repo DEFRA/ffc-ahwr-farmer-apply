@@ -1,5 +1,28 @@
 {% extends './layouts/layout.njk' %}
 
+{% set requiredTesting = [
+  [
+    { text: "Beef cattle"},
+    { text: "Bovine viral diarrhoea (BVD) blood (serum antibody test)"},
+    { text: "5 per epidemiological group in up to 2 groups"}
+  ],
+  [
+    { text: "Dairy cattle"},
+    { text: "Bovine viral diarrhoea (BVD) bulk milk test. The farmer can take the bulk milk sample without the vet, if confident in doing so."},
+    { text: "A representative milk sample from the bulk tank"}
+  ],
+  [
+    { text: "Sheep"},
+    { text: "Worming treatment check"},
+    { text: "Minimum of 10 lambs less than 12 months old"}
+  ],
+  [
+    { text: "Pigs"},
+    { text: "Enzyme-linked immunosorbent assay (ELISA) or porcine reproductive and respiratory syndrome (PRRS) polymerase chain reaction (PCR) test"},
+    { text: "Minimum of 30 pigs"}
+  ]
+] %}
+
 {% block pageTitle %}Guidance for farmers - {{ serviceName }}{% endblock %}
 
 {% block content %}
@@ -112,16 +135,12 @@
 
         <h3 id="what-the-vet-must-do" class="govuk-heading-s">What you must ask the vet to do</h3>
 
-        <ul class="govuk-list govuk-list--number">
+        <ol class="govuk-list govuk-list--number">
           <li>Visit your farm and test for the endemic diseases or condition of the livestock type you’re having reviewed to recommended standards - bovine viral diarrhoea (BVD) in dairy and beef cattle, effectiveness of worming treatments in sheep, porcine reproductive and respiratory syndrome (PRRS) in pigs.</li>
           <li>Advise on the health and welfare of these livestock - examples of this could include lameness, body conditioning or mobility scoring.</li>
           <li>Give you a written report after the review, including recommended follow-up actions and the relevant endemic disease or condition test results from the laboratory.</li>
           <li>Give you a summary of the review you can use as evidence if the Rural Payments Agency (RPA) requests it when you claim.</li>
-        </ul>
-
-        <h3 id="what-a-review-can-include" class="govuk-heading-s">What a review can include</h3>
-
-        <p class="govuk-body">You and the vet can also choose to discuss biosecurity, medicine usage or both if it’s useful.</p>
+        </ol>
 
         <h2 id="check-youre-eligible-to-apply" class="govuk-heading-m">Check you’re eligible to apply</h2>
         
@@ -175,6 +194,20 @@
         <h2 id="during-the-farm-visit" class="govuk-heading-m">During the farm visit</h2>
 
         <p class="govuk-body">During the visit, you must ask the vet to carry out the required testing, and to give you health and welfare advice about your livestock. You may also discuss topics such as biosecurity or medicine usage.</p>
+
+        <h3 data-testid="required-testing-header" class="govuk-heading-s">Required testing</h3>
+
+        <p data-testid="required-testing-caption" class="govuk-body">Depending on the species, you must ask the vet to test for:</p>
+
+        {{ govukTable({
+          firstCellIsHeader: true,
+          head: [
+            { text: "Species"},
+            { text: "Test type"},
+            { text: "Minimum number of animals to test"}
+          ],
+          rows: requiredTesting
+        }) }}
 
         <h3 id="endemic-diseases-condition-testing" class="govuk-heading-s">Endemic diseases and condition testing</h3>
         
@@ -271,6 +304,7 @@
           <li>confirmation the minimum number of animals being reviewed were on the farm when the vet did the review</li>
           <li>confirmation the vet carried out testing in accordance with the review’s disease and endemic conditions testing guidance</li>
           <li>the date the vet completed disease and endemic condition testing</li>
+          <li>the number of beef cattle, sheep and pigs the vet tested - you do not need to provide the number of dairy cattle tested</li>
           <li>the unique reference number for laboratory test results</li>
           <li>the vet’s name and Royal College of Veterinary Surgeons (RCVS) number</li>
           <li>confirmation the vet has given you a written report</li>
@@ -298,6 +332,10 @@
         <h2 id="how-to-claim-funding" class="govuk-heading-m">How to claim your funding</h2>
 
         <p class="govuk-body">When the vet has completed the review, you can claim your funding.</p>
+
+        {{ govukWarningText({ text: "You must claim within 6 months of the date you accept your agreement offer", iconFallbackText: "Warning" }) }}
+
+        <p class="govuk-body" data-testid="warningpay-extrainfo">We cannot pay for a review which happened either before the agreement start date or after the claim date</p>
 
         <p class="govuk-body">Read guidance on <a href="/apply/claim-guidance-for-farmers" class="govuk-link">how to claim for an annual health and welfare review of your livestock.</a></p>
 

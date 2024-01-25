@@ -98,6 +98,7 @@ let sbiValue
 let AGREEMENT_NUMBER_VALUE;
 const actualStatus = 1;
 let fetchedValue;
+<<<<<<< HEAD
 
 //Endemics
 let ACCEPT_AGREEMENT='[value="agree"]'
@@ -116,6 +117,8 @@ let AGREEMENT_OFFER_REJECTED='Agreement offer rejected'
 let AHWR_HEADER='.govuk-header__content'
 let EXPECTED_AHWR_HEADER='Annual health and welfare review of livestock'
 let AHWR_URL='https://ffc-ahwr-farmer-dev.azure.defra.cloud/apply'
+=======
+>>>>>>> main
 
 class SelectBusinessPage extends CommonActions {
 
@@ -569,7 +572,11 @@ console.log(error.message)
     let query = `
   UPDATE public.application
   SET "createdAt" = $2,
+<<<<<<< HEAD
       "updatedAt" = $2
+=======
+      "updatedAt" = '2023-09-19 13:46:04.3+00'
+>>>>>>> main
   WHERE reference = $1;
 `;
 //AGREEMENT_NUMBER_VALUE='AHWR-8092-E593'
@@ -646,6 +653,7 @@ await this.closeBrowser()
           
         });
   }
+<<<<<<< HEAD
 //endemics
 
 
@@ -715,5 +723,8 @@ async checkEndemicsFlag(){
     
   }
 }
+=======
+
+>>>>>>> main
 }
 module.exports = SelectBusinessPage

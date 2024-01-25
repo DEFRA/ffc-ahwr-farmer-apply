@@ -1,15 +1,23 @@
 const boom = require('@hapi/boom')
 const Joi = require('joi')
-const getDeclarationData = require('./models/declaration')
-const session = require('../session')
-const { declaration, reference, offerStatus, organisation: organisationKey, customer: crn } = require('../session/keys').farmerApplyData
-const { sendApplication } = require('../messaging/application')
+const session = require('../../session')
+const { reference, declaration, offerStatus, organisation: organisationKey, customer: crn } = require('../../session/keys').farmerApplyData
+const getDeclarationData = require('../models/declaration')
+const { sendApplication } = require('../../messaging/application')
 const appInsights = require('applicationinsights')
-const config = require('../config/index')
+const { userType } = require('../../constants/user-types')
+const applicationType = require('../../constants/application-type')
+const config = require('../../config/index')
+const {
+  endemicsTimings,
+  endemicsDeclaration,
+  endemicsConfirmation,
+  endemicsOfferRejected
+} = require('../../config/routes')
 
 module.exports = [{
   method: 'GET',
-  path: `${config.urlPrefix}/declaration`,
+  path: `${config.urlPrefix}/${endemicsDeclaration}`,
   options: {
     handler: async (request, h) => {
       const application = session.getFarmerApplyData(request)
@@ -18,12 +26,12 @@ module.exports = [{
       }
       const viewData = getDeclarationData(application)
       session.setFarmerApplyData(request, reference, null)
-      return h.view('declaration', { backLink: `${config.urlPrefix}/check-answers`, latestTermsAndConditionsUri: `${config.latestTermsAndConditionsUri}?continue=true&backLink=${config.urlPrefix}/declaration`, ...viewData })
+      return h.view(endemicsDeclaration, { backLink: `${config.urlPrefix}/${endemicsTimings}`, latestTermsAndConditionsUri: `${config.latestTermsAndConditionsUri}?continue=true&backLink=${config.urlPrefix}/${endemicsDeclaration}`, ...viewData })
     }
   }
 }, {
   method: 'POST',
-  path: `${config.urlPrefix}/declaration`,
+  path: `${config.urlPrefix}/${endemicsDeclaration}`,
   options: {
     validate: {
       payload: Joi.object({
@@ -33,10 +41,11 @@ module.exports = [{
       failAction: async (request, h, _) => {
         const application = session.getFarmerApplyData(request)
         const viewData = getDeclarationData(application)
-        return h.view('declaration', {
-          backLink: `${config.urlPrefix}/check-answers`,
-          ...viewData,
-          errorMessage: { text: 'Confirm you have read and agree to the terms and conditions' }
+        return h.view(endemicsDeclaration, {
+          backLink: `${config.urlPrefix}/${endemicsTimings}`,
+          latestTermsAndConditionsUri: `${config.latestTermsAndConditionsUri}?continue=true&backLink=${config.urlPrefix}/${endemicsDeclaration}`,
+          errorMessage: { text: 'Select you have read and agree to the terms and conditions' },
+          ...viewData
         }).code(400).takeover()
       }
     },
@@ -44,20 +53,16 @@ module.exports = [{
       const application = session.getFarmerApplyData(request)
       let applicationReference = application[reference]
       if (!applicationReference) {
+        console.log('APPLICATION:', application)
         session.setFarmerApplyData(request, declaration, true)
         session.setFarmerApplyData(request, offerStatus, request.payload.offerStatus)
-
-        if (config.endemics.enabled) {
-          applicationReference = await sendApplication({ ...application, type: 'VV' }, request.yar.id)
-        } else {
-          applicationReference = await sendApplication(application, request.yar.id)
-        }
+        applicationReference = await sendApplication({ ...application, type: applicationType.ENDEMICS }, request.yar.id)
 
         if (applicationReference) {
           session.setFarmerApplyData(request, reference, applicationReference)
           const organisation = session.getFarmerApplyData(request, organisationKey)
           appInsights.defaultClient.trackEvent({
-            name: 'agreement-created',
+            name: 'endemics-agreement-created',
             properties: {
               reference: applicationReference,
               sbi: organisation.sbi,
@@ -71,7 +76,10 @@ module.exports = [{
       request.cookieAuth.clear()
 
       if (request.payload.offerStatus === 'rejected') {
-        return h.view('offer-rejected', { ruralPaymentsAgency: config.ruralPaymentsAgency })
+        return h.view(endemicsOfferRejected, {
+          title: 'Agreement offer rejected',
+          ruralPaymentsAgency: config.ruralPaymentsAgency
+        })
       }
 
       if (!applicationReference) {
@@ -81,8 +89,9 @@ module.exports = [{
         throw boom.internal()
       }
 
-      return h.view('confirmation', {
+      return h.view(endemicsConfirmation, {
         reference: applicationReference,
+        isNewUser: userType.NEW_USER === application.organisation.userType,
         ruralPaymentsAgency: config.ruralPaymentsAgency,
         applySurveyUri: config.customerSurvey.uri,
         latestTermsAndConditionsUri: config.latestTermsAndConditionsUri

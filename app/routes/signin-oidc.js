@@ -6,17 +6,20 @@ const config = require('../config')
 const { farmerApply } = require('../constants/user-types')
 const { getPersonSummary, getPersonName, organisationIsEligible, getOrganisationAddress, cphCheck } = require('../api-requests/rpa-api')
 const businessEligibleToApply = require('../api-requests/business-eligible-to-apply')
-const { InvalidPermissionsError, AlreadyAppliedError, NoEligibleCphError, InvalidStateError, CannotReapplyTimeLimitError, OutstandingAgreementError } = require('../exceptions')
+const businessAppliedBefore = require('../api-requests/business-applied-before')
+const { InvalidPermissionsError, AlreadyAppliedError, NoEligibleCphError, InvalidStateError, CannotReapplyTimeLimitError, OutstandingAgreementError, LockedBusinessError } = require('../exceptions')
 const { raiseIneligibilityEvent } = require('../event')
 const appInsights = require('applicationinsights')
+const { endemicsCheckDetails } = require('../config/routes')
 
-function setOrganisationSessionData (request, personSummary, organisationSummary) {
+function setOrganisationSessionData (request, personSummary, { organisation: org, userType }) {
   const organisation = {
-    sbi: organisationSummary.organisation.sbi?.toString(),
+    sbi: org.sbi?.toString(),
     farmerName: getPersonName(personSummary),
-    name: organisationSummary.organisation.name,
-    email: personSummary.email ? personSummary.email : organisationSummary.organisation.email,
-    address: getOrganisationAddress(organisationSummary.organisation.address)
+    name: org.name,
+    email: personSummary.email ? personSummary.email : org.email,
+    address: getOrganisationAddress(org.address),
+    userType: config.endemics.enabled ? userType : undefined
   }
   session.setFarmerApplyData(
     request,
@@ -49,20 +52,23 @@ module.exports = [{
     handler: async (request, h) => {
       try {
         await auth.authenticate(request, session)
-
         const apimAccessToken = await auth.retrieveApimAccessToken()
         const personSummary = await getPersonSummary(request, apimAccessToken)
         session.setCustomer(request, sessionKeys.customer.id, personSummary.id)
         const organisationSummary = await organisationIsEligible(request, personSummary.id, apimAccessToken)
-        setOrganisationSessionData(request, personSummary, organisationSummary)
+
+        if (organisationSummary.organisation.locked) {
+          throw new LockedBusinessError(`Organisation id ${organisationSummary.organisation.id} is locked by RPA`)
+        }
 
         if (!organisationSummary.organisationPermission) {
           throw new InvalidPermissionsError(`Person id ${personSummary.id} does not have the required permissions for organisation id ${organisationSummary.organisation.id}`)
         }
 
         await cphCheck.customerMustHaveAtLeastOneValidCph(request, apimAccessToken)
-
         await businessEligibleToApply(organisationSummary.organisation.sbi)
+        const userType = await businessAppliedBefore(organisationSummary.organisation.sbi)
+        setOrganisationSessionData(request, personSummary, { ...organisationSummary, userType })
 
         auth.setAuthCookie(request, personSummary.email, farmerApply)
         appInsights.defaultClient.trackEvent({
@@ -73,7 +79,7 @@ module.exports = [{
             email: personSummary.email
           }
         })
-        return h.redirect(`${config.urlPrefix}/org-review`)
+        return h.redirect(`${config.urlPrefix}${config.endemics.enabled ? `/${endemicsCheckDetails}` : '/org-review'}`)
       } catch (err) {
         console.error(`Received error with name ${err.name} and message ${err.message}.`)
         const attachedToMultipleBusinesses = session.getCustomer(request, sessionKeys.customer.attachedToMultipleBusinesses)
@@ -85,6 +91,8 @@ module.exports = [{
           case err instanceof AlreadyAppliedError:
             break
           case err instanceof InvalidPermissionsError:
+            break
+          case err instanceof LockedBusinessError:
             break
           case err instanceof NoEligibleCphError:
             break
@@ -105,17 +113,24 @@ module.exports = [{
           organisation?.email,
           err.name
         )
-        return h.view('cannot-apply-for-livestock-review-exception', {
+
+        if (config.endemics.enabled && err instanceof AlreadyAppliedError) {
+          return h.redirect(config.dashboardServiceUri).code(302).takeover()
+        }
+
+        return h.view(config.endemics.enabled ? 'endemics/cannot-apply-exception' : 'cannot-apply-for-livestock-review-exception', {
           ruralPaymentsAgency: config.ruralPaymentsAgency,
           alreadyAppliedError: err instanceof AlreadyAppliedError,
           permissionError: err instanceof InvalidPermissionsError,
           cphError: err instanceof NoEligibleCphError,
+          lockedBusinessError: err instanceof LockedBusinessError,
           reapplyTimeLimitError: err instanceof CannotReapplyTimeLimitError,
           outstandingAgreementError: err instanceof OutstandingAgreementError,
           lastApplicationDate: err.lastApplicationDate,
           nextApplicationDate: err.nextApplicationDate,
           hasMultipleBusinesses: attachedToMultipleBusinesses,
           backLink: auth.requestAuthorizationCodeUrl(session, request),
+          claimLink: config.claimServiceUri,
           sbiText: organisation?.sbi !== undefined ? ` - SBI ${organisation.sbi}` : null,
           organisationName: organisation?.name,
           guidanceLink: config.serviceUri

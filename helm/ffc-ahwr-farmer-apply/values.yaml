@@ -52,6 +52,7 @@ container:
   redisPort: 6379
   serviceUri:
   claimServiceUri:
+  dashboardServiceUri:
   urlPrefix: /apply
   termsAndConditionsUrl:
   eligibilityApiUri:
@@ -76,6 +77,7 @@ container:
   apimScope:
   dateOfTestingEnabled:
   tenMonthRuleEnabled:
+  endemicsEnabled:
  
 ingress:
   class: nginx
