@@ -101,6 +101,7 @@ module.exports = [{
           case err instanceof OutstandingAgreementError:
             break
           default:
+            appInsights.defaultClient.trackException({ exception: err })
             return h.view('verify-login-failed', {
               backLink: auth.requestAuthorizationCodeUrl(session, request),
               ruralPaymentsAgency: config.ruralPaymentsAgency
