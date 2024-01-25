@@ -1,26 +1,59 @@
 #!/usr/bin/env sh
 
 set -e
+
+# Determine the project root directory
 projectRoot="$(a="/$0"; a=${a%/*}; a=${a:-.}; a=${a#/}/; cd "$a/.." || return; pwd)"
 
+# Change the working directory to the project root
 cd "${projectRoot}"
 
-# start web application
+# Set default value for the endemics flag
+ENDDEMICS_FLAG=${FFC_AHWR_ENDDEMICS_FLAG:-false}
+
+# Parse command-line arguments
+while [ "$#" -gt 0 ]; do
+  case "$1" in
+    --endemics)
+      ENDDEMICS_FLAG=true
+      ;;
+    *)
+      # Unknown option
+      echo "Unknown option: $1"
+      exit 1
+      ;;
+  esac
+  shift
+done
+
+# Copy feature files based on the endemics flag
+if [ "$ENDDEMICS_FLAG" = "true" ]; then
+  echo "Copying endemics feature files..."
+  cp -r test/acceptance/features/285796-Dev\ 10\ Customer\ onboarding\ screen\ 3\ Agreement\ apply\ journey.feature
+  cp -r test/acceptance/features/endemics.feature
+  cp -r test/acceptance/features/US\ 285795-Exception\ for\ customer\ onboarding\ screen\ 3\ Agreement\ journey.feature
+else
+  echo "Copying non-endemics feature files..."
+  cp -r test/acceptance/features/10-month-rule-tc*.feature
+  cp -r test/acceptance/features/multi-business*.feature
+  cp -r test/acceptance/features/single-business*.feature
+fi
+
+# Start the web application
 ./scripts/start -d
 
-# run acceptance tests
+# Run acceptance tests
 cd test/acceptance
 
-if [ "$1" = "debug" ];
-then
+# Check the value of the first argument provided when running the script
+if [ "$1" = "debug" ]; then
   echo "=============================="
   echo "| Running Test in Debug mode |"
   echo "=============================="
 
   docker-compose down -v
   docker-compose -f docker-compose.yaml -f docker-compose.override.yaml -f docker-compose.debug.yaml up --build --abort-on-container-exit
-elif [ "$1" = "local" ];
-then
+elif [ "$1" = "local" ]; then
   echo "================================"
   echo "| Running Test on your machine |"
   echo "================================"

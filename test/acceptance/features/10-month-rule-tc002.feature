@@ -1,7 +1,7 @@
-@smoke
+@smoke11
 #runs first
 
-Feature: Applied notclaimed- single Business
+Feature: Applied not claimed- single Business
 
   Scenario: Apply with valid cred
     Given the user is on the /apply/start page

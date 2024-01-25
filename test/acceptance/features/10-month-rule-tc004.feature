@@ -1,4 +1,4 @@
-@smoke
+@smoke11
 
 Feature:10 month rule - Not Agreed - Single business
  Scenario: Apply with valid cred

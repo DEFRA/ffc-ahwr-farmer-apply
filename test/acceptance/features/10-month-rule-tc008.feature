@@ -1,4 +1,4 @@
- @smoke
+ @smoke11
 
 
 Feature: 10 month rule - Ready To Pay- Single business
@@ -18,7 +18,7 @@ Feature: 10 month rule - Ready To Pay- Single business
     Then user continue to next page
     Examples:
     |business|
-    |ASHLEY, D G & J M - SBI 106872259|
+    |Belport Beachampton Limited - SBI 200074310|
 
   Scenario Outline:user select the livestock to apply
     When user is on the livestock page
@@ -57,7 +57,7 @@ Feature: 10 month rule - Ready To Pay- Single business
       Then agreement number is passed to <updatedate> 
    Examples:
     |business|updatedate|
-    |ASHLEY, D G & J M - SBI 106872259|2021-12-09 16:46:04.3+00| 
+    |Belport Beachampton Limited - SBI 200074310|2021-12-09 16:46:04.3+00| 
 
 
   #  Scenario Outline: Withdraw the agreed status
@@ -81,7 +81,7 @@ Feature: 10 month rule - Ready To Pay- Single business
     Then user continue to next page
     Examples:
     |business|
-    |ASHLEY, D G & J M - SBI 106872259|
+    |Belport Beachampton Limited - SBI 200074310|
 
      Scenario Outline:user select the livestock to apply
     When user is on the livestock page
