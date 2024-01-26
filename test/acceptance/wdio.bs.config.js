@@ -33,6 +33,7 @@ exports.config = {
         local: true,
         networkLogs: true,
         seleniumVersion: '3.14.0',
+        'browserstack.local': false,
         userName: user,
         accessKey: key
       },

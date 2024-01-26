@@ -1,5 +1,4 @@
 const CommonActions = require('./common-actions')
-const Locators= require('./locators')
 const { expect } = require('chai')
 const pgp = require('pg-promise')();
 
