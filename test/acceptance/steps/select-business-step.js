@@ -132,7 +132,6 @@ When(/^fetch the agreement number$/, async function () {
 })
 When(/^delete the entry$/, async function () {
   await selectBusinessPage.deleteEntry()
-<<<<<<< HEAD
 })
 
 //endemics
@@ -181,6 +180,4 @@ Then (/^user clicks on the service name link$/,async function (){
 })
 Then (/^user must be redirected to service guidance start pages$/,async function (){ 
   await selectBusinessPage.urlValidationAHWR()
-=======
->>>>>>> main
 })
