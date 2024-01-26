@@ -29,14 +29,17 @@ done
 # Copy feature files based on the endemics flag
 if [ "$ENDDEMICS_FLAG" = "true" ]; then
   echo "Copying endemics feature files..."
-  cp -r test/acceptance/features/285796-Dev\ 10\ Customer\ onboarding\ screen\ 3\ Agreement\ apply\ journey.feature
-  cp -r test/acceptance/features/endemics.feature
-  cp -r test/acceptance/features/US\ 285795-Exception\ for\ customer\ onboarding\ screen\ 3\ Agreement\ journey.feature
+  cp -r test/acceptance/features/Endemics/278298.feature
+  cp -r test/acceptance/features/Endemics/285795.feature
+  cp -r test/acceptance/features//Endemics/285796.feature
+  cp -r test/acceptance/features//Endemics/287083.feature
+
 else
   echo "Copying non-endemics feature files..."
-  cp -r test/acceptance/features/10-month-rule-tc*.feature
-  cp -r test/acceptance/features/multi-business*.feature
-  cp -r test/acceptance/features/single-business*.feature
+  cp -r test/acceptance/features/VetVisits/multiple-business.feature
+  cp -r test/acceptance/features/VetVisits/single-business.feature
+
+ 
 fi
 
 # Start the web application
