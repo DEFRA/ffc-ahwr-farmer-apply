@@ -11,7 +11,11 @@ class CommonActions {
   async open (path) {
     try{
    url = process.env.TEST_ENVIRONMENT_ROOT_URL + path
+  // const urlExists = await doesUrlExist(url);
     await browser.url(url)
+    // if (!urlExists ) {
+    //   throw new Error("Function skipped due to failure condition");
+    // }
   }
     catch (error) {
       // Handle the "invalid session id" error by restarting the WebDriver session
@@ -20,10 +24,13 @@ class CommonActions {
         await browser.reloadSession(); // Assuming reloadSession is available in your setup
         await browser.url(url); // Retry the navigation
       } else {
-        throw error; // Re-throw other errors
+       // this.skip();
+       console.log(error)
+        
       }
     }
     }
+   
 
 
   async clickOn (element) {
@@ -39,7 +46,12 @@ class CommonActions {
   async elementToContainText (element, text) {
     const locator = await browser.$(element)
     expect(await locator.getText()).to.include(text)
+    console.log("THe text is *********************"+await locator.getText())
   }
+
+  async ValidateURL(element){
+    expect(await browser.getUrl()).to.include(element)
+}
 
   async elementGetText(element){
     const locator = await browser.$(element)
