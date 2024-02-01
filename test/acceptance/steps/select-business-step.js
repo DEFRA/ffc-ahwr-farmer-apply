@@ -6,9 +6,12 @@ const commonPage = new CommonActions()
 
 Given(/^the user is on the (.*) page$/, async function (page) {
   await selectBusinessPage.getHomePage(page)
+
 })
 When(/^start the application$/, async function () {
-  await selectBusinessPage.clickOnStartButton()
+     
+    await selectBusinessPage.clickOnStartButton()
+    
 });
 When(/^user login with (.*) business crn and password\(for DefraId\)$/, async function (business) {
   await selectBusinessPage.signInWithDefraId(business)
@@ -38,6 +41,9 @@ When(/^user agreed the business details is correct$/, async function () {
 })
 Then(/^user continue to next page$/, async function () {
   await selectBusinessPage.proceedWithApplication()
+})
+|Then(/^Accept the Cookies$/, async function () {
+  await selectBusinessPage.acceptCookies()
 })
 // SELECT LIVESTOCK
 When(/^user is on the livestock page$/, async function () {
@@ -126,4 +132,52 @@ When(/^fetch the agreement number$/, async function () {
 })
 When(/^delete the entry$/, async function () {
   await selectBusinessPage.deleteEntry()
+})
+
+//endemics
+
+Then(/^agree Reviews and follow up for the same species$/,async function (){
+  await selectBusinessPage.click_Agree()
+})
+Then (/^agree the Minimum number of livestock$/,async function (){
+  await selectBusinessPage.click_Agree()
+})
+Then (/^agree Timing of vet visits and funding claims$/,async function (){
+  await selectBusinessPage.click_Agree()
+})
+Then (/^Validate if the user had landed on minimun live stock page$/,async function (){ 
+  await selectBusinessPage.validate_minimum_livestock_header()
+})
+Then (/^user confirm Review Page$/,async function (){ 
+  await selectBusinessPage.validate_Review_Page()
+})
+Then (/^Validate if the user had landed on timining and funding$/,async function (){ 
+  await selectBusinessPage.validate_timing_and_funding()
+})
+Then (/^Validate if the user had landed on review agreement offer$/,async function (){ 
+  await selectBusinessPage.validate_review_agreement_offer()
+})
+Then(/^user click on Reject$/,async function (){
+  await selectBusinessPage.reject_Agreement()
+})
+Then (/^Validate the reject agreement offer$/,async function (){ 
+  await selectBusinessPage.validate_reject_agreement_offer()
+})
+Then (/^user clicks on back link$/,async function (){ 
+  await selectBusinessPage.click_Back_Link()
+})
+Then (/^click on gov.uk in the left pane$/,async function (){ 
+  await selectBusinessPage.clickGovUKPane()
+})
+Then (/^validate if the user redirected to gov.uk$/,async function (){ 
+  await selectBusinessPage.urlValidation()
+})
+Then (/^user is able to see the Annual health and welfare review of livestock link on the middle top of the header$/,async function  (){ 
+  await selectBusinessPage.getHeaderText()
+})
+Then (/^user clicks on the service name link$/,async function (){ 
+  await selectBusinessPage.clickAHWR()
+})
+Then (/^user must be redirected to service guidance start pages$/,async function (){ 
+  await selectBusinessPage.urlValidationAHWR()
 })
