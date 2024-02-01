@@ -6,7 +6,8 @@ const config = require('../../config')
 const generate = (request) => {
   const state = {
     id: uuidv4(),
-    namespace: config.namespace
+    namespace: config.namespace,
+    source: 'apply'
   }
 
   const base64EncodedState = Buffer.from(JSON.stringify(state)).toString('base64')
