@@ -1,4 +1,4 @@
-@smoke
+@smoke11
 
 Feature: Applied not claimed- Multi Business
 
@@ -17,7 +17,7 @@ Feature: Applied not claimed- Multi Business
     Then user continue to next page
     Examples:
     |business|
-    |ASHLEY, D G & J M - SBI 106872259|
+    |Belport Beachampton Limited - SBI 200074310|
 
   Scenario Outline:user select the livestock to apply
     When user is on the livestock page
@@ -61,7 +61,7 @@ Feature: Applied not claimed- Multi Business
      Then make the agreement status to withdrawn 
         Examples:
     |business|
-    |ASHLEY, D G & J M - SBI 106872259|
+    |Belport Beachampton Limited - SBI 200074310|
 
   Scenario: Apply with valid cred
     Then close browser
@@ -78,7 +78,7 @@ Feature: Applied not claimed- Multi Business
     Then user continue to next page
     Examples:
     |business|
-    |ASHLEY, D G & J M - SBI 106872259|
+    |Belport Beachampton Limited - SBI 200074310|
 
   Scenario Outline:user select the livestock to apply
     When user is on the livestock page
