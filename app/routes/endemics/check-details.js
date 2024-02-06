@@ -2,6 +2,7 @@ const Joi = require('joi')
 const boom = require('@hapi/boom')
 const config = require('../../config')
 const session = require('../../session')
+const businessAppliedBefore = require('../../api-requests/business-applied-before')
 const { organisation: organisationKey, confirmCheckDetails } =
   require('../../session/keys').farmerApplyData
 const getOrganisation = require('../models/organisation')
@@ -23,6 +24,13 @@ module.exports = [
         if (!organisation) {
           return boom.notFound()
         }
+
+        const userType = await businessAppliedBefore(organisation.sbi)
+        session.setFarmerApplyData(
+          request,
+          sessionKeys.farmerApplyData.organisation,
+          { ...organisation, userType }
+        )
         return h.view(
           endemicsCheckDetails,
           getOrganisation(request, organisation)
