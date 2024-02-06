@@ -28,9 +28,10 @@ module.exports = [
         const userType = await businessAppliedBefore(organisation.sbi)
         session.setFarmerApplyData(
           request,
-          sessionKeys.farmerApplyData.organisation,
+          organisationKey,
           { ...organisation, userType }
         )
+
         return h.view(
           endemicsCheckDetails,
           getOrganisation(request, organisation)
