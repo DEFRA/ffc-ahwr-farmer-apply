@@ -6,20 +6,17 @@ const config = require('../config')
 const { farmerApply } = require('../constants/user-types')
 const { getPersonSummary, getPersonName, organisationIsEligible, getOrganisationAddress, cphCheck } = require('../api-requests/rpa-api')
 const businessEligibleToApply = require('../api-requests/business-eligible-to-apply')
-const businessAppliedBefore = require('../api-requests/business-applied-before')
 const { InvalidPermissionsError, AlreadyAppliedError, NoEligibleCphError, InvalidStateError, CannotReapplyTimeLimitError, OutstandingAgreementError, LockedBusinessError } = require('../exceptions')
 const { raiseIneligibilityEvent } = require('../event')
 const appInsights = require('applicationinsights')
-const { endemicsCheckDetails } = require('../config/routes')
 
-function setOrganisationSessionData (request, personSummary, { organisation: org, userType }) {
+function setOrganisationSessionData (request, personSummary, { organisation: org }) {
   const organisation = {
     sbi: org.sbi?.toString(),
     farmerName: getPersonName(personSummary),
     name: org.name,
     email: personSummary.email ? personSummary.email : org.email,
-    address: getOrganisationAddress(org.address),
-    userType: config.endemics.enabled ? userType : undefined
+    address: getOrganisationAddress(org.address)
   }
   session.setFarmerApplyData(
     request,
@@ -67,8 +64,7 @@ module.exports = [{
 
         await cphCheck.customerMustHaveAtLeastOneValidCph(request, apimAccessToken)
         await businessEligibleToApply(organisationSummary.organisation.sbi)
-        const userType = await businessAppliedBefore(organisationSummary.organisation.sbi)
-        setOrganisationSessionData(request, personSummary, { ...organisationSummary, userType })
+        setOrganisationSessionData(request, personSummary, { ...organisationSummary })
 
         auth.setAuthCookie(request, personSummary.email, farmerApply)
         appInsights.defaultClient.trackEvent({
@@ -79,7 +75,7 @@ module.exports = [{
             email: personSummary.email
           }
         })
-        return h.redirect(`${config.urlPrefix}${config.endemics.enabled ? `/${endemicsCheckDetails}` : '/org-review'}`)
+        return h.redirect(`${config.urlPrefix}/org-review`)
       } catch (err) {
         console.error(`Received error with name ${err.name} and message ${err.message}.`)
         const attachedToMultipleBusinesses = session.getCustomer(request, sessionKeys.customer.attachedToMultipleBusinesses)
@@ -115,11 +111,7 @@ module.exports = [{
           err.name
         )
 
-        if (config.endemics.enabled && err instanceof AlreadyAppliedError) {
-          return h.redirect(config.dashboardServiceUri).code(302).takeover()
-        }
-
-        return h.view(config.endemics.enabled ? 'endemics/cannot-apply-exception' : 'cannot-apply-for-livestock-review-exception', {
+        return h.view('cannot-apply-for-livestock-review-exception', {
           ruralPaymentsAgency: config.ruralPaymentsAgency,
           alreadyAppliedError: err instanceof AlreadyAppliedError,
           permissionError: err instanceof InvalidPermissionsError,
