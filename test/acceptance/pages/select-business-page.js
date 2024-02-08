@@ -13,7 +13,7 @@ const databaseConfig = {
 const password = process.env.DB_PASSWORD;
 
 // Create the connection string
-const connectionString = `postgres://${databaseConfig.user}:${password}@${databaseConfig.host}:${databaseConfig.port}/${databaseConfig.database}`;
+const connectionString = `postgres://${databaseConfig.user}:${password}@${databaseConfig.host}:${databaseConfig.port}/${databaseConfig.database}?sslmode=require`;
 
 // Create the database connection
 const db = pgp(connectionString);
@@ -55,6 +55,9 @@ const DECLARATION = '[role="button"]'
 const TERMS_CONDITIONS = '#termsAndConditionsUri'
 const TERMS_AND_CONDITION_BOX = '#terms'
 const COMPLETE_APPLICATION = '[value="accepted"]'
+const COOKIES_ACCEPT = '[value="accept"]'
+const COOKIES_HIDE='/html/body/div[1]/div/div[2]/div[2]'
+const REJECT_APPLICATION = '[value="rejected"]'
 const SUCCESS_MESSAGE = '.govuk-panel__title'
 const ACCURATE_ANSWER = 'Check your answers'
 const AGREED = 'declaration'
@@ -63,11 +66,13 @@ const TERMS = 'Annual health and welfare review of livestock terms and condition
 const MESSAGE = 'Application complete'
 const LIVESTOCK_NUMBER = 'eligible for funding'
 
+
 //'div.govuk-radios>div.govuk-radios__item>label'
 //DefraID
 const DEFRA_CRN = '#crn'
 const DEFRA_PASSWORD = '#password'
 const SIGN_IN_BUTTON = '[type="submit"]'
+const HIDE_COOKIES='[data-hide-cookie-banner="true"]'
 const EMAIL_INPUT = '#email'
 const CONTINUE = '#submit'
 const MUTLIPLE_BUSINESS_CONTINUE = '#continueReplacement'
@@ -75,10 +80,10 @@ const MUTLIPLE_BUSINESS_CONTINUE = '#continueReplacement'
 const EXCEPTION_HEADER = '.govuk-heading-l'
 const HEADER_ERROR_MESSAGE_EXPECTED = 'You cannot apply for a livestock review for this business'
 const EXCEPTION_ERROR_MESSAGE = '.govuk-heading-l+.govuk-body'
-const EXCEPTION_ERROR_MESSAGE_EXPECTED = 'You do not have the required permission to act for Test Estate - SBI 114441446.'
+const EXCEPTION_ERROR_MESSAGE_EXPECTED = 'You do not have the required permission to act for W S Hirst - SBI 107097991.'
 const EXCEPTION_ERROR_MESSAGE_EXPECTED_NO_CPH = 'Mr M A Burdon - SBI 200259426 has no eligible county parish holding (CPH) number registered to it.'
-const EXCEPTION_ERROR_MESSAGE_EXPECTED_MB_NO_PERMISSION = 'You do not have the required permission to act for Dale Hitchens - SBI 107224622.'
-const EXCEPTION_ERROR_MESSAGE_EXPECTED_MB_NO_CPH = 'Jazzmin Arundell - SBI 114522978 has no eligible county parish holding (CPH) number registered to it.'
+const EXCEPTION_ERROR_MESSAGE_EXPECTED_MB_NO_PERMISSION = 'You do not have the required permission to act for Lonsdale Health - SBI 106240540.'
+const EXCEPTION_ERROR_MESSAGE_EXPECTED_MB_NO_CPH = 'Mr R Chapman has no eligible county parish holding (CPH) number registered to it.'
 const EXPECTED_ERROR='has already applied for an annual health and welfare review of livestock.'
 const EXPECTED_ERROR_FOR_MULTIPLEBUSINESS='applied for an annual health and welfare review of livestock'
 const CALL_CHARGES = '.govuk-grid-column-full>p>.govuk-link'
@@ -93,14 +98,35 @@ let AGREEMENT_NUMBER_VALUE;
 const actualStatus = 1;
 let fetchedValue;
 
+//Endemics
+let ACCEPT_AGREEMENT='[value="agree"]'
+let REJECT_AGREEMENT='[value="notAgree"]'
+let REJECT_AGREEMENT_ERROR_MESSAGE='Agreement terms rejected'
+let REJECT_AGREEMENT_ERROR='//*[@id="main-content"]/div/div/h1'
+let BACK='#back'
+let GOV_UK='.govuk-header__logotype-text' 
+let GOV_UK_LINK='https://www.gov.uk/'
+let HEADER='.govuk-heading-l'
+let REVIEW_HEADER='Reviews and follow-ups must be for the same species'
+let MINIMUM_LIVESTOCK_HEADER='Minimum number of livestock'
+let TIMING_AND_FUNDING='Timing of vet visits and funding claims'
+let REVIEW_AGREEMENT_OFFER='Review your agreement offer'
+let AGREEMENT_OFFER_REJECTED='Agreement offer rejected'
+let AHWR_HEADER='.govuk-header__content'
+let EXPECTED_AHWR_HEADER='Annual health and welfare review of livestock'
+let AHWR_URL='https://ffc-ahwr-farmer-dev.azure.defra.cloud/apply'
+
 class SelectBusinessPage extends CommonActions {
 
   async getHomePage(page) {
+   
     await this.open(page)
+
 
   }
   async clickOnStartButton() {
     try{  
+     
       const sleep = (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitTimeInMs))
       await sleep(5000)
       await this.clickOn(START_BUTTON)
@@ -139,14 +165,25 @@ console.log(error.message)
     await this.clickOn(CONTINUE_BUTTON)
   }
 
+
+  async acceptCookies() {
+  
+    await this.clickOn(COOKIES_ACCEPT)
+    await this.clickOn(COOKIES_HIDE)
+    
+  }
   // org review
   async singleUserBusinessDetail() {
+   
     const sleep = (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitTimeInMs))
-    await sleep(10000)
-    await this.elementTextShouldBe(CHECK_DETAILS, DETAILS)
+    await sleep(5000)
+   
+      await this.elementTextShouldBe(CHECK_DETAILS, DETAILS)
+       
   }
 
   async checkFarmerDetails() {
+    
     await this.elementToContainText(FARMER_DETAILS, CONTENT)
   }
 
@@ -292,15 +329,15 @@ console.log(error.message)
     } else if (business == 'Exception-SB-NCPH') {
       console.log(process.env.CRN_EXCEPTION_USERNAME)
       await this.inputValidCrn(process.env.CRN_EXCEPTION_USERNAME_NOCPH)
-      await this.inputPassword(process.env.CRN_PASSWORD)
+      await this.inputPassword(process.env.CRN_EXCEPTION_PASSWORD)
     } else if (business == 'Exception-MB-NP') {
       console.log(process.env.CRN_EXCEPTION_USERNAME)
       await this.inputValidCrn(process.env.CRN_EXCEPTION_USERNAME_MB_NP)
-      await this.inputPassword(process.env.CRN_PASSWORD)
+      await this.inputPassword(process.env.CRN_EXCEPTION_PASSWORD)
     } else if (business == 'Exception-MB-NCPH') {
       console.log(process.env.CRN_EXCEPTION_USERNAME)
       await this.inputValidCrn(process.env.CRN_EXCEPTION_USERNAME_MB_NOCPH)
-      await this.inputPassword(process.env.CRN_PASSWORD)
+      await this.inputPassword(process.env.CRN_EXCEPTION_PASSWORD)
     }
     await this.signInButton()
     await sleep(10000)
@@ -531,7 +568,7 @@ console.log(error.message)
     let query = `
   UPDATE public.application
   SET "createdAt" = $2,
-      "updatedAt" = '2023-09-19 13:46:04.3+00'
+      "updatedAt" = $2
   WHERE reference = $1;
 `;
 //AGREEMENT_NUMBER_VALUE='AHWR-8092-E593'
@@ -608,6 +645,69 @@ await this.closeBrowser()
           
         });
   }
+//endemics
+
+
+async click_Agree(){ 
+    await this.clickOn(ACCEPT_AGREEMENT)
+  }
+
+
+
+async validate_Review_Page(){
+  await this.elementToContainText(HEADER,REVIEW_HEADER)
+}
+
+async validate_minimum_livestock_header(){
+ await this.elementToContainText(HEADER,MINIMUM_LIVESTOCK_HEADER)
+}
+
+async validate_timing_and_funding(){
+ await this.elementToContainText(HEADER,TIMING_AND_FUNDING)
+}
+
+async validate_review_agreement_offer(){
+ await this.elementToContainText(HEADER, REVIEW_AGREEMENT_OFFER)
+}
+
+async validate_reject_agreement_offer(){
+ await this.elementToContainText(HEADER,AGREEMENT_OFFER_REJECTED)
+}
+async click_Back_Link(){
+  await this.clickOn(BACK)
+ }
+
+async clickGovUKPane(){
+  const sleep = (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitTimeInMs))
+    await sleep(5000)
+    const zoomPercentage1 = 100;
+   browser.execute((zoom) => {
+     document.body.style.zoom = `${zoom}%`;
+ }, zoomPercentage1);
+   // await this.clickOn(HIDE_COOKIES)
+  // await this.clickOn(SIGN_IN_BUTTON)
+  await this.clickOn(GOV_UK)
+  
+}
+
+async reject_Agreement(){
+ await this.clickOn(REJECT_APPLICATION) 
+}
+ 
+async urlValidation(){
+     await this.urlContain(GOV_UK_LINK)
+}
+
+async getHeaderText(){
+  await this.elementToContainText(AHWR_HEADER,EXPECTED_AHWR_HEADER)
+}
+async clickAHWR(){
+  await this.clickOn(AHWR_HEADER)
+}
+async urlValidationAHWR(){
+  await this.urlContain(AHWR_URL)
+}
+
 
 }
 module.exports = SelectBusinessPage

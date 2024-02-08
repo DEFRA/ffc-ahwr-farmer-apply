@@ -1,4 +1,4 @@
-@smoke
+@smoke11
 
 
 Feature: 10 month rule - In-Check - Multiple business
@@ -17,7 +17,7 @@ Feature: 10 month rule - In-Check - Multiple business
     Then user continue to next page
     Examples:
     |business|
-    |ASHLEY, D G & J M - SBI 106872259|
+    |Belport Beachampton Limited - SBI 200074310|
 
   Scenario Outline:user select the livestock to apply
     When user is on the livestock page
@@ -57,7 +57,7 @@ Feature: 10 month rule - In-Check - Multiple business
 
    Examples:
     |business|
-    |ASHLEY, D G & J M - SBI 106872259|   
+    |Belport Beachampton Limited - SBI 200074310|   
     
    Scenario Outline: Withdraw the agreed status
      Then agreement number is passed to <updatedate> 
@@ -79,7 +79,7 @@ Feature: 10 month rule - In-Check - Multiple business
     Then user continue to next page
     Examples:
     |business|
-    |ASHLEY, D G & J M - SBI 106872259|
+    |Belport Beachampton Limited - SBI 200074310|
 
   Scenario Outline:user select the livestock to apply
     When user is on the livestock page

@@ -2,7 +2,8 @@ const cheerio = require('cheerio')
 const expectPhaseBanner = require('../../../../utils/phase-banner-expect')
 const getCrumbs = require('../../../../utils/get-crumbs')
 const { endemicsCheckDetails, endemicsReviews } = require('../../../../../app/config/routes')
-
+const businessAppliedBeforeMock = require('../../../../../app/api-requests/business-applied-before')
+jest.mock('../../../../../app/api-requests/business-applied-before')
 const endemicsReviewsUrl = `/apply/${endemicsReviews}`
 
 describe('Org review page test', () => {
@@ -56,6 +57,7 @@ describe('Org review page test', () => {
     })
 
     test('returns 200', async () => {
+      businessAppliedBeforeMock.mockReturnValue('newUser')
       session.getFarmerApplyData.mockReturnValue(org)
       const options = {
         auth,

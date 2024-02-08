@@ -1,4 +1,4 @@
-@smoke
+@smoke11
 
 
 Feature: 10 month rule - Ready To Pay- Single business

@@ -1,4 +1,4 @@
-@smoke
+@smoke11
 Feature: select business
 
   Scenario: Apply with valid cred
@@ -8,18 +8,15 @@ Feature: select business
 
   Scenario: org-review page
     When user check the business details
-    When running accessbility tests
     And user confirm the org-review page
-     When running accessbility tests
     And user agreed the business details is correct
     Then user continue to next page
+    
 
   Scenario Outline: user select the livestock to apply
     When user is on the livestock page
     And user check if livestock are listed
-     When running accessbility tests
     And user choose <LiveStockName> cattle for review
-     When running accessbility tests
     Then User continue the application
     Examples:
       | LiveStockName |
@@ -30,15 +27,15 @@ Feature: select business
     And user confirm to meet the requirement
     Then the user continue the application
     And user check the answer
-     When running accessbility tests
+   
 
   Scenario: user accept terms and condition to complete the journey
     When user is on the declaration page
     When user view the page title
     And user read through the full terms and conditions
-    # And user accept the terms and conditions
-    # Then user complete the application
-    # Then user should see successful message
+    And user accept the terms and conditions
+    Then user complete the application
+    Then user should see successful message
 
     
 
