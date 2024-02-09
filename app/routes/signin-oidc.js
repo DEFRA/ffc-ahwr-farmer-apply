@@ -53,6 +53,7 @@ module.exports = [{
         const personSummary = await getPersonSummary(request, apimAccessToken)
         session.setCustomer(request, sessionKeys.customer.id, personSummary.id)
         const organisationSummary = await organisationIsEligible(request, personSummary.id, apimAccessToken)
+        setOrganisationSessionData(request, personSummary, { ...organisationSummary })
 
         if (organisationSummary.organisation.locked) {
           throw new LockedBusinessError(`Organisation id ${organisationSummary.organisation.id} is locked by RPA`)
@@ -64,7 +65,6 @@ module.exports = [{
 
         await cphCheck.customerMustHaveAtLeastOneValidCph(request, apimAccessToken)
         await businessEligibleToApply(organisationSummary.organisation.sbi)
-        setOrganisationSessionData(request, personSummary, { ...organisationSummary })
 
         auth.setAuthCookie(request, personSummary.email, farmerApply)
         appInsights.defaultClient.trackEvent({

@@ -1,6 +1,6 @@
 {
   "name": "ffc-ahwr-farmer-apply",
-  "version": "0.57.28",
+  "version": "0.57.29",
   "description": "Web frontend for the farmer apply journey",
   "homepage": "https://github.com/DEFRA/ffc-ahwr-farmer-apply",
   "main": "app/index.js",
@@ -49,7 +49,7 @@
     "nunjucks": "^3.2.3",
     "pg-promise": "^11.5.4",
     "uuid": "^8.3.2",
-    "webdriverio": "^8.16.12"
+    "webdriverio": "^8.13.13"
   },
   "overrides": {
     "notifications-node-client": {
