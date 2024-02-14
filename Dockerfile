@@ -14,7 +14,7 @@ EXPOSE ${PORT} ${PORT_DEBUG}
 
 COPY --chown=node:node --chmod=644 package*.json ./
 RUN npm install --ignore-scripts
-COPY --chown=node:node --chmod=644 . .
+COPY --chown=node:node . .
 RUN npm run build
 CMD [ "npm", "run", "start:watch" ]
 
@@ -22,6 +22,9 @@ CMD [ "npm", "run", "start:watch" ]
 FROM defradigital/node:${PARENT_VERSION} AS production
 ARG PARENT_VERSION
 LABEL uk.gov.defra.ffc.parent-image=defradigital/node:${PARENT_VERSION}
+
+USER node
+WORKDIR /home/node
 
 ARG PORT
 ENV PORT ${PORT}
