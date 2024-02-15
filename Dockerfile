@@ -13,7 +13,7 @@ ENV PORT ${PORT}
 EXPOSE ${PORT} ${PORT_DEBUG}
 
 COPY --chown=node:node package*.json ./
-RUN npm install
+RUN npm install --ignore-scripts
 COPY --chown=node:node . .
 RUN npm run build
 CMD [ "npm", "run", "start:watch" ]
@@ -29,5 +29,5 @@ EXPOSE ${PORT}
 
 COPY --from=development /home/node/app/ ./app/
 COPY --from=development /home/node/package*.json ./
-RUN npm ci
+RUN npm ci --ignore-scripts
 CMD [ "node", "app" ]
