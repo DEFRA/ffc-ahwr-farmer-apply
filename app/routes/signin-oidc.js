@@ -9,6 +9,7 @@ const businessEligibleToApply = require('../api-requests/business-eligible-to-ap
 const { InvalidPermissionsError, AlreadyAppliedError, NoEligibleCphError, InvalidStateError, CannotReapplyTimeLimitError, OutstandingAgreementError, LockedBusinessError } = require('../exceptions')
 const { raiseIneligibilityEvent } = require('../event')
 const appInsights = require('applicationinsights')
+const createReference = require('../lib/create-reference')
 
 function setOrganisationSessionData (request, personSummary, { organisation: org }) {
   const organisation = {
@@ -47,7 +48,11 @@ module.exports = [{
       }
     },
     handler: async (request, h) => {
+      let tempApplicationId
       try {
+        tempApplicationId = createReference()
+        // tempApplicationId added to reference to enable session event to report with temp id
+        session.setFarmerApplyData(request, sessionKeys.farmerApplyData.reference, tempApplicationId)
         await auth.authenticate(request, session)
         const apimAccessToken = await auth.retrieveApimAccessToken()
         const personSummary = await getPersonSummary(request, apimAccessToken)
@@ -70,6 +75,7 @@ module.exports = [{
         appInsights.defaultClient.trackEvent({
           name: 'login',
           properties: {
+            reference: tempApplicationId,
             sbi: organisationSummary.organisation.sbi,
             crn: session.getCustomer(request, sessionKeys.customer.crn),
             email: personSummary.email
@@ -83,18 +89,64 @@ module.exports = [{
         const crn = session.getCustomer(request, sessionKeys.customer.crn)
         switch (true) {
           case err instanceof InvalidStateError:
+            appInsights.defaultClient.trackEvent({
+              name: 'invalid-state-error',
+              properties: {
+                reference: tempApplicationId
+              }
+            })
             return h.redirect(auth.requestAuthorizationCodeUrl(session, request))
           case err instanceof AlreadyAppliedError:
+            appInsights.defaultClient.trackEvent({
+              name: 'already-applied-error',
+              properties: {
+                reference: tempApplicationId,
+                sbi: organisation.sbi,
+                crn: session.getCustomer(request, sessionKeys.customer.crn)
+              }
+            })
             break
           case err instanceof InvalidPermissionsError:
+            appInsights.defaultClient.trackEvent({
+              name: 'invalid-permission-error',
+              properties: {
+                reference: tempApplicationId,
+                sbi: organisation.sbi,
+                crn: session.getCustomer(request, sessionKeys.customer.crn)
+              }
+            })
             break
           case err instanceof LockedBusinessError:
             break
           case err instanceof NoEligibleCphError:
+            appInsights.defaultClient.trackEvent({
+              name: 'not-eligible-cph-error',
+              properties: {
+                reference: tempApplicationId,
+                sbi: organisation.sbi,
+                crn: session.getCustomer(request, sessionKeys.customer.crn)
+              }
+            })
             break
           case err instanceof CannotReapplyTimeLimitError:
+            appInsights.defaultClient.trackEvent({
+              name: 'can-not-reapply-error',
+              properties: {
+                reference: tempApplicationId,
+                sbi: organisation.sbi,
+                crn: session.getCustomer(request, sessionKeys.customer.crn)
+              }
+            })
             break
           case err instanceof OutstandingAgreementError:
+            appInsights.defaultClient.trackEvent({
+              name: 'outstanding-agreement-error',
+              properties: {
+                reference: tempApplicationId,
+                sbi: organisation.sbi,
+                crn: session.getCustomer(request, sessionKeys.customer.crn)
+              }
+            })
             break
           default:
             appInsights.defaultClient.trackException({ exception: err })
@@ -103,12 +155,13 @@ module.exports = [{
               ruralPaymentsAgency: config.ruralPaymentsAgency
             }).code(400).takeover()
         }
-        raiseIneligibilityEvent(
+        await raiseIneligibilityEvent(
           request.yar.id,
           organisation?.sbi,
           crn,
           organisation?.email,
-          err.name
+          err.name,
+          tempApplicationId
         )
 
         return h.view('cannot-apply-for-livestock-review-exception', {

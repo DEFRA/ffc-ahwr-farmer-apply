@@ -3,6 +3,7 @@ const Joi = require('joi')
 const getDeclarationData = require('./models/declaration')
 const session = require('../session')
 const { declaration, reference, offerStatus, organisation: organisationKey, customer: crn } = require('../session/keys').farmerApplyData
+const { tempReference } = require('../session/keys').tempReference
 const { sendApplication } = require('../messaging/application')
 const appInsights = require('applicationinsights')
 const config = require('../config/index')
@@ -17,7 +18,6 @@ module.exports = [{
         return boom.notFound()
       }
       const viewData = getDeclarationData(application)
-      session.setFarmerApplyData(request, reference, null)
       return h.view('declaration', { backLink: `${config.urlPrefix}/check-answers`, latestTermsAndConditionsUri: `${config.latestTermsAndConditionsUri}?continue=true&backLink=${config.urlPrefix}/declaration`, ...viewData })
     }
   }
@@ -41,30 +41,32 @@ module.exports = [{
       }
     },
     handler: async (request, h) => {
+      session.setFarmerApplyData(request, declaration, true)
+      session.setFarmerApplyData(request, offerStatus, request.payload.offerStatus)
+      const tempApplicationReference = session.getFarmerApplyData(request, reference)
       const application = session.getFarmerApplyData(request)
-      let applicationReference = application[reference]
-      if (!applicationReference) {
-        session.setFarmerApplyData(request, declaration, true)
-        session.setFarmerApplyData(request, offerStatus, request.payload.offerStatus)
+      application.reference = null // Set application ref to null instead of temp ref before sending it to store.
 
-        if (config.endemics.enabled) {
-          applicationReference = await sendApplication({ ...application, type: 'VV' }, request.yar.id)
-        } else {
-          applicationReference = await sendApplication(application, request.yar.id)
-        }
+      let newApplicationReference
+      if (config.endemics.enabled) {
+        newApplicationReference = await sendApplication({ ...application, type: 'VV' }, request.yar.id)
+      } else {
+        newApplicationReference = await sendApplication(application, request.yar.id)
+      }
 
-        if (applicationReference) {
-          session.setFarmerApplyData(request, reference, applicationReference)
-          const organisation = session.getFarmerApplyData(request, organisationKey)
-          appInsights.defaultClient.trackEvent({
-            name: 'agreement-created',
-            properties: {
-              reference: applicationReference,
-              sbi: organisation.sbi,
-              crn: session.getCustomer(request, crn)
-            }
-          })
-        }
+      if (newApplicationReference) {
+        const organisation = session.getFarmerApplyData(request, organisationKey)
+        session.setFarmerApplyData(request, reference, newApplicationReference)
+        session.setTempReference(request, tempReference, tempApplicationReference)
+        appInsights.defaultClient.trackEvent({
+          name: 'agreement-created',
+          properties: {
+            reference: newApplicationReference,
+            tempReference: tempApplicationReference,
+            sbi: organisation.sbi,
+            crn: session.getCustomer(request, crn)
+          }
+        })
       }
 
       session.clear(request)
@@ -74,7 +76,7 @@ module.exports = [{
         return h.view('offer-rejected', { ruralPaymentsAgency: config.ruralPaymentsAgency })
       }
 
-      if (!applicationReference) {
+      if (!newApplicationReference) {
         // TODO: this requires a designed error screen for this scenario
         // as opposed to the generic screen that this will redirect to.
         console.log('Apply declaration returned a null application reference.')
@@ -82,7 +84,7 @@ module.exports = [{
       }
 
       return h.view('confirmation', {
-        reference: applicationReference,
+        reference: newApplicationReference,
         ruralPaymentsAgency: config.ruralPaymentsAgency,
         applySurveyUri: config.customerSurvey.uri,
         latestTermsAndConditionsUri: config.latestTermsAndConditionsUri

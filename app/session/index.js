@@ -1,7 +1,6 @@
 const { sendSessionEvent } = require('../event')
 
 const entries = {
-  application: 'application',
   farmerApplyData: 'farmerApplyData',
   selectYourBusiness: 'selectYourBusiness',
   organisation: 'organisation',
@@ -9,6 +8,7 @@ const entries = {
   pkcecodes: 'pkcecodes',
   tokens: 'tokens',
   customer: 'customer',
+  tempReference: 'tempReference',
   type: 'type' // EM or VV
 }
 
@@ -27,9 +27,10 @@ function set (request, entryKey, key, value) {
   entryValue[key] = typeof (value) === 'string' ? value.trim() : value
   request.yar.set(entryKey, entryValue)
   const organisation = getFarmerApplyData(request, entries.organisation)
+  const reference = getFarmerApplyData(request, 'reference')
   const xForwardedForHeader = request.headers['x-forwarded-for']
   const ip = xForwardedForHeader ? xForwardedForHeader.split(',')[0] : request.info.remoteAddress
-  sendSessionEvent(organisation, request.yar.id, entryKey, key, value, ip)
+  sendSessionEvent(organisation, request.yar.id, entryKey, key, value, ip, reference)
 }
 
 function get (request, entryKey, key) {
@@ -38,15 +39,10 @@ function get (request, entryKey, key) {
 
 function clear (request) {
   request.yar.clear(entries.farmerApplyData)
-  request.yar.clear(entries.application)
   request.yar.clear(entries.organisation)
   request.yar.clear(entries.answers)
   request.yar.clear(entries.selectYourBusiness)
   request.yar.clear(entries.customer)
-}
-
-function setApplication (request, key, value) {
-  set(request, entries.application, key, value)
 }
 
 function setFarmerApplyData (request, key, value) {
@@ -59,10 +55,6 @@ function setSelectYourBusiness (request, key, value) {
 
 function getSelectYourBusiness (request, key) {
   return get(request, entries.selectYourBusiness, key)
-}
-
-function getApplication (request, key) {
-  return get(request, entries.application, key)
 }
 
 function getFarmerApplyData (request, key) {
@@ -93,13 +85,15 @@ const getCustomer = (request, key) => {
   return get(request, entries.customer, key)
 }
 
+const setTempReference = (request, key, value) => {
+  set(request, entries.tempReference, key, value)
+}
+
 module.exports = {
   entries,
   lacksAny,
   clear,
-  getApplication,
   getFarmerApplyData,
-  setApplication,
   setFarmerApplyData,
   getSelectYourBusiness,
   setSelectYourBusiness,
@@ -108,5 +102,6 @@ module.exports = {
   getPkcecodes,
   setPkcecodes,
   setCustomer,
-  getCustomer
+  getCustomer,
+  setTempReference
 }

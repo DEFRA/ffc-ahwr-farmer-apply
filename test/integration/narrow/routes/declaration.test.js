@@ -1,7 +1,7 @@
 const cheerio = require('cheerio')
 const getCrumbs = require('../../../utils/get-crumbs')
 const expectPhaseBanner = require('../../../utils/phase-banner-expect')
-const { farmerApplyData: { declaration } } = require('../../../../app/session/keys')
+const { farmerApplyData: { declaration, offerStatus, reference } } = require('../../../../app/session/keys')
 const species = require('../../../../app/constants/species')
 const states = require('../../../../app/constants/states')
 
@@ -20,6 +20,7 @@ function expectPageContentOk ($, organisation) {
   expect($('#organisation-sbi').text()).toEqual(organisation.sbi)
 }
 
+// TODO: More tests needed
 describe('Declaration test', () => {
   const organisation = { id: 'organisation', name: 'org-name', address: 'org-address', sbi: '0123456789' }
   const auth = { credentials: { reference: '1111', sbi: '111111111' }, strategy: 'cookie' }
@@ -143,8 +144,9 @@ describe('Declaration test', () => {
       expect(sessionMock.clear).toBeCalledTimes(1)
       expect(sessionMock.setFarmerApplyData).toHaveBeenCalledTimes(3)
       expect(sessionMock.setFarmerApplyData).toHaveBeenNthCalledWith(1, res.request, declaration, true)
-      expect(sessionMock.getFarmerApplyData).toHaveBeenCalledTimes(2)
-      expect(sessionMock.getFarmerApplyData).toHaveBeenCalledWith(res.request)
+      expect(sessionMock.setFarmerApplyData).toHaveBeenNthCalledWith(2, res.request, offerStatus, 'accepted')
+      expect(sessionMock.setFarmerApplyData).toHaveBeenNthCalledWith(3, res.request, reference, 'abc123')
+      expect(sessionMock.setTempReference).toHaveBeenCalledTimes(1)
       expect(messagingMock.sendMessage).toHaveBeenCalledTimes(1)
     })
 
@@ -156,7 +158,7 @@ describe('Declaration test', () => {
     ])('returns 200, caches data and sends message for rejected request for $whichReview', async ({ whichReview }) => {
       const application = { whichReview, organisation }
       sessionMock.getFarmerApplyData.mockReturnValue(application)
-      messagingMock.receiveMessage.mockResolvedValueOnce({ applicationReference: 'abc123' })
+      messagingMock.receiveMessage.mockResolvedValueOnce({ applicationReference: '' })
       const crumb = await getCrumbs(global.__SERVER__)
       const options = {
         method: 'POST',
@@ -174,38 +176,11 @@ describe('Declaration test', () => {
       expect($('title').text()).toEqual(config.serviceName)
       expectPhaseBanner.ok($)
       expect(sessionMock.clear).toBeCalledTimes(1)
-      expect(sessionMock.setFarmerApplyData).toHaveBeenCalledTimes(3)
+      expect(sessionMock.setFarmerApplyData).toHaveBeenCalledTimes(2)
       expect(sessionMock.setFarmerApplyData).toHaveBeenNthCalledWith(1, res.request, declaration, true)
-      expect(sessionMock.getFarmerApplyData).toHaveBeenCalledTimes(2)
-      expect(sessionMock.getFarmerApplyData).toHaveBeenCalledWith(res.request)
+      expect(sessionMock.setFarmerApplyData).toHaveBeenNthCalledWith(2, res.request, offerStatus, 'rejected')
       expect(messagingMock.sendMessage).toHaveBeenCalledTimes(1)
-    })
-
-    test('returns 200, checks cached data for a reference to prevent reference recreation', async () => {
-      const whichReview = species.beef
-      const reference = 'abc123'
-      const application = { whichReview, organisation, reference }
-      sessionMock.getFarmerApplyData.mockReturnValue(application)
-      messagingMock.receiveMessage.mockResolvedValueOnce({ applicationReference: 'abc123' })
-      const crumb = await getCrumbs(global.__SERVER__)
-      const options = {
-        method: 'POST',
-        url,
-        payload: { crumb, terms: 'agree', offerStatus: 'accepted' },
-        auth,
-        headers: { cookie: `crumb=${crumb}` }
-      }
-
-      const res = await global.__SERVER__.inject(options)
-
-      expect(res.statusCode).toBe(200)
-      const $ = cheerio.load(res.payload)
-      expect($('h1').text()).toMatch('Application complete')
-      expect($('title').text()).toEqual(`Application complete - ${config.serviceName}`)
-      expectPhaseBanner.ok($)
-      expect(sessionMock.getFarmerApplyData).toHaveBeenCalledTimes(1)
-      expect(sessionMock.setFarmerApplyData).toHaveBeenCalledTimes(0)
-      expect(messagingMock.sendMessage).toHaveBeenCalledTimes(0)
+      expect(sessionMock.setTempReference).not.toHaveBeenCalled()
     })
 
     test.each([
@@ -269,7 +244,7 @@ describe('Declaration test', () => {
     })
   })
 
-  test('returns 500 when application reference is null', async () => {
+  test('returns 500 when returned application reference is null', async () => {
     const application = { whichReview: species.beef, organisation }
     sessionMock.getFarmerApplyData.mockReturnValue(application)
     messagingMock.receiveMessage.mockResolvedValueOnce({ applicationReference: null })
