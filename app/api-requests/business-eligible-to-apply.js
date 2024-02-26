@@ -57,18 +57,20 @@ function timeLimitDates (latestApplication) {
   const start = new Date(latestApplication.createdAt)
   const end = new Date(start)
   end.setMonth(end.getMonth() + config.reapplyTimeLimitMonths)
-  end.setHours(24, 0, 0, 0) // set to midnight of agreement end day
+  end.setHours(23, 59, 59, 999) // set to midnight of agreement end day
   return { startDate: start, endDate: end }
 }
 
 function timeLimitRule (latestApplication, dates) {
   const { startDate, endDate } = dates
+  // Set re-application date to day after current application ends
+  const nextApplicationDate = new Date(endDate.setDate(endDate.getDate() + 1))
   console.log(`Checking if agreement with reference ${latestApplication.reference}, start date of ${startDate} and end date of ${endDate} has exceeded the application reapply wait time of ${config.reapplyTimeLimitMonths} months.`)
-  if (Date.now() < endDate) {
+  if (Date.now() <= endDate) {
     console.log(`${new Date().toISOString()} Business is not eligible to apply due to ${config.reapplyTimeLimitMonths} month restrictions: ${JSON.stringify({
       sbi: latestApplication.data.organisation.sbi
     })}`)
-    throw new CannotReapplyTimeLimitError(`Business with SBI ${latestApplication.data.organisation.sbi} is not eligible to apply due to ${config.reapplyTimeLimitMonths} month restrictions since the last agreement.`, formatDate(startDate), formatDate(endDate))
+    throw new CannotReapplyTimeLimitError(`Business with SBI ${latestApplication.data.organisation.sbi} is not eligible to apply due to ${config.reapplyTimeLimitMonths} month restrictions since the last agreement.`, formatDate(startDate), formatDate(nextApplicationDate))
   }
 }
 
