@@ -10,7 +10,7 @@ console.log(`Running webpack in ${isDev ? 'development' : 'production'} mode`)
 
 module.exports = {
   entry: './app/frontend/src/entry.js',
-  mode: 'production', 
+  mode:  isDev ? 'development' : 'production',
   module: {
     rules: [
       {
