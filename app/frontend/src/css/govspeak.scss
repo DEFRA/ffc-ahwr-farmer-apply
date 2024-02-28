@@ -1,6 +1,12 @@
 .govspeak .attachment .attachment-thumb svg {
     fill: #b1b4b6;
     stroke: #b1b4b6;
+    display: block;
+    width: 99px;
+    height: 140px;
+    background: #fff;
+    outline: 5px solid rgba(11, 12, 12, 0.1);
+    box-shadow: 0 2px 2px rgba(11, 12, 12, 0.4);
 }
 
 .govspeak .attachment {
@@ -17,15 +23,6 @@
     padding-bottom: 15px;
 }
   
-.govspeak .attachment .attachment-thumb svg {
-    display: block;
-    width: 99px;
-    height: 140px;
-    background: #fff;
-    outline: 5px solid rgba(11, 12, 12, 0.1);
-    box-shadow: 0 2px 2px rgba(11, 12, 12, 0.4);
-}
-
 .gem-c-govspeak .attachment .attachment-details h3 {
   font-family: "nta", arial, sans-serif;
   -webkit-font-smoothing: antialiased;
