@@ -1,0 +1,89 @@
+.app-c-brexit-notice__link,
+.gem-c-contextual-sidebar__brexit-cta .gem-c-contextual-sidebar__brexit-text,
+.gem-c-notice__title a,
+.gem-c-pagination__link,
+.gem-c-related-navigation__section-link,
+.gem-c-share-links__link,
+.gem-c-step-nav-related__link,
+.gem-c-subscription-links__item,
+.gem-c-translation-nav__link,
+.govuk-link {
+  font-family: "nta",arial,sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.gem-c-related-navigation {
+  color: #0b0c0c;
+  border-top: 2px solid #1d70b8;
+}
+
+.gem-c-step-nav__steps {
+  padding: 0;
+  margin: 0;
+}
+
+.gem-c-govspeak .steps {
+  padding-left: 0;
+  margin-left: 0;
+  overflow: hidden;
+}
+
+.gem-c-govspeak .steps>li {
+  background-position: 0 0.87em;
+  background-repeat: no-repeat;
+  list-style-type: decimal;
+  margin-left: 0;
+  padding: 0.75em 0 0.0em 2.5em;
+}
+
+.gem-c-govspeak .steps>li:nth-child(1) {
+  background-image: url("../images/one.svg");
+  background-repeat: no-repeat;
+  background-position: 0.2em 0.7em;
+  background-size: 1.4em 1.4em;
+}
+
+.gem-c-govspeak .steps>li:nth-child(2) {
+  background-image: url("../images/two.svg");
+  background-repeat: no-repeat;
+  background-position: 0.2em 0.7em;
+  background-size: 1.4em 1.4em;
+}
+
+
+
+.gem-c-govspeak .steps>li:nth-child(3) {
+  background-image: url("../images/three.svg");
+  background-repeat: no-repeat;
+  background-position: 0.2em 0.7em;
+  background-size: 1.4em 1.4em;
+}
+
+.gem-c-govspeak .steps>li:nth-child(4) {
+  background-image: url("../images/four.svg");
+  background-repeat: no-repeat;
+  background-position: 0.2em 0.7em;
+  background-size: 1.4em 1.4em;
+}
+
+.gem-c-govspeak .steps>li:nth-child(5) {
+  background-image: url("../images/five.svg");
+  background-repeat: no-repeat;
+  background-position: 0.2em 0.7em;
+  background-size: 1.4em 1.4em;
+}
+
+.gem-c-govspeak .steps>li:nth-child(6) {
+  background-image: url("../images/six.svg");
+  background-repeat: no-repeat;
+  background-position: 0.2em 0.7em;
+  background-size: 1.4em 1.4em;
+}
+
+.gem-c-govspeak .steps>li:nth-child(7) {
+  background-image: url("../images/seven.svg");
+  background-repeat: no-repeat;
+  background-position: 0.2em 0.7em;
+  background-size: 1.4em 1.4em;
+}
