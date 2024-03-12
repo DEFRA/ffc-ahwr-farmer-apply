@@ -5,5 +5,6 @@ module.exports = {
   endemicsTimings: 'endemics/timings',
   endemicsDeclaration: 'endemics/declaration',
   endemicsConfirmation: 'endemics/confirmation',
-  endemicsOfferRejected: 'endemics/offer-rejected'
+  endemicsOfferRejected: 'endemics/offer-rejected',
+  endemicsGuidanceForFarmers: 'endemics/apply-guidance-for-farmers'
 }
