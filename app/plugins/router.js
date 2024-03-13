@@ -27,7 +27,8 @@ if (config.endemics.enabled) {
     require('../routes/endemics/reviews'),
     require('../routes/endemics/declaration'),
     require('../routes/endemics/check-details'),
-    require('../routes/endemics/timings')
+    require('../routes/endemics/timings'),
+    require('../routes/endemics/apply-guidance-for-farmers')
   )
 }
 
