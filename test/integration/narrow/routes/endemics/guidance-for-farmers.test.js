@@ -31,7 +31,6 @@ describe('Farmer apply guidance page test', () => {
     const $ = cheerio.load(res.payload)
     expect($('.gem-c-devolved-nations > h2').text().trim()).toEqual('Applies to England')
     expect($('.gem-c-related-navigation > .govuk-heading-s').text().trim()).toEqual('Related content')
-    expect($('.gem-c-related-navigation > .govuk-heading-s').text().trim()).toEqual('Related content')
     expect($('#what-the-review-is').text().trim()).toEqual('What the service is')
     expect($('.gem-c-print-link > button').first().text().trim()).toEqual('Print this page')
     expect($('#check-youre-eligible-to-apply').text().trim()).toEqual('How much funding you could get')
