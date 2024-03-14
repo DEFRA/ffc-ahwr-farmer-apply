@@ -26,7 +26,7 @@ async function sendApplication (application, sessionId) {
     // throws an error in the above function
     return
   }
-  
+
   return response?.applicationReference
 }
 
