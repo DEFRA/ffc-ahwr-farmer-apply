@@ -124,7 +124,7 @@ describe('Declaration test', () => {
     ])('returns 200, caches data and sends message for valid request for $whichReview', async ({ whichReview }) => {
       const application = { whichReview, organisation }
       sessionMock.getFarmerApplyData.mockReturnValue(application)
-      messagingMock.receiveMessage.mockResolvedValueOnce({ applicationReference: 'abc123' })
+      messagingMock.receiveMessage.mockResolvedValueOnce({ applicationReference: 'abc123', applicationState: states.submitted })
       const crumb = await getCrumbs(global.__SERVER__)
       const options = {
         method: 'POST',

@@ -115,7 +115,7 @@ describe('Declaration test', () => {
     test('returns 200, caches data and sends message for valid request', async () => {
       const application = { organisation }
       sessionMock.getFarmerApplyData.mockReturnValue(application)
-      messagingMock.receiveMessage.mockResolvedValueOnce({ applicationReference: 'abc123' })
+      messagingMock.receiveMessage.mockResolvedValueOnce({ applicationReference: 'abc123', applicationState: states.submitted })
       const crumb = await getCrumbs(global.__SERVER__)
       const options = {
         method: 'POST',
@@ -143,7 +143,7 @@ describe('Declaration test', () => {
     test('returns 200, shows offer rejection content on rejection', async () => {
       const application = { organisation }
       sessionMock.getFarmerApplyData.mockReturnValue(application)
-      messagingMock.receiveMessage.mockResolvedValueOnce({ applicationReference: 'abc123' })
+      messagingMock.receiveMessage.mockResolvedValueOnce({ applicationReference: 'abc123', applicationState: states.submitted })
       const crumb = await getCrumbs(global.__SERVER__)
       const options = {
         method: 'POST',
@@ -171,7 +171,7 @@ describe('Declaration test', () => {
       const reference = 'abc123'
       const application = { organisation, reference }
       sessionMock.getFarmerApplyData.mockReturnValue(application)
-      messagingMock.receiveMessage.mockResolvedValueOnce({ applicationReference: 'abc123' })
+      messagingMock.receiveMessage.mockResolvedValueOnce({ applicationReference: 'abc123', applicationState: states.submitted })
       const crumb = await getCrumbs(global.__SERVER__)
       const options = {
         method: 'POST',
@@ -198,7 +198,7 @@ describe('Declaration test', () => {
       const reference = 'abc123'
       const application = { organisation: { ...organisation, userType: userType.EXISTING_USER }, reference }
       sessionMock.getFarmerApplyData.mockReturnValue(application)
-      messagingMock.receiveMessage.mockResolvedValueOnce({ applicationReference: 'abc123' })
+      messagingMock.receiveMessage.mockResolvedValueOnce({ applicationReference: 'abc123', applicationState: states.submitted })
       const crumb = await getCrumbs(global.__SERVER__)
       const options = {
         method: 'POST',

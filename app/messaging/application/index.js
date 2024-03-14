@@ -1,4 +1,5 @@
 const { sendMessage, receiveMessage } = require('../')
+const states = require('../../constants/states')
 const { applicationRequestQueue, applicationRequestMsgType, fetchApplicationRequestMsgType, applicationResponseQueue } = require('../../config').mqConfig
 
 async function getApplication (applicationReference, sessionId) {
@@ -22,7 +23,7 @@ async function sendApplication (application, sessionId) {
 
   console.log(`Received response ${JSON.stringify(response)} from queue ${applicationResponseQueue.address} for sessionID ${sessionId} with state ${response?.applicationState}.`)
 
-  if (response?.applicationState !== 'submitted') {
+  if (response?.applicationState !== states.submitted) {
     // throws an error in the above function
     return
   }
