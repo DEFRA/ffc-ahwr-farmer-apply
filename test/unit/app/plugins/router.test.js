@@ -109,6 +109,7 @@ describe('routes plugin test', () => {
       '/apply/endemics/reviews',
       '/apply/endemics/start',
       '/apply/endemics/timings',
+      '/apply/endemics/vet-visit-guidance',
       '/apply/terms/endemics',
       '/apply/terms/v1',
       '/apply/terms/v2',
