@@ -8,7 +8,7 @@
 .gem-c-subscription-links__item,
 .gem-c-translation-nav__link,
 .govuk-link {
-  font-family: "nta",arial,sans-serif;
+  font-family: "nta", arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -86,4 +86,12 @@
   background-repeat: no-repeat;
   background-position: 0.2em 0.7em;
   background-size: 1.4em 1.4em;
+}
+
+.address,
+.contact {
+  border-left: 1px solid #b1b4b6;
+  padding-left: 15px;
+  margin-bottom: 30px;
+  margin-top: 30px;
 }
