@@ -7,5 +7,6 @@ module.exports = {
   endemicsConfirmation: 'endemics/confirmation',
   endemicsOfferRejected: 'endemics/offer-rejected',
   endemicsGuidanceForFarmers: 'endemics/apply-guidance-for-farmers',
-  endemicsGuidanceVetVisit: 'endemics/vet-visit-guidance'
+  endemicsGuidanceVetVisit: 'endemics/vet-visit-guidance',
+  endemicsClaimGuidance: 'endemics/claim-guidance'
 }

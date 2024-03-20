@@ -50,12 +50,12 @@ module.exports = [{
       }
     },
     handler: async (request, h) => {
+      session.setFarmerApplyData(request, declaration, true)
+      session.setFarmerApplyData(request, offerStatus, request.payload.offerStatus)
       const application = session.getFarmerApplyData(request)
       let applicationReference = application[reference]
       if (!applicationReference) {
         console.log('APPLICATION:', application)
-        session.setFarmerApplyData(request, declaration, true)
-        session.setFarmerApplyData(request, offerStatus, request.payload.offerStatus)
         applicationReference = await sendApplication({ ...application, type: applicationType.ENDEMICS }, request.yar.id)
 
         if (applicationReference) {

@@ -190,7 +190,7 @@ describe('Declaration test', () => {
       expect($('h2').text()).toContain('What you need to do next')
       expectPhaseBanner.ok($)
       expect(sessionMock.getFarmerApplyData).toHaveBeenCalledTimes(1)
-      expect(sessionMock.setFarmerApplyData).toHaveBeenCalledTimes(0)
+      expect(sessionMock.setFarmerApplyData).toHaveBeenCalledTimes(2)
       expect(messagingMock.sendMessage).toHaveBeenCalledTimes(0)
     })
 
@@ -217,7 +217,7 @@ describe('Declaration test', () => {
       expect($('h2').text()).toContain('We recommend you arrange a funded follow-up by following these steps')
       expectPhaseBanner.ok($)
       expect(sessionMock.getFarmerApplyData).toHaveBeenCalledTimes(1)
-      expect(sessionMock.setFarmerApplyData).toHaveBeenCalledTimes(0)
+      expect(sessionMock.setFarmerApplyData).toHaveBeenCalledTimes(2)
       expect(messagingMock.sendMessage).toHaveBeenCalledTimes(0)
     })
 
