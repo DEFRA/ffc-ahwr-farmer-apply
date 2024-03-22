@@ -17,6 +17,7 @@ function setOrganisationSessionData (request, personSummary, { organisation: org
     farmerName: getPersonName(personSummary),
     name: org.name,
     email: personSummary.email ? personSummary.email : org.email,
+    orgEmail: org.email,
     address: getOrganisationAddress(org.address)
   }
   session.setFarmerApplyData(
