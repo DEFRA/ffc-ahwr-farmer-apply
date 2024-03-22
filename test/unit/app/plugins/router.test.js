@@ -104,6 +104,7 @@ describe('routes plugin test', () => {
       '/apply/assets/{path*}',
       '/apply/endemics/apply-guidance-for-farmers',
       '/apply/endemics/check-details',
+      '/apply/endemics/claim-guidance',
       '/apply/endemics/declaration',
       '/apply/endemics/numbers',
       '/apply/endemics/reviews',

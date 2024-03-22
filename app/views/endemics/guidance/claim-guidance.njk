@@ -1,0 +1,128 @@
+{% extends './layouts/layout.njk' %}
+
+{% block pageTitle %}Guidance for farmers - {{ serviceName }}{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <div class="gem-c-title govuk-!-margin-top-8 govuk-!-margin-bottom-8">
+        <span class="govuk-caption-xl gem-c-title__context">Guidance</span>
+        <h1 class="govuk-heading-l">How to claim funding to improve the health and welfare of your livestock</h1>
+      </div>
+    </div>
+    <div class="govuk-grid-column-two-thirds">
+      <p class="govuk-body-l">Find out when you can claim, what you'll need and how to claim.</p>
+    </div>
+  </div>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible govuk-!-margin-bottom-0">
+  <div class="govuk-grid-row">
+    <div class="metadata-logo-wrapper">
+      <div class="govuk-grid-column-two-thirds metadata-column">
+        <div class="gem-c-metadata" data-module="gem-toggle metadata" data-gem-toggle-module-started="true" data-metadata-module-started="true">
+          <dl class="gem-c-metadata__list" data-module="gem-track-click" data-gem-track-click-module-started="true">
+            <hr class="govuk-section-break govuk-section-break--m">
+            <p class="govuk-body-s">From: <a class="govuk-link govuk-!-font-weight-bold" href="https://www.gov.uk/government/organisations/department-for-environment-food-rural-affairs">Department for Environment, Food &amp; Rural Affairs</a> and <a class="govuk-link govuk-!-font-weight-bold" href="https://www.gov.uk/government/organisations/rural-payments-agency">Rural Payments Agency</a>
+            </p>
+            <dd class="gem-c-metadata__definition"></dd>
+          </dl>
+        </div>
+      </div>
+      <div class="govuk-grid-column-one-third"></div>
+    </div>
+  </div>
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds govuk-!-margin-top-7">
+      <section class="gem-c-devolved-nations govuk-!-margin-bottom-2">
+        <h2 class="govuk-heading-s govuk-!-margin-bottom-0">Applies to England </h2>
+      </section>
+      <div id="contents" class="app-c-contents-list-with-body" data-module="sticky-element-container" data-sticky-element-container-module-started="true">
+        <div class="responsive-bottom-margin">
+          <nav data-module="gem-track-click" aria-label="Contents" class="gem-c-contents-list" role="navigation" data-gem-track-click-module-started="true">
+            <h2 class="gem-c-contents-list__title">Contents</h2>
+            <ol class="gem-c-contents-list__list">
+              <li class="gem-c-contents-list__list-item gem-c-contents-list__list-item--dashed">
+                <a class="gem-c-contents-list__link govuk-link govuk-link--no-underline" href="#when-to-claim">When to claim</a>
+              </li>
+              <li class="gem-c-contents-list__list-item gem-c-contents-list__list-item--dashed">
+                <a class="gem-c-contents-list__link govuk-link govuk-link--no-underline" href="#what-information-youll-need-to-claim">What information you’ll need to provide<a>
+              </li>
+              <li class="gem-c-contents-list__list-item gem-c-contents-list__list-item--dashed">
+                <a class="gem-c-contents-list__link govuk-link govuk-link--no-underline" href="#claim-funding">Claim funding</a>
+              </li>
+              <li class="gem-c-contents-list__list-item gem-c-contents-list__list-item--dashed">
+                <a class="gem-c-contents-list__link govuk-link govuk-link--no-underline"  data-track-label="#get-help-with-your-claim"  href="#get-help-with-your-claim">Get help with your claim</a>
+              </li>
+            </ol>
+          </nav>
+        </div>
+        <div class="gem-c-print-link govuk-!-display-none-print govuk-!-margin-top-3 govuk-!-margin-bottom-3">
+          <button onclick="window.print()" class="govuk-link govuk-body-s gem-c-print-link__button">Print this page</button>
+        </div>
+        <div class="gem-c-govspeak govuk-govspeak " data-module="govspeak" data-govspeak-module-started="true">
+          <div class="govspeak">
+            <h2 id="when-to-claim" class="govuk-heading-m">When to claim</h2>
+            <p>You can claim funding after the vet has visited your farm to do a livestock health and welfare review or endemic disease follow-up. You’ll need a written report and review summary from the vet.</p>
+            <p>You can claim for reviews and follow-ups until:</p>
+            <ul class="govuk-list govuk-list--bullet">
+              <li>[date] for cattle</li>
+              <li>[date] for pigs</li>
+              <li>[date] for sheep</li>
+            </ul>
+            <p>You cannot claim for a follow-up until you’ve claimed for the review that happened before it. <a href="#">You must have followed the guidance on timing of visits.</a></p>
+            <h2 id="what-information-youll-need-to-claim" class="govuk-heading-m govuk-!-margin-top-3">Information you’ll need to provide</h2>
+            <p>When you claim you’ll need to give <a href="#">details of the visit and testing from the vet’s summary.</a></p>
+            <h2 id="claim-funding" class="govuk-heading-m govuk-!-margin-top-3">Claim funding</h2>
+            <p><a href="#">details of the visit and testing from the vet’s summary.</a></p>
+            <h2 id="get-help-with-your-claim" class="govuk-heading-m">Get help with your claim</h2>
+            <p>Contact the Rural Payments Agency (RPA) if you cannot claim online or have a question about your claim. Have your agreement number ready if you have one.</p>
+            <div class="govuk-inset-text">
+            <p class="govuk-body">Rural Payments Agency<br>
+            PO Box 352<br>
+            Worksop<br>
+            S80 9FG<br>
+            </p>
+
+            {{ rpaContactDetails({email: ruralPaymentsAgency.email, callChargesUri: ruralPaymentsAgency.callChargesUri, telephone: ruralPaymentsAgency.telephone}) }}
+          </div>
+          </div>
+        </div>
+        <div data-sticky-element="" class="app-c-contents-list-with-body__link-wrapper sticky-element--stuck-to-window sticky-element--enabled sticky-element--hidden">
+        </div>
+      </div>
+    </div>
+
+    <div class="govuk-grid-column-one-third govuk-!-margin-top-7">
+      <div class="gem-c-contextual-sidebar">
+        <div class="gem-c-related-navigation" data-module="gem-track-click ga4-link-tracker" data-gem-track-click-module-started="true" data-ga4-link-tracker-module-started="true">
+          <h2 class="govuk-heading-s govuk-!-margin-top-3" data-track-count="sidebarRelatedItemSection">Related content</h2>
+          <nav role="navigation" class="gem-c-related-navigation__nav-section govuk-!-margin-bottom-3" aria-labelledby="related-nav-related_items-da209313" data-module="gem-toggle" data-gem-toggle-module-started="true">
+            <ul class="gem-c-contents-list__list govuk-list govuk-list--spaced govuk-!-margin-top-3">
+              <li>
+                <a class="govuk-link"  href="#">How to apply for livestock health and welfare review and endemic disease follow-ups</a>
+              </li>
+              <li>
+                <a class="govuk-link" href="#">What happens on a livestock health and welfare review or endemic disease follow-up</a>
+              </li>
+              <li>
+                <a class="govuk-link" href="#">Vet guidance</a>
+              </li>
+              <li>
+                <a class="govuk-link"  href="#">Animal Health and Welfare Pathway</a>
+              </li>
+            </ul>
+          </nav>
+          <hr class="govuk-section-break govuk-section-break--s govuk-section-break--visible govuk-!-margin-top-6">
+          <nav role="navigation" class="gem-c-related-navigation__nav-section" aria-labelledby="related-nav-collections-da209313" data-module="gem-toggle" data-gem-toggle-module-started="true">
+            <h3 id="related-nav-collections-da209313" class="gem-c-contents-list__title govuk-!-margin-top-3" data-track-count="sidebarRelatedItemSection">Collection</h3>
+            <ul class="gem-c-contents-list__list govuk-list govuk-list--spaced govuk-!-margin-top-3">
+              <li class="gem-c-related-navigation__link">
+                <a class="govuk-link govuk-link gem-c-related-navigation__section-link govuk-link gem-c-related-navigation__section-link--sidebar" href="#" >[scheme name] guidance</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

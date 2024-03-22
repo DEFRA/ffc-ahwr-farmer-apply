@@ -16,7 +16,8 @@ describe('Org review page test', () => {
     cph: '11/222/3333',
     email: 'org@test.com',
     name: 'org-name',
-    sbi: '123456789'
+    sbi: '123456789',
+    orgEmail: 'mrssallypluckc@kculpyllassrmz.com.test'
   }
   describe(`GET ${url} route when logged in`, () => {
     beforeAll(async () => {
@@ -74,6 +75,10 @@ describe('Org review page test', () => {
       expect(values.eq(2).text()).toMatch(org.sbi)
       expect(keys.eq(3).text()).toMatch('Address')
       expect(values.eq(3).text()).toMatch(org.address)
+      expect(keys.eq(4).text()).toMatch('Organisation email address')
+      expect(values.eq(4).text()).toMatch(org.orgEmail)
+      expect(keys.eq(5).text()).toMatch('User Email address')
+      expect(values.eq(5).text()).toMatch(org.email)
       expect($('title').text()).toEqual('Check your details - Annual health and welfare review of livestock')
       expect($('.govuk-back-link').attr('href')).toContain('https://somedefraidlogin')
       expect($('legend').text().trim()).toEqual('Are your details correct?')
