@@ -18,7 +18,9 @@ const getOrganisation = (request, organisation, errorText) => {
     {
       key: { text: 'Address' },
       value: { html: formatAddressForDisplay(organisation) }
-    }
+    },
+    { key: { text: 'Organisation email address' }, value: { text: organisation.orgEmail } },
+    { key: { text: 'User email address' }, value: { text: organisation.email } }
   ]
   return {
     backLink: {
