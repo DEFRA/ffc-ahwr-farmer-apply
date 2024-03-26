@@ -77,7 +77,7 @@ describe('Org review page test', () => {
       expect(values.eq(3).text()).toMatch(org.address)
       expect(keys.eq(4).text()).toMatch('Organisation email address')
       expect(values.eq(4).text()).toMatch(org.orgEmail)
-      expect(keys.eq(5).text()).toMatch('User Email address')
+      expect(keys.eq(5).text()).toMatch('User email address')
       expect(values.eq(5).text()).toMatch(org.email)
       expect($('title').text()).toEqual('Check your details - Annual health and welfare review of livestock')
       expect($('.govuk-back-link').attr('href')).toContain('https://somedefraidlogin')
