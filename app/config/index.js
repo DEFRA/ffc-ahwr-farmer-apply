@@ -44,7 +44,7 @@ const schema = Joi.object({
   serviceUri: Joi.string().uri(),
   claimServiceUri: Joi.string().uri(),
   dashboardServiceUri: Joi.string().uri(),
-  serviceName: Joi.string().default('Annual health and welfare review of livestock'),
+  serviceName: Joi.string().default(process.env.ENDEMICS_ENABLED ? 'Get funding to improve animal health and welfare' : 'Annual health and welfare review of livestock'),
   useRedis: Joi.boolean().default(false),
   urlPrefix: Joi.string().default(urlPrefix),
   ruralPaymentsAgency: {

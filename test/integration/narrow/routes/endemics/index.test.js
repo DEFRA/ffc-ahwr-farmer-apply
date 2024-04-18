@@ -1,5 +1,6 @@
 const cheerio = require('cheerio')
 const expectPhaseBanner = require('../../../../utils/phase-banner-expect')
+const config = require('../../../../../app/config')
 
 describe('Farmer apply home page test', () => {
   jest.mock('../../../../../app/config', () => ({
@@ -24,7 +25,7 @@ describe('Farmer apply home page test', () => {
     )
     const button = $('.govuk-main-wrapper .govuk-button')
     expect(button.text()).toMatch('Start now')
-    expect($('title').text()).toEqual('Annual health and welfare review of livestock')
+    expect($('title').text()).toEqual(`${config.serviceName}`)
     expectPhaseBanner.ok($)
   })
 })
