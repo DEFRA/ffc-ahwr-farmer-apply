@@ -1,6 +1,6 @@
 const cheerio = require('cheerio')
 const expectPhaseBanner = require('../../../../utils/phase-banner-expect')
-const { serviceName, urlPrefix } = require('../../../../../app/config')
+const { urlPrefix } = require('../../../../../app/config')
 
 describe('Farmer apply guidance page test', () => {
   let options
@@ -56,7 +56,7 @@ describe('Farmer apply guidance page test', () => {
     expect($('.govuk-heading-l').text().trim()).toEqual(
       'How to apply for livestock health and welfare review and endemic disease follow-ups'
     )
-    expect($('title').text()).toEqual(`Guidance for farmers - ${serviceName}`)
+    expect($('title').text()).toEqual('Guidance for farmers - Get funding to improve animal health and welfare')
     expectPhaseBanner.ok($)
   })
 

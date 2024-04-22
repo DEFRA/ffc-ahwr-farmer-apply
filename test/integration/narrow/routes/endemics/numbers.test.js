@@ -6,7 +6,6 @@ const {
   endemicsReviews,
   endemicsTimings
 } = require('../../../../../app/config/routes')
-const config = require('../../../../../app/config')
 const endemicsNumbersUrl = `/apply/${endemicsNumbers}`
 const endemicsReviewsUrl = `/apply/${endemicsReviews}`
 const endemicsTimingsUrl = `/apply/${endemicsTimings}`
@@ -78,7 +77,7 @@ describe('Check your eligible page test', () => {
       const title = 'Minimum number of livestock'
       const pageTitleByClassName = $(titleClassName).text()
       const pageTitleByName = $('title').text()
-      const fullTitle = `${title} - ${config.serviceName}`
+      const fullTitle = `${title} - Get funding to improve animal health and welfare`
       const backLinkUrlByClassName = $('.govuk-back-link').attr('href')
 
       expect(pageTitleByName).toEqual(fullTitle)
