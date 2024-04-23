@@ -215,7 +215,7 @@ describe('Declaration test', () => {
       const $ = cheerio.load(res.payload)
       expect($('h1').text()).toMatch('Application complete')
       expect($('title').text()).toEqual('Application complete - Get funding to improve animal health and welfare')
-      expect($('h2').text()).toContain('We recommend you arrange a funded follow-up by following these steps')
+      expect($('h2').text()).toContain('recommend you arrange a funded follow-up by following these steps')
       expectPhaseBanner.ok($)
       expect(sessionMock.getFarmerApplyData).toHaveBeenCalledTimes(1)
       expect(sessionMock.setFarmerApplyData).toHaveBeenCalledTimes(2)
