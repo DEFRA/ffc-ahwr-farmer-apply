@@ -56,6 +56,9 @@ describe('Declaration test', () => {
         clientSecret: 'dummy-client-secret',
         scope: 'dummy-scope'
       }
+    },
+    endemics: {
+      enabled: false
     }
   }))
 

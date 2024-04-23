@@ -28,6 +28,9 @@ describe('Org review page test', () => {
       jest.mock('../../../../app/session')
       jest.mock('../../../../app/config', () => ({
         ...jest.requireActual('../../../../app/config'),
+        endemics: {
+          enabled: false
+        },
         authConfig: {
           defraId: {
             hostname: 'https://tenant.b2clogin.com/tenant.onmicrosoft.com',

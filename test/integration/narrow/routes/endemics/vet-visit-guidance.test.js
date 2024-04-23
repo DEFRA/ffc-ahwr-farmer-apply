@@ -1,47 +1,45 @@
 const cheerio = require('cheerio')
 const expectPhaseBanner = require('../../../../utils/phase-banner-expect')
-const { serviceName, urlPrefix } = require('../../../../../app/config')
+const { urlPrefix } = require('../../../../../app/config')
 
 describe('Farmer apply guidance page test', () => {
   let options
-
-  jest.mock('../../../../../app/config', () => ({
-    ...jest.requireActual('../../../../../app/config'),
-    endemics: {
-      enabled: true
-    },
-    authConfig: {
-      defraId: {
-        hostname: 'https://testtenant.b2clogin.com/testtenant.onmicrosoft.com',
-        oAuthAuthorisePath: '/oauth2/v2.0/authorize',
-        policy: 'testpolicy',
-        redirectUri: 'http://localhost:3000/apply/endemics/signin-oidc',
-        tenantName: 'testtenant',
-        jwtIssuerId: 'dummy_jwt_issuer_id',
-        clientId: 'dummyclientid',
-        clientSecret: 'dummyclientsecret',
-        serviceId: 'dummyserviceid',
-        scope: 'openid dummyclientid offline_access'
-      },
-      ruralPaymentsAgency: {
-        hostname: 'dummy-host-name',
-        getPersonSummaryUrl: 'dummy-get-person-summary-url',
-        getOrganisationPermissionsUrl: 'dummy-get-organisation-permissions-url',
-        getOrganisationUrl: 'dummy-get-organisation-url',
-        getCphNumbersUrl: 'dummy-get-cph-numbers-url'
-      },
-      apim: {
-        ocpSubscriptionKey: 'dummy-ocp-subscription-key',
-        hostname: 'dummy-host-name',
-        oAuthPath: 'dummy-oauth-path',
-        clientId: 'dummy-client-id',
-        clientSecret: 'dummy-client-secret',
-        scope: 'dummy-scope'
-      }
-    }
-  }))
-
   beforeAll(async () => {
+    jest.mock('../../../../../app/config', () => ({
+      ...jest.requireActual('../../../../../app/config'),
+      endemics: {
+        enabled: true
+      },
+      authConfig: {
+        defraId: {
+          hostname: 'https://testtenant.b2clogin.com/testtenant.onmicrosoft.com',
+          oAuthAuthorisePath: '/oauth2/v2.0/authorize',
+          policy: 'testpolicy',
+          redirectUri: 'http://localhost:3000/apply/endemics/signin-oidc',
+          tenantName: 'testtenant',
+          jwtIssuerId: 'dummy_jwt_issuer_id',
+          clientId: 'dummyclientid',
+          clientSecret: 'dummyclientsecret',
+          serviceId: 'dummyserviceid',
+          scope: 'openid dummyclientid offline_access'
+        },
+        ruralPaymentsAgency: {
+          hostname: 'dummy-host-name',
+          getPersonSummaryUrl: 'dummy-get-person-summary-url',
+          getOrganisationPermissionsUrl: 'dummy-get-organisation-permissions-url',
+          getOrganisationUrl: 'dummy-get-organisation-url',
+          getCphNumbersUrl: 'dummy-get-cph-numbers-url'
+        },
+        apim: {
+          ocpSubscriptionKey: 'dummy-ocp-subscription-key',
+          hostname: 'dummy-host-name',
+          oAuthPath: 'dummy-oauth-path',
+          clientId: 'dummy-client-id',
+          clientSecret: 'dummy-client-secret',
+          scope: 'dummy-scope'
+        }
+      }
+    }))
     options = {
       method: 'GET',
       url: `${urlPrefix}/endemics/vet-visit-guidance`
@@ -56,7 +54,7 @@ describe('Farmer apply guidance page test', () => {
     expect($('.govuk-heading-l').text().trim()).toEqual(
       'What happens on a livestock health and welfare review or endemic disease follow-up'
     )
-    expect($('title').text()).toEqual(`Guidance for vet visit - ${serviceName}`)
+    expect($('title').text()).toEqual('Guidance for vet visit - Get funding to improve animal health and welfare')
     expectPhaseBanner.ok($)
   })
 
