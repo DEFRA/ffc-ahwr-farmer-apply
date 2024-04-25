@@ -1,4 +1,4 @@
-const { serviceName, claimServiceUri, serviceUri } = require('../config')
+const { serviceName, claimServiceUri, serviceUri, endemics } = require('../config')
 
 module.exports = {
   plugin: {
@@ -17,7 +17,7 @@ module.exports = {
           if (path.startsWith('/apply/cookies')) {
             serviceUrl = '/apply/cookies'
           }
-          ctx.serviceName = serviceName
+          ctx.serviceName = !endemics.enabled ? serviceName : 'Get funding to improve animal health and welfare'
           ctx.serviceUrl = serviceUrl
           ctx.claimServiceUri = claimServiceUri
           ctx.serviceUri = serviceUri

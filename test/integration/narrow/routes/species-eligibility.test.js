@@ -26,6 +26,9 @@ describe('Species eligibility test', () => {
         getOrganisationPermissionsUrl: 'dummy-get-organisation-permissions-url',
         getOrganisationUrl: 'dummy-get-organisation-url'
       }
+    },
+    endemics: {
+      enabled: false
     }
   }))
 
