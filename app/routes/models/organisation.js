@@ -31,7 +31,7 @@ const getOrganisation = (request, organisation, errorText) => {
     ...getYesNoRadios(labelText, confirmCheckDetails, prevAnswer, errorText, {
       isPageHeading: false,
       legendClasses: 'govuk-fieldset__legend--m',
-      inline: false
+      inline: true
     })
   }
 }
