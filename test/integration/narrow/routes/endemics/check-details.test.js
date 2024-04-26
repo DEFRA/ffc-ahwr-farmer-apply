@@ -19,6 +19,7 @@ describe('Org review page test', () => {
     address: ' org-address-here',
     cph: '11/222/3333',
     email: 'org@test.com',
+    orgEmail: 'org@test.com',
     name: 'org-name',
     sbi: '123456789'
   }
@@ -29,6 +30,7 @@ describe('Org review page test', () => {
 
       session = require('../../../../../app/session')
       jest.mock('../../../../../app/session')
+      session.getCustomer.mockReturnValue({ crn: '123123123' })
       jest.mock('../../../../../app/config', () => ({
         ...jest.requireActual('../../../../../app/config'),
         endemics: {
@@ -80,8 +82,14 @@ describe('Org review page test', () => {
       expect(values.eq(1).text()).toMatch(org.name)
       expect(keys.eq(2).text()).toMatch('SBI number')
       expect(values.eq(2).text()).toMatch(org.sbi)
-      expect(keys.eq(3).text()).toMatch('Address')
-      expect(values.eq(3).text()).toMatch(org.address)
+      expect(keys.eq(3).text()).toMatch('CRN number')
+      expect(values.eq(3).text()).toMatch('123123123')
+      expect(keys.eq(4).text()).toMatch('Organisation email address')
+      expect(values.eq(4).text()).toMatch(org.orgEmail)
+      expect(keys.eq(5).text()).toMatch('User email address')
+      expect(values.eq(5).text()).toMatch(org.email)
+      expect(keys.eq(6).text()).toMatch('Address')
+      expect(values.eq(6).text()).toMatch(org.address)
       expect($('title').text()).toEqual('Check your details - Get funding to improve animal health and welfare')
       expect($('.govuk-back-link').attr('href')).toContain('https://somedefraidlogin')
       expect($('legend').text().trim()).toEqual('Are your details correct?')
