@@ -20,7 +20,7 @@ describe('Farmer apply home page test', () => {
     expect(res.statusCode).toBe(200)
     const $ = cheerio.load(res.payload)
     expect($('.govuk-heading-l').text()).toEqual(
-      'Apply for funding for livestock health and welfare reviews and follow-ups'
+      'Get funding to improve livestock health and welfare'
     )
     const button = $('.govuk-main-wrapper .govuk-button')
     expect(button.text()).toMatch('Start now')
