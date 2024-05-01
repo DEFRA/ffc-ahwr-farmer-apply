@@ -13,7 +13,7 @@ services:
 
   zap-baseline-scan:
     image: softwaresecurityproject/zap-bare:2.14.0
-    command: zap.sh -cmd -quickurl http://ffc-ahwr-farmer-apply:${PORT:-3000} -configfile config/zap.conf -quickout test-output/zap-report.html
+    command: zap.sh -cmd -quickurl http://ffc-ahwr-farmer-apply:${PORT:-3000} -configfile wrk/config/zap.conf -quickout wrk/test-output/zap-report.html
     depends_on:
       - ffc-ahwr-farmer-apply
     volumes:
