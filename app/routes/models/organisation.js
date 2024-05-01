@@ -30,7 +30,7 @@ const getOrganisation = (request, organisation, errorText) => {
     if (endemics.enabled) {
       return true
     }
-    return row.key.text !== 'CRN number'
+    return row.key.text !== 'CRN'
   })
 
   return {
