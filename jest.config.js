@@ -37,5 +37,6 @@ module.exports = {
   setupFilesAfterEnv: [
     '<rootDir>/test/setup.js',
     '<rootDir>/test/teardown.js'
-  ]
+  ],
+  workerIdleMemoryLimit: '500MB'
 }
