@@ -16,8 +16,8 @@ const getOrganisation = (request, organisation, errorText) => {
   const rows = [
     { key: { text: 'Farmer name' }, value: { text: organisation.farmerName } },
     { key: { text: 'Business name' }, value: { text: organisation.name } },
-    { key: { text: 'SBI number' }, value: { text: organisation.sbi } },
-    { key: { text: 'CRN number' }, value: { text: crn } },
+    { key: { text: 'SBI' }, value: { text: organisation.sbi } },
+    { key: { text: 'CRN' }, value: { text: crn } },
     { key: { text: 'Organisation email address' }, value: { text: organisation.orgEmail } },
     { key: { text: 'User email address' }, value: { text: organisation.email } },
     {
