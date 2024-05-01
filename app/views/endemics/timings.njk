@@ -1,6 +1,6 @@
 {% extends './layouts/layout.njk' %}
 
-{% block pageTitle %}Timing of vet visits and funding claims - {{ serviceName }}{% endblock %}
+{% block pageTitle %}Timing of reviews and follow-ups - {{ serviceName }}{% endblock %}
 
 {% block beforeContent %}
   {{ govukBackLink({
@@ -13,7 +13,7 @@
 {% block content %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l">Timing of vet visits and funding claims</h1>
+    <h1 class="govuk-heading-l">Timing of reviews and follow-ups</h1>
 
     <p>There must be:</p>
     <ul class="govuk-list govuk-list--bullet">
@@ -24,8 +24,8 @@
 
     <p>You must have:</p>
     <ul class="govuk-list govuk-list--bullet">
-      <li>had your review before the subsequent follow-up</li>
-      <li>successfully claimed for a review before you claim for the subsequent follow-up</li>
+      <li>had your review before the follow-up that happened after it</li>
+      <li>claimed for a review before you claim for the follow-up that happened after it</li>
     </ul><br>
 
 
