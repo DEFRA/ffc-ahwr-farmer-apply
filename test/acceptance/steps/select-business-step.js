@@ -181,3 +181,12 @@ Then (/^user clicks on the service name link$/,async function (){
 Then (/^user must be redirected to service guidance start pages$/,async function (){ 
   await selectBusinessPage.urlValidationAHWR()
 })
+Then (/^user clicks I do not agree-Reject agreement$/,async function (){
+  await selectBusinessPage.clickRejectTerms()
+})
+Then (/^user clicks I do not agree-Reject agreement for Timing and funding$/,async function (){
+  await selectBusinessPage.clickRejectTermsTimingandFunding()
+})
+Then(/^validate agreement terms rejected$/,async function (){
+  await selectBusinessPage.validateAgreementTermsRejected()
+    })

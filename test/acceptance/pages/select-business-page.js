@@ -101,6 +101,7 @@ let fetchedValue;
 //Endemics
 let ACCEPT_AGREEMENT='[value="agree"]'
 let REJECT_AGREEMENT='[value="notAgree"]'
+let REJECT_TIMEANDFUNDING='[value="rejected"]'
 let REJECT_AGREEMENT_ERROR_MESSAGE='Agreement terms rejected'
 let REJECT_AGREEMENT_ERROR='//*[@id="main-content"]/div/div/h1'
 let BACK='#back'
@@ -275,6 +276,9 @@ console.log(error.message)
   }
 
   async agreeToTerms() {
+    
+    const sleep = (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitTimeInMs))
+    await sleep(5000)
     await this.clickOn(DECLARATION)
   }
 
@@ -386,6 +390,16 @@ console.log(error.message)
     let expectedPageTitle = await this.getPageTitle()
     console.log(expectedPageTitle)
     await expect(expectedPageTitle).to.include(CALL_CHARGES_TITLE)
+    const zoomPercentage = 80;
+    browser.execute((zoom) => {
+      document.body.style.zoom = `${zoom}%`;
+  }, zoomPercentage);
+    var date=Date.now();
+    await browser.saveScreenshot('./screenShots/chrome-'+date+'.png')
+    const zoomPercentage1 = 100;
+    browser.execute((zoom) => {
+      document.body.style.zoom = `${zoom}%`;
+  }, zoomPercentage1);
     await browser.closeWindow();
     await browser.switchToWindow(windowHandles[0]);
 
@@ -691,7 +705,7 @@ async clickGovUKPane(){
 }
 
 async reject_Agreement(){
- await this.clickOn(REJECT_APPLICATION) 
+ await this.clickOn(REJECT_AGREEMENT) 
 }
  
 async urlValidation(){
@@ -708,6 +722,14 @@ async urlValidationAHWR(){
   await this.urlContain(AHWR_URL)
 }
 
-
+async validateAgreementTermsRejected(){
+  await this.elementToContainText(REJECT_AGREEMENT_ERROR,REJECT_AGREEMENT_ERROR_MESSAGE) 
+}
+async clickRejectTerms(){
+  await this.clickOn(REJECT_AGREEMENT)
+}
+async clickRejectTermsTimingandFunding(){
+await this.clickOn(REJECT_TIMEANDFUNDING)
+}
 }
 module.exports = SelectBusinessPage
