@@ -1,4 +1,6 @@
-@smokeTest1
+
+@smoketest
+
 Feature:278298-6 Customer onboarding screen 1 Agreement apply journey
 
   Scenario: AC1 Review and follow up species must be for same species confirmation
@@ -25,7 +27,7 @@ Feature:278298-6 Customer onboarding screen 1 Agreement apply journey
 
     Scenario:AC4-Gov.uk link on the header
     Then click on gov.uk in the left pane
-    Then validate if the user redirected to gov.uk
+    Then validate if the user redirected to gov.uk 
 
     Scenario:AC-5 Service name link on the header
 

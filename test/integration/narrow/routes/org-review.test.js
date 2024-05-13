@@ -16,7 +16,8 @@ describe('Org review page test', () => {
     cph: '11/222/3333',
     email: 'org@test.com',
     name: 'org-name',
-    sbi: '123456789'
+    sbi: '123456789',
+    orgEmail: 'mrssallypluckc@kculpyllassrmz.com.test'
   }
   describe(`GET ${url} route when logged in`, () => {
     beforeAll(async () => {
@@ -25,8 +26,12 @@ describe('Org review page test', () => {
 
       session = require('../../../../app/session')
       jest.mock('../../../../app/session')
+      session.getCustomer.mockReturnValue({ crn: '123123123' })
       jest.mock('../../../../app/config', () => ({
         ...jest.requireActual('../../../../app/config'),
+        endemics: {
+          enabled: false
+        },
         authConfig: {
           defraId: {
             hostname: 'https://tenant.b2clogin.com/tenant.onmicrosoft.com',
@@ -70,10 +75,14 @@ describe('Org review page test', () => {
       expect(values.eq(0).text()).toMatch(org.farmerName)
       expect(keys.eq(1).text()).toMatch('Business name')
       expect(values.eq(1).text()).toMatch(org.name)
-      expect(keys.eq(2).text()).toMatch('SBI number')
+      expect(keys.eq(2).text()).toMatch('SBI')
       expect(values.eq(2).text()).toMatch(org.sbi)
-      expect(keys.eq(3).text()).toMatch('Address')
-      expect(values.eq(3).text()).toMatch(org.address)
+      expect(keys.eq(3).text()).toMatch('Organisation email address')
+      expect(values.eq(3).text()).toMatch(org.orgEmail)
+      expect(keys.eq(4).text()).toMatch('User email address')
+      expect(values.eq(4).text()).toMatch(org.email)
+      expect(keys.eq(5).text()).toMatch('Address')
+      expect(values.eq(5).text()).toMatch(org.address)
       expect($('title').text()).toEqual('Check your details - Annual health and welfare review of livestock')
       expect($('.govuk-back-link').attr('href')).toContain('https://somedefraidlogin')
       expect($('legend').text().trim()).toEqual('Are your details correct?')

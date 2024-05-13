@@ -58,6 +58,9 @@ const COMPLETE_APPLICATION = '[value="accepted"]'
 const COOKIES_ACCEPT = '[value="accept"]'
 const COOKIES_HIDE='/html/body/div[1]/div/div[2]/div[2]'
 const REJECT_APPLICATION = '[value="rejected"]'
+const COOKIES_ACCEPT = '[value="accept"]'
+const COOKIES_HIDE='/html/body/div[1]/div/div[2]/div[2]'
+const REJECT_APPLICATION = '[value="rejected"]'
 const SUCCESS_MESSAGE = '.govuk-panel__title'
 const ACCURATE_ANSWER = 'Check your answers'
 const AGREED = 'declaration'
@@ -67,11 +70,13 @@ const MESSAGE = 'Application complete'
 const LIVESTOCK_NUMBER = 'eligible for funding'
 
 
+
 //'div.govuk-radios>div.govuk-radios__item>label'
 //DefraID
 const DEFRA_CRN = '#crn'
 const DEFRA_PASSWORD = '#password'
 const SIGN_IN_BUTTON = '[type="submit"]'
+const HIDE_COOKIES='[data-hide-cookie-banner="true"]'
 const HIDE_COOKIES='[data-hide-cookie-banner="true"]'
 const EMAIL_INPUT = '#email'
 const CONTINUE = '#submit'
@@ -81,7 +86,10 @@ const EXCEPTION_HEADER = '.govuk-heading-l'
 const HEADER_ERROR_MESSAGE_EXPECTED = 'You cannot apply for a livestock review for this business'
 const EXCEPTION_ERROR_MESSAGE = '.govuk-heading-l+.govuk-body'
 const EXCEPTION_ERROR_MESSAGE_EXPECTED = 'You do not have the required permission to act for W S Hirst - SBI 107097991.'
+const EXCEPTION_ERROR_MESSAGE_EXPECTED = 'You do not have the required permission to act for W S Hirst - SBI 107097991.'
 const EXCEPTION_ERROR_MESSAGE_EXPECTED_NO_CPH = 'Mr M A Burdon - SBI 200259426 has no eligible county parish holding (CPH) number registered to it.'
+const EXCEPTION_ERROR_MESSAGE_EXPECTED_MB_NO_PERMISSION = 'You do not have the required permission to act for Lonsdale Health - SBI 106240540.'
+const EXCEPTION_ERROR_MESSAGE_EXPECTED_MB_NO_CPH = 'Mr R Chapman has no eligible county parish holding (CPH) number registered to it.'
 const EXCEPTION_ERROR_MESSAGE_EXPECTED_MB_NO_PERMISSION = 'You do not have the required permission to act for Lonsdale Health - SBI 106240540.'
 const EXCEPTION_ERROR_MESSAGE_EXPECTED_MB_NO_CPH = 'Mr R Chapman has no eligible county parish holding (CPH) number registered to it.'
 const EXPECTED_ERROR='has already applied for an annual health and welfare review of livestock.'
@@ -121,12 +129,15 @@ class SelectBusinessPage extends CommonActions {
 
   async getHomePage(page) {
    
+   
     await this.open(page)
+
 
 
   }
   async clickOnStartButton() {
     try{  
+     
      
       const sleep = (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitTimeInMs))
       await sleep(5000)
@@ -173,10 +184,22 @@ console.log(error.message)
     await this.clickOn(COOKIES_HIDE)
     
   }
+
+  async acceptCookies() {
+  
+    await this.clickOn(COOKIES_ACCEPT)
+    await this.clickOn(COOKIES_HIDE)
+    
+  }
   // org review
   async singleUserBusinessDetail() {
    
+   
     const sleep = (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitTimeInMs))
+    await sleep(5000)
+   
+      await this.elementTextShouldBe(CHECK_DETAILS, DETAILS)
+       
     await sleep(5000)
    
       await this.elementTextShouldBe(CHECK_DETAILS, DETAILS)
@@ -184,6 +207,7 @@ console.log(error.message)
   }
 
   async checkFarmerDetails() {
+    
     
     await this.elementToContainText(FARMER_DETAILS, CONTENT)
   }
@@ -334,13 +358,16 @@ console.log(error.message)
       console.log(process.env.CRN_EXCEPTION_USERNAME)
       await this.inputValidCrn(process.env.CRN_EXCEPTION_USERNAME_NOCPH)
       await this.inputPassword(process.env.CRN_EXCEPTION_PASSWORD)
+      await this.inputPassword(process.env.CRN_EXCEPTION_PASSWORD)
     } else if (business == 'Exception-MB-NP') {
       console.log(process.env.CRN_EXCEPTION_USERNAME)
       await this.inputValidCrn(process.env.CRN_EXCEPTION_USERNAME_MB_NP)
       await this.inputPassword(process.env.CRN_EXCEPTION_PASSWORD)
+      await this.inputPassword(process.env.CRN_EXCEPTION_PASSWORD)
     } else if (business == 'Exception-MB-NCPH') {
       console.log(process.env.CRN_EXCEPTION_USERNAME)
       await this.inputValidCrn(process.env.CRN_EXCEPTION_USERNAME_MB_NOCPH)
+      await this.inputPassword(process.env.CRN_EXCEPTION_PASSWORD)
       await this.inputPassword(process.env.CRN_EXCEPTION_PASSWORD)
     }
     await this.signInButton()
@@ -582,6 +609,7 @@ console.log(error.message)
     let query = `
   UPDATE public.application
   SET "createdAt" = $2,
+      "updatedAt" = $2
       "updatedAt" = $2
   WHERE reference = $1;
 `;

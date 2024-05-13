@@ -7,8 +7,12 @@ const commonPage = new CommonActions()
 Given(/^the user is on the (.*) page$/, async function (page) {
   await selectBusinessPage.getHomePage(page)
 
+
 })
 When(/^start the application$/, async function () {
+     
+    await selectBusinessPage.clickOnStartButton()
+    
      
     await selectBusinessPage.clickOnStartButton()
     
@@ -41,6 +45,9 @@ When(/^user agreed the business details is correct$/, async function () {
 })
 Then(/^user continue to next page$/, async function () {
   await selectBusinessPage.proceedWithApplication()
+})
+|Then(/^Accept the Cookies$/, async function () {
+  await selectBusinessPage.acceptCookies()
 })
 |Then(/^Accept the Cookies$/, async function () {
   await selectBusinessPage.acceptCookies()

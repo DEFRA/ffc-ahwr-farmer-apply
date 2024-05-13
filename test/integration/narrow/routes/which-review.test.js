@@ -3,6 +3,9 @@ const getCrumbs = require('../../../utils/get-crumbs')
 const expectPhaseBanner = require('../../../utils/phase-banner-expect')
 jest.mock('../../../../app/config', () => ({
   ...jest.requireActual('../../../../app/config'),
+  endemics: {
+    enabled: false
+  },
   authConfig: {
     defraId: {
       hostname: 'https://tenant.b2clogin.com/tenant.onmicrosoft.com',

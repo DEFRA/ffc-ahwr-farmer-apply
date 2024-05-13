@@ -14,7 +14,7 @@ jest.mock('applicationinsights', () => ({ defaultClient: { trackException: jest.
 
 function expectPageContentOk ($, organisation) {
   expect($('h1.govuk-heading-l').text()).toEqual('Review your agreement offer')
-  expect($('title').text()).toEqual(`Review your agreement offer - ${config.serviceName}`)
+  expect($('title').text()).toEqual('Review your agreement offer - Get funding to improve animal health and welfare')
   expect($('#organisation-name').text()).toEqual(organisation.name)
   expect($('#organisation-address').text()).toEqual(organisation.address)
   expect($('#organisation-sbi').text()).toEqual(organisation.sbi)
@@ -106,7 +106,7 @@ describe('Declaration test', () => {
       expect(res.statusCode).toBe(200)
       const $ = cheerio.load(res.payload)
       expect($('h1').text()).toMatch('Review your agreement offer')
-      expect($('title').text()).toEqual(`Review your agreement offer - ${config.serviceName}`)
+      expect($('title').text()).toEqual('Review your agreement offer - Get funding to improve animal health and welfare')
       expectPhaseBanner.ok($)
     })
   })
@@ -115,7 +115,7 @@ describe('Declaration test', () => {
     test('returns 200, caches data and sends message for valid request', async () => {
       const application = { organisation }
       sessionMock.getFarmerApplyData.mockReturnValue(application)
-      messagingMock.receiveMessage.mockResolvedValueOnce({ applicationReference: 'abc123' })
+      messagingMock.receiveMessage.mockResolvedValueOnce({ applicationReference: 'abc123', applicationState: states.submitted })
       const crumb = await getCrumbs(global.__SERVER__)
       const options = {
         method: 'POST',
@@ -130,7 +130,7 @@ describe('Declaration test', () => {
       expect(res.statusCode).toBe(200)
       const $ = cheerio.load(res.payload)
       expect($('h1').text()).toMatch('Application complete')
-      expect($('title').text()).toEqual(`Application complete - ${config.serviceName}`)
+      expect($('title').text()).toEqual('Application complete - Get funding to improve animal health and welfare')
       expectPhaseBanner.ok($)
       expect(sessionMock.clear).toBeCalledTimes(1)
       expect(sessionMock.setFarmerApplyData).toHaveBeenCalledTimes(3)
@@ -143,7 +143,7 @@ describe('Declaration test', () => {
     test('returns 200, shows offer rejection content on rejection', async () => {
       const application = { organisation }
       sessionMock.getFarmerApplyData.mockReturnValue(application)
-      messagingMock.receiveMessage.mockResolvedValueOnce({ applicationReference: 'abc123' })
+      messagingMock.receiveMessage.mockResolvedValueOnce({ applicationReference: 'abc123', applicationState: states.submitted })
       const crumb = await getCrumbs(global.__SERVER__)
       const options = {
         method: 'POST',
@@ -157,7 +157,7 @@ describe('Declaration test', () => {
 
       expect(res.statusCode).toBe(200)
       const $ = cheerio.load(res.payload)
-      expect($('title').text()).toEqual(`Agreement offer rejected - ${config.serviceName}`)
+      expect($('title').text()).toEqual('Agreement offer rejected - Get funding to improve animal health and welfare')
       expectPhaseBanner.ok($)
       expect(sessionMock.clear).toBeCalledTimes(1)
       expect(sessionMock.setFarmerApplyData).toHaveBeenCalledTimes(3)
@@ -171,7 +171,7 @@ describe('Declaration test', () => {
       const reference = 'abc123'
       const application = { organisation, reference }
       sessionMock.getFarmerApplyData.mockReturnValue(application)
-      messagingMock.receiveMessage.mockResolvedValueOnce({ applicationReference: 'abc123' })
+      messagingMock.receiveMessage.mockResolvedValueOnce({ applicationReference: 'abc123', applicationState: states.submitted })
       const crumb = await getCrumbs(global.__SERVER__)
       const options = {
         method: 'POST',
@@ -186,11 +186,11 @@ describe('Declaration test', () => {
       expect(res.statusCode).toBe(200)
       const $ = cheerio.load(res.payload)
       expect($('h1').text()).toMatch('Application complete')
-      expect($('title').text()).toEqual(`Application complete - ${config.serviceName}`)
+      expect($('title').text()).toEqual('Application complete - Get funding to improve animal health and welfare')
       expect($('h2').text()).toContain('What you need to do next')
       expectPhaseBanner.ok($)
       expect(sessionMock.getFarmerApplyData).toHaveBeenCalledTimes(1)
-      expect(sessionMock.setFarmerApplyData).toHaveBeenCalledTimes(0)
+      expect(sessionMock.setFarmerApplyData).toHaveBeenCalledTimes(2)
       expect(messagingMock.sendMessage).toHaveBeenCalledTimes(0)
     })
 
@@ -198,7 +198,7 @@ describe('Declaration test', () => {
       const reference = 'abc123'
       const application = { organisation: { ...organisation, userType: userType.EXISTING_USER }, reference }
       sessionMock.getFarmerApplyData.mockReturnValue(application)
-      messagingMock.receiveMessage.mockResolvedValueOnce({ applicationReference: 'abc123' })
+      messagingMock.receiveMessage.mockResolvedValueOnce({ applicationReference: 'abc123', applicationState: states.submitted })
       const crumb = await getCrumbs(global.__SERVER__)
       const options = {
         method: 'POST',
@@ -213,11 +213,11 @@ describe('Declaration test', () => {
       expect(res.statusCode).toBe(200)
       const $ = cheerio.load(res.payload)
       expect($('h1').text()).toMatch('Application complete')
-      expect($('title').text()).toEqual(`Application complete - ${config.serviceName}`)
-      expect($('h2').text()).toContain('We recommend you arrange a funded follow-up by following these steps')
+      expect($('title').text()).toEqual('Application complete - Get funding to improve animal health and welfare')
+      expect($('h2').text()).toContain('We recommend you arrange an endemic disease follow-up by following these steps')
       expectPhaseBanner.ok($)
       expect(sessionMock.getFarmerApplyData).toHaveBeenCalledTimes(1)
-      expect(sessionMock.setFarmerApplyData).toHaveBeenCalledTimes(0)
+      expect(sessionMock.setFarmerApplyData).toHaveBeenCalledTimes(2)
       expect(messagingMock.sendMessage).toHaveBeenCalledTimes(0)
     })
 

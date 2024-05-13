@@ -6,7 +6,6 @@ const {
   endemicsReviews,
   endemicsCheckDetails
 } = require('../../../../../app/config/routes')
-
 const endemicsNumbersUrl = `/apply/${endemicsNumbers}`
 const endemicsReviewsUrl = `/apply/${endemicsReviews}`
 const endemicsCheckDetailsUrl = `/apply/${endemicsCheckDetails}`
@@ -78,8 +77,7 @@ describe('Check your eligible page test', () => {
       const title = 'Reviews and follow-ups must be for the same species'
       const pageTitleByClassName = $(titleClassName).text()
       const pageTitleByName = $('title').text()
-      const serviceName = 'Annual health and welfare review of livestock'
-      const fullTitle = `${title} - ${serviceName}`
+      const fullTitle = `${title} - Get funding to improve animal health and welfare`
       const backLinkUrlByClassName = $('.govuk-back-link').attr('href')
 
       expect(pageTitleByName).toEqual(fullTitle)

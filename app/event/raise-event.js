@@ -10,6 +10,7 @@ const raiseEvent = async (event, status = 'success') => {
       id: event.id,
       sbi: event.sbi,
       cph: event.cph,
+      reference: event.reference,
       checkpoint: process.env.APPINSIGHTS_CLOUDROLE,
       status,
       action: {

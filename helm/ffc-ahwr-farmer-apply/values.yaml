@@ -59,6 +59,7 @@ container:
   applicationApiUri:
   defraIdTenant:
   defraIdRedirectUri:
+  defraIdDashboardRedirectUri:
   defraIdJwtIssuerId:
   defraIdClientId:
   defraIdClientSecret:
@@ -78,7 +79,7 @@ container:
   dateOfTestingEnabled:
   tenMonthRuleEnabled:
   endemicsEnabled:
- 
+
 ingress:
   class: nginx
   endpoint: ffc-ahwr-farmer

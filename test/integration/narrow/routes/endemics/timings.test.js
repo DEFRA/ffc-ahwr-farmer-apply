@@ -83,8 +83,8 @@ describe('Declaration test', () => {
 
       expect(res.statusCode).toBe(200)
       const $ = cheerio.load(res.payload)
-      expect($('h1').text()).toMatch('Timing of vet visits and funding claims')
-      expect($('title').text()).toEqual(`Timing of vet visits and funding claims - ${config.serviceName}`)
+      expect($('h1').text()).toMatch('Timing of reviews and follow-ups')
+      expect($('title').text()).toEqual('Timing of reviews and follow-ups - Get funding to improve animal health and welfare')
       expectPhaseBanner.ok($)
     })
   })

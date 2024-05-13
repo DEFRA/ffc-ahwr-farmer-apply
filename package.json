@@ -37,7 +37,7 @@
     "@hapi/yar": "^10.1.1",
     "applicationinsights": "^2.5.0",
     "crypto-js": "^4.2.0",
-    "ffc-ahwr-event-publisher": "1.0.0",
+    "ffc-ahwr-event-publisher": "1.0.3",
     "ffc-messaging": "^2.6.2",
     "govuk-frontend": "4.0.1",
     "hapi-pino": "^9.1.2",
@@ -47,9 +47,9 @@
     "mssql": "^10.0.1",
     "notifications-node-client": "^7.0.4",
     "nunjucks": "^3.2.3",
-    "pg-promise": "^11.5.4",
+    "pg-promise": "^11.5.5",
     "uuid": "^8.3.2",
-    "webdriverio": "^8.16.12"
+    "webdriverio": "^8.13.13"
   },
   "overrides": {
     "notifications-node-client": {

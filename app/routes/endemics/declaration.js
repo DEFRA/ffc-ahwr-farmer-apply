@@ -50,12 +50,12 @@ module.exports = [{
       }
     },
     handler: async (request, h) => {
+      session.setFarmerApplyData(request, declaration, true)
+      session.setFarmerApplyData(request, offerStatus, request.payload.offerStatus)
       const application = session.getFarmerApplyData(request)
       let applicationReference = application[reference]
       if (!applicationReference) {
         console.log('APPLICATION:', application)
-        session.setFarmerApplyData(request, declaration, true)
-        session.setFarmerApplyData(request, offerStatus, request.payload.offerStatus)
         applicationReference = await sendApplication({ ...application, type: applicationType.ENDEMICS }, request.yar.id)
 
         if (applicationReference) {
@@ -83,8 +83,6 @@ module.exports = [{
       }
 
       if (!applicationReference) {
-        // TODO: this requires a designed error screen for this scenario
-        // as opposed to the generic screen that this will redirect to.
         console.log('Apply declaration returned a null application reference.')
         throw boom.internal()
       }
