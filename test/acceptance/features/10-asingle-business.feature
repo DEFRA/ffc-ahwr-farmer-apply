@@ -1,4 +1,6 @@
-@smoke11
+
+@smokeRegression
+
 Feature: select business
 
   Scenario: Apply with valid cred
