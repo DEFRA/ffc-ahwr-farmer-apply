@@ -8,7 +8,7 @@ const entries = {
   pkcecodes: 'pkcecodes',
   tokens: 'tokens',
   customer: 'customer',
-  tempClaimReference: 'tempClaimReference',
+  tempReference: 'tempReference',
   type: 'type' // EM or VV
 }
 
