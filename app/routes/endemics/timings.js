@@ -1,4 +1,6 @@
 const session = require('../../session')
+const { agreeVisitTimings } =
+  require('../../session/keys').farmerApplyData
 const urlPrefix = require('../../config/index').urlPrefix
 const config = require('../../config/index')
 const {
@@ -28,8 +30,18 @@ module.exports = [
     options: {
       handler: async (request, h) => {
         if (request.payload.agreementStatus === 'agree') {
+          session.setFarmerApplyData(
+            request,
+            agreeVisitTimings,
+            'yes'
+          )
           return h.redirect(`${urlPrefix}/${endemicsDeclaration}`)
         } else {
+          session.setFarmerApplyData(
+            request,
+            agreeVisitTimings,
+            'no'
+          )
           request.cookieAuth.clear()
           session.clear(request)
           return h.view(endemicsOfferRejected, {

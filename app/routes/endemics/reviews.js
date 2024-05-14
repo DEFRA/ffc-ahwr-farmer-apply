@@ -1,4 +1,6 @@
 const session = require('../../session')
+const { agreeSameSpecies } =
+  require('../../session/keys').farmerApplyData
 const config = require('../../config/index')
 const urlPrefix = require('../../config/index').urlPrefix
 const {
@@ -41,9 +43,19 @@ module.exports = [
     path: pageUrl,
     options: {
       handler: async (request, h) => {
-        if (
-          request.payload.agreementStatus === agreementStatus.notAgree.value
-        ) {
+        if (request.payload.agreementStatus === 'agree') {
+          session.setFarmerApplyData(
+            request,
+            agreeSameSpecies,
+            'yes'
+          )
+          return h.redirect(nextPage)
+        } else {
+          session.setFarmerApplyData(
+            request,
+            agreeSameSpecies,
+            'no'
+          )
           session.clear(request)
           request.cookieAuth.clear()
 
@@ -52,8 +64,6 @@ module.exports = [
             ruralPaymentsAgency: config.ruralPaymentsAgency
           })
         }
-
-        return h.redirect(nextPage)
       }
     }
   }

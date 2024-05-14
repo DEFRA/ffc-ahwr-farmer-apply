@@ -11,6 +11,9 @@ module.exports = {
     organisation: 'organisation',
     whichReview: 'whichReview',
     confirmCheckDetails: 'confirmCheckDetails',
+    agreeSameSpecies: 'agreeSameSpecies',
+    agreeSpeciesNumbers: 'agreeSpeciesNumbers',
+    agreeVisitTimings: 'agreeVisitTimings',
     reference: 'reference',
     offerStatus: 'offerStatus',
     type: 'type'

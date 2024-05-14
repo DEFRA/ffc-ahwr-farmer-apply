@@ -8,7 +8,7 @@ const entries = {
   pkcecodes: 'pkcecodes',
   tokens: 'tokens',
   customer: 'customer',
-  tempReference: 'tempReference',
+  tempClaimReference: 'tempClaimReference',
   type: 'type' // EM or VV
 }
 
@@ -43,6 +43,7 @@ function clear (request) {
   request.yar.clear(entries.answers)
   request.yar.clear(entries.selectYourBusiness)
   request.yar.clear(entries.customer)
+  request.yar.clear(entries.tempReference)
 }
 
 function setFarmerApplyData (request, key, value) {
