@@ -1,9 +1,6 @@
-
-@smoketest
-
-Feature:278298-6 Customer onboarding screen 1 Agreement apply journey
-
-  Scenario: AC1 Review and follow up species must be for same species confirmation
+@smokeTest
+Feature:Dev: 8 Customer onboarding screen 2 Agreement apply journey
+Scenario: AC1 Review and follow up species must be for same species confirmation
     Given the user is on the /apply/start page
     Then start the application
     And user login with Single business crn and password(for DefraId)
@@ -17,12 +14,13 @@ Feature:278298-6 Customer onboarding screen 1 Agreement apply journey
     Then user confirm Review Page
     Then agree Reviews and follow up for the same species
     Then Validate if the user had landed on minimun live stock page
-    # Then agree the Minimum number of livestock
+    Then agree the Minimum number of livestock
+    Then Validate if the user had landed on timining and funding
+   
 
-    Scenario:AC3-Review and follow up species must be for same species confirmation
+   Scenario:AC3-click Back link and validate the page
     Then user clicks on back link
-    Then user confirm Review Page
-    Then agree Reviews and follow up for the same species
+    Then Validate if the user had landed on minimun live stock page
 
 
     Scenario:AC4-Gov.uk link on the header
@@ -40,9 +38,6 @@ Feature:278298-6 Customer onboarding screen 1 Agreement apply journey
     Then user is able to see the Annual health and welfare review of livestock link on the middle top of the header
     Then user clicks on the service name link
     Then user must be redirected to service guidance start pages
-    # Then Validate if the user had landed on minimun live stock page
-    # Then agree the Minimum number of livestock
-    # Then Validate if the user had landed on timining and funding
-    # Then agree Timing of vet visits and funding claims
-    # Then Validate if the user had landed on review agreement offer
-    # Then Validate the reject agreement offer
+    
+
+  
