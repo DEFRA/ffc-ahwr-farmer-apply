@@ -3,7 +3,7 @@ const boom = require('@hapi/boom')
 const config = require('../../config')
 const session = require('../../session')
 const businessAppliedBefore = require('../../api-requests/business-applied-before')
-const { organisation: organisationKey, confirmCheckDetails } =
+const { organisation: organisationKey, confirmCheckDetails: confirmCheckDetailsKey } =
   require('../../session/keys').farmerApplyData
 const getOrganisation = require('../models/organisation')
 const { endemicsCheckDetails, endemicsReviews } = require('../../config/routes')
@@ -45,7 +45,7 @@ module.exports = [
     options: {
       validate: {
         payload: Joi.object({
-          [confirmCheckDetails]: Joi.string().valid('yes', 'no').required()
+          confirmCheckDetails: Joi.string().valid('yes', 'no').required()
         }),
         failAction: (request, h, _err) => {
           const organisation = session.getFarmerApplyData(
@@ -67,18 +67,16 @@ module.exports = [
         }
       },
       handler: async (request, h) => {
-        const answer = request.payload[confirmCheckDetails]
-        if (answer === 'yes') {
-          session.setFarmerApplyData(
-            request,
-            confirmCheckDetails,
-            request.payload[confirmCheckDetails]
-          )
+        const { confirmCheckDetails } = request.payload
+        session.setFarmerApplyData(request, confirmCheckDetailsKey, confirmCheckDetails)
+        
+        if (confirmCheckDetails === 'yes') {
           return h.redirect(`${config.urlPrefix}/${endemicsReviews}`)
         }
+
         return h.view('update-details', {
           ruralPaymentsAgency: config.ruralPaymentsAgency,
-          endemics: true
+          endemics: config.endemics.enabled
         })
       }
     }
