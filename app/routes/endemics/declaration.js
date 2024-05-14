@@ -70,7 +70,7 @@ module.exports = [{
       if (newApplicationReference) {
         session.setFarmerApplyData(request, reference, newApplicationReference)
         session.setTempReference(request, tempReference, tempApplicationReference)
-        console.log('TEMP REFERENCE 2:', tempApplicationReference)
+
         const organisation = session.getFarmerApplyData(request, organisationKey)
         appInsights.defaultClient.trackEvent({
           name: 'endemics-agreement-created',
