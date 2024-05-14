@@ -69,7 +69,7 @@ module.exports = [
       handler: async (request, h) => {
         const { confirmCheckDetails } = request.payload
         session.setFarmerApplyData(request, confirmCheckDetailsKey, confirmCheckDetails)
-        
+
         if (confirmCheckDetails === 'yes') {
           return h.redirect(`${config.urlPrefix}/${endemicsReviews}`)
         }
