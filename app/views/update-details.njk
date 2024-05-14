@@ -5,7 +5,7 @@
 {% block beforeContent %}
   {{ govukBackLink({
     text: "Back",
-    href: "/apply/endemics/org-review" if endemics else "/apply/org-review",
+    href: "/apply/endemics/check-details" if endemics else "/apply/org-review",
 	  attributes: {id: "back"}
   }) }}
 {% endblock %}
