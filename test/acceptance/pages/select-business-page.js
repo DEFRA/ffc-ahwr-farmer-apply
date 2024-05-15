@@ -55,9 +55,7 @@ const DECLARATION = '[role="button"]'
 const TERMS_CONDITIONS = '#termsAndConditionsUri'
 const TERMS_AND_CONDITION_BOX = '#terms'
 const COMPLETE_APPLICATION = '[value="accepted"]'
-const COOKIES_ACCEPT = '[value="accept"]'
-const COOKIES_HIDE='/html/body/div[1]/div/div[2]/div[2]'
-const REJECT_APPLICATION = '[value="rejected"]'
+
 const COOKIES_ACCEPT = '[value="accept"]'
 const COOKIES_HIDE='/html/body/div[1]/div/div[2]/div[2]'
 const REJECT_APPLICATION = '[value="rejected"]'
@@ -77,7 +75,6 @@ const DEFRA_CRN = '#crn'
 const DEFRA_PASSWORD = '#password'
 const SIGN_IN_BUTTON = '[type="submit"]'
 const HIDE_COOKIES='[data-hide-cookie-banner="true"]'
-const HIDE_COOKIES='[data-hide-cookie-banner="true"]'
 const EMAIL_INPUT = '#email'
 const CONTINUE = '#submit'
 const MUTLIPLE_BUSINESS_CONTINUE = '#continueReplacement'
@@ -86,10 +83,9 @@ const EXCEPTION_HEADER = '.govuk-heading-l'
 const HEADER_ERROR_MESSAGE_EXPECTED = 'You cannot apply for a livestock review for this business'
 const EXCEPTION_ERROR_MESSAGE = '.govuk-heading-l+.govuk-body'
 const EXCEPTION_ERROR_MESSAGE_EXPECTED = 'You do not have the required permission to act for W S Hirst - SBI 107097991.'
-const EXCEPTION_ERROR_MESSAGE_EXPECTED = 'You do not have the required permission to act for W S Hirst - SBI 107097991.'
+
 const EXCEPTION_ERROR_MESSAGE_EXPECTED_NO_CPH = 'Mr M A Burdon - SBI 200259426 has no eligible county parish holding (CPH) number registered to it.'
-const EXCEPTION_ERROR_MESSAGE_EXPECTED_MB_NO_PERMISSION = 'You do not have the required permission to act for Lonsdale Health - SBI 106240540.'
-const EXCEPTION_ERROR_MESSAGE_EXPECTED_MB_NO_CPH = 'Mr R Chapman has no eligible county parish holding (CPH) number registered to it.'
+
 const EXCEPTION_ERROR_MESSAGE_EXPECTED_MB_NO_PERMISSION = 'You do not have the required permission to act for Lonsdale Health - SBI 106240540.'
 const EXCEPTION_ERROR_MESSAGE_EXPECTED_MB_NO_CPH = 'Mr R Chapman has no eligible county parish holding (CPH) number registered to it.'
 const EXPECTED_ERROR='has already applied for an annual health and welfare review of livestock.'
@@ -110,7 +106,7 @@ let fetchedValue;
 let ACCEPT_AGREEMENT='[value="agree"]'
 let REJECT_AGREEMENT='[value="notAgree"]'
 let REJECT_TIMEANDFUNDING='[value="rejected"]'
-let REJECT_TIMEANDFUNDING='[value="rejected"]'
+
 let REJECT_AGREEMENT_ERROR_MESSAGE='Agreement terms rejected'
 let REJECT_AGREEMENT_ERROR='//*[@id="main-content"]/div/div/h1'
 let BACK='#back'
@@ -306,9 +302,7 @@ console.log(error.message)
     
     const sleep = (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitTimeInMs))
     await sleep(5000)
-    
-    const sleep = (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitTimeInMs))
-    await sleep(5000)
+  
     await this.clickOn(DECLARATION)
   }
 
@@ -432,17 +426,7 @@ console.log(error.message)
     const zoomPercentage1 = 100;
     browser.execute((zoom) => {
       document.body.style.zoom = `${zoom}%`;
-  }, zoomPercentage1);
-    const zoomPercentage = 80;
-    browser.execute((zoom) => {
-      document.body.style.zoom = `${zoom}%`;
-  }, zoomPercentage);
-    var date=Date.now();
-    await browser.saveScreenshot('./screenShots/chrome-'+date+'.png')
-    const zoomPercentage1 = 100;
-    browser.execute((zoom) => {
-      document.body.style.zoom = `${zoom}%`;
-  }, zoomPercentage1);
+  }, 
     await browser.closeWindow();
     await browser.switchToWindow(windowHandles[0]);
 
