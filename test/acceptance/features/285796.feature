@@ -1,6 +1,6 @@
 
 
-@smoke11
+@smoke
 Feature:285796-Dev 10 Customer onboarding screen 3 Agreement apply journey
 Scenario: AC1 Review and follow up species must be for same species confirmation
     Given the user is on the /apply/endemics/start/ page
@@ -17,13 +17,14 @@ Scenario: AC1 Review and follow up species must be for same species confirmation
     Then agree Reviews and follow up for the same species
     Then Validate if the user had landed on minimun live stock page
     Then agree the Minimum number of livestock
-    Then Validate if the user had landed on minimun live stock page
-    Then agree the Minimum number of livestock
-    Then Validate if the user had landed on timining and funding
+     Then Validate if the user had landed on timining and funding
     Then agree Timing of vet visits and funding claims
     Then Validate if the user had landed on review agreement offer
-    Then user click on Reject
-    Then Validate the reject agreement offer
+
+
+    Scenario:AC3-click Back link and validate the page
+    Then user clicks on back link
+    Then Validate if the user had landed on timining and funding
 
     Scenario:AC4-Gov.uk link on the header
     Then click on gov.uk in the left pane
@@ -46,6 +47,3 @@ Scenario: AC1 Review and follow up species must be for same species confirmation
     # Then agree Timing of vet visits and funding claims
     # Then Validate if the user had landed on review agreement offer
     # Then Validate the reject agreement offer
-
-     Scenario:AC- 6 Validate call charges screen
-    Then validate call charges screen
