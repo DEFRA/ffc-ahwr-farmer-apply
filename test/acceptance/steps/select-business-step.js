@@ -90,8 +90,14 @@ Then(/^user (.*) the application$/, async function (type) {
   await selectBusinessPage.termsCheckBox()
   await selectBusinessPage.applicationCompleted(type)
 })
+Then(/^user (.*) the application without accepting terms$/, async function (type){
+  await selectBusinessPage.applicationCompleted(type)
+})
 Then(/^user should see successful message$/, async function () {
   await selectBusinessPage.successfulMessage()
+})
+Then(/^accept the terms and condition$/,async function (){
+  await selectBusinessPage.termsCheckBox()
 })
 //Exception
 
@@ -160,9 +166,20 @@ Then (/^Validate if the user had landed on review agreement offer$/,async functi
 Then(/^user click on Reject$/,async function (){
   await selectBusinessPage.reject_Agreement()
 })
+Then(/^user click on Reject terms for Timing and Funding$/,async function (){
+  await selectBusinessPage.clickRejectTermsTimingandFunding()
+})
+Then (/^validate accept terms and conditions error message$/,async function (){
+  await selectBusinessPage.validateAcceptAgreementError()
+})
+
 Then (/^Validate the reject agreement offer$/,async function (){ 
   await selectBusinessPage.validate_reject_agreement_offer()
 })
+Then (/^Validate the reject agreement terms$/,async function (){
+  await selectBusinessPage.validateAgreementTermsRejected()
+})
+
 Then (/^user clicks on back link$/,async function (){ 
   await selectBusinessPage.click_Back_Link()
 })
