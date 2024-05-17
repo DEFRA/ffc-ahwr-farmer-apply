@@ -9,7 +9,7 @@ const businessEligibleToApply = require('../api-requests/business-eligible-to-ap
 const { InvalidPermissionsError, AlreadyAppliedError, NoEligibleCphError, InvalidStateError, CannotReapplyTimeLimitError, OutstandingAgreementError, LockedBusinessError } = require('../exceptions')
 const { raiseIneligibilityEvent } = require('../event')
 const appInsights = require('applicationinsights')
-const createReference = require('../lib/create-reference')
+const createTempReference = require('../lib/create-temp-reference')
 
 function setOrganisationSessionData (request, personSummary, { organisation: org }) {
   const organisation = {
@@ -53,7 +53,7 @@ module.exports = [{
     handler: async (request, h) => {
       let tempApplicationId
       try {
-        tempApplicationId = createReference()
+        tempApplicationId = createTempReference()
         // tempApplicationId added to reference to enable session event to report with temp id
         session.setFarmerApplyData(request, sessionKeys.farmerApplyData.reference, tempApplicationId)
         await auth.authenticate(request, session)

@@ -2,6 +2,7 @@ const boom = require('@hapi/boom')
 const Joi = require('joi')
 const session = require('../../session')
 const { reference, declaration, offerStatus, organisation: organisationKey, customer: crn } = require('../../session/keys').farmerApplyData
+const { tempReference } = require('../../session/keys').tempReference
 const getDeclarationData = require('../models/declaration')
 const { sendApplication } = require('../../messaging/application')
 const appInsights = require('applicationinsights')
@@ -15,6 +16,13 @@ const {
   endemicsOfferRejected
 } = require('../../config/routes')
 
+const resetFarmerApplyDataBeforeApplication = (application) => {
+  application.reference = null // Set application ref to null instead of temp ref before sending it to be processed.
+  delete application.agreeSpeciesNumbers
+  delete application.agreeSameSpecies
+  delete application.agreeVisitTimings
+}
+
 module.exports = [{
   method: 'GET',
   path: `${config.urlPrefix}/${endemicsDeclaration}`,
@@ -25,7 +33,6 @@ module.exports = [{
         return boom.notFound()
       }
       const viewData = getDeclarationData(application)
-      session.setFarmerApplyData(request, reference, null)
       return h.view(endemicsDeclaration, { backLink: `${config.urlPrefix}/${endemicsTimings}`, latestTermsAndConditionsUri: `${config.latestTermsAndConditionsUri}?continue=true&backLink=${config.urlPrefix}/${endemicsDeclaration}`, ...viewData })
     }
   }
@@ -52,24 +59,28 @@ module.exports = [{
     handler: async (request, h) => {
       session.setFarmerApplyData(request, declaration, true)
       session.setFarmerApplyData(request, offerStatus, request.payload.offerStatus)
-      const application = session.getFarmerApplyData(request)
-      let applicationReference = application[reference]
-      if (!applicationReference) {
-        console.log('APPLICATION:', application)
-        applicationReference = await sendApplication({ ...application, type: applicationType.ENDEMICS }, request.yar.id)
 
-        if (applicationReference) {
-          session.setFarmerApplyData(request, reference, applicationReference)
-          const organisation = session.getFarmerApplyData(request, organisationKey)
-          appInsights.defaultClient.trackEvent({
-            name: 'endemics-agreement-created',
-            properties: {
-              reference: applicationReference,
-              sbi: organisation.sbi,
-              crn: session.getCustomer(request, crn)
-            }
-          })
-        }
+      const application = session.getFarmerApplyData(request)
+      const tempApplicationReference = application.reference
+
+      resetFarmerApplyDataBeforeApplication(application)
+
+      const newApplicationReference = await sendApplication({ ...application, type: applicationType.ENDEMICS }, request.yar.id)
+
+      if (newApplicationReference) {
+        session.setFarmerApplyData(request, reference, newApplicationReference)
+        session.setTempReference(request, tempReference, tempApplicationReference)
+
+        const organisation = session.getFarmerApplyData(request, organisationKey)
+        appInsights.defaultClient.trackEvent({
+          name: 'endemics-agreement-created',
+          properties: {
+            reference: newApplicationReference,
+            tempReference: tempApplicationReference,
+            sbi: organisation.sbi,
+            crn: session.getCustomer(request, crn)
+          }
+        })
       }
 
       session.clear(request)
@@ -82,13 +93,13 @@ module.exports = [{
         })
       }
 
-      if (!applicationReference) {
+      if (!newApplicationReference) {
         console.log('Apply declaration returned a null application reference.')
         throw boom.internal()
       }
 
       return h.view(endemicsConfirmation, {
-        reference: applicationReference,
+        reference: newApplicationReference,
         isNewUser: userType.NEW_USER === application.organisation.userType,
         ruralPaymentsAgency: config.ruralPaymentsAgency,
         applySurveyUri: config.customerSurvey.uri,

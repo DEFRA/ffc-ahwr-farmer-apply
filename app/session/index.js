@@ -43,6 +43,7 @@ function clear (request) {
   request.yar.clear(entries.answers)
   request.yar.clear(entries.selectYourBusiness)
   request.yar.clear(entries.customer)
+  request.yar.clear(entries.tempReference)
 }
 
 function setFarmerApplyData (request, key, value) {
