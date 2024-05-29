@@ -141,6 +141,7 @@ describe('Declaration test', () => {
 
       expect(res.statusCode).toBe(200)
       const $ = cheerio.load(res.payload)
+
       expect($('h1').text()).toMatch('Application complete')
       expect($('title').text()).toEqual(`Application complete - ${config.serviceName}`)
       expectPhaseBanner.ok($)

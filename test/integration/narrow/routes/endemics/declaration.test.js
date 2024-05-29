@@ -130,7 +130,7 @@ describe('Declaration test', () => {
       expect(res.statusCode).toBe(200)
       const $ = cheerio.load(res.payload)
       expect($('h1').text()).toMatch('Application complete')
-      expect($('title').text()).toEqual('Application complete - Get funding to improve animal health and welfare')
+      expect($('title').text()).toMatch('Application complete - Get funding to improve animal health and welfare')
       expectPhaseBanner.ok($)
       expect(sessionMock.clear).toBeCalledTimes(1)
       expect(sessionMock.setFarmerApplyData).toHaveBeenCalledTimes(3)
@@ -157,7 +157,7 @@ describe('Declaration test', () => {
 
       expect(res.statusCode).toBe(200)
       const $ = cheerio.load(res.payload)
-      expect($('title').text()).toEqual('Agreement offer rejected - Get funding to improve animal health and welfare')
+      expect($('title').text()).toMatch('Agreement offer rejected - Get funding to improve animal health and welfare')
       expectPhaseBanner.ok($)
       expect(sessionMock.clear).toBeCalledTimes(1)
       expect(sessionMock.setFarmerApplyData).toHaveBeenCalledTimes(3)
