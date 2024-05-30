@@ -1,6 +1,7 @@
 {% extends './layouts/layout.njk' %}
 
-{% block pageTitle %}Reviews and follow-ups must be for the same species - {{ serviceName }}{% endblock %}
+{% block pageTitle %}Reviews and follow-ups must be for the same species - {{ serviceName }}
+{% endblock %}
 
 {% block beforeContent %}
   {{ govukBackLink({
@@ -11,33 +12,33 @@
 {% endblock %}
 
 {% block content %}
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l">Reviews and follow-ups must be for the same species</h1>
-    <h1 class="govuk-heading-m">If you are new to the service</h1>
-    <p class="govuk-body">All your reviews and follow-ups must be done on the same species.</p>
-    <h1 class="govuk-heading-m">If you have already had a review</h1>
-    <p class="govuk-body">All your reviews and follow-ups must be done on the same species tested during your first review.</p>
-    <br>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-l">Reviews and follow-ups must be for the same species</h1>
+      <h1 class="govuk-heading-m">If you are new to the service</h1>
+      <p class="govuk-body">All your reviews and follow-ups must be done on the same species.</p>
+      <h1 class="govuk-heading-m">If you have already had a review</h1>
+      <p class="govuk-body">All your reviews and follow-ups must be done on the same species tested for your first review.</p>
+      <br>
 
-    <form method="POST" autocomplete="off" novalidate="novalidate" id ="submitNumbersForm">
-      <input type="hidden" name="crumb" value="{{crumb}}"/>
-      <div class="govuk-button-group">
-        {{ govukButton({
+      <form method="POST" autocomplete="off" novalidate="novalidate" id ="submitNumbersForm">
+        <input type="hidden" name="crumb" value="{{crumb}}"/>
+        <div class="govuk-button-group">
+          {{ govukButton({
           text: agreementStatus.agree.text,
           value: agreementStatus.agree.value,
           name: "agreementStatus",
           preventDoubleClick: true
         }) }}
-        {{ govukButton({
+          {{ govukButton({
           text: agreementStatus.notAgree.text,
           value: agreementStatus.notAgree.value,
           name: "agreementStatus",
           preventDoubleClick: true,
           classes: "govuk-button--secondary"
         }) }}
-      </div>
-    </form>
+        </div>
+      </form>
+    </div>
   </div>
-</div>
 {% endblock %}
