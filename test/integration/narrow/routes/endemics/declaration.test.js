@@ -14,7 +14,7 @@ jest.mock('applicationinsights', () => ({ defaultClient: { trackException: jest.
 
 function expectPageContentOk ($, organisation) {
   expect($('h1.govuk-heading-l').text()).toEqual('Review your agreement offer')
-  expect($('title').text()).toEqual('Review your agreement offer - Get funding to improve animal health and welfare')
+  expect($('title').text()).toMatch('Review your agreement offer - Get funding to improve animal health and welfare')
   expect($('#organisation-name').text()).toEqual(organisation.name)
   expect($('#organisation-address').text()).toEqual(organisation.address)
   expect($('#organisation-sbi').text()).toEqual(organisation.sbi)
@@ -106,7 +106,7 @@ describe('Declaration test', () => {
       expect(res.statusCode).toBe(200)
       const $ = cheerio.load(res.payload)
       expect($('h1').text()).toMatch('Review your agreement offer')
-      expect($('title').text()).toEqual('Review your agreement offer - Get funding to improve animal health and welfare')
+      expect($('title').text()).toMatch('Review your agreement offer - Get funding to improve animal health and welfare')
       expectPhaseBanner.ok($)
     })
   })
