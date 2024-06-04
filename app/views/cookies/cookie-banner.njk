@@ -1,7 +1,7 @@
 {% from "govuk/components/cookie-banner/macro.njk" import govukCookieBanner %}
 <noscript>
   {{ govukCookieBanner({
-  ariaLabel: serviceName,
+  ariaLabel: "Cookes on " + serviceName,
   messages: [
     {
       headingText: "Cookes on " + serviceName,
@@ -27,11 +27,11 @@
     at any time.</p>
   {% endset %}
   {{ govukCookieBanner({
-    ariaLabel: serviceName,
+    ariaLabel: "Cookes on " + serviceName,
     classes: "js-cookies-banner",
     messages: [
       {
-        headingText: serviceName,
+        headingText: "Cookes on " + serviceName,
         html: html,
         classes: "js-question-banner",
         actions: [
