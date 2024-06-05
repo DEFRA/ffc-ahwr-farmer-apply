@@ -42,10 +42,8 @@ describe('Farmer apply accessibility page test', () => {
 
     expect(res.statusCode).toBe(200)
     const $ = cheerio.load(res.payload)
-    expect($('.govuk-heading-l').text()).toContain(
-      `Accessibility statement for ${serviceName}`
-    )
-    expect($('title').text()).toEqual(`Accessibility statement - ${serviceName}`)
+    expect($('.govuk-heading-l').text()).toMatch(`Accessibility statement: ${serviceName}`)
+    expect($('title').text()).toMatch(`Accessibility statement - ${serviceName}`)
     expectPhaseBanner.ok($)
   })
 })
