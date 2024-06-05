@@ -3,10 +3,14 @@ const boom = require('@hapi/boom')
 const config = require('../../config')
 const session = require('../../session')
 const businessAppliedBefore = require('../../api-requests/business-applied-before')
-const { organisation: organisationKey, confirmCheckDetails: confirmCheckDetailsKey } =
-  require('../../session/keys').farmerApplyData
+const {
+  organisation: organisationKey,
+  confirmCheckDetails: confirmCheckDetailsKey,
+  reference: referenceKey
+} = require('../../session/keys').farmerApplyData
 const getOrganisation = require('../models/organisation')
 const { endemicsCheckDetails, endemicsReviews } = require('../../config/routes')
+const createTempReference = require('../../lib/create-temp-reference')
 
 const pageUrl = `${config.urlPrefix}/${endemicsCheckDetails}`
 const errorMessageText = 'Select if your details are correct'
@@ -67,6 +71,9 @@ module.exports = [
         }
       },
       handler: async (request, h) => {
+        const tempApplicationId = createTempReference()
+        session.setFarmerApplyData(request, referenceKey, tempApplicationId)
+
         const { confirmCheckDetails } = request.payload
         session.setFarmerApplyData(request, confirmCheckDetailsKey, confirmCheckDetails)
 
