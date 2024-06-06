@@ -21,7 +21,7 @@ const agreementStatus = {
   },
   notAgree: {
     value: 'notAgree',
-    text: 'I do not agree – reject agreement'
+    text: 'I do not agree'
   }
 }
 

@@ -26,16 +26,22 @@
       {% endif %}
       <h1 class="govuk-heading-l">Review your agreement offer</h1>
 
-      <p class="govuk-body">This is an offer of funding to  improve animal health and welfare  for this business:</p>
+      <p class="govuk-body">This is an offer of funding to improve animal health and welfare for this business:</p>
       <div class="govuk-inset-text">
         <span id="organisation-name">{{ organisation.name }}</span><br>
         <span id="organisation-address">{{ organisation.address | safe }}</span><br>
       SBI: <span id="organisation-sbi">{{ organisation.sbi }}</span>
       </div>
 
+      <p>You may either:</p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>accept this offer of agreement subject to the following</li>
+        <li>reject this offer</li>
+      </ul>
+
       <p>You must:</p>
       <ul class="govuk-list govuk-list--bullet">
-        <li>allow a vet to take samples to test for diseases relevant to the livestock you choose to claim for </li>
+        <li>allow a vet to take samples to test for diseases relevant to the livestock you choose </li>
         <li>share details about the vet and the results the vet gives you with the Rural Payments Agency (RPA)</li>
       </ul><br>
 
