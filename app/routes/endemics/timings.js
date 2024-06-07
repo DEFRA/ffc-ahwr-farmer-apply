@@ -3,7 +3,6 @@ const session = require('../../session')
 const { userType } = require('../../constants/user-types')
 const { agreeVisitTimings } =
   require('../../session/keys').farmerApplyData
-const { userType } = require('../../constants/user-types')
 const urlPrefix = require('../../config/index').urlPrefix
 const config = require('../../config/index')
 const {
