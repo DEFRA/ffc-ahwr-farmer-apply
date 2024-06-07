@@ -71,8 +71,9 @@ describe('Declaration test', () => {
     })
 
     test('returns 200 when application found', async () => {
-      // const application = { organisation }
-      sessionMock.getFarmerApplyData.mockReturnValue(organisation)
+      const application = { organisation }
+      sessionMock.getFarmerApplyData.mockReturnValueOnce(application)
+      sessionMock.getFarmerApplyData.mockReturnValueOnce(organisation)
       const options = {
         method: 'GET',
         url,

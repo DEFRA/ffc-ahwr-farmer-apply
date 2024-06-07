@@ -1,5 +1,4 @@
 const session = require('../../session')
-const boom = require('@hapi/boom')
 const { agreeSpeciesNumbers, organisation: organisationKey } = require('../../session/keys').farmerApplyData
 const config = require('../../config/index')
 const urlPrefix = require('../../config/index').urlPrefix
@@ -32,9 +31,6 @@ module.exports = [
     options: {
       handler: async (request, h) => {
         const organisation = session.getFarmerApplyData(request, organisationKey)
-        if (!organisation) {
-          return boom.notFound()
-        }
         return h.view(endemicsNumbers, {
           backLink,
           agreementStatus,

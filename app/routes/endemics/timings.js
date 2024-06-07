@@ -1,6 +1,5 @@
 const session = require('../../session')
 const { userType } = require('../../constants/user-types')
-const boom = require('@hapi/boom')
 const { agreeVisitTimings, organisation: organisationKey } = require('../../session/keys').farmerApplyData
 const urlPrefix = require('../../config/index').urlPrefix
 const config = require('../../config/index')
@@ -21,12 +20,10 @@ module.exports = [
       handler: async (request, h) => {
         const application = session.getFarmerApplyData(request)
         const organisation = session.getFarmerApplyData(request, organisationKey)
-        if (!organisation) {
-          return boom.notFound()
-        }
         return h.view(endemicsTimings, {
           isOldUser: userType.NEW_USER !== application.organisation.userType,
-          backLink
+          backLink,
+          organisation
         })
       }
     }
