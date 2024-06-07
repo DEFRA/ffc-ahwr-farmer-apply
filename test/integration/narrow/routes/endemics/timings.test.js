@@ -13,7 +13,7 @@ jest.mock('../../../../../app/messaging')
 jest.mock('applicationinsights', () => ({ defaultClient: { trackException: jest.fn(), trackEvent: jest.fn() }, dispose: jest.fn() }))
 
 describe('Declaration test', () => {
-  const organisation = { id: 'organisation', name: 'org-name', address: 'org-address', sbi: '0123456789' }
+  const organisation = { id: 'organisation', name: 'org-name', address: 'org-address', sbi: '0123456789', farmerName: 'Mr Farm' }
   const auth = { credentials: { reference: '1111', sbi: '111111111' }, strategy: 'cookie' }
   const url = `${config.urlPrefix}/${endemicsTimings}`
 
