@@ -8,5 +8,6 @@ module.exports = {
   endemicsOfferRejected: 'endemics/offer-rejected',
   endemicsGuidanceForFarmers: 'endemics/apply-guidance-for-farmers',
   endemicsGuidanceVetVisit: 'endemics/vet-visit-guidance',
-  endemicsClaimGuidance: 'endemics/claim-guidance'
+  endemicsClaimGuidance: 'endemics/claim-guidance',
+  endemicsDetailsNotCorrect: 'endemics/details-not-correct'
 }

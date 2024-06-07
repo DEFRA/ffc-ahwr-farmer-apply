@@ -1,6 +1,7 @@
 {% extends './layouts/layout.njk' %}
 
-{% block pageTitle %}Timing of reviews and follow-ups - {{ serviceName }}{% endblock %}
+{% block pageTitle %}Timing of reviews and follow-ups - {{ serviceName }}
+{% endblock %}
 
 {% block beforeContent %}
   {{ govukBackLink({
@@ -43,24 +44,25 @@
     {% endif %}
     <br/><br/>
 
-    <form method="POST" autocomplete="off" novalidate="novalidate" id ="submitDeclarationForm">
-      <input type="hidden" name="crumb" value="{{crumb}}"/>
-      <div class="govuk-button-group">
-        {{ govukButton({
+          <form method="POST" autocomplete="off" novalidate="novalidate" id ="submitDeclarationForm">
+            <input type="hidden" name="crumb" value="{{crumb}}"/>
+            <div class="govuk-button-group">
+              {{ govukButton({
           text: "I agree",
           value: "agree",
           name: "agreementStatus",
           preventDoubleClick: true
         }) }}
         {{ govukButton({
+
           text: "I do not agree",
           classes: "govuk-button--secondary",
           value: "rejected",
           name: "agreementStatus",
           preventDoubleClick: true
         }) }}
+            </div>
+          </form>
+        </div>
       </div>
-    </form>
-  </div>
-</div>
-{% endblock %}
+    {% endblock %}

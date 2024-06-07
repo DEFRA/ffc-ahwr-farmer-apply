@@ -1,20 +1,22 @@
 {% extends './layouts/layout.njk' %}
 
-{% block pageTitle %}Update you details - {{ serviceName }}{% endblock %}
+{% block pageTitle %}Update you details - {{ serviceName }}
+{% endblock %}
 
 {% block beforeContent %}
   {{ govukBackLink({
     text: "Back",
-    href: "/apply/endemics/check-details" if endemics else "/apply/org-review",
+    href: "/apply/org-review",
 	  attributes: {id: "back"}
   }) }}
 {% endblock %}
 
 {% block content %}
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l">Update your details</h1>
-    <p><a href="https://www.gov.uk/claim-rural-payments">Sign in to the Rural Payments service</a> to update your details.</p>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-l">Update your details</h1>
+      <p>
+        <a href="https://www.gov.uk/claim-rural-payments">Sign in to the Rural Payments service</a> to update your details.</p>
+    </div>
   </div>
-</div>
 {% endblock %}
