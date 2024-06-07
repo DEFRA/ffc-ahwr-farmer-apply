@@ -1,6 +1,8 @@
+const boom = require('@hapi/boom')
 const session = require('../../session')
 const { agreeVisitTimings } =
   require('../../session/keys').farmerApplyData
+const { userType } = require('../../constants/user-types')
 const urlPrefix = require('../../config/index').urlPrefix
 const config = require('../../config/index')
 const {
@@ -18,8 +20,13 @@ module.exports = [
     path: `${urlPrefix}/${endemicsTimings}`,
     options: {
       handler: async (request, h) => {
+        const application = session.getFarmerApplyData(request)
+        if (!application) {
+          return boom.notFound()
+        }
         return h.view(endemicsTimings, {
-          backLink
+          backLink,
+          isNewUser: userType.NEW_USER === application.organisation.userType
         })
       }
     }
