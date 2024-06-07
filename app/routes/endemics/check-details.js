@@ -9,7 +9,7 @@ const {
   reference: referenceKey
 } = require('../../session/keys').farmerApplyData
 const getOrganisation = require('../models/organisation')
-const { endemicsCheckDetails, endemicsReviews } = require('../../config/routes')
+const { endemicsCheckDetails, endemicsReviews, endemicsDetailsNotCorrect } = require('../../config/routes')
 const createTempReference = require('../../lib/create-temp-reference')
 
 const pageUrl = `${config.urlPrefix}/${endemicsCheckDetails}`
@@ -81,8 +81,9 @@ module.exports = [
           return h.redirect(`${config.urlPrefix}/${endemicsReviews}`)
         }
 
-        return h.view('update-details', {
+        return h.view(endemicsDetailsNotCorrect, {
           ruralPaymentsAgency: config.ruralPaymentsAgency,
+          title: 'Details are not correct',
           endemics: config.endemics.enabled
         })
       }

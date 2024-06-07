@@ -21,7 +21,7 @@ const agreementStatus = {
   },
   notAgree: {
     value: 'notAgree',
-    text: 'I do not agree – reject agreement'
+    text: 'I do not agree'
   }
 }
 
@@ -60,7 +60,7 @@ module.exports = [
           request.cookieAuth.clear()
 
           return h.view(endemicsOfferRejected, {
-            title: 'Agreement terms rejected',
+            title: 'You cannot continue with your application',
             ruralPaymentsAgency: config.ruralPaymentsAgency
           })
         }

@@ -1,4 +1,5 @@
 const session = require('../../session')
+const { userType } = require('../../constants/user-types')
 const { agreeVisitTimings } =
   require('../../session/keys').farmerApplyData
 const urlPrefix = require('../../config/index').urlPrefix
@@ -18,7 +19,9 @@ module.exports = [
     path: `${urlPrefix}/${endemicsTimings}`,
     options: {
       handler: async (request, h) => {
+        const application = session.getFarmerApplyData(request)
         return h.view(endemicsTimings, {
+          isOldUser: userType.NEW_USER !== application.organisation.userType,
           backLink
         })
       }
@@ -45,7 +48,7 @@ module.exports = [
           request.cookieAuth.clear()
           session.clear(request)
           return h.view(endemicsOfferRejected, {
-            title: 'Agreement terms rejected',
+            title: 'You cannot continue with your application',
             ruralPaymentsAgency: config.ruralPaymentsAgency
           })
         }

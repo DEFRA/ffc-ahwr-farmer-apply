@@ -166,7 +166,7 @@ describe('Org review page test', () => {
 
       expect(res.statusCode).toBe(200)
       const $ = cheerio.load(res.payload)
-      expect($('.govuk-heading-l').text()).toEqual('Update your details')
+      expect($('.govuk-heading-l').text()).toEqual('Details are not correct')
     })
 
     test.each([
