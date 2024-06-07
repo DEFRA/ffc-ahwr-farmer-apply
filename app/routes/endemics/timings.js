@@ -1,4 +1,3 @@
-const boom = require('@hapi/boom')
 const session = require('../../session')
 const { userType } = require('../../constants/user-types')
 const { agreeVisitTimings } =
