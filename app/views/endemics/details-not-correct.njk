@@ -4,7 +4,7 @@
 {% endblock %}
 
 {% block beforeContent %}
-    {{ govukBackLink({
+  {{ govukBackLink({
     text: "Back",
     href: "/apply/endemics/check-details",
 	  attributes: {id: "back"}
@@ -12,13 +12,13 @@
 {% endblock %}
 
 {% block content %}
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
-            <h1 class="govuk-heading-l">Details are not correct</h1>
-            <p>
-                <a href="https://www.gov.uk/claim-rural-payments">Sign in to the Rural Payments service</a> to add or update the businesses registered to your account.</p>
-            <p class="govuk-body">If you need help, contact the Rural Payments Agency.</p>
-            {{ rpaContactDetails({email: ruralPaymentsAgency.email, callChargesUri: ruralPaymentsAgency.callChargesUri, telephone: ruralPaymentsAgency.telephone}) }}
-        </div>
-    </div>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-l">Details are not correct</h1>
+      <p><a class="govuk-link" rel="external" href="https://www.gov.uk/claim-rural-payments">Sign in to the Rural Payments service</a> to add or update the businesses registered to your account.</p>
+      <p class="govuk-body">If you need help, contact the Rural Payments Agency.</p>
+    
+      {{ rpaContactDetails({email: ruralPaymentsAgency.email, callChargesUri: ruralPaymentsAgency.callChargesUri, telephone: ruralPaymentsAgency.telephone}) }}
+   </div>
+ </div>
 {% endblock %}
