@@ -11,7 +11,7 @@ Scenario: AC1 Review and follow up species must be for same species confirmation
     Then user continue to next page
     Then user confirm Review Page
     Then user clicks I do not agree-Reject agreement
-    Then validate agreement terms rejected
+    Then validate You cannot continue with your application
 
     Scenario:AC-2 Validate call charges screen
     Then validate call charges screen

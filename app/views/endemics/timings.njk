@@ -12,54 +12,37 @@
 {% endblock %}
 
 {% block content %}
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
-      <h1 class="govuk-heading-l">Timing of reviews and follow-ups</h1>
-      <p class="govuk-body">
-        You can do up to 3 reviews and follow-ups under this
-        {% if not isNewUser %}
-        new
-        {% endif %}
-         agreement. We recommend you follow this sequence.
-      </p>
-      {{ govukWarningText({
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">Timing of reviews and follow-ups</h1>
+    <p>You can do up to 3 reviews and follow-up under this agreement. We recommend you follow this sequence.</p>
+    {{ govukWarningText({
       text: "At each step you choose to complete, you must follow the relevant timing rules to be eligible to claim.",
       iconFallbackText: "Warning"
-      }) }}
-
-      <ol class="govuk-list govuk-list--number">
-        <p class="govuk-heading-m">Do a review</p>
-        <li> If you do a review, you must:
-          <ul class="govuk-list govuk-list--bullet">
-            <li>always do the review before you do the resulting follow-up</li>
-            <li>wait at least 10months between your reviews</li>
-          </ul>
-        </li>
-        <li>
-          <p class="govuk-heading-m">Claim for review<p></li>
-            <li>
-              <p class="govuk-heading-m">Do a follow-up</p>
-              <p> If you do a follow-up, you must:</p>
-              <ul class="govuk-list govuk-list--bullet">
-                <li>do the follow-up no more than 10 months after the review</li>
-                <li>wait at least 10 months between your follow-ups</li>
-              </ul>
-            </li>
-            <li>
-              <p class="govuk-heading-m">Claim for a follow-up</p>
-              <p>your review claim must be approved before you claim for the resulting follow-up.</p>
-            </li>
-            <li>
-              <p class="govuk-heading-m">Repeat this sequence for your second and third reviews and follow-ups</p>
-              {% if not isNewUser %}
-                <div class="govuk-inset-text">
-                  If you have completed a review in the old annual health and welfare review, you can go straight 
-                  to your follow-up. You need to do the follow-up no more than 10 months after your review. 
-              </div>
-              {% endif %}
-            </li>
-          </ol>
-          <br><br>
+    }) }}
+    
+    <h2 class="govuk-heading-m">1 Do a review</h2>
+    <p>If you do a review, you must:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>always do the review before you do the resulting follow-up</li>
+      <li>wait at least 10 months between your reviews</li>
+    </ul><br/>
+    <h2 class="govuk-heading-m">2 Claim for review</h2>
+    <h2 class="govuk-heading-m">3 Do a follow-up</h2>
+    <p>If you do a follow-up, you must:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>do the follow-up no more than 10 months after the review</li>
+      <li>wait at least 10 months between your follow-ups</li>
+    </ul><br/>
+    <h2 class="govuk-heading-m">4 Claim for a follow-up</h2>
+    <p>Your review claim must be approved before you claim for the resulting follow-up.</p>
+    <h2 class="govuk-heading-m">5 Repeat this sequence for your second and third reviews and follow-up</h2>
+    {% if isOldUser %}
+    {{ govukInsetText({
+      text: "If you have completed a review in the old annual health and welfare review, you need to do the follow-up no more than 10 months after your review."
+    }) }}
+    {% endif %}
+    <br/><br/>
 
           <form method="POST" autocomplete="off" novalidate="novalidate" id ="submitDeclarationForm">
             <input type="hidden" name="crumb" value="{{crumb}}"/>
@@ -70,7 +53,8 @@
           name: "agreementStatus",
           preventDoubleClick: true
         }) }}
-              {{ govukButton({
+        {{ govukButton({
+
           text: "I do not agree",
           classes: "govuk-button--secondary",
           value: "rejected",

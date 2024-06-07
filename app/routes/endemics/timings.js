@@ -1,5 +1,6 @@
 const boom = require('@hapi/boom')
 const session = require('../../session')
+const { userType } = require('../../constants/user-types')
 const { agreeVisitTimings } =
   require('../../session/keys').farmerApplyData
 const { userType } = require('../../constants/user-types')
@@ -21,12 +22,9 @@ module.exports = [
     options: {
       handler: async (request, h) => {
         const application = session.getFarmerApplyData(request)
-        if (!application) {
-          return boom.notFound()
-        }
         return h.view(endemicsTimings, {
-          backLink,
-          isNewUser: userType.NEW_USER === application.organisation.userType
+          isOldUser: userType.NEW_USER !== application.organisation.userType,
+          backLink
         })
       }
     }
@@ -52,7 +50,7 @@ module.exports = [
           request.cookieAuth.clear()
           session.clear(request)
           return h.view(endemicsOfferRejected, {
-            title: 'Agreement terms rejected',
+            title: 'You cannot continue with your application',
             ruralPaymentsAgency: config.ruralPaymentsAgency
           })
         }
