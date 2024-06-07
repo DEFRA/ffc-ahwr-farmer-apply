@@ -25,12 +25,14 @@
         <input type="hidden" name="crumb" value="{{crumb}}"/>
         <div class="govuk-button-group">
           {{ govukButton({
+          ariaLabel: agreementStatus.agree.text + " - Reviews and follow-ups must be for the same specie",
           text: agreementStatus.agree.text,
           value: agreementStatus.agree.value,
           name: "agreementStatus",
           preventDoubleClick: true
         }) }}
           {{ govukButton({
+          ariaLabel: agreementStatus.agree.text + " - Reviews and follow-ups must be for the same specie",
           text: agreementStatus.notAgree.text,
           value: agreementStatus.notAgree.value,
           name: "agreementStatus",
