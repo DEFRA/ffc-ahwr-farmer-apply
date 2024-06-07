@@ -13,7 +13,7 @@ jest.mock('../../../../../app/messaging')
 jest.mock('applicationinsights', () => ({ defaultClient: { trackException: jest.fn(), trackEvent: jest.fn() }, dispose: jest.fn() }))
 
 describe('Declaration test', () => {
-  const organisation = { id: 'organisation', name: 'org-name', address: 'org-address', sbi: '0123456789' }
+  const organisation = { id: 'organisation', name: 'org-name', address: 'org-address', sbi: '0123456789', farmerName: 'Mr Farm' }
   const auth = { credentials: { reference: '1111', sbi: '111111111' }, strategy: 'cookie' }
   const url = `${config.urlPrefix}/${endemicsTimings}`
 
@@ -71,8 +71,8 @@ describe('Declaration test', () => {
     })
 
     test('returns 200 when application found', async () => {
-      const application = { organisation }
-      sessionMock.getFarmerApplyData.mockReturnValue(application)
+      // const application = { organisation }
+      sessionMock.getFarmerApplyData.mockReturnValue(organisation)
       const options = {
         method: 'GET',
         url,
@@ -85,6 +85,7 @@ describe('Declaration test', () => {
       const $ = cheerio.load(res.payload)
       expect($('h1').text()).toMatch('Timing of reviews and follow-ups')
       expect($('title').text()).toMatch('Timing of reviews and follow-ups - Get funding to improve animal health and welfare')
+      expect($('.govuk-heading-s').text()).toEqual(`${organisation.farmerName} - SBI ${organisation.sbi}`)
       expectPhaseBanner.ok($)
     })
   })
