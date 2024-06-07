@@ -84,7 +84,7 @@ describe('Check your eligible page test', () => {
 
       expect(pageTitleByName).toMatch(fullTitle)
       expect(pageTitleByClassName).toEqual(title)
-      expect($('.govuk-heading-s').text()).toEqual(`${org.farmerName} - SBI ${org.sbi}`)
+      expect($('.govuk-heading-s').text()).toEqual(`${org.name} - SBI ${org.sbi}`)
       expect(backLinkUrlByClassName).toContain(endemicsCheckDetailsUrl)
       expectPhaseBanner.ok($)
     })
