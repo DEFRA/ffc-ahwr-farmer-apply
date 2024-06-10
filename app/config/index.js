@@ -115,7 +115,7 @@ const config = {
     telephone: '03000 200 301'
   },
   customerSurvey: {
-    uri: 'https://defragroup.eu.qualtrics.com/jfe/form/SV_0lxBrd2XeDnn2hU'
+    uri: 'https://defragroup.eu.qualtrics.com/jfe/form/SV_b78D60CTVqEC7KC'
   },
   applicationApi: require('../api-requests/application-api.config'),
   wreckHttp: {
