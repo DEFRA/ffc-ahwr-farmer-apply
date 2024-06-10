@@ -1,6 +1,5 @@
 const session = require('../../session')
-const { agreeSameSpecies } =
-  require('../../session/keys').farmerApplyData
+const { agreeSameSpecies, organisation: organisationKey } = require('../../session/keys').farmerApplyData
 const config = require('../../config/index')
 const urlPrefix = require('../../config/index').urlPrefix
 const {
@@ -31,9 +30,11 @@ module.exports = [
     path: pageUrl,
     options: {
       handler: async (request, h) => {
+        const organisation = session.getFarmerApplyData(request, organisationKey)
         return h.view(endemicsReviews, {
           backLink,
-          agreementStatus
+          agreementStatus,
+          organisation
         })
       }
     }
