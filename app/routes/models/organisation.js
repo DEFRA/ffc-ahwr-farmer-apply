@@ -4,7 +4,7 @@ const { endemics } = require('../../config')
 const { confirmCheckDetails } = require('../../session/keys').farmerApplyData
 const { getYesNoRadios } = require('./form-component/yes-no-radios')
 
-const labelText = 'Are your details correct?'
+const labelText = 'Are these details correct?'
 
 const formatAddressForDisplay = (organisation) => {
   return organisation?.address?.replaceAll(',', '<br>')
