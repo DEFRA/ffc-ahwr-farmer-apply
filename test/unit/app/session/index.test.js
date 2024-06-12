@@ -6,6 +6,8 @@ describe('session', () => {
   const tokensSectionKey = 'tokens'
   const customerSectionKey = 'customer'
   const pkcecodesSectionKey = 'pkcecodes'
+  const routeReturn = 'returnRoute'
+  const tempReference = 'tempReference'
 
   const value = 'value'
   const objectValue = { key: value }
@@ -15,7 +17,9 @@ describe('session', () => {
     { func: 'getSelectYourBusiness', expectedSectionKey: selectYourBusinessSectionKey },
     { func: 'getToken', expectedSectionKey: tokensSectionKey },
     { func: 'getCustomer', expectedSectionKey: customerSectionKey },
-    { func: 'getPkcecodes', expectedSectionKey: pkcecodesSectionKey }
+    { func: 'getPkcecodes', expectedSectionKey: pkcecodesSectionKey },
+    { func: 'getReturnRoute', expectedSectionKey: routeReturn }
+
   ]
 
   const setFunctionsToTest = [
@@ -23,7 +27,9 @@ describe('session', () => {
     { func: 'setSelectYourBusiness', expectedSectionKey: selectYourBusinessSectionKey },
     { func: 'setToken', expectedSectionKey: tokensSectionKey },
     { func: 'setCustomer', expectedSectionKey: customerSectionKey },
-    { func: 'setPkcecodes', expectedSectionKey: pkcecodesSectionKey }
+    { func: 'setPkcecodes', expectedSectionKey: pkcecodesSectionKey },
+    { func: 'setTempReference', expectedSectionKey: tempReference },
+    { func: 'setReturnRoute', expectedSectionKey: routeReturn }
   ]
 
   const keysAndValuesToTest = [
