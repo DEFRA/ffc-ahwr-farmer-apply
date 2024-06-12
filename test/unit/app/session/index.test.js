@@ -145,4 +145,22 @@ describe('session', () => {
       'key3'
     ])).toBeTruthy()
   })
+  test('session clear clears correct keys', async () => {
+    const yarMock = {
+      get: jest.fn(),
+      set: jest.fn(),
+      clear: jest.fn()
+    }
+    const requestSetMock = { yar: yarMock, headers: { 'x-forwarded-for': '1.1.1.1' } }
+    session.clear(requestSetMock)
+
+    expect(requestSetMock.yar.clear).toHaveBeenCalledTimes(7)
+    expect(requestSetMock.yar.clear).toHaveBeenCalledWith('farmerApplyData')
+    expect(requestSetMock.yar.clear).toHaveBeenCalledWith('selectYourBusiness')
+    expect(requestSetMock.yar.clear).toHaveBeenCalledWith('organisation')
+    expect(requestSetMock.yar.clear).toHaveBeenCalledWith('answers')
+    expect(requestSetMock.yar.clear).toHaveBeenCalledWith('customer')
+    expect(requestSetMock.yar.clear).toHaveBeenCalledWith('tempReference')
+    expect(requestSetMock.yar.clear).toHaveBeenCalledWith('returnRoute')
+  })
 })
