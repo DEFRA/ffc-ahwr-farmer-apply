@@ -180,7 +180,7 @@ module.exports = [{
           hasMultipleBusinesses: attachedToMultipleBusinesses,
           backLink: auth.requestAuthorizationCodeUrl(session, request),
           claimLink: config.claimServiceUri,
-          sbiText: organisation?.sbi !== undefined ? ` - SBI ${organisation.sbi}` : null,
+          sbiText: organisation?.sbi !== undefined ? `SBI ${organisation.sbi}` : null,
           organisationName: organisation?.name,
           guidanceLink: config.serviceUri
         }).code(400).takeover()
