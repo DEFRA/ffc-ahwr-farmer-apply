@@ -88,7 +88,7 @@ module.exports = [{
 
       if (request.payload.offerStatus === 'rejected') {
         return h.view(endemicsOfferRejected, {
-          title: 'Agreement offer rejected',
+          offerRejected: true,
           ruralPaymentsAgency: config.ruralPaymentsAgency
         })
       }

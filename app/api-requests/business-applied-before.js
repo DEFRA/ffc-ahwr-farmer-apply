@@ -1,6 +1,7 @@
 const applicationApi = require('./application-api')
 const status = require('../constants/status')
 const { userType } = require('../constants/user-types')
+const applicationType = require('../constants/application-type')
 
 async function businessAppliedBefore (sbi) {
   const latestApplicationsForSbi = await applicationApi.getLatestApplicationsBySbi(sbi)
@@ -12,7 +13,7 @@ async function businessAppliedBefore (sbi) {
 }
 
 function applicationForBusinessInStateToApply (latestApplicationsForSbi) {
-  if (latestApplicationsForSbi.length === 0) {
+  if (latestApplicationsForSbi.filter(application => application.type === applicationType.VET_VISITS).length === 0) {
     return userType.NEW_USER
   }
   const latestApplication = getLatestApplication(latestApplicationsForSbi)
