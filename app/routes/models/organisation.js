@@ -4,7 +4,7 @@ const { endemics } = require('../../config')
 const { confirmCheckDetails } = require('../../session/keys').farmerApplyData
 const { getYesNoRadios } = require('./form-component/yes-no-radios')
 
-const labelText = 'Are these details correct?'
+const labelText = () => endemics.enabled ? 'Are these details correct?' : 'Are your details correct?'
 
 const formatAddressForDisplay = (organisation) => {
   return organisation?.address?.replaceAll(',', '<br>')
@@ -39,7 +39,7 @@ const getOrganisation = (request, organisation, errorText) => {
     },
     organisation,
     listData: { rows: filteredRows },
-    ...getYesNoRadios(labelText, confirmCheckDetails, prevAnswer, errorText, {
+    ...getYesNoRadios(labelText(), confirmCheckDetails, prevAnswer, errorText, {
       isPageHeading: false,
       legendClasses: 'govuk-fieldset__legend--m',
       inline: true
