@@ -21,7 +21,7 @@
       {% endif %}
 
       <h2 class="govuk-heading-m">Get help with your application</h2>
-      <p class="govuk-body">If you need help with your application, contact the Rural Payments Agency by email or phone.</p>
+      <p class="govuk-body">If you need help with your application, contact the Rural Payments Agency.</p>
       {{ rpaContactDetails({email: ruralPaymentsAgency.email, callChargesUri: ruralPaymentsAgency.callChargesUri, telephone: ruralPaymentsAgency.telephone}) }}
     {% endif %}
     
@@ -52,7 +52,7 @@
       
       <h2 class="govuk-heading-m">Contact RPA</h2>
       
-      <p class="govuk-body">You can contact the RPA by email or phone.</p>
+      <p class="govuk-body">You can contact the RPA.</p>
       {{ rpaContactDetails({email: ruralPaymentsAgency.email, callChargesUri: ruralPaymentsAgency.callChargesUri, telephone: ruralPaymentsAgency.telephone}) }}
       <p class="govuk-body">Have your agreement number with you when you call or include it in your email.</p>
     {% endif %}
@@ -68,13 +68,8 @@
         <li>‘submit’ permission level for the basic payment scheme</li>
       </ul>
 
-      {% if hasMultipleBusinesses %}
-        <h2 class="govuk-heading-m">Apply for another business</h2>
-        <p class="govuk-body">You can <a href='{{ backLink }}'>apply for another business</a> that you have permission to act for.</p>
-      {% endif %}
-
       <h2 class="govuk-heading-m">Get help with your application</h2>
-      <p class="govuk-body">If you need help with your application, contact the Rural Payments Agency by email or phone.</p>
+      <p class="govuk-body">If you need help with your application, contact the Rural Payments Agency.</p>
       {{ rpaContactDetails({email: ruralPaymentsAgency.email, callChargesUri: ruralPaymentsAgency.callChargesUri, telephone: ruralPaymentsAgency.telephone}) }}
     {% endif %}
 
@@ -93,7 +88,7 @@
       {% endif %}
 
       <h2 class="govuk-heading-m">Get help with your application</h2>
-      <p class="govuk-body">If you need help with your application, contact the Rural Payments Agency by email or phone.</p>
+      <p class="govuk-body">If you need help with your application, contact the Rural Payments Agency.</p>
       {{ rpaContactDetails({email: ruralPaymentsAgency.email, callChargesUri: ruralPaymentsAgency.callChargesUri, telephone: ruralPaymentsAgency.telephone}) }}
     {% endif %}
   </div>

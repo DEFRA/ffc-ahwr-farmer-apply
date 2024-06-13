@@ -6,6 +6,8 @@ describe('session', () => {
   const tokensSectionKey = 'tokens'
   const customerSectionKey = 'customer'
   const pkcecodesSectionKey = 'pkcecodes'
+  const routeReturn = 'returnRoute'
+  const tempReference = 'tempReference'
 
   const value = 'value'
   const objectValue = { key: value }
@@ -15,7 +17,9 @@ describe('session', () => {
     { func: 'getSelectYourBusiness', expectedSectionKey: selectYourBusinessSectionKey },
     { func: 'getToken', expectedSectionKey: tokensSectionKey },
     { func: 'getCustomer', expectedSectionKey: customerSectionKey },
-    { func: 'getPkcecodes', expectedSectionKey: pkcecodesSectionKey }
+    { func: 'getPkcecodes', expectedSectionKey: pkcecodesSectionKey },
+    { func: 'getReturnRoute', expectedSectionKey: routeReturn }
+
   ]
 
   const setFunctionsToTest = [
@@ -23,7 +27,9 @@ describe('session', () => {
     { func: 'setSelectYourBusiness', expectedSectionKey: selectYourBusinessSectionKey },
     { func: 'setToken', expectedSectionKey: tokensSectionKey },
     { func: 'setCustomer', expectedSectionKey: customerSectionKey },
-    { func: 'setPkcecodes', expectedSectionKey: pkcecodesSectionKey }
+    { func: 'setPkcecodes', expectedSectionKey: pkcecodesSectionKey },
+    { func: 'setTempReference', expectedSectionKey: tempReference },
+    { func: 'setReturnRoute', expectedSectionKey: routeReturn }
   ]
 
   const keysAndValuesToTest = [
@@ -138,5 +144,23 @@ describe('session', () => {
       'key2',
       'key3'
     ])).toBeTruthy()
+  })
+  test('session clear clears correct keys', async () => {
+    const yarMock = {
+      get: jest.fn(),
+      set: jest.fn(),
+      clear: jest.fn()
+    }
+    const requestSetMock = { yar: yarMock, headers: { 'x-forwarded-for': '1.1.1.1' } }
+    session.clear(requestSetMock)
+
+    expect(requestSetMock.yar.clear).toHaveBeenCalledTimes(7)
+    expect(requestSetMock.yar.clear).toHaveBeenCalledWith('farmerApplyData')
+    expect(requestSetMock.yar.clear).toHaveBeenCalledWith('selectYourBusiness')
+    expect(requestSetMock.yar.clear).toHaveBeenCalledWith('organisation')
+    expect(requestSetMock.yar.clear).toHaveBeenCalledWith('answers')
+    expect(requestSetMock.yar.clear).toHaveBeenCalledWith('customer')
+    expect(requestSetMock.yar.clear).toHaveBeenCalledWith('tempReference')
+    expect(requestSetMock.yar.clear).toHaveBeenCalledWith('returnRoute')
   })
 })

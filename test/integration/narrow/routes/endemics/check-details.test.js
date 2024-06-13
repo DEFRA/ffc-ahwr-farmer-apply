@@ -92,7 +92,7 @@ describe('Org review page test', () => {
       expect(values.eq(6).text()).toMatch(org.address)
       expect($('title').text()).toEqual('Check your details - Get funding to improve animal health and welfare')
       expect($('.govuk-back-link').attr('href')).toContain('https://somedefraidlogin')
-      expect($('legend').text().trim()).toEqual('Are your details correct?')
+      expect($('legend').text().trim()).toEqual('Are these details correct?')
       expect($('.govuk-radios__item').length).toEqual(2)
       expect(authMock.requestAuthorizationCodeUrl).toBeCalledTimes(1)
       expectPhaseBanner.ok($)

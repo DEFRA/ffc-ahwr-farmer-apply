@@ -108,6 +108,7 @@ module.exports = [{
                 crn: session.getCustomer(request, sessionKeys.customer.crn)
               }
             })
+            session.setReturnRoute(request, 'returnRoute', 'apply')
             break
           case err instanceof InvalidPermissionsError:
             appInsights.defaultClient.trackEvent({
