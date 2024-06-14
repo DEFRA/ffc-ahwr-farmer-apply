@@ -21,7 +21,7 @@ module.exports = [
         const application = session.getFarmerApplyData(request)
         const organisation = session.getFarmerApplyData(request, organisationKey)
         return h.view(endemicsTimings, {
-          isOldUser: userType.NEW_USER !== application.organisation.userType,
+          isOldUser: userType.NEW_USER === application.organisation.userType,
           backLink,
           organisation
         })
