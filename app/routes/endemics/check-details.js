@@ -13,7 +13,7 @@ const { endemicsCheckDetails, endemicsReviews, endemicsDetailsNotCorrect } = req
 const createTempReference = require('../../lib/create-temp-reference')
 
 const pageUrl = `${config.urlPrefix}/${endemicsCheckDetails}`
-const errorMessageText = 'Select if your details are correct'
+const errorMessageText = 'Select if these details are correct'
 
 module.exports = [
   {

@@ -61,7 +61,7 @@ module.exports = [
           request.cookieAuth.clear()
 
           return h.view(endemicsOfferRejected, {
-            title: 'You cannot continue with your application',
+            termsRejected: true,
             ruralPaymentsAgency: config.ruralPaymentsAgency
           })
         }
