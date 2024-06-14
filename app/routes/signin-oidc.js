@@ -105,11 +105,9 @@ module.exports = [{
               properties: {
                 reference: tempApplicationId,
                 sbi: organisation.sbi,
-                crn: session.getCustomer(request, sessionKeys.customer.crn),
-                returnRoute: 'Apply -> from Apply Repo'
+                crn: session.getCustomer(request, sessionKeys.customer.crn)
               }
             })
-            session.setReturnRoute(request, 'returnRoute', 'apply')
             break
           case err instanceof InvalidPermissionsError:
             appInsights.defaultClient.trackEvent({
@@ -168,6 +166,10 @@ module.exports = [{
           err.name,
           tempApplicationId
         )
+
+        if (err instanceof AlreadyAppliedError) {
+          session.setReturnRoute(request, 'returnRoute', 'apply')
+        }
 
         return h.view('cannot-apply-for-livestock-review-exception', {
           ruralPaymentsAgency: config.ruralPaymentsAgency,
