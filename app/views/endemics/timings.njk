@@ -16,7 +16,7 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l">Timing of reviews and follow-ups</h1>
-    <p>You can do up to 3 reviews and follow-ups under this agreement. We recommend you follow this sequence.</p>
+    <p>You can do up to 3 reviews and follow-ups under this {{ 'new' if isOldUser else ''}} agreement. We recommend you follow this sequence.</p>
     {{ govukWarningText({
       text: "At each step you choose to complete, you must follow the relevant timing rules to be eligible to claim.",
       iconFallbackText: "Warning"
