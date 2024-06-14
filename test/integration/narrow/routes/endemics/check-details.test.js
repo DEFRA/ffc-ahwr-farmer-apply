@@ -211,7 +211,7 @@ describe('Org review page test', () => {
 
       expect(res.statusCode).toBe(400)
       const $ = cheerio.load(res.payload)
-      expect($('.govuk-error-summary .govuk-list').text().trim()).toEqual('Select if your details are correct')
+      expect($('.govuk-error-summary .govuk-list').text().trim()).toEqual('Select if these details are correct')
     })
   })
 })
