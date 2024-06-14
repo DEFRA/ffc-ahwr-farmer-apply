@@ -105,7 +105,8 @@ module.exports = [{
               properties: {
                 reference: tempApplicationId,
                 sbi: organisation.sbi,
-                crn: session.getCustomer(request, sessionKeys.customer.crn)
+                crn: session.getCustomer(request, sessionKeys.customer.crn),
+                returnRoute: 'Apply -> from Apply Repo'
               }
             })
             session.setReturnRoute(request, 'returnRoute', 'apply')
