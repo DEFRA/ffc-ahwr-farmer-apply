@@ -167,18 +167,6 @@ module.exports = [{
           tempApplicationId
         )
 
-        if (err instanceof AlreadyAppliedError) {
-          session.setReturnRoute(request, 'returnRoute', 'apply')
-          appInsights.defaultClient.trackEvent({
-            name: 'return-route',
-            properties: {
-              sbi: organisation.sbi,
-              crn: session.getCustomer(request, sessionKeys.customer.crn),
-              returnRoute: `${session.getReturnRoute(request, 'returnRoute')}`
-            }
-          })
-        }
-
         return h.view('cannot-apply-for-livestock-review-exception', {
           ruralPaymentsAgency: config.ruralPaymentsAgency,
           alreadyAppliedError: err instanceof AlreadyAppliedError,
