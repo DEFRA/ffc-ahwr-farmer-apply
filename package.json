@@ -49,11 +49,14 @@
     "nunjucks": "^3.2.3",
     "pg-promise": "^11.5.5",
     "uuid": "^8.3.2",
-    "webdriverio": "^8.13.13"
+    "webdriverio": "^7.16.4"
   },
   "overrides": {
     "mssql": {
       "@azure/identity": "4.2.1"
+    },
+    "puppeteer-core": {
+      "ws": "^8.17.1"
     },
     "semver": "7.5.2"
   },
