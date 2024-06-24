@@ -9,6 +9,7 @@ const entries = {
   tokens: 'tokens',
   customer: 'customer',
   tempReference: 'tempReference',
+  returnRoute: 'returnRoute',
   type: 'type' // EM or VV
 }
 
@@ -43,6 +44,8 @@ function clear (request) {
   request.yar.clear(entries.answers)
   request.yar.clear(entries.selectYourBusiness)
   request.yar.clear(entries.customer)
+  request.yar.clear(entries.tempReference)
+  request.yar.clear(entries.returnRoute)
 }
 
 function setFarmerApplyData (request, key, value) {
@@ -89,6 +92,14 @@ const setTempReference = (request, key, value) => {
   set(request, entries.tempReference, key, value)
 }
 
+const setReturnRoute = (request, key, value) => {
+  set(request, entries.returnRoute, key, value)
+}
+
+const getReturnRoute = (request, key) => {
+  return get(request, entries.returnRoute, key)
+}
+
 module.exports = {
   entries,
   lacksAny,
@@ -103,5 +114,7 @@ module.exports = {
   setPkcecodes,
   setCustomer,
   getCustomer,
-  setTempReference
+  setTempReference,
+  setReturnRoute,
+  getReturnRoute
 }

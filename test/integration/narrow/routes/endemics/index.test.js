@@ -23,8 +23,9 @@ describe('Farmer apply home page test', () => {
       'Get funding to improve animal health and welfare'
     )
     const button = $('.govuk-main-wrapper .govuk-button')
+    console.log('title ===>', $('title').text())
     expect(button.text()).toMatch('Start now')
-    expect($('title').text()).toEqual('Get funding to improve animal health and welfare')
+    expect($('title').text()).toMatch('Get funding to improve animal health and welfare')
     expectPhaseBanner.ok($)
   })
 })

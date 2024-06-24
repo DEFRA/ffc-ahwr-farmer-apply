@@ -17,7 +17,7 @@ Scenario: AC1 Review and follow up species must be for same species confirmation
     Then agree the Minimum number of livestock
     Then Validate if the user had landed on timining and funding
     Then user clicks I do not agree-Reject agreement for Timing and funding
-    Then validate agreement terms rejected
+    Then validate You cannot continue with your application
 
     Scenario:AC- 6 Validate call charges screen
     Then validate call charges screen

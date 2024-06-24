@@ -2,11 +2,13 @@ const config = require('../../config')
 const nonce = require('../id-token/nonce')
 const state = require('./state')
 const pkce = require('./proof-key-for-code-exchange')
+const { setReturnRoute } = require('../../session')
 
 const requestAuthorizationCodeUrl = (session, request, useProofKeyForCodeExchange = true) => {
   const url = new URL(
     `${config.authConfig.defraId.hostname}${config.authConfig.defraId.oAuthAuthorisePath}`
   )
+  if (config.endemics.enabled) setReturnRoute(request, 'returnRoute', 'apply')
   url.searchParams.append('p', config.authConfig.defraId.policy)
   url.searchParams.append('client_id', config.authConfig.defraId.clientId)
   url.searchParams.append('nonce', nonce.generate(request))

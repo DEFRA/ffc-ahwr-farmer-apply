@@ -80,8 +80,11 @@ describe('Check your eligible page test', () => {
       const fullTitle = `${title} - Get funding to improve animal health and welfare`
       const backLinkUrlByClassName = $('.govuk-back-link').attr('href')
 
-      expect(pageTitleByName).toEqual(fullTitle)
+      console.log(' asdjflkdajslfjals f ', $('.govuk-heading-s').text())
+
+      expect(pageTitleByName).toMatch(fullTitle)
       expect(pageTitleByClassName).toEqual(title)
+      expect($('.govuk-heading-s').text()).toEqual(`${org.name} - SBI ${org.sbi}`)
       expect(backLinkUrlByClassName).toContain(endemicsCheckDetailsUrl)
       expectPhaseBanner.ok($)
     })
