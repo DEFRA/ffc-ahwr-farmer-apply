@@ -1,22 +1,17 @@
 const { Given, When, Then } = require('@wdio/cucumber-framework')
-const SelectBusinessPage = require('../pages/select-business-page')
+//import { Given, When, Then } from '@wdio/cucumber-framework'
+//const { Given } = require('cucumber');
+const SelectBusinessPage = require('../../pages/select-business-page')
 const selectBusinessPage = new SelectBusinessPage()
-const CommonActions = require('../pages/common-actions')
+const CommonActions = require('../../pages/common-actions')
 const commonPage = new CommonActions()
 
 Given(/^the user is on the (.*) page$/, async function (page) {
   await selectBusinessPage.getHomePage(page)
-
-
 })
 When(/^start the application$/, async function () {
-     
-    await selectBusinessPage.clickOnStartButton()
-    
-     
-    await selectBusinessPage.clickOnStartButton()
-    
-});
+    await selectBusinessPage.clickOnStartButton()   
+ });
 When(/^user login with (.*) business crn and password\(for DefraId\)$/, async function (business) {
   await selectBusinessPage.signInWithDefraId(business)
 });
