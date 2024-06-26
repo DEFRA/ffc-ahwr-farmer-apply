@@ -31,7 +31,7 @@ ARG PORT
 ENV PORT ${PORT}
 EXPOSE ${PORT}
 
-COPY --from=development /home/node/app/ ./app/
-COPY --from=development /home/node/package*.json ./
+COPY --from=development /home/node/app/app/ ./app/
+COPY --from=development /home/node/app/package*.json ./
 RUN npm ci --ignore-scripts
 CMD [ "node", "app" ]
