@@ -20,6 +20,4 @@ services:
       - ./test-output/:/zap/wrk/test-output/
       - ./zap/:/zap/wrk/config/
 
-Then(/^agree Reviews and follow up for the same species$/, () => {
-	return true;
-});
+
