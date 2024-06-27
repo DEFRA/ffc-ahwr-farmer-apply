@@ -12,8 +12,12 @@ ARG PORT_DEBUG
 ENV PORT ${PORT}
 EXPOSE ${PORT} ${PORT_DEBUG}
 
+RUN mkdir -p /home/node/app && chown -R node:node /home/node/app
+WORKDIR /home/node/app
+
 COPY --chown=node:node package*.json ./
-RUN npm install --ignore-scripts
+USER node
+RUN npm ci --ignore-scripts
 COPY --chown=node:node . .
 RUN npm run build
 CMD [ "npm", "run", "start:watch" ]
@@ -27,7 +31,7 @@ ARG PORT
 ENV PORT ${PORT}
 EXPOSE ${PORT}
 
-COPY --from=development /home/node/app/ ./app/
-COPY --from=development /home/node/package*.json ./
+COPY --from=development /home/node/app/app/ ./app/
+COPY --from=development /home/node/app/package*.json ./
 RUN npm ci --ignore-scripts
 CMD [ "node", "app" ]
