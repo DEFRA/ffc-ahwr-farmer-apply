@@ -19,3 +19,4 @@ services:
     volumes:
       - ./test-output/:/zap/wrk/test-output/
       - ./zap/:/zap/wrk/config/
+    
