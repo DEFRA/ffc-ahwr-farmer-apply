@@ -51,10 +51,10 @@ module.exports = [{
       }
     },
     handler: async (request, h) => {
-      console.error('landed on Signin-doc GET 54')
+      console.log('landed on Signin-doc GET 54')
       let tempApplicationId
       try {
-        console.error('landed on Signin-doc GET 57')
+        console.log('landed on Signin-doc GET 57')
         tempApplicationId = createTempReference()
         // tempApplicationId added to reference to enable session event to report with temp id
         session.setFarmerApplyData(request, sessionKeys.farmerApplyData.reference, tempApplicationId)
