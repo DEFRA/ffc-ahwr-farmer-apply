@@ -12,10 +12,10 @@ ARG PORT_DEBUG
 ENV PORT ${PORT}
 EXPOSE ${PORT} ${PORT_DEBUG}
 
-RUN mkdir -p /home/node/app && chown -R node:node /home/node/app
+USER node
+RUN mkdir -p /home/node/app 
 WORKDIR /home/node/app
 
-USER node
 COPY package*.json ./
 RUN npm ci --ignore-scripts
 COPY . .
