@@ -13,4 +13,4 @@ services:
     container_name: ffc-ahwr-farmer-apply-test
     command: npm run test
     volumes:
-      - ./test-output:/home/node/app/test-output
+      - ./test-output:/home/node/test-output
