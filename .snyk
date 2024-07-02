@@ -7,4 +7,9 @@ ignore:
         reason: None given
         expires: "2024-07-17T00:00:00.000Z"
         created: "2024-06-17T00:00:00.000Z"
+  SNYK-JS-ASYNC-7414156:
+    - "*":
+        reason: None given
+        expires: "2024-08-17T00:00:00.000Z"
+        created: "2024-07-02:00:00.000Z"
 patch: {}
