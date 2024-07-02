@@ -107,7 +107,7 @@ let ACCEPT_AGREEMENT='[value="agree"]'
 let REJECT_AGREEMENT='[value="notAgree"]'
 let REJECT_TIMEANDFUNDING='[value="rejected"]'
 
-let REJECT_AGREEMENT_ERROR_MESSAGE='Agreement terms rejected'
+let REJECT_AGREEMENT_ERROR_MESSAGE='You cannot continue with your application'
 let REJECT_AGREEMENT_ERROR='//*[@id="main-content"]/div/div/h1'
 let BACK='#back'
 let GOV_UK='.govuk-header__logotype-text' 
@@ -115,7 +115,7 @@ let GOV_UK_LINK='https://www.gov.uk/'
 let HEADER='.govuk-heading-l'
 let REVIEW_HEADER='Reviews and follow-ups must be for the same species'
 let MINIMUM_LIVESTOCK_HEADER='Minimum number of livestock'
-let TIMING_AND_FUNDING='Timing of vet visits and funding claims'
+let TIMING_AND_FUNDING='Timing of reviews and follow-ups'
 let REVIEW_AGREEMENT_OFFER='Review your agreement offer'
 let AGREEMENT_OFFER_REJECTED='Agreement offer rejected'
 let AHWR_HEADER='.govuk-header__content'
@@ -206,8 +206,6 @@ console.log(error.message)
   }
 
   async checkFarmerDetails() {
-    
-    
     await this.elementToContainText(FARMER_DETAILS, CONTENT)
   }
 
@@ -426,7 +424,7 @@ console.log(error.message)
     const zoomPercentage1 = 100;
     browser.execute((zoom) => {
       document.body.style.zoom = `${zoom}%`;
-  }, 
+  }, zoomPercentage1);
     await browser.closeWindow();
     await browser.switchToWindow(windowHandles[0]);
 
