@@ -41,14 +41,15 @@ describe('Business Applied Before Tests', () => {
     })
   })
 
-  test('Business has a closed VV application', async () => {
+  test('Business has a successful VV application within the last 10 months', async () => {
     const SBI = 123456789
     const apiResponse = [
       {
         data: {
           organisation: {
             sbi: '122333'
-          }
+          },
+          visitDate: new Date()
         },
         createdAt: '2020-06-06T13:52:14.207Z',
         updatedAt: '2020-06-06T13:52:14.207Z',
@@ -58,5 +59,65 @@ describe('Business Applied Before Tests', () => {
     ]
     applicationApiMock.getLatestApplicationsBySbi.mockResolvedValueOnce(apiResponse)
     await expect(businessAppliedBefore(SBI)).resolves.toEqual(userType.EXISTING_USER)
+  })
+
+  test('Business has a withdrawn VV application within the last 10 months', async () => {
+    const SBI = 123456789
+    const apiResponse = [
+      {
+        data: {
+          organisation: {
+            sbi: '122333'
+          },
+          visitDate: new Date()
+        },
+        createdAt: '2020-06-06T13:52:14.207Z',
+        updatedAt: '2020-06-06T13:52:14.207Z',
+        statusId: status.WITHDRAWN,
+        type: 'VV'
+      }
+    ]
+    applicationApiMock.getLatestApplicationsBySbi.mockResolvedValueOnce(apiResponse)
+    await expect(businessAppliedBefore(SBI)).resolves.toEqual(userType.NEW_USER)
+  })
+
+  test('Business has a successful VV application NOT within the last 10 months', async () => {
+    const SBI = 123456789
+    const apiResponse = [
+      {
+        data: {
+          organisation: {
+            sbi: '122333'
+          },
+          visitDate: '2020-01-01'
+        },
+        createdAt: '2020-06-06T13:52:14.207Z',
+        updatedAt: '2020-06-06T13:52:14.207Z',
+        statusId: status.READY_TO_PAY,
+        type: 'VV'
+      }
+    ]
+    applicationApiMock.getLatestApplicationsBySbi.mockResolvedValueOnce(apiResponse)
+    await expect(businessAppliedBefore(SBI)).resolves.toEqual(userType.NEW_USER)
+  })
+
+  test('Business has a withdrawn VV application within the last 10 months', async () => {
+    const SBI = 123456789
+    const apiResponse = [
+      {
+        data: {
+          organisation: {
+            sbi: '122333'
+          },
+          visitDate: '2020-01-01'
+        },
+        createdAt: '2020-06-06T13:52:14.207Z',
+        updatedAt: '2020-06-06T13:52:14.207Z',
+        statusId: status.WITHDRAWN,
+        type: 'VV'
+      }
+    ]
+    applicationApiMock.getLatestApplicationsBySbi.mockResolvedValueOnce(apiResponse)
+    await expect(businessAppliedBefore(SBI)).resolves.toEqual(userType.NEW_USER)
   })
 })
