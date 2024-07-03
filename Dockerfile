@@ -17,6 +17,7 @@ EXPOSE ${PORT} ${PORT_DEBUG}
 COPY --chown=root:node --chmod=755 package*.json ./
 RUN npm ci --ignore-scripts
 COPY --chown=root:node --chmod=775 ${DOT} ${DOT}
+RUN mkdir -m 775 /home/node/app/frontend/dist
 RUN npm run build
 CMD [ "npm", "run", "start:watch" ]
 
