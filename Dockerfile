@@ -16,8 +16,8 @@ EXPOSE ${PORT} ${PORT_DEBUG}
 
 COPY --chown=root:node --chmod=755 package*.json ./
 RUN npm ci --ignore-scripts
-COPY --chown=root:node --chmod=775 ${DOT} ${DOT}
-RUN npm run build
+COPY --chown=root:node --chmod=755 ${DOT} ${DOT}
+# RUN npm run build
 CMD [ "npm", "run", "start:watch" ]
 
 # Production
