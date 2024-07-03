@@ -7,6 +7,9 @@ ARG PARENT_VERSION
 LABEL uk.gov.defra.ffc.parent-image=defradigital/node-development:${PARENT_VERSION}
 ARG PORT_DEBUG
 EXPOSE ${PORT_DEBUG}
+
+USER node
+
 COPY --chown=root:node --chmod=755 package*.json ./
 RUN npm ci --ignore-scripts
 COPY --chown=node:node . .
