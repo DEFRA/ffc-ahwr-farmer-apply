@@ -9,7 +9,7 @@ services:
     environment:
       NODE_ENV: test
     volumes:
-      - ./test-output/:/home/node/app/test-output/
+      - ./test-output/:/home/node/test-output/
 
   zap-baseline-scan:
     image: softwaresecurityproject/zap-bare:2.14.0
