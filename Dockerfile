@@ -27,6 +27,8 @@ FROM defradigital/node:${PARENT_VERSION} AS production
 ARG PARENT_VERSION
 LABEL uk.gov.defra.ffc.parent-image=defradigital/node:${PARENT_VERSION}
 
+USER node
+
 ARG PORT
 ENV PORT ${PORT}
 EXPOSE ${PORT}
