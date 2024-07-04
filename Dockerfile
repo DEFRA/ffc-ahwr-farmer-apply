@@ -1,7 +1,7 @@
 ARG PARENT_VERSION=2.2.0-node18.16.0
 ARG PORT=3000
 ARG PORT_DEBUG=9229
-ARG DOT=.
+ARG SOURCE=.
 
 # Development
 FROM defradigital/node-development:${PARENT_VERSION} AS development
@@ -10,13 +10,13 @@ LABEL uk.gov.defra.ffc.parent-image=defradigital/node-development:${PARENT_VERSI
 
 ARG PORT
 ARG PORT_DEBUG
-ARG DOT
+ARG SOURCE
 ENV PORT ${PORT}
 EXPOSE ${PORT} ${PORT_DEBUG}
 
 COPY --chown=root:node --chmod=755 package*.json ./
 RUN npm ci --ignore-scripts
-COPY --chown=root:node --chmod=755 ${DOT} ${DOT}
+COPY --chown=root:node --chmod=755 ${SOURCE} .
 USER root
 RUN npm run build
 USER node
