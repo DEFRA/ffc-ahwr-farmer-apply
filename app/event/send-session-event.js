@@ -16,7 +16,7 @@ async function retryRaiseEvent (event, maxRetries) {
   console.error(`Apply raiseEvent for event ${event} failed after ${maxRetries} attempts.`)
 }
 
-const sendSessionEvent = async (organisation, sessionId, entryKey, key, value, ip, reference = '') => {
+const sendSessionEvent = (organisation, sessionId, entryKey, key, value, ip, reference = '') => {
   if (sessionId && organisation) {
     const event = {
       id: sessionId,
