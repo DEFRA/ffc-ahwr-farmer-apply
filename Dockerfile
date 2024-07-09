@@ -25,7 +25,6 @@ COPY --chown=root:node --chmod=755 ./provision.azure.yaml ./
 COPY --chown=root:node --chmod=755 ./scripts ./scripts
 COPY --chown=root:node --chmod=755 ./test ./test
 COPY --chown=root:node --chmod=755 ./zap ./zap
-RUN ls -al
 USER root
 RUN npm run build
 USER node

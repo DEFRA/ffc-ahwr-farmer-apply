@@ -14,5 +14,15 @@ USER node
 
 COPY --chown=root:node --chmod=755 package*.json ./
 RUN npm ci --ignore-scripts
-COPY --chown=root:node --chmod=755 ${SOURCE} .
+COPY --chown=root:node --chmod=755 ./.git ./
+COPY --chown=root:node --chmod=755 ./.github ./
+COPY --chown=root:node --chmod=755 ./Jenkinsfile ./
+COPY --chown=root:node --chmod=755 ./app ./app
+COPY --chown=root:node --chmod=755 ./jest.config.js ./
+COPY --chown=root:node --chmod=755 ./webpack.config.js ./
+COPY --chown=root:node --chmod=755 ./sonar-project.properties ./
+COPY --chown=root:node --chmod=755 ./provision.azure.yaml ./
+COPY --chown=root:node --chmod=755 ./scripts ./scripts
+COPY --chown=root:node --chmod=755 ./test ./test
+COPY --chown=root:node --chmod=755 ./zap ./zap
 CMD [ "npm", "run", "test" ]
