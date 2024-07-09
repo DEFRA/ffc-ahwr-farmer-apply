@@ -14,7 +14,6 @@ EXPOSE ${PORT} ${PORT_DEBUG}
 
 COPY --chown=root:node --chmod=755 package*.json ./
 RUN npm ci --ignore-scripts
-COPY --chown=root:node --chmod=755 ./.env ./
 COPY --chown=root:node --chmod=755 ./.git ./
 COPY --chown=root:node --chmod=755 ./.github ./
 COPY --chown=root:node --chmod=755 ./Jenkinsfile ./
