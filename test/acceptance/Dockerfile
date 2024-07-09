@@ -24,5 +24,4 @@ COPY --chown=root:node --chmod=755 ./sonar-project.properties ./
 COPY --chown=root:node --chmod=755 ./provision.azure.yaml ./
 COPY --chown=root:node --chmod=755 ./scripts ./scripts
 COPY --chown=root:node --chmod=755 ./test ./test
-COPY --chown=root:node --chmod=755 ./zap ./zap
 CMD [ "npm", "run", "test" ]
