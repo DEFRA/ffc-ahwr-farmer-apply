@@ -21,8 +21,11 @@ const raiseEvent = async (event, status = 'success') => {
       }
     }
   }
-
-  await eventPublisher.sendEvent(eventMessage)
+  try {
+    await eventPublisher.sendEvent(eventMessage)
+  } catch {
+    throw new Error('raiseEvent eventPublisher failed')
+  }
 }
 
 module.exports = raiseEvent
