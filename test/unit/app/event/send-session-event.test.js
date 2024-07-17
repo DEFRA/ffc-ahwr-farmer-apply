@@ -1,5 +1,4 @@
 const raiseEvent = require('../../../../app/event/raise-event')
-// const retryRaiseEvent = require('../../../../app/event/retry-raise-event')
 const sendSessionEvent = require('../../../../app/event/send-session-event')
 
 jest.mock('../../../../app/event/raise-event')
