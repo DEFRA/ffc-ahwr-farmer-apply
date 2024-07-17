@@ -24,11 +24,7 @@ const raiseEvent = async (event, status = 'success') => {
     }
     await eventPublisher.sendEvent(eventMessage)
   } catch (err) {
-    if (event.type) {
-      console.error(`Apply raiseEvent for ${event.type} failed`, err)
-    } else {
-      console.error('Apply raiseEvent failed', err)
-    }
+    console.error('Apply raiseEvent failed', err)
   }
 }
 
