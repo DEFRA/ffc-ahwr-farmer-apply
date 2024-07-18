@@ -1,4 +1,5 @@
 const raiseEvent = require('../../../../app/event/raise-event')
+
 jest.mock('ffc-ahwr-event-publisher')
 const mockEventPublisher = require('ffc-ahwr-event-publisher')
 
