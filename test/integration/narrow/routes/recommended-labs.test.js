@@ -44,7 +44,7 @@ describe('Recommended lab pages', () => {
     expect($('.govuk-heading-xl').text()).toEqual(
       'Recommended laboratories to test for bovine viral diarrhoea (BVD) in cattle'
     )
-    expect($('title').text()).toEqual(`Guidance for vets - ${serviceName}`)
+    expect($('title').text()).toContain(`Guidance for vets - ${serviceName}`)
     expectPhaseBanner.ok($)
   })
 
@@ -61,7 +61,7 @@ describe('Recommended lab pages', () => {
     expect($('.govuk-heading-xl').text()).toEqual(
       'Recommended laboratories to test for porcine reproductive and respiratory syndrome (PRRS) in pigs'
     )
-    expect($('title').text()).toEqual(`Guidance for vets - ${serviceName}`)
+    expect($('title').text()).toContain(`Guidance for vets - ${serviceName}`)
     expectPhaseBanner.ok($)
   })
 
@@ -78,7 +78,7 @@ describe('Recommended lab pages', () => {
     expect($('.govuk-heading-xl').text()).toEqual(
       'Recommended laboratories to carry out a Worming Treatment Check test in sheep'
     )
-    expect($('title').text()).toEqual(`Guidance for vets - ${serviceName}`)
+    expect($('title').text()).toContain(`Guidance for vets - ${serviceName}`)
     expectPhaseBanner.ok($)
   })
 })

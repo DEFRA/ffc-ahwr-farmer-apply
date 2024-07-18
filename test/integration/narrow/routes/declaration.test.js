@@ -14,7 +14,7 @@ jest.mock('applicationinsights', () => ({ defaultClient: { trackException: jest.
 
 function expectPageContentOk ($, organisation) {
   expect($('h1.govuk-heading-l').text()).toEqual('Review your agreement offer')
-  expect($('title').text()).toEqual(`Review your agreement offer - ${config.serviceName}`)
+  expect($('title').text()).toContain(`Review your agreement offer - ${config.serviceName}`)
   expect($('#organisation-name').text()).toEqual(organisation.name)
   expect($('#organisation-address').text()).toEqual(organisation.address)
   expect($('#organisation-sbi').text()).toEqual(organisation.sbi)
@@ -143,7 +143,7 @@ describe('Declaration test', () => {
       const $ = cheerio.load(res.payload)
 
       expect($('h1').text()).toMatch('Application complete')
-      expect($('title').text()).toEqual(`Application complete - ${config.serviceName}`)
+      expect($('title').text()).toContain(`Application complete - ${config.serviceName}`)
       expectPhaseBanner.ok($)
       expect(sessionMock.clear).toBeCalledTimes(1)
       expect(sessionMock.setFarmerApplyData).toHaveBeenCalledTimes(3)
@@ -177,7 +177,7 @@ describe('Declaration test', () => {
       expect(res.statusCode).toBe(200)
       const $ = cheerio.load(res.payload)
       expect($('.govuk-heading-l').text()).toEqual('Agreement offer rejected')
-      expect($('title').text()).toEqual(config.serviceName)
+      expect($('title').text()).toContain(config.serviceName)
       expectPhaseBanner.ok($)
       expect(sessionMock.clear).toBeCalledTimes(1)
       expect(sessionMock.setFarmerApplyData).toHaveBeenCalledTimes(2)

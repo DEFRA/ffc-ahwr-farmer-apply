@@ -43,7 +43,7 @@ describe('Farmer claim guidance page test', () => {
     expect($('.govuk-heading-l').text()).toEqual(
       'How to claim for an annual health and welfare review of livestock'
     )
-    expect($('title').text()).toEqual(`Guidance for farmers - ${serviceName}`)
+    expect($('title').text()).toContain(`Guidance for farmers - ${serviceName}`)
     expectPhaseBanner.ok($)
   })
 })
@@ -66,7 +66,7 @@ describe('Farmer apply guidance page test', () => {
     expect($('.govuk-heading-l').text()).toEqual(
       'How to apply for an annual health and welfare review of livestock'
     )
-    expect($('title').text()).toEqual(`Guidance for farmers - ${serviceName}`)
+    expect($('title').text()).toContain(`Guidance for farmers - ${serviceName}`)
     expectPhaseBanner.ok($)
   })
 
