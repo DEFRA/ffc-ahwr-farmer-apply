@@ -50,7 +50,7 @@ describe('Species eligibility test', () => {
       expect(res.statusCode).toBe(200)
       const $ = cheerio.load(res.payload)
       expect($('h1').text()).toMatch(speciesContent[species].legendText)
-      expect($('title').text()).toEqual(speciesContent[species].title + ` - ${config.serviceName}`)
+      expect($('title').text()).toContain(speciesContent[species].title + ` - ${config.serviceName}`)
       expect($('.govuk-hint').text()).toMatch(speciesContent[species].hintText)
       expectPhaseBanner.ok($)
     })

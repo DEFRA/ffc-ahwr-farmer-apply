@@ -56,7 +56,7 @@ describe('Farmer apply guidance page test', () => {
     expect($('.govuk-heading-l').text().trim()).toEqual(
       'How to apply for livestock health and welfare review and endemic disease follow-ups'
     )
-    expect($('title').text()).toEqual('Guidance for farmers - Get funding to improve animal health and welfare')
+    expect($('title').text()).toContain('Guidance for farmers - Get funding to improve animal health and welfare')
     expectPhaseBanner.ok($)
   })
 

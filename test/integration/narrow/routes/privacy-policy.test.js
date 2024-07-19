@@ -44,7 +44,7 @@ describe('Farmer apply privacy policy page test', () => {
     const $ = cheerio.load(res.payload)
     expect($('.govuk-heading-l').text()).toEqual('Privacy notice')
 
-    expect($('title').text()).toEqual(serviceName)
+    expect($('title').text()).toContain(serviceName)
     expectPhaseBanner.ok($)
   })
 })

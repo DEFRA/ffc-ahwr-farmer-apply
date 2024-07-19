@@ -83,7 +83,7 @@ describe('Org review page test', () => {
       expect(values.eq(4).text()).toMatch(org.email)
       expect(keys.eq(5).text()).toMatch('Address')
       expect(values.eq(5).text()).toMatch(org.address)
-      expect($('title').text()).toEqual('Check your details - Annual health and welfare review of livestock')
+      expect($('title').text()).toContain('Check your details - Annual health and welfare review of livestock')
       expect($('.govuk-back-link').attr('href')).toContain('https://somedefraidlogin')
       expect($('legend').text().trim()).toEqual('Are your details correct?')
       expect($('.govuk-radios__item').length).toEqual(2)

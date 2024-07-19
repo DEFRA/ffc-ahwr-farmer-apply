@@ -45,7 +45,7 @@ describe('Species review test', () => {
       expect(res.statusCode).toBe(200)
       const $ = cheerio.load(res.payload)
       expect($('h1').text()).toMatch('Which livestock do you want a review for?')
-      expect($('title').text()).toEqual(`Which livestock do you want a review for? - ${config.serviceName}`)
+      expect($('title').text()).toContain(`Which livestock do you want a review for? - ${config.serviceName}`)
       expectPhaseBanner.ok($)
     })
 

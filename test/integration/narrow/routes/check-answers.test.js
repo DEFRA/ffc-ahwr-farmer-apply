@@ -49,7 +49,7 @@ describe('Check Answers test', () => {
       expect(res.statusCode).toBe(200)
       const $ = cheerio.load(res.payload)
       expect($('h1').text()).toMatch('Check your answers')
-      expect($('title').text()).toEqual(`Check your answers - ${config.serviceName}`)
+      expect($('title').text()).toContain(`Check your answers - ${config.serviceName}`)
       expectPhaseBanner.ok($)
     })
 

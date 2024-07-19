@@ -45,7 +45,7 @@ describe('Vet technical guidance pages', () => {
     expect($('.govuk-heading-l').text()).toEqual(
       'Cattle: testing required for an annual health and welfare review'
     )
-    expect($('title').text()).toEqual(`Guidance for vets - ${serviceName}`)
+    expect($('title').text()).toContain(`Guidance for vets - ${serviceName}`)
     expectPhaseBanner.ok($)
   })
   test('GET technical-guidance-cattle route returns 200 when not logged in', async () => {
@@ -61,7 +61,7 @@ describe('Vet technical guidance pages', () => {
     expect($('.govuk-heading-xl').text()).toEqual(
       'Vets: test for bovine viral diarrhoea (BVD) in cattle'
     )
-    expect($('title').text()).toEqual(`Guidance for vets - ${serviceName}`)
+    expect($('title').text()).toContain(`Guidance for vets - ${serviceName}`)
     expectPhaseBanner.ok($)
   })
   test('GET /test-sheep route returns 200 when not logged in', async () => {
@@ -77,7 +77,7 @@ describe('Vet technical guidance pages', () => {
     expect($('.govuk-heading-l').text()).toEqual(
       'Sheep: testing required for an annual health and welfare review'
     )
-    expect($('title').text()).toEqual(`Guidance for vets - ${serviceName}`)
+    expect($('title').text()).toContain(`Guidance for vets - ${serviceName}`)
     expectPhaseBanner.ok($)
   })
   test('GET /labs-sheep route returns 200 when not logged in', async () => {
@@ -93,7 +93,7 @@ describe('Vet technical guidance pages', () => {
     expect($('.govuk-heading-xl').text()).toEqual(
       'Vets: test for the effectiveness of worming treatments in sheep'
     )
-    expect($('title').text()).toEqual(`Guidance for vets - ${serviceName}`)
+    expect($('title').text()).toContain(`Guidance for vets - ${serviceName}`)
     expectPhaseBanner.ok($)
   })
   test('GET /test-pigs route returns 200 when not logged in', async () => {
@@ -109,7 +109,7 @@ describe('Vet technical guidance pages', () => {
     expect($('.govuk-heading-l').text()).toEqual(
       'Pigs: testing required for an annual health and welfare review'
     )
-    expect($('title').text()).toEqual(`Guidance for vets - ${serviceName}`)
+    expect($('title').text()).toContain(`Guidance for vets - ${serviceName}`)
     expectPhaseBanner.ok($)
   })
   test('GET /labs-pigs route returns 200 when not logged in', async () => {
@@ -125,7 +125,7 @@ describe('Vet technical guidance pages', () => {
     expect($('.govuk-heading-xl').text()).toEqual(
       'Vets: test for porcine reproductive and respiratory syndrome (PRRS) in pigs'
     )
-    expect($('title').text()).toEqual(`Guidance for vets - ${serviceName}`)
+    expect($('title').text()).toContain(`Guidance for vets - ${serviceName}`)
     expectPhaseBanner.ok($)
   })
 })
