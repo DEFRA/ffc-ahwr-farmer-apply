@@ -14,7 +14,7 @@ const getSecurityPolicy = () => "default-src 'self';" +
   "style-src 'self' 'unsafe-inline' tagmanager.google.com *.googleapis.com;" +
   "img-src 'self' *.google-analytics.com *.googletagmanager.com;"
 
-async function createServer() {
+async function createServer () {
   const server = Hapi.server({
     cache: [{
       provider: {
