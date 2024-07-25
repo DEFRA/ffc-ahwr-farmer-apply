@@ -1,4 +1,4 @@
-const raiseEvent = require('./raise-event')
+const retryRaiseEvent = require('./retry-raise-event')
 
 const sendSessionEvent = (organisation, sessionId, entryKey, key, value, ip, reference = '') => {
   if (sessionId && organisation) {
@@ -14,7 +14,7 @@ const sendSessionEvent = (organisation, sessionId, entryKey, key, value, ip, ref
       data: { reference, [key]: value },
       ip
     }
-    raiseEvent(event)
+    retryRaiseEvent(event, 2)
   }
 }
 

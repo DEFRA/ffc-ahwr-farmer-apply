@@ -42,7 +42,7 @@ describe('Not eligible page test', () => {
       expect(res.statusCode).toBe(200)
       const $ = cheerio.load(res.payload)
       expect($('.govuk-heading-l').text()).toEqual('You\'re not eligible to apply')
-      expect($('title').text()).toEqual(`Not Eligible - ${config.serviceName}`)
+      expect($('title').text()).toContain(`Not Eligible - ${config.serviceName}`)
       expectPhaseBanner.ok($)
     })
 

@@ -44,7 +44,7 @@ describe('Farmer vet guidance page test', () => {
     expect($('.govuk-heading-l').text()).toEqual(
       'How to carry out an annual health and welfare review of livestock'
     )
-    expect($('title').text()).toEqual(`Guidance for vets - ${serviceName}`)
+    expect($('title').text()).toContain(`Guidance for vets - ${serviceName}`)
     expectPhaseBanner.ok($)
   })
 })

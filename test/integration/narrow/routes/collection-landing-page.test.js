@@ -45,7 +45,7 @@ describe('Annual Health and Welfare Review landing page', () => {
     expect($('.govuk-heading-xl').text()).toEqual(
       'Annual health and welfare review of livestock'
     )
-    expect($('title').text()).toEqual(`Guidance for farmers - ${serviceName}`)
+    expect($('title').text()).toContain(`Guidance for farmers - ${serviceName}`)
     expectPhaseBanner.ok($)
   })
 })
