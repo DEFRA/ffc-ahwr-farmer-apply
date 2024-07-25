@@ -1,7 +1,6 @@
 ARG PARENT_VERSION=2.2.0-node18.16.0
 ARG PORT=3000
 ARG PORT_DEBUG=9229
-ARG DOT=.
 
 # Development
 FROM defradigital/node-development:${PARENT_VERSION} AS development
@@ -10,13 +9,22 @@ LABEL uk.gov.defra.ffc.parent-image=defradigital/node-development:${PARENT_VERSI
 
 ARG PORT
 ARG PORT_DEBUG
-ARG DOT
 ENV PORT ${PORT}
 EXPOSE ${PORT} ${PORT_DEBUG}
 
 COPY --chown=root:node --chmod=755 package*.json ./
 RUN npm ci --ignore-scripts
-COPY --chown=root:node --chmod=755 ${DOT} ${DOT}
+COPY --chown=root:node --chmod=755 ./.git ./
+COPY --chown=root:node --chmod=755 ./.github ./
+COPY --chown=root:node --chmod=755 ./Jenkinsfile ./
+COPY --chown=root:node --chmod=755 ./app ./app
+COPY --chown=root:node --chmod=755 ./jest.config.js ./
+COPY --chown=root:node --chmod=755 ./webpack.config.js ./
+COPY --chown=root:node --chmod=755 ./sonar-project.properties ./
+COPY --chown=root:node --chmod=755 ./provision.azure.yaml ./
+COPY --chown=root:node --chmod=755 ./scripts ./scripts
+COPY --chown=root:node --chmod=755 ./test ./test
+COPY --chown=root:node --chmod=755 ./zap ./zap
 USER root
 RUN npm run build
 USER node
@@ -26,6 +34,8 @@ CMD [ "npm", "run", "start:watch" ]
 FROM defradigital/node:${PARENT_VERSION} AS production
 ARG PARENT_VERSION
 LABEL uk.gov.defra.ffc.parent-image=defradigital/node:${PARENT_VERSION}
+
+USER node
 
 ARG PORT
 ENV PORT ${PORT}

@@ -12,5 +12,5 @@ USER node
 
 COPY --chown=root:node --chmod=755 package*.json ./
 RUN npm ci --ignore-scripts
-COPY --chown=node:node . .
+COPY --chown=root:node --chmod=755 . .
 CMD [ "npm", "run", "test" ]
