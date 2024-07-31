@@ -48,15 +48,16 @@
           <form method="POST" autocomplete="off" novalidate="novalidate" id ="submitDeclarationForm">
             <input type="hidden" name="crumb" value="{{crumb}}"/>
             <div class="govuk-button-group">
-              {{ govukButton({
+        {{ govukButton({
           text: "I agree",
+          attributes: { "aria-label": "I agree - Timing of review and follow-ups" },
           value: "agree",
           name: "agreementStatus",
           preventDoubleClick: true
         }) }}
         {{ govukButton({
-
           text: "I do not agree",
+          attributes: { "aria-label": "I do not agree - Timing of review and follow-ups" },
           classes: "govuk-button--secondary",
           value: "rejected",
           name: "agreementStatus",
