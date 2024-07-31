@@ -28,15 +28,15 @@
       <input type="hidden" name="crumb" value="{{crumb}}"/>
       <div class="govuk-button-group">
         {{ govukButton({
-          ariaLabel: agreementStatus.agree.text + " - Minimum number of livestock requirements",
           text: agreementStatus.agree.text,
+          attributes: { "aria-label": agreementStatus.agree.text + " - Minimum number of livestock requirements" },
           value: agreementStatus.agree.value,
           name: "agreementStatus",
           preventDoubleClick: true
         }) }}
         {{ govukButton({
-          ariaLabel: agreementStatus.notAgree.text + " - Minimum number of livestock requirements",
           text: agreementStatus.notAgree.text,
+          attributes: { "aria-label": agreementStatus.notAgree.text + " - Minimum number of livestock requirements" },
           value: agreementStatus.notAgree.value,
           name: "agreementStatus",
           preventDoubleClick: true,
