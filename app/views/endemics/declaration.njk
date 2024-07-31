@@ -78,12 +78,14 @@
         <div class="govuk-button-group">
           {{ govukButton({
           text: "Accept",
+          attributes: { "aria-label": "Accept - Review your agreement offer" },
           value: "accepted",
           name: "offerStatus",
           preventDoubleClick: true
         }) }}
           {{ govukButton({
           text: "Reject",
+          attributes: { "aria-label": "Reject - Review your agreement offer" },
           classes: "govuk-button--secondary",
           value: "rejected",
           name: "offerStatus",
