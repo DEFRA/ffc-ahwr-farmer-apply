@@ -9,6 +9,8 @@ const appInsights = require('applicationinsights')
 const { userType } = require('../../constants/user-types')
 const applicationType = require('../../constants/application-type')
 const config = require('../../config/index')
+const { getExistingUserData } = require('../../api-requests/rpa-api/getExistingUserData')
+const { isUserOldWorldRejectWithinTenMonths } = require('../../lib/common-checks')
 const {
   endemicsTimings,
   endemicsDeclaration,
@@ -65,7 +67,11 @@ module.exports = [{
 
       resetFarmerApplyDataBeforeApplication(application)
 
-      const newApplicationReference = await sendApplication({ ...application, type: applicationType.ENDEMICS }, request.yar.id)
+      const { crn: crnNumber } = session.getCustomer(request, crn)
+      const resultOfAllApplications = await getExistingUserData(crnNumber)
+      const oldWorldRejectedAgreement10months = isUserOldWorldRejectWithinTenMonths(resultOfAllApplications)
+
+      const newApplicationReference = await sendApplication({ ...application, type: applicationType.ENDEMICS, oldWorldRejectedAgreement10months }, request.yar.id)
 
       if (newApplicationReference) {
         session.setFarmerApplyData(request, reference, newApplicationReference)
@@ -100,7 +106,8 @@ module.exports = [{
 
       return h.view(endemicsConfirmation, {
         reference: newApplicationReference,
-        isNewUser: userType.NEW_USER === application.organisation.userType,
+        isNewUser: userType.NEW_USER === application.organisation.userType && !oldWorldRejectedAgreement10months.isExistingUserRejectedAgreementWithin10months,
+        hasRejectedApplicationInPastTenMonths: oldWorldRejectedAgreement10months.isExistingUserRejectedAgreementWithin10months,
         ruralPaymentsAgency: config.ruralPaymentsAgency,
         applySurveyUri: config.customerSurvey.uri,
         latestTermsAndConditionsUri: config.latestTermsAndConditionsUri

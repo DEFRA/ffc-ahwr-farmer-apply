@@ -1,64 +1,86 @@
-const { is } = require("cheerio/lib/api/traversing")
-const status = require("../constants/status")
-
-
-
- const isExistingUser = (userType) => userType.EXISTING_USER === userType
- const getKeyByValue = (object, value) => Object.keys(object).find(key => object[key] === value)
-// check status for the correct value to 10 is rejected 
- const checkOfferStatus = (offerStatus) => offerStatus === getKeyByValue(status, 10)
+const status = require('../constants/status')
+const { hasSearchValue } = require('./checkForValue')
+const { getValueWhereCondition } = require('./getValueFromObjectCondition')
 
 //  10month = check offer is within 10months
- const calculateMonths = (date, months) => {
-    const resultantDate = new Date(date);
-    resultantDate.setMonth(resultantDate.getMonth() + months)
-    return resultantDate
- }
+const calculateMonths = (date, months) => {
+  const resultantDate = new Date(date)
+  resultantDate.setMonth(resultantDate.getMonth() + months)
+  return resultantDate
+}
 
 const isWithinPeriodFromDate = (date, periodInMonths) => {
-    const today = new Date()
-    const targetDate = calculateMonths(date, periodInMonths)
-    return today <= targetDate
+  if (!date || !(date instanceof Date)) {
+    throw new Error('Invalid date provided')
+  }
+  const today = new Date()
+  const targetDate = calculateMonths(date, periodInMonths)
+  return today <= targetDate
 }
 
 const isOfferWithinTenMonths = (offerDate) => {
-    if(!offerDate || !offerDate instanceof Date ){
-        throw new Error('Invalid date provided')
+  if (!offerDate || !(offerDate instanceof Date)) {
+    throw new Error(`Invalid date provided ${offerDate} `)
+  }
+  const periodInMonths = 10
+  return isWithinPeriodFromDate(offerDate, periodInMonths)
+}
+
+// check all the conditions
+const isUserOldWorldRejectWithinTenMonths = (applicationData) => {
+  if (!applicationData || !Array.isArray(applicationData)) {
+    throw new Error('Invalid application Data object')
+  }
+  if (applicationData.length < 2) {
+    return { isValid: false, message: 'No old World aggreement' }
+  }
+  const dateOfClaim = getValueWhereCondition(
+    applicationData,
+    'statusId',
+    10,
+    'dateOfClaim'
+  )
+
+  const isExistingUser = hasSearchValue(applicationData, 'type', 'VV')
+  const offerWithinTenMonths = isOfferWithinTenMonths(dateOfClaim)
+  const isOfferRejected = hasSearchValue(
+    applicationData,
+    'statusId',
+    status.REJECTED
+  )
+  const checks = [
+    {
+      check: isExistingUser,
+      message: isExistingUser ? 'existing user' : 'new user'
+    },
+    {
+      check: offerWithinTenMonths,
+      message: offerWithinTenMonths
+        ? 'Offer is within 10 months'
+        : 'Offer is not within 10 months'
+    },
+    {
+      check: isOfferRejected,
+      message: isOfferRejected ? 'Offer is rejected' : 'Offer is not rejected'
     }
-    const periodInMonths = 10
-    return isWithinPeriodFromDate(offerDate, periodInMonths)
-} 
+  ]
 
-// check all the conditions 
-const isUserOldworldRejectWithinTenMonths = (applicationData) => {
-    if(!applicationData || typeof applicationData !== 'object'){
-        throw new Error('Invalid application Data object')
-    }
+  console.log(`checks:  ${JSON.stringify(checks)}`)
 
-    const {userType, dateOfClaim, offerStatus } = applicationData
+  const failedChecks = checks
+    .filter((item) => !item.check)
+    .map((item) => item.message)
 
-    const checks = [
-        {check: isExistingUser(userType), message: 'Not existing user'},
-        {check: isOfferWithinTenMonths(dateOfClaim), message: 'Offer is not within 10 months'},
-        {check: checkOfferStatus(offerStatus), message: 'Offer is not rejected'}
-    ]
+  if (failedChecks.length > 0) {
+    return { isExistingUserRejectedAgreementWithin10months: false, message: failedChecks.join(', ') }
+  }
 
-    const failedChecks = checks.filter(item => !item.check).map(item => item.message)
-
-    if(failedChecks.length > 0){
-        return {isValid: false, message: failedChecks.join(', ')}
-    }
-
-    return {isValid: true}
-
+  return { isExistingUserRejectedAgreementWithin10months: true }
 }
 
 module.exports = {
-isExistingUser,
-getKeyByValue,
-checkOfferStatus,
-calculateMonths,
-isWithinPeriodFromDate,
-isOfferWithinTenMonths,
-isUserOldworldRejectWithinTenMonths
+  calculateMonths,
+  isWithinPeriodFromDate,
+  isOfferWithinTenMonths,
+  isUserOldWorldRejectWithinTenMonths
 }
