@@ -5,8 +5,8 @@ const { getValueWhereCondition } = require('./getValueFromObjectCondition')
 //  10month = check offer is within 10months
 const calculateMonths = (date, months) => {
   const resultantDate = new Date(date)
-  resultantDate.setMonth(resultantDate.getMonth() + months)
-  return resultantDate
+  const resDate = resultantDate.setMonth(resultantDate.getMonth() + months)
+  return resDate
 }
 
 const isWithinPeriodFromDate = (date, periodInMonths) => {
@@ -17,6 +17,11 @@ const isWithinPeriodFromDate = (date, periodInMonths) => {
 
 const isOfferWithinTenMonths = (offerDate) => {
   const periodInMonths = 10
+
+  if(!offerDate){
+    const currentDate = Date.now()
+    return isWithinPeriodFromDate(currentDate, periodInMonths)
+  }
   return isWithinPeriodFromDate(offerDate, periodInMonths)
 }
 
