@@ -18,7 +18,7 @@ const isWithinPeriodFromDate = (date, periodInMonths) => {
 const isOfferWithinTenMonths = (offerDate) => {
   const periodInMonths = 10
 
-  if(!offerDate){
+  if (!offerDate) {
     const currentDate = Date.now()
     return isWithinPeriodFromDate(currentDate, periodInMonths)
   }
