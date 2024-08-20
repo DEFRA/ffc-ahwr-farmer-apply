@@ -97,6 +97,7 @@ module.exports = [
 
         const { crn: crnNumber } = session.getCustomer(request, crn);
         const resultOfAllApplications = await getExistingUserData(crnNumber);
+        console.log(` all the applications result by CRN: ${JSON.stringify(resultOfAllApplications)}`)
         const oldWorldRejectedAgreement10months =
           isUserOldWorldRejectWithinTenMonths(resultOfAllApplications);
 
