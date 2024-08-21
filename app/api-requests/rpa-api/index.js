@@ -1,10 +1,10 @@
-const { getPersonSummary, getPersonName } = require("./person");
+const { getPersonSummary, getPersonName } = require('./person')
 const {
   organisationIsEligible,
-  getOrganisationAddress,
-} = require("./organisation");
-const cphCheck = require("./cph-check");
-const { getExistingUserData } = require("./get-existing-user-Data");
+  getOrganisationAddress
+} = require('./organisation')
+const cphCheck = require('./cph-check')
+const { getExistingUserData } = require('./get-existing-user-Data')
 
 module.exports = {
   getPersonSummary,
@@ -12,5 +12,5 @@ module.exports = {
   organisationIsEligible,
   getOrganisationAddress,
   cphCheck,
-  getExistingUserData,
-};
+  getExistingUserData
+}
