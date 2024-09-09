@@ -1,7 +1,6 @@
 ARG PARENT_VERSION=2.3.0-node20.15.0
 ARG PORT=3000
 ARG PORT_DEBUG=9229
-ARG DOT=.
 
 # Development
 FROM defradigital/node-development:${PARENT_VERSION} AS development
@@ -10,7 +9,6 @@ LABEL uk.gov.defra.ffc.parent-image=defradigital/node-development:${PARENT_VERSI
 
 ARG PORT
 ARG PORT_DEBUG
-ARG DOT
 ENV PORT ${PORT}
 EXPOSE ${PORT} ${PORT_DEBUG}
 
