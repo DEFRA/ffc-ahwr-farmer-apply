@@ -5,7 +5,6 @@ const {
 } = require('./organisation')
 const cphCheck = require('./cph-check')
 
-
 module.exports = {
   getPersonSummary,
   getPersonName,
