@@ -119,6 +119,8 @@ describe('Declaration test', () => {
   describe(`POST ${url} route`, () => {
     test('returns 200, caches data and sends message for valid request', async () => {
       const application = { organisation }
+      getLatestApplicationsBySbi.mockResolvedValue([])
+      isUserOldWorldRejectWithinTenMonths.mockReturnValue(false)
       sessionMock.getFarmerApplyData.mockReturnValue(application)
       messagingMock.receiveMessage.mockResolvedValueOnce({ applicationReference: 'abc123', applicationState: states.submitted })
       const crumb = await getCrumbs(global.__SERVER__)

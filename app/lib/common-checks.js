@@ -27,7 +27,6 @@ const isOfferWithinTenMonths = (offerDate) => {
 
 // check all the conditions
 const isUserOldWorldRejectWithinTenMonths = (applicationData) => {
-  console.log('applicationData from isUserOldWorldRejectWithinTenMonths', applicationData)
   const dateOfClaim = getValueWhereCondition(
     applicationData,
     'statusId',
