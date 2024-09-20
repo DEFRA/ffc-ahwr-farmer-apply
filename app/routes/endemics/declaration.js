@@ -16,9 +16,7 @@ const { userType } = require('../../constants/user-types')
 const applicationType = require('../../constants/application-type')
 const config = require('../../config/index')
 const { getLatestApplicationsBySbi } = require('../../api-requests/application-api')
-const {
-  isUserOldWorldRejectWithinTenMonths
-} = require('../../lib/common-checks')
+const { isUserOldWorldRejectWithinTenMonths, isUserOldWorldReadyToPayWithinTenMonths } = require('../../lib/common-checks')
 const {
   endemicsTimings,
   endemicsDeclaration,
@@ -95,6 +93,7 @@ module.exports = [
 
         const resultOfAllApplications = await getLatestApplicationsBySbi(application.organisation.sbi)
         const oldWorldRejectedAgreement10months = isUserOldWorldRejectWithinTenMonths(resultOfAllApplications)
+        const oldWorldReadyToPayWithin10Months = isUserOldWorldReadyToPayWithinTenMonths(resultOfAllApplications)
 
         const newApplicationReference = await sendApplication(
           {
@@ -151,11 +150,10 @@ module.exports = [
 
         return h.view(endemicsConfirmation, {
           reference: newApplicationReference,
-          isNewUser:
-            userType.NEW_USER === application.organisation.userType &&
+          isNewUser: userType.NEW_USER === application.organisation.userType &&
             !oldWorldRejectedAgreement10months.isExistingUserRejectedAgreementWithin10months,
-          hasRejectedApplicationInPastTenMonths:
-            oldWorldRejectedAgreement10months.isExistingUserRejectedAgreementWithin10months,
+          hasRejectedApplicationInPastTenMonths: oldWorldRejectedAgreement10months.isExistingUserRejectedAgreementWithin10months,
+          hasOldWorldReadyToPayWithinTenMonths: oldWorldReadyToPayWithin10Months.isExistingUserReadyToPayAgreementWithin10months,
           ruralPaymentsAgency: config.ruralPaymentsAgency,
           applySurveyUri: config.customerSurvey.uri,
           latestTermsAndConditionsUri: config.latestTermsAndConditionsUri

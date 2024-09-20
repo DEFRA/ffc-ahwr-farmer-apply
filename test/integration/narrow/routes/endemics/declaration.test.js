@@ -13,7 +13,8 @@ jest.mock('../../../../../app/messaging')
 jest.mock('applicationinsights', () => ({ defaultClient: { trackException: jest.fn(), trackEvent: jest.fn() }, dispose: jest.fn() }))
 
 jest.mock('../../../../../app/lib/common-checks')
-const { isUserOldWorldRejectWithinTenMonths } = require('../../../../../app/lib/common-checks')
+const { isUserOldWorldRejectWithinTenMonths, isUserOldWorldReadyToPayWithinTenMonths } = require('../../../../../app/lib/common-checks')
+
 jest.mock('../../../../../app/api-requests/application-api')
 const { getLatestApplicationsBySbi } = require('../../../../../app/api-requests/application-api')
 
@@ -121,6 +122,7 @@ describe('Declaration test', () => {
       const application = { organisation }
       getLatestApplicationsBySbi.mockResolvedValue([])
       isUserOldWorldRejectWithinTenMonths.mockReturnValue(false)
+      isUserOldWorldReadyToPayWithinTenMonths.mockReturnValue(false)
       sessionMock.getFarmerApplyData.mockReturnValue(application)
       messagingMock.receiveMessage.mockResolvedValueOnce({ applicationReference: 'abc123', applicationState: states.submitted })
       const crumb = await getCrumbs(global.__SERVER__)

@@ -62,6 +62,8 @@ const isUserOldWorldRejectWithinTenMonths = (applicationData) => {
     .filter((item) => !item.check)
     .map((item) => item.message)
 
+  console.log('failedChecks', failedChecks)
+
   if (failedChecks.length > 0) {
     return {
       isExistingUserRejectedAgreementWithin10months: false,
@@ -75,9 +77,50 @@ const isUserOldWorldRejectWithinTenMonths = (applicationData) => {
   }
 }
 
+const isUserOldWorldReadyToPayWithinTenMonths = (applicationData) => {
+  const dateOfClaim = getValueWhereCondition(applicationData, 'statusId', 9, 'dateOfClaim')
+
+  const isExistingUser = hasSearchValue(applicationData, 'type', 'VV')
+  const offerWithinTenMonths = isOfferWithinTenMonths(dateOfClaim)
+  const isOfferReadyToPay = hasSearchValue(applicationData, 'statusId', status.READY_TO_PAY)
+  const checks = [
+    {
+      check: isExistingUser,
+      message: isExistingUser ? 'existing user' : 'new user'
+    },
+    {
+      check: offerWithinTenMonths,
+      message: offerWithinTenMonths
+        ? 'Offer is within 10 months'
+        : 'Offer is not within 10 months'
+    },
+    {
+      check: isOfferReadyToPay,
+      message: isOfferReadyToPay ? 'Ready To Pay' : 'Offer is not Ready To Pay'
+    }
+  ]
+
+  const failedChecks = checks
+    .filter((item) => !item.check)
+    .map((item) => item.message)
+
+  if (failedChecks.length > 0) {
+    return {
+      isExistingUserRejectedAgreementWithin10months: false,
+      message: failedChecks.join(', ')
+    }
+  }
+
+  return {
+    isExistingUserReadyToPayAgreementWithin10months: true,
+    message: 'existingUser, Ready To Pay within 10months'
+  }
+}
+
 module.exports = {
   calculateMonths,
   isWithinPeriodFromDate,
   isOfferWithinTenMonths,
-  isUserOldWorldRejectWithinTenMonths
+  isUserOldWorldRejectWithinTenMonths,
+  isUserOldWorldReadyToPayWithinTenMonths
 }
