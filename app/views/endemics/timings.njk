@@ -38,9 +38,19 @@
     <p>Your review claim must be approved before you claim for the resulting follow-up.</p>
     <h2 class="govuk-heading-m">5 Repeat this sequence for your second and third reviews and follow-ups</h2>
     {% if isOldUser %}
-    {{ govukInsetText({
-      text: "If you have completed a review in the old annual health and welfare review, you can go straight to your follow-up. You need to do the follow-up no more than 10 months after your review."
-    }) }}
+    <div class="govuk-inset-text">
+      If you have completed a review in the old annual health and welfare review:
+      </br>
+      </br>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>
+          you can go straight to your follow-up if your claim was successful(you need to do the follow-up no more than 10 months after your review)
+        </li>
+        <li>
+          you must wait until 10 months after your last review before doing a new review under this agreement(this still applies if your review claim was rejected)
+        </li>
+      </ul>
+    </div>
     {% endif %}
     <br/><br/>
 
