@@ -62,8 +62,6 @@ const isUserOldWorldRejectWithinTenMonths = (applicationData) => {
     .filter((item) => !item.check)
     .map((item) => item.message)
 
-  console.log('failedChecks', failedChecks)
-
   if (failedChecks.length > 0) {
     return {
       isExistingUserRejectedAgreementWithin10months: false,
