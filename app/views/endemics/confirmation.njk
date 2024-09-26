@@ -29,7 +29,7 @@
             </li>
         </ol>
 
-      {% elseif hasRejectedApplicationInPastTenMonths %}
+      {% elseif userTypeStatus.isExistingUserRejectedAgreementWithin10months %}
         <h2 class="govuk-heading-m">What you need to do next</h2>
         <ol class="govuk-list govuk-list--number">
           <li class="govuk-body">You must wait until 10 months after your last review under the agreement. This still applies if your review claim was rejected.</li>
@@ -60,13 +60,21 @@
                 how to claim funding to improve animal health and welfare</a>.
             </li>
         </ol>
-
-        <h2 class="govuk-heading-m">If you do not want to have a follow-up, you can arrange your next review</h2>
-        <p class="govuk-body">Follow-ups help prevent the spread of disease in your livestock. If you choose not to have one, 
-          <a class="govuk-link" rel="external" href="https://www.gov.uk/guidance/farmers-how-to-apply-for-funding-to-improve-animal-health-and-welfare#timing-of-reviews-and-follow-ups">
-            you can arrange your next review
-          </a> at the advised time.
-        </p>
+          {% if userTypeStatus.isExistingUserReadyToPayAgreementWithin10months %}
+            <h2 class="govuk-heading-m">If you do not want to have a follow-up, you can arrange your next review</h2>
+            <p class="govuk-body">Follow-ups help prevent the spread of disease in your livestock. If you choose not to have a follow-up, 
+              <a class="govuk-link" rel="external" href="https://www.gov.uk/guidance/farmers-how-to-apply-for-funding-to-improve-animal-health-and-welfare#timing-of-reviews-and-follow-ups">
+                you can arrange your next review from 10 months after your last review
+              </a>
+            </p>
+          {% else %}
+            <h2 class="govuk-heading-m">If you do not want to have a follow-up, you can arrange your next review</h2>
+            <p class="govuk-body">Follow-ups help prevent the spread of disease in your livestock. If you choose not to have one, 
+              <a class="govuk-link" rel="external" href="https://www.gov.uk/guidance/farmers-how-to-apply-for-funding-to-improve-animal-health-and-welfare#timing-of-reviews-and-follow-ups">
+                you can arrange your next review
+              </a> at the advised time.
+            </p>
+          {%endif%} 
       {% endif %}
 
       <h2 class="govuk-heading-m">Get help with your application</h2>

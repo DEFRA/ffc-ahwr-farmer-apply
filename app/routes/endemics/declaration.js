@@ -16,9 +16,7 @@ const { userType } = require('../../constants/user-types')
 const applicationType = require('../../constants/application-type')
 const config = require('../../config/index')
 const { getLatestApplicationsBySbi } = require('../../api-requests/application-api')
-const {
-  isUserOldWorldRejectWithinTenMonths
-} = require('../../lib/common-checks')
+const { isUserOldWorldRejectWithinTenMonths, isUserOldWorldReadyToPayWithinTenMonths } = require('../../lib/common-checks')
 const {
   endemicsTimings,
   endemicsDeclaration,
@@ -81,6 +79,7 @@ module.exports = [
         }
       },
       handler: async (request, h) => {
+        let userTypeStatus = {}
         session.setFarmerApplyData(request, declaration, true)
         session.setFarmerApplyData(
           request,
@@ -94,13 +93,15 @@ module.exports = [
         resetFarmerApplyDataBeforeApplication(application)
 
         const resultOfAllApplications = await getLatestApplicationsBySbi(application.organisation.sbi)
-        const oldWorldRejectedAgreement10months = isUserOldWorldRejectWithinTenMonths(resultOfAllApplications)
+        const { isExistingUserRejectedAgreementWithin10months } = isUserOldWorldRejectWithinTenMonths(resultOfAllApplications) || {}
+        const { isExistingUserReadyToPayAgreementWithin10months } = isUserOldWorldReadyToPayWithinTenMonths(resultOfAllApplications) || {}
+        userTypeStatus = { isExistingUserRejectedAgreementWithin10months, isExistingUserReadyToPayAgreementWithin10months }
 
         const newApplicationReference = await sendApplication(
           {
             ...application,
             type: applicationType.ENDEMICS,
-            oldWorldRejectedAgreement10months
+            oldWorldRejectedAgreement10months: { ...userTypeStatus }
           },
           request.yar.id
         )
@@ -151,11 +152,8 @@ module.exports = [
 
         return h.view(endemicsConfirmation, {
           reference: newApplicationReference,
-          isNewUser:
-            userType.NEW_USER === application.organisation.userType &&
-            !oldWorldRejectedAgreement10months.isExistingUserRejectedAgreementWithin10months,
-          hasRejectedApplicationInPastTenMonths:
-            oldWorldRejectedAgreement10months.isExistingUserRejectedAgreementWithin10months,
+          userTypeStatus,
+          isNewUser: userType.NEW_USER === application.organisation.userType && !userTypeStatus.isExistingUserRejectedAgreementWithin10months,
           ruralPaymentsAgency: config.ruralPaymentsAgency,
           applySurveyUri: config.customerSurvey.uri,
           latestTermsAndConditionsUri: config.latestTermsAndConditionsUri
