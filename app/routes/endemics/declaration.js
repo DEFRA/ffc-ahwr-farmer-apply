@@ -101,7 +101,7 @@ module.exports = [
           {
             ...application,
             type: applicationType.ENDEMICS,
-            oldWorldRejectedAgreement10months: { ...userTypeStatus }
+            userTypeStatus
           },
           request.yar.id
         )
