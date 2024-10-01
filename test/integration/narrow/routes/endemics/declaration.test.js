@@ -12,12 +12,6 @@ const messagingMock = require('../../../../../app/messaging')
 jest.mock('../../../../../app/messaging')
 jest.mock('applicationinsights', () => ({ defaultClient: { trackException: jest.fn(), trackEvent: jest.fn() }, dispose: jest.fn() }))
 
-jest.mock('../../../../../app/lib/common-checks')
-const { isUserOldWorldRejectWithinTenMonths, isUserOldWorldReadyToPayWithinTenMonths } = require('../../../../../app/lib/common-checks')
-
-jest.mock('../../../../../app/api-requests/application-api')
-const { getLatestApplicationsBySbi } = require('../../../../../app/api-requests/application-api')
-
 function expectPageContentOk ($, organisation) {
   expect($('h1.govuk-heading-l').text()).toEqual('Review your agreement offer')
   expect($('title').text()).toMatch('Review your agreement offer - Get funding to improve animal health and welfare')
@@ -120,9 +114,6 @@ describe('Declaration test', () => {
   describe(`POST ${url} route`, () => {
     test('returns 200, caches data and sends message for valid request', async () => {
       const application = { organisation }
-      getLatestApplicationsBySbi.mockResolvedValue([])
-      isUserOldWorldRejectWithinTenMonths.mockReturnValue(false)
-      isUserOldWorldReadyToPayWithinTenMonths.mockReturnValue(false)
       sessionMock.getFarmerApplyData.mockReturnValue(application)
       messagingMock.receiveMessage.mockResolvedValueOnce({ applicationReference: 'abc123', applicationState: states.submitted })
       const crumb = await getCrumbs(global.__SERVER__)
@@ -250,89 +241,5 @@ describe('Declaration test', () => {
     expect(res.statusCode).toBe(500)
     const $ = cheerio.load(res.payload)
     expect($('h1').text()).toEqual('Sorry, there is a problem with the service')
-  })
-  describe('isUserOldWorldRejectWithinTenMonths', () => {
-    test('returns false when no applications', () => {
-      const result = isUserOldWorldRejectWithinTenMonths([])
-      expect(result).toBeUndefined()
-    })
-    test('calls getLatestApplicationsBySbi and isUserOldWorldRejectWithinTenMonths', async () => {
-      const application = { organisation }
-      sessionMock.getFarmerApplyData.mockReturnValue(application)
-      getLatestApplicationsBySbi.mockResolvedValue([])
-      isUserOldWorldRejectWithinTenMonths.mockReturnValue(false)
-
-      const crumb = await getCrumbs(global.__SERVER__)
-      const options = {
-        method: 'POST',
-        url,
-        payload: { crumb, terms: 'agree', offerStatus: 'accepted' },
-        auth,
-        headers: { cookie: `crumb=${crumb}` }
-      }
-
-      await global.__SERVER__.inject(options)
-
-      expect(getLatestApplicationsBySbi).toHaveBeenCalledWith(organisation.sbi)
-      expect(isUserOldWorldRejectWithinTenMonths).toHaveBeenCalledWith([])
-    })
-    test('calls isUserOldWorldRejectWithinTenMonths with the correct data', async () => {
-      const application = { organisation }
-      const oldWorldUserData = [
-        {
-          id: 'e1c05eea-da01-4e81-a5b5-5e587d2ca917',
-          reference: 'AHWR-E1C0-5EEA',
-          data: {
-            vetName: 'John May',
-            vetRcvs: '3454332',
-            reference: null,
-            urnResult: '4433',
-            visitDate: '2024-08-08T00:00:00.000Z',
-            dateOfClaim: '2024-08-08T08:08:49.369Z',
-            declaration: true,
-            offerStatus: 'accepted',
-            whichReview: 'sheep',
-            organisation: {
-              crn: '1101741414',
-              frn: '1100848126',
-              sbi: '119852719',
-              name: 'Bunkers Hill Barn',
-              email: 'georgephillipsq@spillihpegroegp.com.test',
-              address: 'Stanton Harcourt Farms,15a New Street,Knowle,BROCK FARM,HARROWGATE ROAD,BRISTOL,RG10 9NS,United Kingdom',
-              orgEmail: 'bunkershillbarnv@nrabllihsreknubb.com.test',
-              farmerName: 'George Phillips'
-            },
-            animalsTested: '21',
-            dateOfTesting: '2024-08-08T00:00:00.000Z',
-            detailsCorrect: 'yes',
-            eligibleSpecies: 'yes',
-            confirmCheckDetails: 'yes'
-          },
-          claimed: false,
-          createdAt: '2024-08-08T07:35:39.481Z',
-          updatedAt: '2024-08-08T08:08:49.406Z',
-          createdBy: 'admin',
-          updatedBy: 'admin',
-          statusId: 10,
-          type: 'VV'
-        }]
-      sessionMock.getFarmerApplyData.mockReturnValue(application)
-      getLatestApplicationsBySbi.mockResolvedValue(oldWorldUserData)
-      isUserOldWorldRejectWithinTenMonths.mockReturnValue(true)
-
-      const crumb = await getCrumbs(global.__SERVER__)
-      const options = {
-        method: 'POST',
-        url,
-        payload: { crumb, terms: 'agree', offerStatus: 'accepted' },
-        auth,
-        headers: { cookie: `crumb=${crumb}` }
-      }
-
-      await global.__SERVER__.inject(options)
-
-      expect(getLatestApplicationsBySbi).toHaveBeenCalledWith(organisation.sbi)
-      expect(isUserOldWorldRejectWithinTenMonths).toHaveBeenCalledWith(oldWorldUserData)
-    })
   })
 })

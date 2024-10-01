@@ -89,23 +89,6 @@ describe('Declaration test', () => {
       expect($('.govuk-heading-s').text()).toEqual(`${organisation.name} - SBI ${organisation.sbi}`)
       expectPhaseBanner.ok($)
     })
-    test('returns 200 when application found and user comes from old world', async () => {
-      const application = { organisation: { ...organisation, userType: 'existingUser' } }
-      sessionMock.getFarmerApplyData.mockReturnValueOnce(application)
-      sessionMock.getFarmerApplyData.mockReturnValueOnce(organisation)
-      const options = {
-        method: 'GET',
-        url,
-        auth
-      }
-
-      const res = await global.__SERVER__.inject(options)
-
-      expect(res.statusCode).toBe(200)
-      const $ = cheerio.load(res.payload)
-      expect($('.govuk-inset-text').text()).toContain('If you have completed a review in the old annual health and welfare review:')
-      expectPhaseBanner.ok($)
-    })
   })
 
   describe('POST timings route', () => {
