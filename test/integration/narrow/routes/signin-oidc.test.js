@@ -18,7 +18,7 @@ jest.mock('../../../../app/api-requests/business-eligible-to-apply')
 const businessAppliedBeforeMock = require('../../../../app/api-requests/business-applied-before')
 jest.mock('../../../../app/api-requests/business-applied-before')
 
-const { InvalidPermissionsError, InvalidStateError, AlreadyAppliedError, NoEligibleCphError, CannotReapplyTimeLimitError, OutstandingAgreementError } = require('../../../../app/exceptions')
+const { InvalidStateError, AlreadyAppliedError, NoEligibleCphError, CannotReapplyTimeLimitError, OutstandingAgreementError } = require('../../../../app/exceptions')
 
 describe('FarmerApply defra ID redirection test', () => {
   jest.mock('../../../../app/config', () => ({
@@ -229,8 +229,6 @@ describe('FarmerApply defra ID redirection test', () => {
     })
 
     test('returns 400 and login failed view when apim access token auth fails', async () => {
-      const consoleErrorSpy = jest.spyOn(console, 'error')
-      const expectedError = new Error('APIM Access Token Retrieval Failed')
       const baseUrl = `${url}?code=432432&state=83d2b160-74ce-4356-9709-3f8da7868e35`
       const options = {
         method: 'GET',
@@ -248,13 +246,9 @@ describe('FarmerApply defra ID redirection test', () => {
       expect(authMock.retrieveApimAccessToken).toBeCalledTimes(1)
       const $ = cheerio.load(res.payload)
       expect($('.govuk-heading-l').text()).toMatch('Login failed')
-      expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
-      expect(consoleErrorSpy).toHaveBeenCalledWith(`Received error with name Error and message ${expectedError.message}.`)
     })
 
     test('returns 400 and exception view when permissions failed', async () => {
-      const consoleErrorSpy = jest.spyOn(console, 'error')
-      const expectedError = new InvalidPermissionsError('Person id 1234567 does not have the required permissions for organisation id 7654321')
       const baseUrl = `${url}?code=432432&state=83d2b160-74ce-4356-9709-3f8da7868e35`
       const options = {
         method: 'GET',
@@ -328,13 +322,10 @@ describe('FarmerApply defra ID redirection test', () => {
       expect(sendIneligibilityEventMock).toBeCalledTimes(1)
       const $ = cheerio.load(res.payload)
       expect($('.govuk-heading-l').text()).toMatch('You cannot apply for reviews or follow-ups for this business')
-      expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
-      expect(consoleErrorSpy).toHaveBeenCalledWith(`Received error with name InvalidPermissionsError and message ${expectedError.message}.`)
     })
 
     // TODO: This test can be removed when the 10 month rule toggle and AlreadyAppliedError are removed
     test('returns 400 and exception view when already applied', async () => {
-      const consoleErrorSpy = jest.spyOn(console, 'error')
       const expectedError = new AlreadyAppliedError('Business with SBI 101122201 is not eligible to apply')
       const baseUrl = `${url}?code=432432&state=83d2b160-74ce-4356-9709-3f8da7868e35`
       const options = {
@@ -416,12 +407,9 @@ describe('FarmerApply defra ID redirection test', () => {
       const $ = cheerio.load(res.payload)
       expect($('.govuk-heading-l').text()).toMatch('You cannot apply for reviews or follow-ups for this business')
       expect($('#guidanceLink').attr('href')).toMatch('http://localhost:3000/apply')
-      expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
-      expect(consoleErrorSpy).toHaveBeenCalledWith(`Received error with name AlreadyAppliedError and message ${expectedError.message}.`)
     })
 
     test('returns 400 and exception view when there is a cannot reapply time limit error', async () => {
-      const consoleErrorSpy = jest.spyOn(console, 'error')
       const expectedError = new CannotReapplyTimeLimitError('Business with SBI 101122201 is not eligible to apply due to 10 month restrictions since the last agreement.', '1 Jan 2023', '2 Oct 2023')
       const baseUrl = `${url}?code=432432&state=83d2b160-74ce-4356-9709-3f8da7868e35`
       const options = {
@@ -503,12 +491,9 @@ describe('FarmerApply defra ID redirection test', () => {
       const $ = cheerio.load(res.payload)
       expect($('.govuk-heading-l').text()).toMatch('You cannot apply for reviews or follow-ups for this business')
       expect($('.govuk-body').text()).toMatch(/ on 2 Oct 2023/)
-      expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
-      expect(consoleErrorSpy).toHaveBeenCalledWith(`Received error with name CannotReapplyTimeLimitError and message ${expectedError.message}.`)
     })
 
     test('returns 400 and exception view when there is an outstanding agreement error', async () => {
-      const consoleErrorSpy = jest.spyOn(console, 'error')
       const expectedError = new OutstandingAgreementError('Business with SBI 101122201 must claim or withdraw agreement before creating another.')
       const baseUrl = `${url}?code=432432&state=83d2b160-74ce-4356-9709-3f8da7868e35`
       const options = {
@@ -589,12 +574,9 @@ describe('FarmerApply defra ID redirection test', () => {
       expect(sendIneligibilityEventMock).toBeCalledTimes(1)
       const $ = cheerio.load(res.payload)
       expect($('.govuk-heading-l').text()).toMatch('You cannot apply for reviews or follow-ups for this business')
-      expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
-      expect(consoleErrorSpy).toHaveBeenCalledWith(`Received error with name OutstandingAgreementError and message ${expectedError.message}.`)
     })
 
     test('returns 400 and exception view when no eligible cph', async () => {
-      const consoleErrorSpy = jest.spyOn(console, 'error')
       const expectedError = new NoEligibleCphError('Customer must have at least one valid CPH')
       const baseUrl = `${url}?code=432432&state=83d2b160-74ce-4356-9709-3f8da7868e35`
       const options = {
@@ -675,8 +657,6 @@ describe('FarmerApply defra ID redirection test', () => {
       expect(sendIneligibilityEventMock).toBeCalledTimes(1)
       const $ = cheerio.load(res.payload)
       expect($('.govuk-heading-l').text()).toMatch('You cannot apply for reviews or follow-ups for this business')
-      expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
-      expect(consoleErrorSpy).toHaveBeenCalledWith(`Received error with name NoEligibleCphError and message ${expectedError.message}.`)
     })
   })
 })

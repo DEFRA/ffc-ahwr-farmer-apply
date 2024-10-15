@@ -9,7 +9,7 @@ const { CannotReapplyTimeLimitError, OutstandingAgreementError, AlreadyAppliedEr
 async function businessEligibleToApply (sbi) {
   const latestApplicationsForSbi = await applicationApi.getLatestApplicationsBySbi(sbi)
   if (latestApplicationsForSbi && Array.isArray(latestApplicationsForSbi)) {
-    applicationForBusinessInStateToApply(latestApplicationsForSbi)
+    return applicationForBusinessInStateToApply(latestApplicationsForSbi)
   } else {
     throw new Error('Bad response from API')
   }
@@ -17,15 +17,11 @@ async function businessEligibleToApply (sbi) {
 
 function applicationForBusinessInStateToApply (latestApplicationsForSbi) {
   if (latestApplicationsForSbi.length === 0) {
-    // no existing applications so continue
-    return
+    return 'no existing applications'
   }
   const latestApplication = getLatestApplication(latestApplicationsForSbi)
   if (validStatusForApplication.includes(latestApplication.statusId)) {
-    // latest application is either WITHDRAWN or NOT_AGREED so okay to continue
-    console.log(`${new Date().toISOString()} Business is eligible to apply : ${JSON.stringify({
-        sbi: latestApplication.data.organisation.sbi
-      })}`)
+    return 'latest application either WITHDRAWN or NOT_AGREED'
   } else if (config.endemics.enabled) {
     if (latestApplication.statusId === status.AGREED && latestApplication.type === applicationType.ENDEMICS) {
       throw new AlreadyAppliedError(`Business with SBI ${latestApplication.data.organisation.sbi} already has an endemics agreement`)
@@ -65,11 +61,7 @@ function timeLimitRule (latestApplication, dates) {
   const { startDate, endDate } = dates
   // Set re-application date to day after current application ends
   const nextApplicationDate = new Date(endDate.setDate(endDate.getDate() + 1))
-  console.log(`Checking if agreement with reference ${latestApplication.reference}, start date of ${startDate} and end date of ${endDate} has exceeded the application reapply wait time of ${config.reapplyTimeLimitMonths} months.`)
   if (Date.now() <= endDate) {
-    console.log(`${new Date().toISOString()} Business is not eligible to apply due to ${config.reapplyTimeLimitMonths} month restrictions: ${JSON.stringify({
-      sbi: latestApplication.data.organisation.sbi
-    })}`)
     throw new CannotReapplyTimeLimitError(`Business with SBI ${latestApplication.data.organisation.sbi} is not eligible to apply due to ${config.reapplyTimeLimitMonths} month restrictions since the last agreement.`, formatDate(startDate), formatDate(nextApplicationDate))
   }
 }

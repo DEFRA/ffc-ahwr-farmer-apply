@@ -42,7 +42,7 @@ module.exports = [{
         stripUnknown: true
       }),
       failAction (request, h, err) {
-        console.log(`Validation error caught during DEFRA ID redirect - ${err.message}.`)
+        request.logger.warn(err, 'signin oidc')
         appInsights.defaultClient.trackException({ exception: err })
         return h.view('verify-login-failed', {
           backLink: auth.requestAuthorizationCodeUrl(session, request),
@@ -54,13 +54,19 @@ module.exports = [{
       let tempApplicationId
       try {
         tempApplicationId = createTempReference()
+        request.logger.setBindings({ tempApplicationId })
         // tempApplicationId added to reference to enable session event to report with temp id
         session.setFarmerApplyData(request, sessionKeys.farmerApplyData.reference, tempApplicationId)
-        await auth.authenticate(request, session)
+        await auth.authenticate(request)
+        request.logger.setBindings({ authenticated: true })
         const apimAccessToken = await auth.retrieveApimAccessToken()
+
         const personSummary = await getPersonSummary(request, apimAccessToken)
         session.setCustomer(request, sessionKeys.customer.id, personSummary.id)
         const organisationSummary = await organisationIsEligible(request, personSummary.id, apimAccessToken)
+
+        request.logger.setBindings({ sbi: organisationSummary.organisation.sbi })
+
         setOrganisationSessionData(request, personSummary, { ...organisationSummary })
 
         if (organisationSummary.organisation.locked) {
@@ -72,7 +78,9 @@ module.exports = [{
         }
 
         await cphCheck.customerMustHaveAtLeastOneValidCph(request, apimAccessToken)
-        await businessEligibleToApply(organisationSummary.organisation.sbi)
+        const previousApplication = await businessEligibleToApply(organisationSummary.organisation.sbi)
+
+        request.logger.setBindings({ previousApplication })
 
         auth.setAuthCookie(request, personSummary.email, farmerApply)
         appInsights.defaultClient.trackEvent({
@@ -86,7 +94,8 @@ module.exports = [{
         })
         return h.redirect(`${config.urlPrefix}/org-review`)
       } catch (err) {
-        console.error(`Received error with name ${err.name} and message ${err.message}.`)
+        request.logger.error(err, 'check details')
+
         const attachedToMultipleBusinesses = session.getCustomer(request, sessionKeys.customer.attachedToMultipleBusinesses)
         const organisation = session.getFarmerApplyData(request, sessionKeys.farmerApplyData.organisation)
         const crn = session.getCustomer(request, sessionKeys.customer.crn)

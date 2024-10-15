@@ -14,10 +14,9 @@ const clear = (request) => {
   request.cookieAuth.clear()
 }
 
-// legacy?
 const setAuthCookie = (request, email, userType) => {
   request.cookieAuth.set({ email, userType })
-  console.log(`Logged in user of type '${userType}' with email '${email}'.`)
+  request.logger.info({ userType }, 'logged in user')
 }
 
 module.exports = {
