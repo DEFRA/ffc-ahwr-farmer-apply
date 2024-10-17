@@ -10,10 +10,6 @@ const set = (request, accessToken) => {
   })
 }
 
-const clear = (request) => {
-  request.cookieAuth.clear()
-}
-
 const setAuthCookie = (request, email, userType) => {
   request.cookieAuth.set({ email, userType })
   request.logger.info({ userType }, 'logged in user')
@@ -21,6 +17,5 @@ const setAuthCookie = (request, email, userType) => {
 
 module.exports = {
   set,
-  clear,
   setAuthCookie
 }
