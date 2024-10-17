@@ -36,10 +36,6 @@ Please ask a developer for an example `.env` file that you can include in the ro
 | MESSAGE_QUEUE_PASSWORD                | Azure Service Bus SAS policy key                                                                 |
 | MESSAGE_QUEUE_SUFFIX                  | Developer initials                                                                               |
 | MESSAGE_QUEUE_USER                    | Azure Service Bus SAS policy name, e.g. `RootManageSharedAccessKey`                              |
-| NOTIFY_API_KEY                        | GOV.UK Notify API Key                                                                            |
-| NOTIFY_TEMPLATE_ID_FARMER_APPLY_LOGIN | Id of email template used for farmer apply login email                                           |
-| NOTIFY_TEMPLATE_ID_FARMER_CLAIM_LOGIN | Id of email template used for farmer claim login email                                           |
-| NOTIFY_TEMPLATE_ID_VET_LOGIN          | Id of email template used for vet login email                                                    |
 | SERVICE_URI                           | URI of service (used in links, in emails) e.g. `http://localhost:3000` or `https://defra.gov.uk` |
 | AZURE_STORAGE_CREATE_CONTAINERS       | Set true to use connection string, false to connect using azure credentials for blobstorage      |
 | DEFRA_ID_TENANT                       | The Azure tenant for Defra Id                                                                    |
