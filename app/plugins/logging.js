@@ -1,4 +1,5 @@
 const pino = require('hapi-pino')
+const { name } = require('../../package.json')
 
 const transport = { target: 'pino-pretty' }
 const testLevel = { level: 'silent' }
@@ -30,7 +31,7 @@ const err = (err) => ({
 module.exports = {
   plugin: pino,
   options: {
-    name: 'ffc-ahwr-farmer-apply',
+    name,
     ...(process.env.NODE_ENV === 'test' && testLevel),
     formatters: {
       level: (level) => ({ level })
