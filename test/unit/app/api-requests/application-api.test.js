@@ -1,8 +1,6 @@
 const Wreck = require('@hapi/wreck')
 const mockConfig = require('../../../../app/config')
 jest.mock('@hapi/wreck')
-const consoleLogSpy = jest.spyOn(console, 'log')
-const consoleErrorSpy = jest.spyOn(console, 'error')
 const mockApplicationApiUri = 'http://internal:3333/api'
 
 const MOCK_NOW = new Date()
@@ -155,10 +153,6 @@ describe('Application API', () => {
       try {
         await applicationApi.getLatestApplicationsBySbi(SBI)
       } catch (error) {
-        expect(consoleLogSpy).toHaveBeenCalledTimes(1)
-        expect(consoleLogSpy).toHaveBeenCalledWith(`${MOCK_NOW.toISOString()} Getting latest applications by: ${JSON.stringify({
-          sbi: SBI
-        })}`)
         expect(Wreck.get).toHaveBeenCalledWith(
           `${mockApplicationApiUri}/applications/latest?sbi=${SBI}`,
           options
@@ -176,10 +170,6 @@ describe('Application API', () => {
       try {
         await applicationApi.getLatestApplicationsBySbi(SBI)
       } catch (error) {
-        expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
-        expect(consoleErrorSpy).toHaveBeenCalledWith(`${MOCK_NOW.toISOString()} Getting latest applications failed: ${JSON.stringify({
-          sbi: SBI
-        })}`, expectedError)
         expect(Wreck.get).toHaveBeenCalledWith(
           `${mockApplicationApiUri}/applications/latest?sbi=${SBI}`,
           options

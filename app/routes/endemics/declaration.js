@@ -63,9 +63,16 @@ module.exports = [{
       const application = session.getFarmerApplyData(request)
       const tempApplicationReference = application.reference
 
+      request.logger.setBindings({
+        tempApplicationReference,
+        sbi: application.organisation.sbi
+      })
+
       resetFarmerApplyDataBeforeApplication(application)
 
       const newApplicationReference = await sendApplication({ ...application, type: applicationType.ENDEMICS }, request.yar.id)
+
+      request.logger.setBindings({ newApplicationReference })
 
       if (newApplicationReference) {
         session.setFarmerApplyData(request, reference, newApplicationReference)
@@ -94,8 +101,7 @@ module.exports = [{
       }
 
       if (!newApplicationReference) {
-        console.log('Apply declaration returned a null application reference.')
-        throw boom.internal()
+        throw boom.internal('Apply declaration returned a null application reference.')
       }
 
       return h.view(endemicsConfirmation, {

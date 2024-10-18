@@ -182,4 +182,26 @@ describe('CPH check', () => {
       ).resolves.toEqual(undefined)
     }
   })
+
+  test('success false is returned', async () => {
+    when(session.getCustomer)
+      .calledWith(expect.anything(), sessionKeys.customer.organisationId)
+      .mockReturnValue('unsuccessful')
+
+    when(Wreck.get)
+      .mockResolvedValue({
+        res: {
+          statusCode: 200
+        },
+        payload: {
+          data: [],
+          success: false,
+          errorString: 'cph failed'
+        }
+      })
+
+    await expect(
+      () => cphCheck.customerMustHaveAtLeastOneValidCph({}, 'apimAccessToken')
+    ).rejects.toThrowError('cph failed')
+  })
 })

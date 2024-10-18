@@ -12,11 +12,11 @@ module.exports = {
             return h.view('error-pages/4xx', { payload }).code(payload.statusCode)
           }
 
-          request.log('error', {
+          request.logger.error({
             statusCode: payload.statusCode,
             message: payload.message,
             stack: response.data ? response.data.stack : response.stack
-          })
+          }, 'pre response error')
 
           return h.view('error-pages/500').code(payload.statusCode)
         }

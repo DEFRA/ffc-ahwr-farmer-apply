@@ -25,7 +25,7 @@ function logException (request, event) {
       }
     })
   } catch (err) {
-    console.error(err, 'App Insights')
+    request.logger.error(err, 'App Insights')
   }
 }
 module.exports = { setup, logException }

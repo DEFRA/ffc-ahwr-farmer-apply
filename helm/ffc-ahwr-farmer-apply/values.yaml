@@ -44,7 +44,6 @@ container:
   googleTagManagerKey:
   imagePullPolicy: IfNotPresent
   messageQueueHost: namespace.servicebus.windows.net
-  notifyApiKey:
   port: 3000
   redisHostname: redis-hostname.default
   redisPartition: ffc-ahwr-farmer-apply

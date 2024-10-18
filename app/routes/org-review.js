@@ -27,7 +27,12 @@ module.exports = [{
       payload: Joi.object({
         [confirmCheckDetails]: Joi.string().valid('yes', 'no').required()
       }),
-      failAction: (request, h, _err) => {
+      failAction: (request, h, err) => {
+        request.logger.warn({
+          err,
+          organisationKey,
+          confirmCheckDetails: request.payload.confirmCheckDetails
+        }, 'org review')
         const organisation = session.getFarmerApplyData(request, organisationKey)
         if (!organisation) {
           return boom.notFound()

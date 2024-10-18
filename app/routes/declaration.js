@@ -47,12 +47,19 @@ module.exports = [{
       const application = session.getFarmerApplyData(request)
       application.reference = null // Set application ref to null instead of temp ref before sending it to store.
 
+      request.logger.setBindings({
+        tempApplicationReference,
+        sbi: application.organisation.sbi
+      })
+
       let newApplicationReference
       if (config.endemics.enabled) {
         newApplicationReference = await sendApplication({ ...application, type: 'VV' }, request.yar.id)
       } else {
         newApplicationReference = await sendApplication(application, request.yar.id)
       }
+
+      request.logger.setBindings({ newApplicationReference })
 
       if (newApplicationReference) {
         const organisation = session.getFarmerApplyData(request, organisationKey)
@@ -72,13 +79,14 @@ module.exports = [{
       session.clear(request)
       request.cookieAuth.clear()
 
+      request.logger.info('declaration')
+
       if (request.payload.offerStatus === 'rejected') {
         return h.view('offer-rejected', { ruralPaymentsAgency: config.ruralPaymentsAgency })
       }
 
       if (!newApplicationReference) {
-        console.log('Apply declaration returned a null application reference.')
-        throw boom.internal()
+        throw boom.internal('Apply declaration returned a null application reference.')
       }
 
       return h.view('confirmation', {

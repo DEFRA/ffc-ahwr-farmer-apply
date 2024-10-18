@@ -18,6 +18,7 @@ const authenticate = async (request) => {
   await jwtVerify(redeemResponse.access_token)
   const accessToken = jwtDecode(redeemResponse.access_token)
   const idToken = jwtDecode(redeemResponse.id_token)
+  request.logger.setBindings({ iss: accessToken.iss })
   await jwtVerifyIss(accessToken.iss)
   nonce.verify(request, idToken)
 

@@ -29,6 +29,8 @@ module.exports = [
           return boom.notFound()
         }
 
+        request.logger.setBindings({ sbi: organisation.sbi })
+
         const userType = await businessAppliedBefore(organisation.sbi)
         session.setFarmerApplyData(
           request,
