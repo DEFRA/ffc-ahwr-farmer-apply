@@ -1,6 +1,5 @@
 const Joi = require('joi')
 const mqConfig = require('./messaging')
-const notifyConfig = require('./notify')
 const authConfig = require('./auth')
 const urlPrefix = '/apply'
 
@@ -144,7 +143,6 @@ if (result.error) {
 
 const value = result.value
 value.mqConfig = mqConfig
-value.notifyConfig = notifyConfig
 value.authConfig = authConfig
 
 module.exports = value
