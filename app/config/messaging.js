@@ -2,43 +2,43 @@ const Joi = require('joi')
 
 const msgTypePrefix = 'uk.gov.ffc.ahwr'
 
-const mqSchema = Joi.object({
+const schema = Joi.object({
   messageQueue: {
     host: Joi.string().required(),
     username: Joi.string(),
     password: Joi.string(),
-    useCredentialChain: Joi.bool().default(false),
+    useCredentialChain: Joi.bool(),
     appInsights: Joi.object()
   },
   applicationRequestQueue: {
-    address: process.env.APPLICATIONREQUEST_QUEUE_ADDRESS,
-    type: 'queue'
+    address: Joi.string().required(),
+    type: Joi.string().required().valid('queue')
   },
-  applicationRequestMsgType: `${msgTypePrefix}.app.request`,
   applicationResponseQueue: {
-    address: process.env.APPLICATIONRESPONSE_QUEUE_ADDRESS,
-    type: 'queue'
+    address: Joi.string().required(),
+    type: Joi.string().required().valid('queue')
   },
   eventQueue: {
-    address: process.env.EVENT_QUEUE_ADDRESS,
-    type: 'queue'
+    address: Joi.string().required(),
+    type: Joi.string().required().valid('queue')
   },
-  fetchApplicationRequestMsgType: `${msgTypePrefix}.fetch.app.request`
+  applicationRequestMsgType: Joi.string().required()
 })
 
-const mqConfig = {
-  messageQueue: {
-    host: process.env.MESSAGE_QUEUE_HOST,
-    username: process.env.MESSAGE_QUEUE_USER,
-    password: process.env.MESSAGE_QUEUE_PASSWORD,
-    useCredentialChain: process.env.NODE_ENV === 'production',
-    appInsights: require('applicationinsights')
-  },
+const messageQueue = {
+  host: process.env.MESSAGE_QUEUE_HOST,
+  username: process.env.MESSAGE_QUEUE_USER,
+  password: process.env.MESSAGE_QUEUE_PASSWORD,
+  useCredentialChain: process.env.NODE_ENV === 'production',
+  appInsights: require('applicationinsights')
+}
+
+const config = {
+  messageQueue,
   applicationRequestQueue: {
     address: process.env.APPLICATIONREQUEST_QUEUE_ADDRESS,
     type: 'queue'
   },
-  applicationRequestMsgType: `${msgTypePrefix}.app.request`,
   applicationResponseQueue: {
     address: process.env.APPLICATIONRESPONSE_QUEUE_ADDRESS,
     type: 'queue'
@@ -47,27 +47,21 @@ const mqConfig = {
     address: process.env.EVENT_QUEUE_ADDRESS,
     type: 'queue'
   },
-  fetchApplicationRequestMsgType: `${msgTypePrefix}.fetch.app.request`
+  applicationRequestMsgType: `${msgTypePrefix}.app.request`
 }
 
-const mqResult = mqSchema.validate(mqConfig, {
-  abortEarly: false
+const { error } = schema.validate(config, {
+  abortEarly: false,
+  convert: false
 })
 
-if (mqResult.error) {
-  throw new Error(`The message queue config is invalid. ${mqResult.error.message}`)
+if (error) {
+  throw new Error(`The message queue config is invalid. ${error.message}`)
 }
 
-const applicationRequestQueue = { ...mqResult.value.messageQueue, ...mqResult.value.applicationRequestQueue }
-const applicationResponseQueue = { ...mqResult.value.messageQueue, ...mqResult.value.applicationResponseQueue }
-const eventQueue = { ...mqResult.value.messageQueue, ...mqResult.value.eventQueue }
-const fetchApplicationRequestQueue = { ...mqResult.value.messageQueue, ...mqResult.value.fetchApplicationRequestQueue }
-const applicationRequestMsgType = mqResult.value.applicationRequestMsgType
-
 module.exports = {
-  applicationRequestQueue,
-  applicationResponseQueue,
-  eventQueue,
-  fetchApplicationRequestQueue,
-  applicationRequestMsgType
+  applicationRequestQueue: { ...messageQueue, ...config.applicationRequestQueue },
+  applicationResponseQueue: { ...messageQueue, ...config.applicationResponseQueue },
+  eventQueue: { ...messageQueue, ...config.eventQueue },
+  applicationRequestMsgType: config.applicationRequestMsgType
 }
