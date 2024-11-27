@@ -13,8 +13,7 @@ test('uses defaults', () => {
     .toBe(6379)
   expect(config.port)
     .toBe(3000)
-  expect(config.urlPrefix)
-    .toBe('/apply')
+  expect(config.urlPrefix).toBe('/apply')
 })
 
 test('throws an error for invalid config', () => {
