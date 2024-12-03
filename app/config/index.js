@@ -64,14 +64,17 @@ const schema = Joi.object({
   },
   latestTermsAndConditionsUri: Joi.string().required(),
   dateOfTesting: {
-    enabled: Joi.bool()
+    enabled: Joi.bool().required()
   },
   tenMonthRule: {
-    enabled: Joi.bool().default(false)
+    enabled: Joi.bool().required()
   },
   reapplyTimeLimitMonths: Joi.number(),
   endemics: {
-    enabled: Joi.bool().default(false)
+    enabled: Joi.bool().required()
+  },
+  multiSpecies: {
+    enabled: Joi.bool().required()
   }
 })
 
@@ -139,6 +142,9 @@ const config = {
   reapplyTimeLimitMonths: 10,
   endemics: {
     enabled: process.env.ENDEMICS_ENABLED === 'true'
+  },
+  multiSpecies: {
+    enabled: process.env.MULTI_SPECIES_ENABLED === 'true'
   }
 }
 

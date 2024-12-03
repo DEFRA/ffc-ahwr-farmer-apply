@@ -42,4 +42,5 @@ data:
   DATE_OF_TESTING_ENABLED: {{ quote .Values.container.dateOfTestingEnabled }}
   TEN_MONTH_RULE_ENABLED: {{ quote .Values.container.tenMonthRuleEnabled }}
   ENDEMICS_ENABLED: {{ quote .Values.container.endemicsEnabled }}
+  MULTI_SPECIES_ENABLED: {{ quote .Values.container.multiSpeciesEnabled }}
 {{- end -}}
