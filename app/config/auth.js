@@ -1,6 +1,6 @@
 const Joi = require('joi')
 
-const authSchema = Joi.object({
+const schema = Joi.object({
   defraId: {
     hostname: Joi.string().uri(),
     oAuthAuthorisePath: Joi.string(),
@@ -31,7 +31,7 @@ const authSchema = Joi.object({
   }
 })
 
-const authConfig = {
+const config = {
   defraId: {
     hostname: `https://${process.env.DEFRA_ID_TENANT}.b2clogin.com/${process.env.DEFRA_ID_TENANT}.onmicrosoft.com`,
     oAuthAuthorisePath: '/oauth2/v2.0/authorize',
@@ -62,12 +62,13 @@ const authConfig = {
   }
 }
 
-const authResult = authSchema.validate(authConfig, {
-  abortEarly: false
+const { error } = schema.validate(config, {
+  abortEarly: false,
+  convert: false
 })
 
-if (authResult.error) {
-  throw new Error(`The auth config is invalid. ${authResult.error.message}`)
+if (error) {
+  throw new Error(`The auth config is invalid. ${error.message}`)
 }
 
-module.exports = authResult.value
+module.exports = config
