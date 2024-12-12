@@ -1,5 +1,6 @@
 module.exports = {
   endemicsCheckDetails: 'endemics/check-details',
+  endemicsMultipleSpeciesIntro: 'endemics/multiple-species-intro',
   endemicsReviews: 'endemics/reviews',
   endemicsNumbers: 'endemics/numbers',
   endemicsTimings: 'endemics/timings',

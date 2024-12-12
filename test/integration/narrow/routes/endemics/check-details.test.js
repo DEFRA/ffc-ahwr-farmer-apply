@@ -1,10 +1,13 @@
 const cheerio = require('cheerio')
 const expectPhaseBanner = require('../../../../utils/phase-banner-expect')
 const getCrumbs = require('../../../../utils/get-crumbs')
-const { endemicsCheckDetails, endemicsReviews } = require('../../../../../app/config/routes')
+const { endemicsCheckDetails, endemicsReviews, endemicsMultipleSpeciesIntro } = require('../../../../../app/config/routes')
 const businessAppliedBeforeMock = require('../../../../../app/api-requests/business-applied-before')
-jest.mock('../../../../../app/api-requests/business-applied-before')
+
 const endemicsReviewsUrl = `/apply/${endemicsReviews}`
+const endemicsMultipleSpeciesIntroUrl = `/apply/${endemicsMultipleSpeciesIntro}`
+
+jest.mock('../../../../../app/api-requests/business-applied-before')
 
 describe('Org review page test', () => {
   let session
@@ -28,11 +31,15 @@ describe('Org review page test', () => {
       jest.resetAllMocks()
       jest.resetModules()
 
+      jest.mock('../../../../../app/api-requests/business-applied-before')
       session = require('../../../../../app/session')
       jest.mock('../../../../../app/session')
       session.getCustomer.mockReturnValue({ crn: '123123123' })
       jest.mock('../../../../../app/config', () => ({
         ...jest.requireActual('../../../../../app/config'),
+        multiSpecies: {
+          enabled: false
+        },
         endemics: {
           enabled: true
         },
@@ -127,6 +134,9 @@ describe('Org review page test', () => {
     beforeAll(async () => {
       jest.mock('../../../../../app/config', () => ({
         ...jest.requireActual('../../../../../app/config'),
+        multiSpecies: {
+          enabled: false
+        },
         endemics: {
           enabled: true
         },
@@ -139,6 +149,21 @@ describe('Org review page test', () => {
     })
 
     test('returns 302 to next page when acceptable answer given', async () => {
+      const options = {
+        method,
+        url,
+        payload: { crumb, confirmCheckDetails: 'yes' },
+        auth,
+        headers: { cookie: `crumb=${crumb}` }
+      }
+
+      const res = await global.__SERVER__.inject(options)
+
+      expect(res.statusCode).toBe(302)
+      expect(res.headers.location).toEqual(endemicsReviewsUrl)
+    })
+
+    test('navigates to same species page when multiple species is disabled', async () => {
       const options = {
         method,
         url,
@@ -212,6 +237,62 @@ describe('Org review page test', () => {
       expect(res.statusCode).toBe(400)
       const $ = cheerio.load(res.payload)
       expect($('.govuk-error-summary .govuk-list').text().trim()).toEqual('Select if these details are correct')
+    })
+  })
+
+  describe(`POST ${url} route - multispecies`, () => {
+    let crumb
+    const method = 'POST'
+
+    beforeEach(async () => {
+      crumb = await getCrumbs(global.__SERVER__)
+    })
+
+    beforeAll(async () => {
+      jest.resetAllMocks()
+      jest.resetModules()
+
+      jest.mock('../../../../../app/config', () => ({
+        ...jest.requireActual('../../../../../app/config'),
+        multiSpecies: {
+          enabled: true
+        },
+        endemics: {
+          enabled: true
+        },
+        authConfig: {
+          defraId: {
+            hostname: 'https://tenant.b2clogin.com/tenant.onmicrosoft.com',
+            oAuthAuthorisePath: '/oauth2/v2.0/authorize',
+            policy: 'b2c_1a_signupsigninsfi',
+            redirectUri: 'http://localhost:3000/apply/endemics/signin-oidc',
+            clientId: 'dummy_client_id',
+            serviceId: 'dummy_service_id',
+            scope: 'openid dummy_client_id offline_access'
+          },
+          ruralPaymentsAgency: {
+            hostname: 'dummy-host-name',
+            getPersonSummaryUrl: 'dummy-get-person-summary-url',
+            getOrganisationPermissionsUrl: 'dummy-get-organisation-permissions-url',
+            getOrganisationUrl: 'dummy-get-organisation-url'
+          }
+        }
+      }))
+    })
+
+    test('navigates to multiple species page when multiple species is enabled', async () => {
+      const options = {
+        method,
+        url,
+        payload: { crumb, confirmCheckDetails: 'yes' },
+        auth,
+        headers: { cookie: `crumb=${crumb}` }
+      }
+
+      const res = await global.__SERVER__.inject(options)
+
+      expect(res.statusCode).toBe(302)
+      expect(res.headers.location).toEqual(endemicsMultipleSpeciesIntroUrl)
     })
   })
 })
