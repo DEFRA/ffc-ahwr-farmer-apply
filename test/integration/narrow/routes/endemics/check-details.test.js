@@ -31,7 +31,6 @@ describe('Org review page test', () => {
       jest.resetAllMocks()
       jest.resetModules()
 
-      jest.mock('../../../../../app/api-requests/business-applied-before')
       session = require('../../../../../app/session')
       jest.mock('../../../../../app/session')
       session.getCustomer.mockReturnValue({ crn: '123123123' })
