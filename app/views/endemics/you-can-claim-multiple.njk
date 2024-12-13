@@ -1,0 +1,43 @@
+{% extends './layouts/layout.njk' %}
+
+{% set pageHeadingText='You can claim for more than one species as part of this agreement' %}
+
+{% block pageTitle %}{{ pageHeadingText }} - {{ serviceName }} - GOV.UK{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: backLink,
+	  attributes: {id: "back"}
+  }) }}
+  {{ nameSbiTag({name: organisation.name, sbi: organisation.sbi}) }}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-l">{{ pageHeadingText }}</h1>
+
+      <form method="POST" autocomplete="off" novalidate="novalidate" id ="submitYouCanClaimMultipleForm">
+        <input type="hidden" name="crumb" value="{{crumb}}"/>
+        <div class="govuk-button-group">
+          {{ govukButton({
+          attributes: { "aria-label": agreementStatus.agree.text + " - " + pageHeadingText },
+          text: agreementStatus.agree.text,
+          value: agreementStatus.agree.value,
+          name: "agreementStatus",
+          preventDoubleClick: true
+        }) }}
+          {{ govukButton({
+          attributes: { "aria-label": agreementStatus.notAgree.text + " - " + pageHeadingText },
+          text: agreementStatus.notAgree.text,
+          value: agreementStatus.notAgree.value,
+          name: "agreementStatus",
+          preventDoubleClick: true,
+          classes: "govuk-button--secondary"
+        }) }}
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

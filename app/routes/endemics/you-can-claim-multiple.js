@@ -1,18 +1,17 @@
 const session = require('../../session')
-const { agreeSpeciesNumbers, organisation: organisationKey } = require('../../session/keys').farmerApplyData
+const { agreeSameSpecies, organisation: organisationKey } = require('../../session/keys').farmerApplyData
 const config = require('../../config/index')
 const urlPrefix = require('../../config/index').urlPrefix
 const {
-  endemicsTimings,
   endemicsNumbers,
   endemicsYouCanClaimMultiple,
-  endemicsReviews,
+  endemicsCheckDetails,
   endemicsOfferRejected
 } = require('../../config/routes')
 
-const pageUrl = `${urlPrefix}/${endemicsNumbers}`
-const backLink = (config.multiSpecies.enabled) ? `${urlPrefix}/${endemicsYouCanClaimMultiple}` : `${urlPrefix}/${endemicsReviews}`
-const nextPage = `${urlPrefix}/${endemicsTimings}`
+const pageUrl = `${urlPrefix}/${endemicsYouCanClaimMultiple}`
+const backLink = `${urlPrefix}/${endemicsCheckDetails}`
+const nextPage = `${urlPrefix}/${endemicsNumbers}`
 
 const agreementStatus = {
   agree: {
@@ -32,7 +31,7 @@ module.exports = [
     options: {
       handler: async (request, h) => {
         const organisation = session.getFarmerApplyData(request, organisationKey)
-        return h.view(endemicsNumbers, {
+        return h.view(endemicsYouCanClaimMultiple, {
           backLink,
           agreementStatus,
           organisation
@@ -48,19 +47,18 @@ module.exports = [
         if (request.payload.agreementStatus === 'agree') {
           session.setFarmerApplyData(
             request,
-            agreeSpeciesNumbers,
+            agreeSameSpecies,
             'yes'
           )
           return h.redirect(nextPage)
         } else {
           session.setFarmerApplyData(
             request,
-            agreeSpeciesNumbers,
+            agreeSameSpecies,
             'no'
           )
           session.clear(request)
           request.cookieAuth.clear()
-
           return h.view(endemicsOfferRejected, {
             termsRejected: true,
             ruralPaymentsAgency: config.ruralPaymentsAgency

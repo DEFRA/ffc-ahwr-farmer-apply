@@ -24,6 +24,7 @@ if (config.endemics.enabled) {
   routes = routes.concat(
     require('../routes/endemics/index'),
     require('../routes/endemics/numbers'),
+    require('../routes/endemics/you-can-claim-multiple'),
     require('../routes/endemics/reviews'),
     require('../routes/endemics/declaration'),
     require('../routes/endemics/check-details'),

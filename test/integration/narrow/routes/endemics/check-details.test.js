@@ -1,11 +1,11 @@
 const cheerio = require('cheerio')
 const expectPhaseBanner = require('../../../../utils/phase-banner-expect')
 const getCrumbs = require('../../../../utils/get-crumbs')
-const { endemicsCheckDetails, endemicsReviews, endemicsMultipleSpeciesIntro } = require('../../../../../app/config/routes')
+const { endemicsCheckDetails, endemicsReviews, endemicsYouCanClaimMultiple } = require('../../../../../app/config/routes')
 const businessAppliedBeforeMock = require('../../../../../app/api-requests/business-applied-before')
 
 const endemicsReviewsUrl = `/apply/${endemicsReviews}`
-const endemicsMultipleSpeciesIntroUrl = `/apply/${endemicsMultipleSpeciesIntro}`
+const endemicsYouCanClaimMultipleUrl = `/apply/${endemicsYouCanClaimMultiple}`
 
 jest.mock('../../../../../app/api-requests/business-applied-before')
 
@@ -291,7 +291,7 @@ describe('Org review page test', () => {
       const res = await global.__SERVER__.inject(options)
 
       expect(res.statusCode).toBe(302)
-      expect(res.headers.location).toEqual(endemicsMultipleSpeciesIntroUrl)
+      expect(res.headers.location).toEqual(endemicsYouCanClaimMultipleUrl)
     })
   })
 })
