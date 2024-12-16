@@ -1,5 +1,4 @@
 const session = require('../../session')
-const { userType } = require('../../constants/user-types')
 const { agreeVisitTimings, organisation: organisationKey } = require('../../session/keys').farmerApplyData
 const urlPrefix = require('../../config/index').urlPrefix
 const config = require('../../config/index')
@@ -18,10 +17,8 @@ module.exports = [
     path: `${urlPrefix}/${endemicsTimings}`,
     options: {
       handler: async (request, h) => {
-        const application = session.getFarmerApplyData(request)
         const organisation = session.getFarmerApplyData(request, organisationKey)
         return h.view(endemicsTimings, {
-          isOldUser: userType.NEW_USER !== application.organisation.userType,
           backLink,
           organisation
         })

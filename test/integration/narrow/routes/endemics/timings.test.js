@@ -71,8 +71,6 @@ describe('Declaration test', () => {
     })
 
     test('returns 200 when application found', async () => {
-      const application = { organisation }
-      sessionMock.getFarmerApplyData.mockReturnValueOnce(application)
       sessionMock.getFarmerApplyData.mockReturnValueOnce(organisation)
       const options = {
         method: 'GET',
@@ -86,24 +84,7 @@ describe('Declaration test', () => {
       const $ = cheerio.load(res.payload)
       expect($('h1').text()).toMatch('Timing of reviews and follow-ups')
       expect($('title').text()).toMatch('Timing of reviews and follow-ups - Get funding to improve animal health and welfare')
-      expect($('.govuk-heading-s').text()).toEqual(`${organisation.name} - SBI ${organisation.sbi}`)
-      expectPhaseBanner.ok($)
-    })
-    test('returns 200 when application found and user comes from old world', async () => {
-      const application = { organisation: { ...organisation, userType: 'existingUser' } }
-      sessionMock.getFarmerApplyData.mockReturnValueOnce(application)
-      sessionMock.getFarmerApplyData.mockReturnValueOnce(organisation)
-      const options = {
-        method: 'GET',
-        url,
-        auth
-      }
-
-      const res = await global.__SERVER__.inject(options)
-
-      expect(res.statusCode).toBe(200)
-      const $ = cheerio.load(res.payload)
-      expect($('.govuk-inset-text').text()).toContain('If you have completed a review in the old annual health and welfare review:')
+      expect($('h3').text()).toEqual(`${organisation.name} - SBI ${organisation.sbi}`)
       expectPhaseBanner.ok($)
     })
   })

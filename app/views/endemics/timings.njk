@@ -15,48 +15,43 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l">Timing of reviews and follow-ups</h1>
-    <p>You can do up to 3 reviews and follow-ups under this {{ 'new' if isOldUser else ''}} agreement. We recommend you follow this sequence.</p>
+    <p>Claim your animal health and welfare reviews and endemic disease follow-ups as part of Get funding to improve animal health and welfare.</p>
+
+    <hr class="govuk-section-break govuk-section-break--s" />
+
     {{ govukWarningText({
-      text: "At each step you choose to complete, you must follow the relevant timing rules to be eligible to claim.",
+      text: "To be eligible to claim, you need to have an Improve Animal Health and Welfare (IAHW) agreement in place and follow these timing rules.",
       iconFallbackText: "Warning"
     }) }}
-    
-    <h2 class="govuk-heading-m">1 Do a review</h2>
-    <p>If you do a review, you must:</p>
-      <ul class="govuk-list govuk-list--bullet">
-        <li>always do the review before you do the resulting follow-up</li>
-        <li>wait at least 10 months between your reviews</li>
-      </ul><br/>
-    <h2 class="govuk-heading-m">2 Claim for a review</h2>
-    <h2 class="govuk-heading-m">3 Do a follow-up</h2>
-    <p>If you do a follow-up, you must:</p>
-      <ul class="govuk-list govuk-list--bullet">
-        <li>do the follow-up no more than 10 months after the review</li>
-        <li>wait at least 10 months between your follow-ups</li>
-      </ul><br/>
-    <h2 class="govuk-heading-m">4 Claim for a follow-up</h2>
-    <p>Your review claim must be approved before you claim for the resulting follow-up.</p>
-    <h2 class="govuk-heading-m">5 Repeat this sequence for your second and third reviews and follow-ups</h2>
-    {% if isOldUser %}
-    <div class="govuk-inset-text">
-      If you have completed a review in the old annual health and welfare review:
-      </br>
-      </br>
-      <ul class="govuk-list govuk-list--bullet">
-        <li>
-          you can go straight to your follow-up if your claim was successful (you need to do the follow-up no more than 10 months after your review)
-        </li>
-        <li>
-          you must wait until 10 months after your last review before doing a new review under this agreement (this still applies if your review claim was rejected)
-        </li>
-      </ul>
-    </div>
-    {% endif %}
-    <br/><br/>
 
-          <form method="POST" autocomplete="off" novalidate="novalidate" id ="submitDeclarationForm">
-            <input type="hidden" name="crumb" value="{{crumb}}"/>
-            <div class="govuk-button-group">
+    <hr class="govuk-section-break govuk-section-break--s" />
+
+    <h2 class="govuk-heading-m">Animal health and welfare reviews</h2>
+    <p>To be eligible to claim for animal health and welfare reviews you must:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>have an IAHW agreement in place before you do your first review</li>
+      <li>ensure reviews on a particular species are at least 10 months apart</li>
+      <li>have no more than 3 animal health and welfare reviews per species before 19 June 2027</li>
+    </ul>
+
+    <hr class="govuk-section-break govuk-section-break--m" />
+
+    <h2 class="govuk-heading-m">Endemic disease follow-ups</h2>
+    <p>To be eligible to claim for endemic disease follow-ups you must: </p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>have an IAHW agreement agreement in place before you do your first follow-up</li>
+      <li>have had a review which you should claim for first</li>
+      <li>ensure the follow-up takes place no more than 10 months after your review</li>
+      <li>have the follow-up on the same species as the review</li>
+      <li>ensure that follow-ups for that species take place at least 10 months after your last follow-up and always be at least 10 months apart</li>
+      <li>have no more than 3 endemic disease follow-ups per species before 19 June 2027 </li>
+    </ul>
+
+    <hr class="govuk-section-break govuk-section-break--m" />
+
+    <form method="POST" autocomplete="off" novalidate="novalidate" id ="submitDeclarationForm">
+      <input type="hidden" name="crumb" value="{{crumb}}"/>
+      <div class="govuk-button-group">
         {{ govukButton({
           text: "I agree",
           attributes: { "aria-label": "I agree - Timing of review and follow-ups" },
@@ -72,8 +67,8 @@
           name: "agreementStatus",
           preventDoubleClick: true
         }) }}
-            </div>
-          </form>
-        </div>
       </div>
-    {% endblock %}
+    </form>
+  </div>
+</div>
+{% endblock %}
