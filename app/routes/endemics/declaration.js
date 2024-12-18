@@ -20,6 +20,7 @@ const resetFarmerApplyDataBeforeApplication = (application) => {
   application.reference = null // Set application ref to null instead of temp ref before sending it to be processed.
   delete application.agreeSpeciesNumbers
   delete application.agreeSameSpecies
+  delete application.agreeMultipleSpecies // TODO AHWR-233 correct?
   delete application.agreeVisitTimings
 }
 

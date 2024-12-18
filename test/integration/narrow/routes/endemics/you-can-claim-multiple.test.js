@@ -1,131 +1,120 @@
-const cheerio = require('cheerio')
 const getCrumbs = require('../../../../utils/get-crumbs')
-const expectPhaseBanner = require('../../../../utils/phase-banner-expect')
 const {
   endemicsNumbers,
   endemicsYouCanClaimMultiple,
   endemicsCheckDetails
 } = require('../../../../../app/config/routes')
+const session = require('../../../../../app/session')
 
 const pageUrl = `/apply/${endemicsYouCanClaimMultiple}`
 const backLinkUrl = `/apply/${endemicsCheckDetails}`
 const nextPageUrl = `/apply/${endemicsNumbers}`
 
+jest.mock('../../../../../app/session', () => ({
+  getFarmerApplyData: jest.fn((_request, _key) => ({ name: 'org-name', sbi: '123456789' })),
+  setFarmerApplyData: jest.fn(),
+  clear: jest.fn()
+}))
+
 describe('you-can-claim-multiple page', () => {
-  let session
-  const auth = {
-    strategy: 'cookie',
-    credentials: { reference: '1111', sbi: '111111111' }
-  }
-  const org = {
-    farmerName: 'Dailry Farmer',
-    address: ' org-address-here',
-    cph: '11/222/3333',
-    email: 'org@test.com',
-    name: 'org-name',
-    sbi: '123456789'
-  }
   const optionsBase = {
-    auth,
+    auth: { strategy: 'cookie', credentials: { reference: '1111', sbi: '111111111' } },
     url: pageUrl
   }
 
-  describe('GET operation handler', () => {
-    beforeAll(async () => {
-      jest.resetAllMocks()
-      jest.resetModules()
-
-      session = require('../../../../../app/session')
-
-      jest.mock('../../../../../app/auth')
-      jest.mock('../../../../../app/session')
-      jest.mock('../../../../../app/config', () => ({
-        ...jest.requireActual('../../../../../app/config'),
-        endemics: {
-          enabled: true
+  beforeEach(async () => {
+    jest.clearAllMocks()
+    jest.mock('../../../../../app/auth')
+    jest.mock('../../../../../app/config', () => ({
+      ...jest.requireActual('../../../../../app/config'),
+      endemics: {
+        enabled: true
+      },
+      authConfig: {
+        defraId: {
+          hostname: 'https://tenant.b2clogin.com/tenant.onmicrosoft.com',
+          oAuthAuthorisePath: '/oauth2/v2.0/authorize',
+          policy: 'b2c_1a_signupsigninsfi',
+          redirectUri: 'http://localhost:3000/apply/endemics/signin-oidc',
+          clientId: 'dummy_client_id',
+          serviceId: 'dummy_service_id',
+          scope: 'openid dummy_client_id offline_access'
         },
-        authConfig: {
-          defraId: {
-            hostname: 'https://tenant.b2clogin.com/tenant.onmicrosoft.com',
-            oAuthAuthorisePath: '/oauth2/v2.0/authorize',
-            policy: 'b2c_1a_signupsigninsfi',
-            redirectUri: 'http://localhost:3000/apply/endemics/signin-oidc',
-            clientId: 'dummy_client_id',
-            serviceId: 'dummy_service_id',
-            scope: 'openid dummy_client_id offline_access'
-          },
-          ruralPaymentsAgency: {
-            hostname: 'dummy-host-name',
-            getPersonSummaryUrl: 'dummy-get-person-summary-url',
-            getOrganisationPermissionsUrl: 'dummy-get-organisation-permissions-url',
-            getOrganisationUrl: 'dummy-get-organisation-url'
-          }
+        ruralPaymentsAgency: {
+          hostname: 'dummy-host-name',
+          getPersonSummaryUrl: 'dummy-get-person-summary-url',
+          getOrganisationPermissionsUrl: 'dummy-get-organisation-permissions-url',
+          getOrganisationUrl: 'dummy-get-organisation-url'
         }
-      }))
-    })
+      }
+    }))
+  })
 
+  describe('GET operation handler', () => {
     test('returns 200 and content is correct', async () => {
-      session.getFarmerApplyData.mockReturnValue(org)
-
       const res = await global.__SERVER__.inject({ ...optionsBase, method: 'GET' })
 
-      expect(res.statusCode).toBe(200)
-      // TODO: 233 verify page content
-      // TODO: 233 verify session.setFarmerApplyData()
+      expect(session.getFarmerApplyData).toHaveBeenCalledTimes(1)
 
-      const $ = cheerio.load(res.payload)
-      const backLinkUrlByClassName = $('.govuk-back-link').attr('href')
-      expect(backLinkUrlByClassName).toContain(backLinkUrl)
-      expectPhaseBanner.ok($)
+      expect(res.statusCode).toBe(200)
+      expect(res.payload).toContain(backLinkUrl)
+      const sanitizedHTML = sanitizeHTML(res.payload)
+      expect(sanitizedHTML).toMatchSnapshot()
     })
+
+    const sanitizeHTML = (html) => {
+      return html
+        .replace(/<input type="hidden" name="crumbBanner" id="crumbBanner" value=".*?"/g, '<input type="hidden" name="crumbBanner" id="crumbBanner" value="SANITIZED"')
+        .replace(/<input type="hidden" name="crumb" value=".*?"/g, '<input type="hidden" name="crumb" value="SANITIZED"')
+    }
   })
 
   describe('POST operation handler', () => {
-    beforeAll(async () => {
-      jest.mock('../../../../../app/config', () => ({
-        ...jest.requireActual('../../../../../app/config'),
-        endemics: {
-          enabled: true
-        },
-        authConfig: {
-          defraId: {
-            enabled: true
-          }
-        }
-      }))
-    })
+    let postOptionsBase
 
-    test('returns 302 and navigates to correct next page when user agrees', async () => {
+    beforeEach(async () => {
       const crumb = await getCrumbs(global.__SERVER__)
-      const options = {
+      postOptionsBase = {
         ...optionsBase,
         method: 'POST',
         headers: { cookie: `crumb=${crumb}` },
-        payload: { crumb, agreementStatus: 'agree' }
+        payload: { crumb }
+      }
+    })
+
+    test('returns 302 and navigates to correct next page when user agrees', async () => {
+      const options = {
+        ...postOptionsBase,
+        payload: {
+          ...postOptionsBase.payload,
+          agreementStatus: 'agree'
+        }
       }
 
       const res = await global.__SERVER__.inject(options)
+
+      expect(session.setFarmerApplyData).toHaveBeenCalledTimes(1)
 
       expect(res.statusCode).toBe(302)
       expect(res.headers.location).toEqual(nextPageUrl)
     })
 
     test('returns 200 and navigates to error page when user disagrees', async () => {
-      const crumb = await getCrumbs(global.__SERVER__)
       const options = {
-        ...optionsBase,
-        method: 'POST',
-        headers: { cookie: `crumb=${crumb}` },
-        payload: { crumb, agreementStatus: 'notAgree' }
+        ...postOptionsBase,
+        payload: {
+          ...postOptionsBase.payload,
+          agreementStatus: 'notAgree'
+        }
       }
 
       const res = await global.__SERVER__.inject(options)
 
+      expect(session.setFarmerApplyData).toHaveBeenCalledTimes(1)
+      expect(session.clear).toHaveBeenCalledTimes(1)
+
       expect(res.statusCode).toBe(200)
-      // TODO: 233 verify error page
-      // TODO: 233 verify session.setFarmerApplyData()
-      // TODO: 233 verify session.clear()
-      // TODO: 233 verify request.cookieAuth.clear()
+      expect(res.headers.location).not.toEqual(nextPageUrl)
     })
   })
 })

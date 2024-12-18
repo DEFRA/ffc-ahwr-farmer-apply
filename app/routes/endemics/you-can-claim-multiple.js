@@ -1,5 +1,5 @@
 const session = require('../../session')
-const { agreeSameSpecies, organisation: organisationKey } = require('../../session/keys').farmerApplyData
+const { agreeMultipleSpecies, organisation: organisationKey } = require('../../session/keys').farmerApplyData
 const config = require('../../config/index')
 const urlPrefix = require('../../config/index').urlPrefix
 const {
@@ -16,11 +16,13 @@ const nextPage = `${urlPrefix}/${endemicsNumbers}`
 const agreementStatus = {
   agree: {
     value: 'agree',
-    text: 'I agree'
+    text: 'I agree',
+    storedAnswer: 'yes'
   },
   notAgree: {
     value: 'notAgree',
-    text: 'I do not agree'
+    text: 'I do not agree',
+    storedAnswer: 'yes'
   }
 }
 
@@ -44,18 +46,18 @@ module.exports = [
     path: pageUrl,
     options: {
       handler: async (request, h) => {
-        if (request.payload.agreementStatus === 'agree') {
+        if (request.payload.agreementStatus === agreementStatus.agree.value) {
           session.setFarmerApplyData(
             request,
-            agreeSameSpecies,
-            'yes'
+            agreeMultipleSpecies, // TODO AHWR-233 agreeSameSpecies?
+            agreementStatus.agree.storedAnswer
           )
           return h.redirect(nextPage)
         } else {
           session.setFarmerApplyData(
             request,
-            agreeSameSpecies,
-            'no'
+            agreeMultipleSpecies, // TODO AHWR-233 agreeSameSpecies?
+            agreementStatus.notAgree.storedAnswer
           )
           session.clear(request)
           request.cookieAuth.clear()
