@@ -23,14 +23,14 @@ describe('you-can-claim-multiple page', () => {
       setFarmerApplyData: jest.fn(),
       clear: jest.fn()
     }))
-  })
 
-  beforeEach(async () => {
-    jest.clearAllMocks()
     jest.mock('../../../../../app/auth')
     jest.mock('../../../../../app/config', () => ({
       ...jest.requireActual('../../../../../app/config'),
       endemics: {
+        enabled: true
+      },
+      multiSpecies: {
         enabled: true
       },
       authConfig: {
@@ -53,6 +53,10 @@ describe('you-can-claim-multiple page', () => {
     }))
   })
 
+  beforeEach(async () => {
+    jest.clearAllMocks()
+  })
+
   describe('GET operation handler', () => {
     test('returns 200 and content is correct', async () => {
       const res = await global.__SERVER__.inject({ ...optionsBase, method: 'GET' })
@@ -72,7 +76,7 @@ describe('you-can-claim-multiple page', () => {
     }
   })
 
-  describe.skip('POST operation handler', () => {
+  describe('POST operation handler', () => {
     let postOptionsBase
 
     beforeEach(async () => {
