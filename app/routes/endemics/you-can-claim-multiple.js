@@ -1,29 +1,29 @@
 const session = require('../../session')
-const { agreeSpeciesNumbers, organisation: organisationKey } = require('../../session/keys').farmerApplyData
+const { agreeSameSpecies, organisation: organisationKey } = require('../../session/keys').farmerApplyData
 const config = require('../../config/index')
 const urlPrefix = require('../../config/index').urlPrefix
 const {
-  endemicsTimings,
   endemicsNumbers,
   endemicsYouCanClaimMultiple,
-  endemicsReviews,
+  endemicsCheckDetails,
   endemicsOfferRejected
 } = require('../../config/routes')
 
-const pageUrl = `${urlPrefix}/${endemicsNumbers}`
-const backLink = (config.multiSpecies.enabled) ? `${urlPrefix}/${endemicsYouCanClaimMultiple}` : `${urlPrefix}/${endemicsReviews}`
-const nextPage = `${urlPrefix}/${endemicsTimings}`
+const pageUrl = `${urlPrefix}/${endemicsYouCanClaimMultiple}`
+const backLink = `${urlPrefix}/${endemicsCheckDetails}`
+const nextPage = `${urlPrefix}/${endemicsNumbers}`
 
-const agreementStatus = {
-  agree: {
-    value: 'agree',
+const agreeStatusValue = 'yes'
+const agreementStatuses = [
+  {
+    value: agreeStatusValue,
     text: 'I agree'
   },
-  notAgree: {
-    value: 'notAgree',
+  {
+    value: 'no',
     text: 'I do not agree'
   }
-}
+]
 
 module.exports = [
   {
@@ -32,9 +32,9 @@ module.exports = [
     options: {
       handler: async (request, h) => {
         const organisation = session.getFarmerApplyData(request, organisationKey)
-        return h.view(endemicsNumbers, {
+        return h.view(endemicsYouCanClaimMultiple, {
           backLink,
-          agreementStatus,
+          agreementStatuses,
           organisation
         })
       }
@@ -45,27 +45,24 @@ module.exports = [
     path: pageUrl,
     options: {
       handler: async (request, h) => {
-        if (request.payload.agreementStatus === 'agree') {
-          session.setFarmerApplyData(
-            request,
-            agreeSpeciesNumbers,
-            'yes'
-          )
-          return h.redirect(nextPage)
-        } else {
-          session.setFarmerApplyData(
-            request,
-            agreeSpeciesNumbers,
-            'no'
-          )
+        const status = agreementStatuses.find((s) => s.value === request.payload.agreementStatus)
+
+        session.setFarmerApplyData(
+          request,
+          agreeSameSpecies, // NOTE AHWR-427 switch to agreeMultipleSpecies, once MI report supports it
+          status.value
+        )
+
+        if (status.value !== agreeStatusValue) {
           session.clear(request)
           request.cookieAuth.clear()
-
           return h.view(endemicsOfferRejected, {
             termsRejected: true,
             ruralPaymentsAgency: config.ruralPaymentsAgency
           })
         }
+
+        return h.redirect(nextPage)
       }
     }
   }

@@ -111,6 +111,7 @@ describe('routes plugin test', () => {
       '/apply/endemics/start',
       '/apply/endemics/timings',
       '/apply/endemics/vet-visit-guidance',
+      '/apply/endemics/you-can-claim-multiple',
       '/apply/terms/endemics',
       '/apply/terms/v1',
       '/apply/terms/v2',
@@ -124,7 +125,8 @@ describe('routes plugin test', () => {
       '/apply/endemics/declaration',
       '/apply/endemics/numbers',
       '/apply/endemics/reviews',
-      '/apply/endemics/timings'
+      '/apply/endemics/timings',
+      '/apply/endemics/you-can-claim-multiple'
     ])
   })
 })
