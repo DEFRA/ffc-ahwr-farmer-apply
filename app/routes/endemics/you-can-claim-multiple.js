@@ -55,9 +55,7 @@ module.exports = [
           status.storedAnswer
         )
 
-        if (status.value === agreeStatusValue) {
-          return h.redirect(nextPage)
-        } else {
+        if (status.value !== agreeStatusValue) {
           session.clear(request)
           request.cookieAuth.clear()
           return h.view(endemicsOfferRejected, {
@@ -65,6 +63,8 @@ module.exports = [
             ruralPaymentsAgency: config.ruralPaymentsAgency
           })
         }
+
+        return h.redirect(nextPage)
       }
     }
   }
