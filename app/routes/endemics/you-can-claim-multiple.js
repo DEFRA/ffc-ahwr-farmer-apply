@@ -36,7 +36,7 @@ module.exports = [
         const organisation = session.getFarmerApplyData(request, organisationKey)
         return h.view(endemicsYouCanClaimMultiple, {
           backLink,
-          agreementStatus: agreementStatuses,
+          agreementStatuses,
           organisation
         })
       }
