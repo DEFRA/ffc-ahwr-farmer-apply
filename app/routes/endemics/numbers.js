@@ -5,12 +5,13 @@ const urlPrefix = require('../../config/index').urlPrefix
 const {
   endemicsTimings,
   endemicsNumbers,
+  endemicsYouCanClaimMultiple,
   endemicsReviews,
   endemicsOfferRejected
 } = require('../../config/routes')
 
 const pageUrl = `${urlPrefix}/${endemicsNumbers}`
-const backLink = `${urlPrefix}/${endemicsReviews}`
+const backLink = (config.multiSpecies.enabled) ? `${urlPrefix}/${endemicsYouCanClaimMultiple}` : `${urlPrefix}/${endemicsReviews}`
 const nextPage = `${urlPrefix}/${endemicsTimings}`
 
 const agreementStatus = {

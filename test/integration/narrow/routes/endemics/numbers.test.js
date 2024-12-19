@@ -4,10 +4,12 @@ const expectPhaseBanner = require('../../../../utils/phase-banner-expect')
 const {
   endemicsNumbers,
   endemicsReviews,
+  endemicsYouCanClaimMultiple,
   endemicsTimings
 } = require('../../../../../app/config/routes')
 const endemicsNumbersUrl = `/apply/${endemicsNumbers}`
 const endemicsReviewsUrl = `/apply/${endemicsReviews}`
+const endemicsYouCanClaimMultipleUrl = `/apply/${endemicsYouCanClaimMultiple}`
 const endemicsTimingsUrl = `/apply/${endemicsTimings}`
 
 describe('Check your eligible page test', () => {
@@ -40,6 +42,9 @@ describe('Check your eligible page test', () => {
       jest.mock('../../../../../app/session')
       jest.mock('../../../../../app/config', () => ({
         ...jest.requireActual('../../../../../app/config'),
+        multiSpecies: {
+          enabled: false
+        },
         endemics: {
           enabled: true
         },
@@ -65,7 +70,7 @@ describe('Check your eligible page test', () => {
       jest.mock('../../../../../app/auth')
     })
 
-    test('returns 200', async () => {
+    test('returns 200 and has correct backLink when multispecies is disabled', async () => {
       session.getFarmerApplyData.mockReturnValue(org)
 
       const res = await global.__SERVER__.inject({ ...options, method: 'GET' })
@@ -84,6 +89,67 @@ describe('Check your eligible page test', () => {
       expect(pageTitleByClassName).toEqual(title)
       expect($('.govuk-heading-s').text()).toEqual(`${org.name} - SBI ${org.sbi}`)
       expect(backLinkUrlByClassName).toContain(endemicsReviewsUrl)
+      expectPhaseBanner.ok($)
+    })
+  })
+
+  describe(`GET ${endemicsNumbers} route when logged in - multispecies`, () => {
+    beforeAll(async () => {
+      jest.resetAllMocks()
+      jest.resetModules()
+
+      session = require('../../../../../app/session')
+
+      jest.mock('../../../../../app/session')
+      jest.mock('../../../../../app/config', () => ({
+        ...jest.requireActual('../../../../../app/config'),
+        multiSpecies: {
+          enabled: true
+        },
+        endemics: {
+          enabled: true
+        },
+        authConfig: {
+          defraId: {
+            hostname: 'https://tenant.b2clogin.com/tenant.onmicrosoft.com',
+            oAuthAuthorisePath: '/oauth2/v2.0/authorize',
+            policy: 'b2c_1a_signupsigninsfi',
+            redirectUri: 'http://localhost:3000/apply/endemics/signin-oidc',
+            clientId: 'dummy_client_id',
+            serviceId: 'dummy_service_id',
+            scope: 'openid dummy_client_id offline_access'
+          },
+          ruralPaymentsAgency: {
+            hostname: 'dummy-host-name',
+            getPersonSummaryUrl: 'dummy-get-person-summary-url',
+            getOrganisationPermissionsUrl:
+              'dummy-get-organisation-permissions-url',
+            getOrganisationUrl: 'dummy-get-organisation-url'
+          }
+        }
+      }))
+      jest.mock('../../../../../app/auth')
+    })
+
+    test('returns 200 and has correct backLink when multispecies is enabled', async () => {
+      session.getFarmerApplyData.mockReturnValue(org)
+
+      const res = await global.__SERVER__.inject({ ...options, method: 'GET' })
+
+      expect(res.statusCode).toBe(200)
+
+      const $ = cheerio.load(res.payload)
+      const titleClassName = '.govuk-heading-l'
+      const title = 'Minimum number of livestock'
+      const pageTitleByClassName = $(titleClassName).text()
+      const pageTitleByName = $('title').text()
+      const fullTitle = `${title} - Get funding to improve animal health and welfare`
+      const backLinkUrlByClassName = $('.govuk-back-link').attr('href')
+
+      expect(pageTitleByName).toContain(fullTitle)
+      expect(pageTitleByClassName).toEqual(title)
+      expect($('.govuk-heading-s').text()).toEqual(`${org.name} - SBI ${org.sbi}`)
+      expect(backLinkUrlByClassName).toContain(endemicsYouCanClaimMultipleUrl)
       expectPhaseBanner.ok($)
     })
   })
