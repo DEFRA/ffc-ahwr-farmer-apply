@@ -13,17 +13,15 @@ const pageUrl = `${urlPrefix}/${endemicsYouCanClaimMultiple}`
 const backLink = `${urlPrefix}/${endemicsCheckDetails}`
 const nextPage = `${urlPrefix}/${endemicsNumbers}`
 
-const agreeStatusValue = 'agree'
+const agreeStatusValue = 'yes'
 const agreementStatuses = [
   {
     value: agreeStatusValue,
-    text: 'I agree',
-    storedAnswer: 'yes'
+    text: 'I agree'
   },
   {
-    value: 'notAgree',
-    text: 'I do not agree',
-    storedAnswer: 'no'
+    value: 'no',
+    text: 'I do not agree'
   }
 ]
 
@@ -52,7 +50,7 @@ module.exports = [
         session.setFarmerApplyData(
           request,
           agreeSameSpecies, // NOTE AHWR-427 switch to agreeMultipleSpecies, once MI report supports it
-          status.storedAnswer
+          status.value
         )
 
         if (status.value !== agreeStatusValue) {

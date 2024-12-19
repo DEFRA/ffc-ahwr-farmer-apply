@@ -272,7 +272,7 @@ exports[`you-can-claim-multiple page GET operation handler returns 200 and conte
     
   
 
-<button value="agree" type="submit" name="agreementStatus" data-prevent-double-click="true" class="govuk-button" data-module="govuk-button"
+<button value="yes" type="submit" name="agreementStatus" data-prevent-double-click="true" class="govuk-button" data-module="govuk-button"
     
         
       
@@ -288,7 +288,7 @@ exports[`you-can-claim-multiple page GET operation handler returns 200 and conte
     
   
 
-<button value="notAgree" type="submit" name="agreementStatus" data-prevent-double-click="true" class="govuk-button govuk-button--secondary" data-module="govuk-button"
+<button value="no" type="submit" name="agreementStatus" data-prevent-double-click="true" class="govuk-button govuk-button--secondary" data-module="govuk-button"
     
         
       
