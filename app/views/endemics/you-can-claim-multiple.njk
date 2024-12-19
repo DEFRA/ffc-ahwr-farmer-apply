@@ -33,16 +33,16 @@
         <input type="hidden" name="crumb" value="{{crumb}}"/>
         <div class="govuk-button-group">
           {{ govukButton({
-          attributes: { "aria-label": agreementStatus.agree.text + " - " + pageHeadingText },
-          text: agreementStatus.agree.text,
-          value: agreementStatus.agree.value,
+          attributes: { "aria-label": agreementStatus[0].text + " - " + pageHeadingText },
+          text: agreementStatus[0].text,
+          value: agreementStatus[0].value,
           name: "agreementStatus",
           preventDoubleClick: true
         }) }}
           {{ govukButton({
-          attributes: { "aria-label": agreementStatus.notAgree.text + " - " + pageHeadingText },
-          text: agreementStatus.notAgree.text,
-          value: agreementStatus.notAgree.value,
+          attributes: { "aria-label": agreementStatus[1].text + " - " + pageHeadingText },
+          text: agreementStatus[1].text,
+          value: agreementStatus[1].value,
           name: "agreementStatus",
           preventDoubleClick: true,
           classes: "govuk-button--secondary"

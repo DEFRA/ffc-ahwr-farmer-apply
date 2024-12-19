@@ -1,5 +1,5 @@
 const session = require('../../session')
-const { agreeMultipleSpecies, organisation: organisationKey } = require('../../session/keys').farmerApplyData
+const { agreeSameSpecies, organisation: organisationKey } = require('../../session/keys').farmerApplyData
 const config = require('../../config/index')
 const urlPrefix = require('../../config/index').urlPrefix
 const {
@@ -13,18 +13,19 @@ const pageUrl = `${urlPrefix}/${endemicsYouCanClaimMultiple}`
 const backLink = `${urlPrefix}/${endemicsCheckDetails}`
 const nextPage = `${urlPrefix}/${endemicsNumbers}`
 
-const agreementStatus = {
-  agree: {
-    value: 'agree',
+const agreeStatusValue = 'agree'
+const agreementStatuses = [
+  {
+    value: agreeStatusValue,
     text: 'I agree',
     storedAnswer: 'yes'
   },
-  notAgree: {
+  {
     value: 'notAgree',
     text: 'I do not agree',
-    storedAnswer: 'yes'
+    storedAnswer: 'no'
   }
-}
+]
 
 module.exports = [
   {
@@ -35,7 +36,7 @@ module.exports = [
         const organisation = session.getFarmerApplyData(request, organisationKey)
         return h.view(endemicsYouCanClaimMultiple, {
           backLink,
-          agreementStatus,
+          agreementStatus: agreementStatuses,
           organisation
         })
       }
@@ -46,19 +47,17 @@ module.exports = [
     path: pageUrl,
     options: {
       handler: async (request, h) => {
-        if (request.payload.agreementStatus === agreementStatus.agree.value) {
-          session.setFarmerApplyData(
-            request,
-            agreeMultipleSpecies, // TODO AHWR-233 agreeSameSpecies?
-            agreementStatus.agree.storedAnswer
-          )
+        const status = agreementStatuses.find((s) => s.value === request.payload.agreementStatus)
+
+        session.setFarmerApplyData(
+          request,
+          agreeSameSpecies, // NOTE AHWR-427 switch to agreeMultipleSpecies, once MI report supports it
+          status.storedAnswer
+        )
+
+        if (status.value === agreeStatusValue) {
           return h.redirect(nextPage)
         } else {
-          session.setFarmerApplyData(
-            request,
-            agreeMultipleSpecies, // TODO AHWR-233 agreeSameSpecies?
-            agreementStatus.notAgree.storedAnswer
-          )
           session.clear(request)
           request.cookieAuth.clear()
           return h.view(endemicsOfferRejected, {
