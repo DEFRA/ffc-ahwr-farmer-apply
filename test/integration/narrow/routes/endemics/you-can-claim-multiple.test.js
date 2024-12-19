@@ -4,23 +4,26 @@ const {
   endemicsYouCanClaimMultiple,
   endemicsCheckDetails
 } = require('../../../../../app/config/routes')
-const session = require('../../../../../app/session')
 
 const pageUrl = `/apply/${endemicsYouCanClaimMultiple}`
 const backLinkUrl = `/apply/${endemicsCheckDetails}`
 const nextPageUrl = `/apply/${endemicsNumbers}`
-
-jest.mock('../../../../../app/session', () => ({
-  getFarmerApplyData: jest.fn((_request, _key) => ({ name: 'org-name', sbi: '123456789' })),
-  setFarmerApplyData: jest.fn(),
-  clear: jest.fn()
-}))
 
 describe('you-can-claim-multiple page', () => {
   const optionsBase = {
     auth: { strategy: 'cookie', credentials: { reference: '1111', sbi: '111111111' } },
     url: pageUrl
   }
+
+  let session
+  beforeAll(async () => {
+    session = require('../../../../../app/session')
+    jest.mock('../../../../../app/session', () => ({
+      getFarmerApplyData: jest.fn((_request, _key) => ({ name: 'org-name', sbi: '123456789' })),
+      setFarmerApplyData: jest.fn(),
+      clear: jest.fn()
+    }))
+  })
 
   beforeEach(async () => {
     jest.clearAllMocks()
