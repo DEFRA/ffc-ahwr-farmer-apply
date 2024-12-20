@@ -9,7 +9,7 @@ const {
   reference: referenceKey
 } = require('../../session/keys').farmerApplyData
 const getOrganisation = require('../models/organisation')
-const { endemicsCheckDetails, endemicsReviews, endemicsDetailsNotCorrect } = require('../../config/routes')
+const { endemicsCheckDetails, endemicsReviews, endemicsDetailsNotCorrect, endemicsYouCanClaimMultiple } = require('../../config/routes')
 const createTempReference = require('../../lib/create-temp-reference')
 
 const pageUrl = `${config.urlPrefix}/${endemicsCheckDetails}`
@@ -80,7 +80,8 @@ module.exports = [
         session.setFarmerApplyData(request, confirmCheckDetailsKey, confirmCheckDetails)
 
         if (confirmCheckDetails === 'yes') {
-          return h.redirect(`${config.urlPrefix}/${endemicsReviews}`)
+          const urlSuffix = (config.multiSpecies.enabled) ? endemicsYouCanClaimMultiple : endemicsReviews
+          return h.redirect(`${config.urlPrefix}/${urlSuffix}`)
         }
 
         return h.view(endemicsDetailsNotCorrect, {

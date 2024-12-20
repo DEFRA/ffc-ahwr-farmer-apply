@@ -12,6 +12,7 @@ module.exports = {
     whichReview: 'whichReview',
     confirmCheckDetails: 'confirmCheckDetails',
     agreeSameSpecies: 'agreeSameSpecies',
+    agreeMultipleSpecies: 'agreeMultipleSpecies',
     agreeSpeciesNumbers: 'agreeSpeciesNumbers',
     agreeVisitTimings: 'agreeVisitTimings',
     reference: 'reference',

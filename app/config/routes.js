@@ -1,5 +1,6 @@
 module.exports = {
   endemicsCheckDetails: 'endemics/check-details',
+  endemicsYouCanClaimMultiple: 'endemics/you-can-claim-multiple',
   endemicsReviews: 'endemics/reviews',
   endemicsNumbers: 'endemics/numbers',
   endemicsTimings: 'endemics/timings',
