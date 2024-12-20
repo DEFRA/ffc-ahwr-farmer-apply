@@ -1,3 +1,5 @@
+const { randomInt } = require('node:crypto')
+
 /**
  * Generate unique reference number, prefixed by TEMP
  * ex. TEMP-Z4F1-F2PC
@@ -5,10 +7,7 @@
  */
 function generateRandomID () {
   const charset = 'ABCDEFGHIJKLMNPQRSTUVWXYZ123456789'
-  const id = Array.from({ length: 8 }, () =>
-    charset.charAt(Math.floor(Math.random() * charset.length))
-  ).join('')
-
+  const id = Array.from({ length: 8 }, () => charset.charAt(randomInt(0, charset.length))).join('')
   const firstFour = id.slice(0, 4)
   const secondFour = id.slice(4)
 
