@@ -1,5 +1,7 @@
 const { randomInt } = require('node:crypto')
-const { profanity } = require('@2toad/profanity')
+const { Profanity } = require('@2toad/profanity')
+
+const profanity = new Profanity({ wholeWord: false })
 
 const containsSwearWord = (input) => {
   return profanity.exists(input)
