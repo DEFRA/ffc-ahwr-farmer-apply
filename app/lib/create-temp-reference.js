@@ -13,7 +13,7 @@ const generateRandomID = () => {
   const firstFour = id.slice(0, 4)
   const secondFour = id.slice(4)
 
-  if (containsSwearWord(firstFour) || containsSwearWord(secondFour) || containsSwearWord(`${firstFour}${secondFour}`)) {
+  if (containsSwearWord(`${firstFour}${secondFour}`)) {
     return generateRandomID()
   }
 
