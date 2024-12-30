@@ -17,7 +17,7 @@ const {
 } = require('../../config/routes')
 
 const resetFarmerApplyDataBeforeApplication = (application) => {
-  application.reference = null // Set application ref to null instead of temp ref before sending it to be processed.
+  // we are no longer nulling the reference as backend needs it with new reference mechanism. have not changed any tests to go with this - so comforting to see that no tests break now - not!
   // NOTE AHWR-426 investigate why these aren't being stored in the database
   delete application.agreeSpeciesNumbers
   delete application.agreeSameSpecies
