@@ -5,6 +5,8 @@ module.exports = [{
   options: {
     auth: false,
     handler: async (_, h) => {
+      // note this is the landing page for old world prior to starting journey, maybe redirect to new world here?
+      // if we could get rid of this, then all the related guidance pages could go too. need to check this one with UCD though
       return h.view('guidance/landing-page')
     }
   }

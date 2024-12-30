@@ -1,6 +1,4 @@
 const config = require('../config')
-const session = require('../session')
-const { requestAuthorizationCodeUrl } = require('../auth')
 
 module.exports = {
   method: 'GET',
@@ -8,10 +6,10 @@ module.exports = {
   options: {
     auth: false,
     handler: async (request, h) => {
-      return h.view('index', {
-        defraIdLogin: requestAuthorizationCodeUrl(session, request),
-        ruralPaymentsAgency: config.ruralPaymentsAgency
-      })
+      // old world apply is no longer active, redirect user to new world start
+      // it's not actually possible to navigate directly to this page anyway anymore, except
+      // if the user decided to type it in url themselves, or had a bookmark saved here
+      return h.redirect(`${config.urlPrefix}/endemics/start`)
     }
   }
 }

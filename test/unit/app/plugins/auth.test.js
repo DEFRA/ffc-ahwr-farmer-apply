@@ -19,11 +19,14 @@ describe('Auth plugin test', () => {
           ruralPaymentsAgency: {
             hostname: 'dummy-host-name'
           }
+        },
+        endemics: {
+          enabled: true
         }
       }))
       const config = require('../../../../app/config')
       urlPrefix = config.urlPrefix
-      url = `${urlPrefix}/org-review`
+      url = `${urlPrefix}/endemics/check-details`
     })
 
     test('when not logged in redirects to defra id', async () => {
