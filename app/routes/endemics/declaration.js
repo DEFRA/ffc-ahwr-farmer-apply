@@ -17,7 +17,6 @@ const {
 } = require('../../config/routes')
 
 const resetFarmerApplyDataBeforeApplication = (application) => {
-  // we are no longer nulling the reference as backend needs it with new reference mechanism. have not changed any tests to go with this - so comforting to see that no tests break now - not!
   // NOTE AHWR-426 investigate why these aren't being stored in the database
   delete application.agreeSpeciesNumbers
   delete application.agreeSameSpecies
