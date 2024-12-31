@@ -1,5 +1,3 @@
-const cheerio = require('cheerio')
-const expectPhaseBanner = require('../../../utils/phase-banner-expect')
 
 describe('Farmer apply home page test', () => {
   jest.mock('../../../../app/config', () => ({
@@ -37,7 +35,7 @@ describe('Farmer apply home page test', () => {
       }
     }
   }))
-  test('GET / route returns 200 when not logged in', async () => {
+  test('GET / route returns 302 when not logged in', async () => {
     const options = {
       method: 'GET',
       url: '/apply/start'
@@ -45,14 +43,7 @@ describe('Farmer apply home page test', () => {
 
     const res = await global.__SERVER__.inject(options)
 
-    expect(res.statusCode).toBe(200)
-    const $ = cheerio.load(res.payload)
-    expect($('.govuk-heading-l').text()).toEqual(
-      'Apply for an annual health and welfare review of your livestock'
-    )
-    const button = $('.govuk-main-wrapper .govuk-button')
-    expect(button.text()).toMatch('Start now')
-    expect($('title').text()).toContain('Annual health and welfare review of livestock')
-    expectPhaseBanner.ok($)
+    expect(res.statusCode).toBe(302)
+    expect(res.headers.location).toEqual('/apply/endemics/start')
   })
 })

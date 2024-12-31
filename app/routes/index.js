@@ -1,17 +1,16 @@
 const config = require('../config')
-const session = require('../session')
-const { requestAuthorizationCodeUrl } = require('../auth')
+
+const deprecatedOldEntryPoint = `${config.urlPrefix}/start`
+const newAppEntryPoint = `${config.urlPrefix}/endemics/start`
 
 module.exports = {
   method: 'GET',
-  path: `${config.urlPrefix}/start`,
+  path: deprecatedOldEntryPoint,
   options: {
     auth: false,
-    handler: async (request, h) => {
-      return h.view('index', {
-        defraIdLogin: requestAuthorizationCodeUrl(session, request),
-        ruralPaymentsAgency: config.ruralPaymentsAgency
-      })
+    handler: async (_request, h) => {
+      // old world apply is no longer active, redirect user to new world start
+      return h.redirect(newAppEntryPoint)
     }
   }
 }

@@ -27,6 +27,7 @@ describe('App Insight', () => {
 
   beforeEach(() => {
     delete process.env.APPLICATIONINSIGHTS_CONNECTION_STRING
+    delete process.env.APPINSIGHTS_CLOUDROLE
     jest.clearAllMocks()
   })
 
@@ -49,6 +50,17 @@ describe('App Insight', () => {
     expect(consoleLogSpy).toHaveBeenCalledWith('App Insights Running')
   })
 
+  test('when started and no cloudrole set, then app name is blank', () => {
+    process.env.APPLICATIONINSIGHTS_CONNECTION_STRING = 'something'
+    const insights = require('../../app/insights')
+
+    insights.setup()
+
+    expect(setupMock).toHaveBeenCalledTimes(1)
+    expect(startMock).toHaveBeenCalledTimes(1)
+    expect(tags[cloudRoleTag]).toEqual('')
+  })
+
   test('logs not running when env var does not exist', () => {
     const insights = require('../../app/insights')
 
@@ -56,32 +68,5 @@ describe('App Insight', () => {
 
     expect(consoleLogSpy).toHaveBeenCalledTimes(1)
     expect(consoleLogSpy).toHaveBeenCalledWith('App Insights Not Running!')
-  })
-
-  test('logException', () => {
-    const { logException } = require('../../app/insights')
-
-    expect(logException).toBeDefined()
-
-    logException({}, {})
-
-    const event = {
-      error: 'mock_error',
-      request: 'mock_request'
-    }
-
-    let req = {
-      statusCode: 200,
-      yar: { id: 'mock_id' },
-      payload: 'mock_paylodd'
-    }
-    logException(req, event)
-    expect(appInsights.defaultClient.trackException).toHaveBeenCalled()
-
-    req = {
-      statusCode: 200,
-      payload: 'mock_paylodd'
-    }
-    expect(appInsights.defaultClient.trackException).toHaveBeenCalled()
   })
 })

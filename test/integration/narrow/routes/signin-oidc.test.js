@@ -160,7 +160,7 @@ describe('FarmerApply defra ID redirection test', () => {
 
       const res = await global.__SERVER__.inject(options)
       expect(res.statusCode).toBe(302)
-      expect(res.headers.location).toEqual('/apply/org-review')
+      expect(res.headers.location).toEqual('/apply/endemics/check-details')
       expect(sessionMock.setFarmerApplyData).toBeCalledWith(expect.anything(), 'organisation', expect.objectContaining({
         email: 'billsmith@testemail.com'
       }))
@@ -217,7 +217,7 @@ describe('FarmerApply defra ID redirection test', () => {
 
       const res = await global.__SERVER__.inject(options)
       expect(res.statusCode).toBe(302)
-      expect(res.headers.location).toEqual('/apply/org-review')
+      expect(res.headers.location).toEqual('/apply/endemics/check-details')
       expect(sessionMock.setFarmerApplyData).toBeCalledWith(expect.anything(), 'organisation', expect.objectContaining({
         email: 'org1@testemail.com'
       }))

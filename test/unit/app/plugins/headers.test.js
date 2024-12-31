@@ -17,7 +17,7 @@ describe('headers plugin tests', () => {
     },
     { key: 'Cross-Origin-Resource-Policy', value: 'same-origin' },
     { key: 'X-Permitted-Cross-Domain-Policies', value: 'none' }
-  ])('returns IT healcheck', async ({ key, value }) => {
+  ])('returns expected header %p', async ({ key, value }) => {
     const url = `${urlPrefix}/start`
     const options = {
       method: 'GET',

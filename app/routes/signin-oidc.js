@@ -92,7 +92,7 @@ module.exports = [{
             email: personSummary.email
           }
         })
-        return h.redirect(`${config.urlPrefix}/org-review`)
+        return h.redirect(`${config.urlPrefix}/endemics/check-details`)
       } catch (err) {
         request.logger.error(err, 'check details')
 
