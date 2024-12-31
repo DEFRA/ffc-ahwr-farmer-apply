@@ -1,6 +1,6 @@
 const config = require('../config')
 
-const deprecatedOldEntryPoint =  `${config.urlPrefix}/start`
+const deprecatedOldEntryPoint = `${config.urlPrefix}/start`
 const newAppEntryPoint = `${config.urlPrefix}/endemics/start`
 
 module.exports = {
