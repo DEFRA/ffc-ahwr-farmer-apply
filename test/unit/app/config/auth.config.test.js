@@ -1,30 +1,27 @@
+import { getAuthConfig } from '../../../../app/config/auth.js'
+
 describe('Auth config', () => {
   const env = process.env
 
   beforeEach(() => {
     jest.resetModules()
     process.env = { ...env }
-    jest.mock('../../../../app/config', () => ({
-      ...jest.requireActual('../../../../app/config'),
-      endemics: {
-        enabled: false
+    jest.mock('../../../../app/config/auth', () => ({
+      ...jest.requireActual('../../../../app/config/auth'),
+      defraId: {
+        hostname: 'https://tenant.b2clogin.com/tenant.onmicrosoft.com',
+        oAuthAuthorisePath: '/oauth2/v2.0/authorize',
+        policy: 'b2c_1a_signupsigninsfi',
+        redirectUri: 'http://localhost:3000/apply/signin-oidc',
+        clientId: 'dummy_client_id',
+        serviceId: 'dummy_service_id',
+        scope: 'openid dummy_client_id offline_access'
       },
-      authConfig: {
-        defraId: {
-          hostname: 'https://tenant.b2clogin.com/tenant.onmicrosoft.com',
-          oAuthAuthorisePath: '/oauth2/v2.0/authorize',
-          policy: 'b2c_1a_signupsigninsfi',
-          redirectUri: 'http://localhost:3000/apply/signin-oidc',
-          clientId: 'dummy_client_id',
-          serviceId: 'dummy_service_id',
-          scope: 'openid dummy_client_id offline_access'
-        },
-        ruralPaymentsAgency: {
-          hostname: 'dummy-host-name',
-          getPersonSummaryUrl: 'dummy-get-person-summary-url',
-          getOrganisationPermissionsUrl: 'dummy-get-organisation-permissions-url',
-          getOrganisationUrl: 'dummy-get-organisation-url'
-        }
+      ruralPaymentsAgency: {
+        hostname: 'dummy-host-name',
+        getPersonSummaryUrl: 'dummy-get-person-summary-url',
+        getOrganisationPermissionsUrl: 'dummy-get-organisation-permissions-url',
+        getOrganisationUrl: 'dummy-get-organisation-url'
       }
     }))
   })
@@ -35,6 +32,7 @@ describe('Auth config', () => {
         tenant: 'testtenant',
         policy: 'testpolicy',
         redirectUri: 'http://localhost:3000/apply/signin-oidc',
+        dashboardRedirectUri: 'http://localhost:3003/signin-oidc',
         jwtIssuerId: 'dummy_jwt_issuer_id',
         clientId: 'dummyclientid',
         clientSecret: 'dummyclientsecret',
@@ -86,6 +84,7 @@ describe('Auth config', () => {
     process.env.DEFRA_ID_TENANT = testCase.processEnv.tenant
     process.env.DEFRA_ID_POLICY = testCase.processEnv.policy
     process.env.DEFRA_ID_REDIRECT_URI = testCase.processEnv.redirectUri
+    process.env.DEFRA_ID_DASHBOARD_REDIRECT_URI = testCase.processEnv.dashboardRedirectUri
     process.env.DEFRA_ID_JWT_ISSUER_ID = testCase.processEnv.jwtIssuerId
     process.env.DEFRA_ID_CLIENT_ID = testCase.processEnv.clientId
     process.env.DEFRA_ID_CLIENT_SECRET = testCase.processEnv.clientSecret
@@ -102,7 +101,7 @@ describe('Auth config', () => {
     process.env.APIM_CLIENT_SECRET = testCase.processEnv.apimClientSecret
     process.env.APIM_SCOPE = testCase.processEnv.apimScope
 
-    const config = require('../../../../app/config/auth')
+    const config = getAuthConfig()
 
     expect(config).toEqual(testCase.config)
   })

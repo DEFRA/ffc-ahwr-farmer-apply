@@ -1,3 +1,5 @@
+import { createServer } from '../../../../app/server.js'
+
 describe('routes plugin test', () => {
   jest.mock('../../../../app/config', () => ({
     ...jest.requireActual('../../../../app/config'),
@@ -12,7 +14,6 @@ describe('routes plugin test', () => {
   })
 
   test('routes included', async () => {
-    const createServer = require('../../../../app/server')
     const server = await createServer()
     const routePaths = []
     server.table().forEach((element) => {
@@ -23,22 +24,10 @@ describe('routes plugin test', () => {
       '/healthy',
       '/healthz',
       '/apply/accessibility',
-      '/apply/claim-guidance-for-farmers',
       '/apply/cookies',
-      '/apply/guidance-for-farmers',
-      '/apply/guidance-for-vet',
       '/apply/privacy-policy',
-      '/apply/recommended-cattle-labs',
-      '/apply/recommended-pig-labs',
-      '/apply/recommended-sheep-labs',
       '/apply/signin-oidc',
       '/apply/start',
-      '/apply/test-cattle',
-      '/apply/test-pigs',
-      '/apply/test-sheep',
-      '/apply/vet-technical-guidance-cattle',
-      '/apply/vet-technical-guidance-pigs',
-      '/apply/vet-technical-guidance-sheep',
       '/apply/assets/{path*}',
       '/apply/cookies'
     ])
@@ -52,7 +41,6 @@ describe('routes plugin test', () => {
       }
     }))
 
-    const createServer = require('../../../../app/server')
     const server = await createServer()
     const routePaths = []
     server.table().forEach((element) => {
@@ -63,22 +51,10 @@ describe('routes plugin test', () => {
       '/healthy',
       '/healthz',
       '/apply/accessibility',
-      '/apply/claim-guidance-for-farmers',
       '/apply/cookies',
-      '/apply/guidance-for-farmers',
-      '/apply/guidance-for-vet',
       '/apply/privacy-policy',
-      '/apply/recommended-cattle-labs',
-      '/apply/recommended-pig-labs',
-      '/apply/recommended-sheep-labs',
       '/apply/signin-oidc',
       '/apply/start',
-      '/apply/test-cattle',
-      '/apply/test-pigs',
-      '/apply/test-sheep',
-      '/apply/vet-technical-guidance-cattle',
-      '/apply/vet-technical-guidance-pigs',
-      '/apply/vet-technical-guidance-sheep',
       '/apply/assets/{path*}',
       '/apply/endemics/check-details',
       '/apply/endemics/declaration',

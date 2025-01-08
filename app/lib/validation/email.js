@@ -1,12 +1,11 @@
-const Joi = require('joi')
-const { email: emailErrorMessages } = require('../error-messages')
+import joi from 'joi'
 
 module.exports = {
-  email: Joi.string().trim().email().lowercase().required()
+  email: joi.string().trim().email().lowercase().required()
     .messages({
-      'any.required': emailErrorMessages.enterEmail,
-      'string.base': emailErrorMessages.enterEmail,
-      'string.email': emailErrorMessages.validEmail,
-      'string.empty': emailErrorMessages.enterEmail
+      'any.required': 'Enter an email address',
+      'string.base': 'Enter an email address',
+      'string.email': 'Enter an email address in the correct format, like name@example.com',
+      'string.empty': 'Enter an email address'
     })
 }

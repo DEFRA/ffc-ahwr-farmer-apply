@@ -1,4 +1,6 @@
-const { urlPrefix } = require('../../../../app/config')
+import { config } from '../../../../app/config/index.js'
+
+const { urlPrefix } = config
 
 describe('headers plugin tests', () => {
   test.each([

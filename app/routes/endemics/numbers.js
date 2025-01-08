@@ -1,14 +1,16 @@
-const session = require('../../session')
-const { agreeSpeciesNumbers, organisation: organisationKey } = require('../../session/keys').farmerApplyData
-const config = require('../../config/index')
-const urlPrefix = require('../../config/index').urlPrefix
-const {
-  endemicsTimings,
+import { clear, getFarmerApplyData, setFarmerApplyData } from '../../session/index.js'
+import { config } from '../../config/index.js'
+import { keys } from '../../session/keys.js'
+import {
   endemicsNumbers,
-  endemicsYouCanClaimMultiple,
+  endemicsOfferRejected,
   endemicsReviews,
-  endemicsOfferRejected
-} = require('../../config/routes')
+  endemicsTimings,
+  endemicsYouCanClaimMultiple
+} from '../../config/routes.js'
+
+const { agreeSpeciesNumbers, organisation: organisationKey } = keys.farmerApplyData
+const urlPrefix = config.urlPrefix
 
 const pageUrl = `${urlPrefix}/${endemicsNumbers}`
 const backLink = (config.multiSpecies.enabled) ? `${urlPrefix}/${endemicsYouCanClaimMultiple}` : `${urlPrefix}/${endemicsReviews}`
@@ -25,13 +27,13 @@ const agreementStatus = {
   }
 }
 
-module.exports = [
+export const numbersRouteHandlers = [
   {
     method: 'GET',
     path: pageUrl,
     options: {
       handler: async (request, h) => {
-        const organisation = session.getFarmerApplyData(request, organisationKey)
+        const organisation = getFarmerApplyData(request, organisationKey)
         return h.view(endemicsNumbers, {
           backLink,
           agreementStatus,
@@ -46,19 +48,19 @@ module.exports = [
     options: {
       handler: async (request, h) => {
         if (request.payload.agreementStatus === 'agree') {
-          session.setFarmerApplyData(
+          setFarmerApplyData(
             request,
             agreeSpeciesNumbers,
             'yes'
           )
           return h.redirect(nextPage)
         } else {
-          session.setFarmerApplyData(
+          setFarmerApplyData(
             request,
             agreeSpeciesNumbers,
             'no'
           )
-          session.clear(request)
+          clear(request)
           request.cookieAuth.clear()
 
           return h.view(endemicsOfferRejected, {

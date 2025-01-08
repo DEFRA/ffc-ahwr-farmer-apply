@@ -14,7 +14,7 @@ module.exports = {
     '<rootDir>/node_modules/',
     '<rootDir>/test-output/',
     '<rootDir>/test/',
-    '<rootDir>/jest.config.js',
+    '<rootDir>/jest.config.cjs',
     '<rootDir>/webpack.config.js'
   ],
   modulePathIgnorePatterns: [
@@ -38,5 +38,8 @@ module.exports = {
     '<rootDir>/test/setup.js',
     '<rootDir>/test/teardown.js'
   ],
+  transform: {
+    '^.+\\.[j]sx?$': 'babel-jest'
+  },
   workerIdleMemoryLimit: '500MB'
 }

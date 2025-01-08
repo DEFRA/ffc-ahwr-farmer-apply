@@ -1,18 +1,21 @@
-const session = require('../../session')
-const auth = require('../../auth')
-const { endemics } = require('../../config')
-const { confirmCheckDetails } = require('../../session/keys').farmerApplyData
-const { getYesNoRadios } = require('./form-component/yes-no-radios')
+import { getYesNoRadios } from './form-component/yes-no-radios.js'
+import { config } from '../../config/index.js'
 
-const labelText = () => endemics.enabled ? 'Are these details correct?' : 'Are your details correct?'
+import { keys } from '../../session/keys.js'
+import { getCustomer, getFarmerApplyData } from '../../session/index.js'
+import { requestAuthorizationCodeUrl } from '../../auth/auth-code-grant/request-authorization-code-url.js'
+
+const { confirmCheckDetails } = keys.farmerApplyData
+
+const labelText = () => config.endemics.enabled ? 'Are these details correct?' : 'Are your details correct?'
 
 const formatAddressForDisplay = (organisation) => {
   return organisation?.address?.replaceAll(',', '<br>')
 }
 
-const getOrganisation = (request, organisation, errorText) => {
-  const prevAnswer = session.getFarmerApplyData(request, confirmCheckDetails)
-  const { crn } = session.getCustomer(request)
+export const getOrganisation = (request, organisation, errorText) => {
+  const prevAnswer = getFarmerApplyData(request, confirmCheckDetails)
+  const { crn } = getCustomer(request)
   const rows = [
     { key: { text: 'Farmer name' }, value: { text: organisation.farmerName } },
     { key: { text: 'Business name' }, value: { text: organisation.name } },
@@ -27,7 +30,7 @@ const getOrganisation = (request, organisation, errorText) => {
   ]
 
   const filteredRows = rows.filter((row) => {
-    if (endemics.enabled) {
+    if (config.endemics.enabled) {
       return true
     }
     return row.key.text !== 'CRN'
@@ -35,7 +38,7 @@ const getOrganisation = (request, organisation, errorText) => {
 
   return {
     backLink: {
-      href: auth.requestAuthorizationCodeUrl(session, request)
+      href: requestAuthorizationCodeUrl(request)
     },
     organisation,
     listData: { rows: filteredRows },
@@ -46,5 +49,3 @@ const getOrganisation = (request, organisation, errorText) => {
     })
   }
 }
-
-module.exports = getOrganisation

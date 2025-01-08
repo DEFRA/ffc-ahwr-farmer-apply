@@ -1,13 +1,10 @@
-const session = require('../../session')
-const { agreeSameSpecies, organisation: organisationKey } = require('../../session/keys').farmerApplyData
-const config = require('../../config/index')
-const urlPrefix = require('../../config/index').urlPrefix
-const {
-  endemicsNumbers,
-  endemicsReviews,
-  endemicsCheckDetails,
-  endemicsOfferRejected
-} = require('../../config/routes')
+import { keys } from '../../session/keys.js'
+import { config } from '../../config/index.js'
+import { clear, getFarmerApplyData, setFarmerApplyData } from '../../session/index.js'
+import { endemicsCheckDetails, endemicsNumbers, endemicsOfferRejected, endemicsReviews } from '../../config/routes.js'
+
+const { agreeSameSpecies, organisation: organisationKey } = keys.farmerApplyData
+const urlPrefix = config.urlPrefix
 
 const pageUrl = `${urlPrefix}/${endemicsReviews}`
 const backLink = `${urlPrefix}/${endemicsCheckDetails}`
@@ -24,13 +21,13 @@ const agreementStatus = {
   }
 }
 
-module.exports = [
+export const reviewsRouteHandlers = [
   {
     method: 'GET',
     path: pageUrl,
     options: {
       handler: async (request, h) => {
-        const organisation = session.getFarmerApplyData(request, organisationKey)
+        const organisation = getFarmerApplyData(request, organisationKey)
         return h.view(endemicsReviews, {
           backLink,
           agreementStatus,
@@ -45,19 +42,19 @@ module.exports = [
     options: {
       handler: async (request, h) => {
         if (request.payload.agreementStatus === 'agree') {
-          session.setFarmerApplyData(
+          setFarmerApplyData(
             request,
             agreeSameSpecies,
             'yes'
           )
           return h.redirect(nextPage)
         } else {
-          session.setFarmerApplyData(
+          setFarmerApplyData(
             request,
             agreeSameSpecies,
             'no'
           )
-          session.clear(request)
+          clear(request)
           request.cookieAuth.clear()
 
           return h.view(endemicsOfferRejected, {

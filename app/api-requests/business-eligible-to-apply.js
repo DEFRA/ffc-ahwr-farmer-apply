@@ -1,13 +1,15 @@
-const applicationApi = require('./application-api')
-const config = require('../config')
-const status = require('../constants/status')
-const applicationType = require('../constants/application-type')
+import { getLatestApplicationsBySbi } from './application-api.js'
+import { config } from '../config/index.js'
+import { applicationType, status } from '../constants/constants.js'
+import { AlreadyAppliedError } from '../exceptions/AlreadyAppliedError.js'
+import { CannotReapplyTimeLimitError } from '../exceptions/CannotReapplyTimeLimitError.js'
+import { OutstandingAgreementError } from '../exceptions/OutstandingAgreementError.js'
+
 const validStatusForApplication = [status.NOT_AGREED, status.WITHDRAWN]
 const closedApplicationStatuses = [status.WITHDRAWN, status.REJECTED, status.NOT_AGREED, status.READY_TO_PAY]
-const { CannotReapplyTimeLimitError, OutstandingAgreementError, AlreadyAppliedError } = require('../exceptions')
 
-async function businessEligibleToApply (sbi) {
-  const latestApplicationsForSbi = await applicationApi.getLatestApplicationsBySbi(sbi)
+export async function businessEligibleToApply (sbi) {
+  const latestApplicationsForSbi = await getLatestApplicationsBySbi(sbi)
   if (latestApplicationsForSbi && Array.isArray(latestApplicationsForSbi)) {
     return applicationForBusinessInStateToApply(latestApplicationsForSbi)
   } else {
@@ -71,5 +73,3 @@ function getLatestApplication (latestApplicationsForSbi) {
     return new Date(a.createdAt) > new Date(b.createdAt) ? a : b
   })
 }
-
-module.exports = businessEligibleToApply

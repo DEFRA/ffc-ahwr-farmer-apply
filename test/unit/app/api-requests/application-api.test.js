@@ -1,4 +1,5 @@
-const Wreck = require('@hapi/wreck')
+import Wreck from '@hapi/wreck'
+
 const mockConfig = require('../../../../app/config')
 jest.mock('@hapi/wreck')
 const mockApplicationApiUri = 'http://internal:3333/api'

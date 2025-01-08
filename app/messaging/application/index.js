@@ -1,8 +1,10 @@
-const { sendMessage, receiveMessage } = require('../')
-const states = require('../../constants/states')
-const { applicationRequestQueue, applicationRequestMsgType, applicationResponseQueue } = require('../../config').mqConfig
+import { sendMessage } from '../send-message.js'
+import { receiveMessage } from '../receive-message.js'
 
-async function sendApplication (application, sessionId) {
+import { states } from '../../constants/constants.js'
+import { applicationRequestMsgType, applicationRequestQueue, applicationResponseQueue } from '../../config/messaging.js'
+
+export async function sendApplication (application, sessionId) {
   await sendMessage(
     application,
     applicationRequestMsgType,
@@ -20,8 +22,4 @@ async function sendApplication (application, sessionId) {
   }
 
   return response?.applicationReference
-}
-
-module.exports = {
-  sendApplication
 }

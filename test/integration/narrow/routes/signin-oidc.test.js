@@ -1,4 +1,5 @@
-const cheerio = require('cheerio')
+import * as cheerio from 'cheerio'
+
 const sessionMock = require('../../../../app/session')
 jest.mock('../../../../app/session')
 const authMock = require('../../../../app/auth')

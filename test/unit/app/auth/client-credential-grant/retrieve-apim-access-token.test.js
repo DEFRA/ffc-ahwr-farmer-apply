@@ -1,5 +1,6 @@
+import Wreck from '@hapi/wreck'
+
 const retrieveApimAccessToken = require('../../../../../app/auth/client-credential-grant/retrieve-apim-access-token')
-const Wreck = require('@hapi/wreck')
 jest.mock('@hapi/wreck')
 
 describe('Retrieve apim access token', () => {

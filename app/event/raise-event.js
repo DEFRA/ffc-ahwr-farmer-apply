@@ -1,7 +1,7 @@
-const { PublishEvent } = require('ffc-ahwr-event-publisher')
-const { eventQueue } = require('../config').mqConfig
+import { PublishEvent } from 'ffc-ahwr-event-publisher'
+import { eventQueue } from '../config/messaging.js'
 
-const raiseEvent = async (event, status = 'success') => {
+export const raiseEvent = async (event, status = 'success') => {
   try {
     const eventPublisher = new PublishEvent(eventQueue)
 
@@ -27,5 +27,3 @@ const raiseEvent = async (event, status = 'success') => {
     console.error('Apply raiseEvent failed', err)
   }
 }
-
-module.exports = raiseEvent

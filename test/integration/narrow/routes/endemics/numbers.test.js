@@ -1,6 +1,7 @@
-const cheerio = require('cheerio')
+import * as cheerio from 'cheerio'
+import { ok } from '../../../../utils/phase-banner-expect'
+
 const getCrumbs = require('../../../../utils/get-crumbs')
-const expectPhaseBanner = require('../../../../utils/phase-banner-expect')
 const {
   endemicsNumbers,
   endemicsReviews,
@@ -89,7 +90,7 @@ describe('Check your eligible page test', () => {
       expect(pageTitleByClassName).toEqual(title)
       expect($('.govuk-heading-s').text()).toEqual(`${org.name} - SBI ${org.sbi}`)
       expect(backLinkUrlByClassName).toContain(endemicsReviewsUrl)
-      expectPhaseBanner.ok($)
+      ok($)
     })
   })
 
@@ -150,7 +151,7 @@ describe('Check your eligible page test', () => {
       expect(pageTitleByClassName).toEqual(title)
       expect($('.govuk-heading-s').text()).toEqual(`${org.name} - SBI ${org.sbi}`)
       expect(backLinkUrlByClassName).toContain(endemicsYouCanClaimMultipleUrl)
-      expectPhaseBanner.ok($)
+      ok($)
     })
   })
 

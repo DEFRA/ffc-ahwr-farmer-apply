@@ -1,4 +1,4 @@
-class CannotReapplyTimeLimitError extends Error {
+export class CannotReapplyTimeLimitError extends Error {
   constructor (message, lastApplicationDate, nextApplicationDate) {
     super(message)
     this.name = 'CannotReapplyTimeLimitError'
@@ -6,5 +6,3 @@ class CannotReapplyTimeLimitError extends Error {
     this.nextApplicationDate = nextApplicationDate
   }
 }
-
-module.exports = CannotReapplyTimeLimitError

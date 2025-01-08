@@ -1,11 +1,12 @@
-const urlPrefix = require('../config/index').urlPrefix
-module.exports = {
+import { config } from '../config/index.js'
+
+export const accessibilityRouteHandlers = [{
   method: 'GET',
-  path: `${urlPrefix}/accessibility`,
+  path: `${config.urlPrefix}/accessibility`,
   options: {
     auth: false,
     handler: async (_, h) => {
       return h.view('accessibility')
     }
   }
-}
+}]

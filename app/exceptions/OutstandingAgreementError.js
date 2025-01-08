@@ -1,4 +1,4 @@
-class OutstandingAgreementError extends Error {
+export class OutstandingAgreementError extends Error {
   constructor (message, lastApplicationDate, nextApplicationDate) {
     super(message)
     this.name = 'OutstandingAgreementError'
@@ -6,5 +6,3 @@ class OutstandingAgreementError extends Error {
     this.nextApplicationDate = nextApplicationDate
   }
 }
-
-module.exports = OutstandingAgreementError

@@ -1,13 +1,12 @@
-const cheerio = require('cheerio')
-const getCrumbs = require('../../../../utils/get-crumbs')
-const expectPhaseBanner = require('../../../../utils/phase-banner-expect')
-const {
-  endemicsDeclaration,
-  endemicsTimings
-} = require('../../../../../app/config/routes')
+import * as cheerio from 'cheerio'
+import { getCrumbs } from '../../../../utils/get-crumbs.js'
+import { ok } from 'assert'
 
-const config = require('../../../../../app/config')
-const sessionMock = require('../../../../../app/session')
+import { endemicsDeclaration, endemicsTimings } from '../../../../../app/config/routes.js'
+
+import { config } from '../../../../../app/config/index.js'
+import { getFarmerApplyData } from '../../../../../app/session/index.js'
+
 jest.mock('../../../../../app/session')
 jest.mock('../../../../../app/messaging')
 jest.mock('applicationinsights', () => ({ defaultClient: { trackException: jest.fn(), trackEvent: jest.fn() }, dispose: jest.fn() }))
@@ -71,7 +70,7 @@ describe('Declaration test', () => {
     })
 
     test('returns 200 when application found', async () => {
-      sessionMock.getFarmerApplyData.mockReturnValueOnce(organisation)
+      getFarmerApplyData.mockReturnValueOnce(organisation)
       const options = {
         method: 'GET',
         url,
@@ -85,7 +84,7 @@ describe('Declaration test', () => {
       expect($('h1').text()).toMatch('Timing of reviews and follow-ups')
       expect($('title').text()).toMatch('Timing of reviews and follow-ups - Get funding to improve animal health and welfare')
       expect($('h3').text()).toEqual(`${organisation.name} - SBI ${organisation.sbi}`)
-      expectPhaseBanner.ok($)
+      ok($)
     })
   })
 

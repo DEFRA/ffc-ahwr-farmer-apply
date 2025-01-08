@@ -1,5 +1,5 @@
-const raiseEvent = require('../../../../app/event/raise-event')
-const sendSessionEvent = require('../../../../app/event/send-session-event')
+import { raiseEvent } from '../../../../app/event/raise-event.js'
+import { sendSessionEvent } from '../../../../app/event/send-session-event.js'
 
 jest.mock('../../../../app/event/raise-event')
 

@@ -1,3 +1,5 @@
+import { getConfig } from '../../../../app/config/index.js'
+
 test('uses defaults', () => {
   jest.resetModules()
   delete process.env.REDIS_HOSTNAME
@@ -5,7 +7,7 @@ test('uses defaults', () => {
   delete process.env.PORT
   delete process.env.URL_PREFIX
 
-  const config = require('../../../../app/config')
+  const config = getConfig()
 
   expect(config.cache.options.host)
     .toBe('redis-hostname.default')
@@ -21,6 +23,6 @@ test('throws an error for invalid config', () => {
   jest.resetModules()
   delete process.env.COOKIE_PASSWORD
 
-  expect(() => require('../../../../app/config'))
+  expect(() => getConfig())
     .toThrow('The server config is invalid. "cookie.password" is required. "cookiePolicy.password" is required')
 })

@@ -1,15 +1,16 @@
-const wreck = require('@hapi/wreck')
-const session = require('../../session')
-const { tokens } = require('../../session/keys')
-const config = require('../../config')
-const apiHeaders = require('../../constants/api-headers')
+import Wreck from '@hapi/wreck'
+import { getToken } from '../../session/index.js'
 
-const get = async (hostname, url, request, headers = {}) => {
-  const token = session.getToken(request, tokens.accessToken)
-  headers[apiHeaders.xForwardedAuthorization] = token
-  headers[apiHeaders.ocpSubscriptionKey] = config.authConfig.apim.ocpSubscriptionKey
+import { keys } from '../../session/keys.js'
+import { config } from '../../config/index.js'
+import { authConfig } from '../../config/auth.js'
+import { apiHeaders } from '../../constants/constants.js'
 
-  const response = await wreck.get(`${hostname}${url}`,
+export const get = async (hostname, url, request, headers = {}) => {
+  headers[apiHeaders.xForwardedAuthorization] = getToken(request, keys.tokens.accessToken)
+  headers[apiHeaders.ocpSubscriptionKey] = authConfig.apim.ocpSubscriptionKey
+
+  const response = await Wreck.get(`${hostname}${url}`,
     {
       headers,
       json: true,
@@ -18,8 +19,4 @@ const get = async (hostname, url, request, headers = {}) => {
     })
 
   return response.payload
-}
-
-module.exports = {
-  get
 }

@@ -1,11 +1,8 @@
-const cheerio = require('cheerio')
+import * as cheerio from 'cheerio'
+import { ok } from '../../../../utils/phase-banner-expect'
+import { endemicsCheckDetails, endemicsNumbers, endemicsReviews } from '../../../../../app/config/routes.js'
+
 const getCrumbs = require('../../../../utils/get-crumbs')
-const expectPhaseBanner = require('../../../../utils/phase-banner-expect')
-const {
-  endemicsNumbers,
-  endemicsReviews,
-  endemicsCheckDetails
-} = require('../../../../../app/config/routes')
 const endemicsNumbersUrl = `/apply/${endemicsNumbers}`
 const endemicsReviewsUrl = `/apply/${endemicsReviews}`
 const endemicsCheckDetailsUrl = `/apply/${endemicsCheckDetails}`
@@ -86,7 +83,7 @@ describe('Check your eligible page test', () => {
       expect(pageTitleByClassName).toEqual(title)
       expect($('.govuk-heading-s').text()).toEqual(`${org.name} - SBI ${org.sbi}`)
       expect(backLinkUrlByClassName).toContain(endemicsCheckDetailsUrl)
-      expectPhaseBanner.ok($)
+      ok($)
     })
   })
 

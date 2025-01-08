@@ -14,3 +14,6 @@ services:
     command: npm run test
     volumes:
       - ./test-output:/home/node/test-output
+      - ./babel.config.cjs:/home/node/babel.config.cjs
+      - ./jsconfig.json:/home/node/jsconfig.json
+      - ./jest.config.cjs:/home/node/jest.config.cjs

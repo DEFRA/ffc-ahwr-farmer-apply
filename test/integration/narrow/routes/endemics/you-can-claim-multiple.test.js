@@ -1,9 +1,7 @@
-const getCrumbs = require('../../../../utils/get-crumbs')
-const {
-  endemicsNumbers,
-  endemicsYouCanClaimMultiple,
-  endemicsCheckDetails
-} = require('../../../../../app/config/routes')
+import { getCrumbs } from '../../../../utils/get-crumbs.js'
+
+import { endemicsCheckDetails, endemicsNumbers, endemicsYouCanClaimMultiple } from '../../../../../app/config/routes.js'
+import { clear, getFarmerApplyData, setFarmerApplyData } from '../../../../../app/session/index.js'
 
 const pageUrl = `/apply/${endemicsYouCanClaimMultiple}`
 const backLinkUrl = `/apply/${endemicsCheckDetails}`
@@ -15,9 +13,7 @@ describe('you-can-claim-multiple page', () => {
     url: pageUrl
   }
 
-  let session
   beforeAll(async () => {
-    session = require('../../../../../app/session')
     jest.mock('../../../../../app/session', () => ({
       getFarmerApplyData: jest.fn((_request, _key) => ({ name: 'org-name', sbi: '123456789' })),
       setFarmerApplyData: jest.fn(),
@@ -61,7 +57,7 @@ describe('you-can-claim-multiple page', () => {
     test('returns 200 and content is correct', async () => {
       const res = await global.__SERVER__.inject({ ...optionsBase, method: 'GET' })
 
-      expect(session.getFarmerApplyData).toHaveBeenCalledTimes(1)
+      expect(getFarmerApplyData).toHaveBeenCalledTimes(1)
 
       expect(res.statusCode).toBe(200)
       expect(res.payload).toContain(backLinkUrl)
@@ -100,7 +96,7 @@ describe('you-can-claim-multiple page', () => {
 
       const res = await global.__SERVER__.inject(options)
 
-      expect(session.setFarmerApplyData).toHaveBeenCalledTimes(1)
+      expect(setFarmerApplyData).toHaveBeenCalledTimes(1)
 
       expect(res.statusCode).toBe(302)
       expect(res.headers.location).toEqual(nextPageUrl)
@@ -117,8 +113,8 @@ describe('you-can-claim-multiple page', () => {
 
       const res = await global.__SERVER__.inject(options)
 
-      expect(session.setFarmerApplyData).toHaveBeenCalledTimes(1)
-      expect(session.clear).toHaveBeenCalledTimes(1)
+      expect(setFarmerApplyData).toHaveBeenCalledTimes(1)
+      expect(clear).toHaveBeenCalledTimes(1)
 
       expect(res.statusCode).toBe(200)
       expect(res.headers.location).not.toEqual(nextPageUrl)

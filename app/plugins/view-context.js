@@ -1,6 +1,8 @@
-const { serviceName, claimServiceUri, serviceUri, endemics } = require('../config')
+import { config } from '../config/index.js'
 
-module.exports = {
+const { serviceName, claimServiceUri, serviceUri, endemics } = config
+
+export const viewContextPlugin = {
   plugin: {
     name: 'view-context',
     register: (server, _) => {

@@ -1,6 +1,8 @@
-const cheerio = require('cheerio')
-const { serviceName, urlPrefix } = require('../../../../app/config')
-const expectPhaseBanner = require('../../../utils/phase-banner-expect')
+import * as cheerio from 'cheerio'
+import { config } from '../../../../app/config/index.js'
+import { ok } from '../../../utils/phase-banner-expect'
+
+const { serviceName, urlPrefix } = config
 const url = `${urlPrefix}/cookies`
 describe('cookies route', () => {
   beforeAll(async () => {
@@ -117,6 +119,6 @@ describe('cookies route', () => {
     expect($('.govuk-cookie-banner h2').text()).toContain(`Cookies on ${serviceName}`)
     expect($('.js-cookies-button-accept').text()).toContain('Accept analytics cookies')
     expect($('.js-cookies-button-reject').text()).toContain('Reject analytics cookies')
-    expectPhaseBanner.ok($)
+    ok($)
   })
 })

@@ -1,6 +1,6 @@
-const createMessage = require('../../../../app/messaging/create-message')
-const { createMessageSender } = require('../../../../app/messaging/create-message-sender')
-const sendMessage = require('../../../../app/messaging/send-message')
+import { createMessage } from '../../../../app/messaging/create-message.js'
+import { createMessageSender } from '../../../../app/messaging/create-message-sender.js'
+import { sendMessage } from '../../../../app/messaging/send-message.js'
 
 jest.mock('../../../../app/messaging/create-message')
 jest.mock('../../../../app/messaging/create-message-sender')
@@ -11,7 +11,7 @@ describe('sendMessage', () => {
   })
 
   it('should create a message and send it using the message sender', async () => {
-    const body = 'Hello'
+    const body = { message: 'Hello' }
     const type = 'text'
     const options = { priority: 'high' }
     const config = { url: 'https://example.com', apiKey: '123456' }

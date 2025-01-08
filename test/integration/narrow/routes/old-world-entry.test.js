@@ -1,11 +1,11 @@
-const cheerio = require('cheerio')
-const expectPhaseBanner = require('../../../utils/phase-banner-expect')
-const { serviceName, urlPrefix } = require('../../../../app/config')
+import { config } from '../../../../app/config/index.js'
 
-describe('Farmer vet guidance page test', () => {
+describe('Annual Health and Welfare Review landing page', () => {
   beforeAll(async () => {
     jest.resetAllMocks()
     jest.resetModules()
+
+    jest.mock('../../../../app/session')
     jest.mock('../../../../app/config', () => ({
       ...jest.requireActual('../../../../app/config'),
       endemics: {
@@ -30,21 +30,15 @@ describe('Farmer vet guidance page test', () => {
       }
     }))
   })
-
   test('GET / route returns 200 when not logged in', async () => {
     const options = {
       method: 'GET',
-      url: `${urlPrefix}/guidance-for-vet`
+      url: `${config.urlPrefix}/`
     }
 
     const res = await global.__SERVER__.inject(options)
 
-    expect(res.statusCode).toBe(200)
-    const $ = cheerio.load(res.payload)
-    expect($('.govuk-heading-l').text()).toEqual(
-      'How to carry out an annual health and welfare review of livestock'
-    )
-    expect($('title').text()).toContain(`Guidance for vets - ${serviceName}`)
-    expectPhaseBanner.ok($)
+    expect(res.statusCode).toBe(302)
+    expect(res.headers.location).toEqual('/apply/endemics/start')
   })
 })

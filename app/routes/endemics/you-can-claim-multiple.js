@@ -1,13 +1,15 @@
-const session = require('../../session')
-const { agreeSameSpecies, organisation: organisationKey } = require('../../session/keys').farmerApplyData
-const config = require('../../config/index')
-const urlPrefix = require('../../config/index').urlPrefix
-const {
-  endemicsNumbers,
-  endemicsYouCanClaimMultiple,
+import { keys } from '../../session/keys.js'
+import { clear, getFarmerApplyData, setFarmerApplyData } from '../../session/index.js'
+import { config } from '../../config/index.js'
+import {
   endemicsCheckDetails,
-  endemicsOfferRejected
-} = require('../../config/routes')
+  endemicsNumbers,
+  endemicsOfferRejected,
+  endemicsYouCanClaimMultiple
+} from '../../config/routes.js'
+
+const { agreeSameSpecies, organisation: organisationKey } = keys.farmerApplyData
+const urlPrefix = config.urlPrefix
 
 const pageUrl = `${urlPrefix}/${endemicsYouCanClaimMultiple}`
 const backLink = `${urlPrefix}/${endemicsCheckDetails}`
@@ -25,13 +27,13 @@ const agreementStatuses = [
   }
 ]
 
-module.exports = [
+export const claimMultipleRouteHandlers = [
   {
     method: 'GET',
     path: pageUrl,
     options: {
       handler: async (request, h) => {
-        const organisation = session.getFarmerApplyData(request, organisationKey)
+        const organisation = getFarmerApplyData(request, organisationKey)
         return h.view(endemicsYouCanClaimMultiple, {
           backLink,
           agreementStatuses,
@@ -47,14 +49,14 @@ module.exports = [
       handler: async (request, h) => {
         const status = agreementStatuses.find((s) => s.value === request.payload.agreementStatus)
 
-        session.setFarmerApplyData(
+        setFarmerApplyData(
           request,
           agreeSameSpecies, // NOTE AHWR-427 switch to agreeMultipleSpecies, once MI report supports it
           status.value
         )
 
         if (status.value !== agreeStatusValue) {
-          session.clear(request)
+          clear(request)
           request.cookieAuth.clear()
           return h.view(endemicsOfferRejected, {
             termsRejected: true,

@@ -1,5 +1,5 @@
-const cheerio = require('cheerio')
-const expectPhaseBanner = require('../../../../utils/phase-banner-expect')
+import * as cheerio from 'cheerio'
+import { ok } from '../../../../utils/phase-banner-expect'
 
 describe('Farmer apply home page test', () => {
   jest.mock('../../../../../app/config', () => ({
@@ -26,6 +26,6 @@ describe('Farmer apply home page test', () => {
     console.log('title ===>', $('title').text())
     expect(button.text()).toMatch('Start now')
     expect($('title').text()).toMatch('Get funding to improve animal health and welfare')
-    expectPhaseBanner.ok($)
+    ok($)
   })
 })

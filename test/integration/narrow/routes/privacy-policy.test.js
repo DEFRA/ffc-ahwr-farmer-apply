@@ -1,6 +1,8 @@
-const cheerio = require('cheerio')
-const expectPhaseBanner = require('../../../utils/phase-banner-expect')
-const { serviceName, urlPrefix } = require('../../../../app/config')
+import * as cheerio from 'cheerio'
+import { config } from '../../../../app/config/index.js'
+import { ok } from '../../../utils/phase-banner-expect'
+
+const { serviceName, urlPrefix } = config
 
 describe('Farmer apply privacy policy page test', () => {
   beforeAll(async () => {
@@ -45,6 +47,6 @@ describe('Farmer apply privacy policy page test', () => {
     expect($('.govuk-heading-l').text()).toEqual('Privacy notice')
 
     expect($('title').text()).toContain(serviceName)
-    expectPhaseBanner.ok($)
+    ok($)
   })
 })

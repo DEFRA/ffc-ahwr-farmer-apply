@@ -1,6 +1,7 @@
-const cheerio = require('cheerio')
+import * as cheerio from 'cheerio'
+import { ok } from '../../../../utils/phase-banner-expect'
+
 const getCrumbs = require('../../../../utils/get-crumbs')
-const expectPhaseBanner = require('../../../../utils/phase-banner-expect')
 const { farmerApplyData: { declaration } } = require('../../../../../app/session/keys')
 const states = require('../../../../../app/constants/states')
 const { userType } = require('../../../../../app/constants/user-types')
@@ -107,7 +108,7 @@ describe('Declaration test', () => {
       const $ = cheerio.load(res.payload)
       expect($('h1').text()).toMatch('Review your agreement offer')
       expect($('title').text()).toMatch('Review your agreement offer - Get funding to improve animal health and welfare')
-      expectPhaseBanner.ok($)
+      ok($)
     })
   })
 
@@ -131,7 +132,7 @@ describe('Declaration test', () => {
       const $ = cheerio.load(res.payload)
       expect($('h1').text()).toMatch('Application complete')
       expect($('title').text()).toMatch('Application complete - Get funding to improve animal health and welfare')
-      expectPhaseBanner.ok($)
+      ok($)
       expect(sessionMock.clear).toBeCalledTimes(1)
       expect(sessionMock.setFarmerApplyData).toHaveBeenCalledTimes(3)
       expect(sessionMock.setFarmerApplyData).toHaveBeenNthCalledWith(1, res.request, declaration, true)
@@ -158,7 +159,7 @@ describe('Declaration test', () => {
       expect(res.statusCode).toBe(200)
       const $ = cheerio.load(res.payload)
       expect($('title').text()).toMatch('Agreement offer rejected - Get funding to improve animal health and welfare')
-      expectPhaseBanner.ok($)
+      ok($)
       expect(sessionMock.clear).toBeCalledTimes(1)
       expect(sessionMock.setFarmerApplyData).toHaveBeenCalledTimes(3)
       expect(sessionMock.setFarmerApplyData).toHaveBeenNthCalledWith(1, res.request, declaration, true)

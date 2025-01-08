@@ -1,6 +1,6 @@
-const cheerio = require('cheerio')
-const expectPhaseBanner = require('../../../utils/phase-banner-expect')
-const { serviceName, urlPrefix } = require('../../../../app/config')
+import * as cheerio from 'cheerio'
+import { ok } from '../../../utils/phase-banner-expect'
+import { config } from '../../../../app/config/index.js'
 
 describe('Farmer apply accessibility page test', () => {
   beforeAll(async () => {
@@ -35,15 +35,15 @@ describe('Farmer apply accessibility page test', () => {
   test('GET / route returns 200 when not logged in', async () => {
     const options = {
       method: 'GET',
-      url: `${urlPrefix}/accessibility`
+      url: `${config.urlPrefix}/accessibility`
     }
 
     const res = await global.__SERVER__.inject(options)
 
     expect(res.statusCode).toBe(200)
     const $ = cheerio.load(res.payload)
-    expect($('.govuk-heading-l').text()).toMatch(`Accessibility statement: ${serviceName}`)
-    expect($('title').text()).toMatch(`Accessibility statement - ${serviceName}`)
-    expectPhaseBanner.ok($)
+    expect($('.govuk-heading-l').text()).toMatch(`Accessibility statement: ${config.serviceName}`)
+    expect($('title').text()).toMatch(`Accessibility statement - ${config.serviceName}`)
+    ok($)
   })
 })

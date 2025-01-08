@@ -7,14 +7,14 @@ describe('Server', () => {
   let server
   let createServer
   let originalProcessOn
-  let origianlProcessExit
+  let originalProcessExit
   let originalConsoleError
   let MessageSenders
   let MessageReceivers
 
   beforeAll(() => {
     originalProcessOn = process.on
-    origianlProcessExit = process.exit
+    originalProcessExit = process.exit
     originalConsoleError = console.error
     process.on = jest.fn()
     process.exit = jest.fn()
@@ -23,7 +23,7 @@ describe('Server', () => {
 
   afterAll(() => {
     process.on = originalProcessOn
-    process.exit = origianlProcessExit
+    process.exit = originalProcessExit
     console.error = originalConsoleError
   })
 

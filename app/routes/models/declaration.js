@@ -1,4 +1,4 @@
-const species = require('../../constants/species')
+import { species } from '../../constants/constants.js'
 
 function getSpeciesTestText (application) {
   switch (application.whichReview) {
@@ -49,7 +49,7 @@ function formatAddressForDisplay (organisation) {
   return organisation?.address.replaceAll(',', '<br>')
 }
 
-function getDeclarationData (application) {
+export function getDeclarationData (application) {
   return {
     organisation: getOrganisationForDisplay(application),
     minNumText: getSpeciesMinNumText(application),
@@ -57,5 +57,3 @@ function getDeclarationData (application) {
     testText: getSpeciesTestText(application)
   }
 }
-
-module.exports = getDeclarationData

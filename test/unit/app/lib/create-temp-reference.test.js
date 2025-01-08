@@ -1,7 +1,7 @@
-const createTempReference = require('../../../../app/lib/create-temp-reference')
+const { generateRandomID } = require('../../../../app/lib/create-temp-reference.js')
 
 test('should return a string temp reference', () => {
-  const tempRef = createTempReference()
+  const tempRef = generateRandomID()
 
   expect(typeof tempRef).toBe('string')
   // A-Z excluding O, and 1-9
@@ -14,7 +14,7 @@ test('should not generate the same ID twice in 20,000 IDs', () => {
   const numberToCreate = 20000
 
   for (let index = 0; index < numberToCreate; index++) {
-    ids.push(createTempReference())
+    ids.push(generateRandomID())
   }
 
   expect(ids.length).toEqual(numberToCreate)

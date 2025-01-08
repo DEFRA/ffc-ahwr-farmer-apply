@@ -1,5 +1,6 @@
-const cheerio = require('cheerio')
-const expectPhaseBanner = require('../../../../utils/phase-banner-expect')
+import * as cheerio from 'cheerio'
+import { ok } from '../../../../utils/phase-banner-expect'
+
 const getCrumbs = require('../../../../utils/get-crumbs')
 const { endemicsCheckDetails, endemicsReviews, endemicsYouCanClaimMultiple } = require('../../../../../app/config/routes')
 const businessAppliedBeforeMock = require('../../../../../app/api-requests/business-applied-before')
@@ -101,7 +102,7 @@ describe('Org review page test', () => {
       expect($('legend').text().trim()).toEqual('Are these details correct?')
       expect($('.govuk-radios__item').length).toEqual(2)
       expect(authMock.requestAuthorizationCodeUrl).toBeCalledTimes(1)
-      expectPhaseBanner.ok($)
+      ok($)
     })
 
     test('returns 404 when no orgranisation', async () => {
@@ -118,7 +119,7 @@ describe('Org review page test', () => {
       const $ = cheerio.load(res.payload)
       expect($('.govuk-heading-l').text()).toEqual('404 - Not Found')
       expect($('#_404 div p').text()).toEqual('Not Found')
-      expectPhaseBanner.ok($)
+      ok($)
     })
   })
 

@@ -1,5 +1,5 @@
-const cheerio = require('cheerio')
-const expectPhaseBanner = require('../../../utils/phase-banner-expect')
+import * as cheerio from 'cheerio'
+import { ok } from '../../../utils/phase-banner-expect.js'
 
 describe('4xx error pages', () => {
   test('GET /unknown route returns 404', async () => {
@@ -14,6 +14,6 @@ describe('4xx error pages', () => {
     const $ = cheerio.load(res.payload)
     expect($('.govuk-heading-l').text()).toEqual('404 - Not Found')
     expect($('#_404 div p').text()).toEqual('Not Found')
-    expectPhaseBanner.ok($)
+    ok($)
   })
 })

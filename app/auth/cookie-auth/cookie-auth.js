@@ -1,6 +1,6 @@
-const parseRoles = require('./parse-roles')
+import { parseRoles } from './parse-roles.js'
 
-const set = (request, accessToken) => {
+export const set = (request, accessToken) => {
   request.cookieAuth.set({
     scope: parseRoles(accessToken.roles),
     account: {
@@ -10,12 +10,7 @@ const set = (request, accessToken) => {
   })
 }
 
-const setAuthCookie = (request, email, userType) => {
+export const setAuthCookie = (request, email, userType) => {
   request.cookieAuth.set({ email, userType })
   request.logger.info({ userType }, 'logged in user')
-}
-
-module.exports = {
-  set,
-  setAuthCookie
 }

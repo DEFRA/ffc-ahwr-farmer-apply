@@ -1,5 +1,6 @@
+import Wreck from '@hapi/wreck'
+
 const { when, resetAllWhenMocks } = require('jest-when')
-const Wreck = require('@hapi/wreck')
 const session = require('../../../../../app/session')
 const sessionKeys = require('../../../../../app/session/keys')
 

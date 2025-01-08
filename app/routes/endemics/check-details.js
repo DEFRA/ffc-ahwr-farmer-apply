@@ -1,27 +1,34 @@
-const Joi = require('joi')
-const boom = require('@hapi/boom')
-const config = require('../../config')
-const session = require('../../session')
-const businessAppliedBefore = require('../../api-requests/business-applied-before')
+import joi from 'joi'
+import boom from '@hapi/boom'
+import { config } from '../../config/index.js'
+import { getFarmerApplyData, setFarmerApplyData } from '../../session/index.js'
+import { businessAppliedBefore } from '../../api-requests/business-applied-before.js'
+import { keys } from '../../session/keys.js'
+import { getOrganisation } from '../models/organisation.js'
+import { generateRandomID } from '../../lib/create-temp-reference.js'
+import {
+  endemicsCheckDetails,
+  endemicsDetailsNotCorrect,
+  endemicsReviews,
+  endemicsYouCanClaimMultiple
+} from '../../config/routes.js'
+
 const {
   organisation: organisationKey,
   confirmCheckDetails: confirmCheckDetailsKey,
   reference: referenceKey
-} = require('../../session/keys').farmerApplyData
-const getOrganisation = require('../models/organisation')
-const { endemicsCheckDetails, endemicsReviews, endemicsDetailsNotCorrect, endemicsYouCanClaimMultiple } = require('../../config/routes')
-const createTempReference = require('../../lib/create-temp-reference')
+} = keys.farmerApplyData
 
 const pageUrl = `${config.urlPrefix}/${endemicsCheckDetails}`
 const errorMessageText = 'Select if these details are correct'
 
-module.exports = [
+export const checkDetailsRouteHandlers = [
   {
     method: 'GET',
     path: pageUrl,
     options: {
       handler: async (request, h) => {
-        const organisation = session.getFarmerApplyData(
+        const organisation = getFarmerApplyData(
           request,
           organisationKey
         )
@@ -32,7 +39,7 @@ module.exports = [
         request.logger.setBindings({ sbi: organisation.sbi })
 
         const userType = await businessAppliedBefore(organisation.sbi)
-        session.setFarmerApplyData(
+        setFarmerApplyData(
           request,
           organisationKey,
           { ...organisation, userType }
@@ -50,11 +57,11 @@ module.exports = [
     path: pageUrl,
     options: {
       validate: {
-        payload: Joi.object({
-          confirmCheckDetails: Joi.string().valid('yes', 'no').required()
+        payload: joi.object({
+          confirmCheckDetails: joi.string().valid('yes', 'no').required()
         }),
         failAction: (request, h, _err) => {
-          const organisation = session.getFarmerApplyData(
+          const organisation = getFarmerApplyData(
             request,
             organisationKey
           )
@@ -73,11 +80,11 @@ module.exports = [
         }
       },
       handler: async (request, h) => {
-        const tempApplicationId = createTempReference()
-        session.setFarmerApplyData(request, referenceKey, tempApplicationId)
+        const tempApplicationId = generateRandomID()
+        setFarmerApplyData(request, referenceKey, tempApplicationId)
 
         const { confirmCheckDetails } = request.payload
-        session.setFarmerApplyData(request, confirmCheckDetailsKey, confirmCheckDetails)
+        setFarmerApplyData(request, confirmCheckDetailsKey, confirmCheckDetails)
 
         if (confirmCheckDetails === 'yes') {
           const urlSuffix = (config.multiSpecies.enabled) ? endemicsYouCanClaimMultiple : endemicsReviews
