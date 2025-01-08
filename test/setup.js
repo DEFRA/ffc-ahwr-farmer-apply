@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import { createServer } from '../app/server.js'
 
 beforeEach(async () => {
