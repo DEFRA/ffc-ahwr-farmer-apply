@@ -1,20 +1,25 @@
 import * as cheerio from 'cheerio'
 import { ok } from '../../../../utils/phase-banner-expect'
+import { getCrumbs } from '../../../../utils/get-crumbs.js'
 
-const getCrumbs = require('../../../../utils/get-crumbs')
-const {
+import {
   endemicsNumbers,
   endemicsReviews,
-  endemicsYouCanClaimMultiple,
-  endemicsTimings
-} = require('../../../../../app/config/routes')
+  endemicsTimings,
+  endemicsYouCanClaimMultiple
+} from '../../../../../app/config/routes.js'
+import { getFarmerApplyData } from '../../../../../app/session/index.js'
+
 const endemicsNumbersUrl = `/apply/${endemicsNumbers}`
 const endemicsReviewsUrl = `/apply/${endemicsReviews}`
 const endemicsYouCanClaimMultipleUrl = `/apply/${endemicsYouCanClaimMultiple}`
 const endemicsTimingsUrl = `/apply/${endemicsTimings}`
 
+jest.mock('../../../../../app/session', () => ({
+  getFarmerApplyData: jest.fn()
+}))
+
 describe('Check your eligible page test', () => {
-  let session
 
   const auth = {
     strategy: 'cookie',
@@ -38,9 +43,6 @@ describe('Check your eligible page test', () => {
       jest.resetAllMocks()
       jest.resetModules()
 
-      session = require('../../../../../app/session')
-
-      jest.mock('../../../../../app/session')
       jest.mock('../../../../../app/config', () => ({
         ...jest.requireActual('../../../../../app/config'),
         multiSpecies: {
@@ -68,11 +70,12 @@ describe('Check your eligible page test', () => {
           }
         }
       }))
-      jest.mock('../../../../../app/auth')
+      jest.mock('../../../../../app/auth/authenticate')
     })
 
     test('returns 200 and has correct backLink when multispecies is disabled', async () => {
-      session.getFarmerApplyData.mockReturnValue(org)
+
+      getFarmerApplyData.mockImplementation(() => org)
 
       const res = await global.__SERVER__.inject({ ...options, method: 'GET' })
 
@@ -98,8 +101,6 @@ describe('Check your eligible page test', () => {
     beforeAll(async () => {
       jest.resetAllMocks()
       jest.resetModules()
-
-      session = require('../../../../../app/session')
 
       jest.mock('../../../../../app/session')
       jest.mock('../../../../../app/config', () => ({
@@ -129,11 +130,11 @@ describe('Check your eligible page test', () => {
           }
         }
       }))
-      jest.mock('../../../../../app/auth')
+      jest.mock('../../../../../app/auth/authenticate')
     })
 
     test('returns 200 and has correct backLink when multispecies is enabled', async () => {
-      session.getFarmerApplyData.mockReturnValue(org)
+      getFarmerApplyData.mockReturnValue(org)
 
       const res = await global.__SERVER__.inject({ ...options, method: 'GET' })
 

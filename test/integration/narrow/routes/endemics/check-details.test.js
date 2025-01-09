@@ -1,9 +1,11 @@
 import * as cheerio from 'cheerio'
 import { ok } from '../../../../utils/phase-banner-expect'
+import { getCrumbs } from '../../../../utils/get-crumbs.js'
 
-const getCrumbs = require('../../../../utils/get-crumbs')
-const { endemicsCheckDetails, endemicsReviews, endemicsYouCanClaimMultiple } = require('../../../../../app/config/routes')
-const businessAppliedBeforeMock = require('../../../../../app/api-requests/business-applied-before')
+import { endemicsCheckDetails, endemicsReviews, endemicsYouCanClaimMultiple } from '../../../../../app/config/routes.js'
+import { businessAppliedBefore } from '../../../../../app/api-requests/business-applied-before.js'
+import { requestAuthorizationCodeUrl } from '../../../../../app/auth/auth-code-grant/request-authorization-code-url.js'
+import { getCustomer, getFarmerApplyData } from '../../../../../app/session/index.js'
 
 const endemicsReviewsUrl = `/apply/${endemicsReviews}`
 const endemicsYouCanClaimMultipleUrl = `/apply/${endemicsYouCanClaimMultiple}`
@@ -12,7 +14,6 @@ jest.mock('../../../../../app/api-requests/business-applied-before')
 
 describe('Org review page test', () => {
   let session
-  let authMock
   const url = `/apply/${endemicsCheckDetails}`
   const auth = {
     credentials: { reference: '1111', sbi: '111111111' },
@@ -32,9 +33,8 @@ describe('Org review page test', () => {
       jest.resetAllMocks()
       jest.resetModules()
 
-      session = require('../../../../../app/session')
       jest.mock('../../../../../app/session')
-      session.getCustomer.mockReturnValue({ crn: '123123123' })
+      getCustomer.mockReturnValue({ crn: '123123123' })
       jest.mock('../../../../../app/config', () => ({
         ...jest.requireActual('../../../../../app/config'),
         multiSpecies: {
@@ -61,20 +61,19 @@ describe('Org review page test', () => {
           }
         }
       }))
-      jest.mock('../../../../../app/auth')
-      authMock = require('../../../../../app/auth')
+      jest.mock('../../../../../app/auth/authenticate')
     })
 
     test('returns 200', async () => {
-      businessAppliedBeforeMock.mockReturnValue('newUser')
-      session.getFarmerApplyData.mockReturnValue(org)
+      businessAppliedBefore.mockReturnValue('newUser')
+      getFarmerApplyData.mockReturnValue(org)
       const options = {
         auth,
         method: 'GET',
         url
       }
 
-      authMock.requestAuthorizationCodeUrl.mockReturnValueOnce('https://somedefraidlogin')
+      requestAuthorizationCodeUrl.mockReturnValueOnce('https://somedefraidlogin')
 
       const res = await global.__SERVER__.inject(options)
 
@@ -101,12 +100,12 @@ describe('Org review page test', () => {
       expect($('.govuk-back-link').attr('href')).toContain('https://somedefraidlogin')
       expect($('legend').text().trim()).toEqual('Are these details correct?')
       expect($('.govuk-radios__item').length).toEqual(2)
-      expect(authMock.requestAuthorizationCodeUrl).toBeCalledTimes(1)
+      expect(requestAuthorizationCodeUrl).toBeCalledTimes(1)
       ok($)
     })
 
     test('returns 404 when no orgranisation', async () => {
-      session.getFarmerApplyData.mockReturnValue(undefined)
+      getFarmerApplyData.mockReturnValue(undefined)
       const options = {
         auth,
         method: 'GET',
@@ -202,7 +201,7 @@ describe('Org review page test', () => {
     ])(
       'returns error when unacceptable answer is given',
       async ({ confirmCheckDetails }) => {
-        session.getFarmerApplyData.mockReturnValue(org)
+        getFarmerApplyData.mockReturnValue(org)
         const options = {
           method,
           url,

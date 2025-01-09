@@ -9,6 +9,7 @@ import { cookiePlugin } from './plugins/cookies.js'
 import { crumbPlugin } from './plugins/crumb.js'
 import { errorPagesPlugin } from './plugins/error-pages.js'
 import { loggingPlugin } from './plugins/logging.js'
+import { loggingContextPlugin } from './plugins/logging-context.js'
 import { headersPlugin } from './plugins/header.js'
 import { sessionPlugin } from './plugins/session.js'
 import { viewContextPlugin } from './plugins/view-context.js'
@@ -48,6 +49,7 @@ export async function createServer () {
   await server.register(cookiePlugin)
   await server.register(errorPagesPlugin)
   await server.register(loggingPlugin)
+  await server.register(loggingContextPlugin)
   await server.register(routerPlugin)
   await server.register(sessionPlugin)
   await server.register(viewContextPlugin)
