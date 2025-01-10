@@ -35,8 +35,7 @@ module.exports = {
   testPathIgnorePatterns: [],
   verbose: true,
   setupFilesAfterEnv: [
-    '<rootDir>/test/setup.js',
-    '<rootDir>/test/teardown.js'
+    '<rootDir>/test/setup.js'
   ],
   transform: {
     '^.+\\.[j]sx?$': 'babel-jest'

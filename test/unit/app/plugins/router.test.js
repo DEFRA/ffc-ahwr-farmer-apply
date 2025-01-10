@@ -1,24 +1,27 @@
+import { config } from '../../../../app/config/index.js'
 import { createServer } from '../../../../app/server.js'
 
-describe('routes plugin test', () => {
-  jest.mock('../../../../app/config', () => ({
-    ...jest.requireActual('../../../../app/config'),
-    endemics: {
-      enabled: false
-    }
-  }))
+describe('routes plugin test - multi species disabled', () => {
+  let server
 
-  beforeEach(() => {
+  beforeAll(async () => {
     jest.resetModules()
     jest.clearAllMocks()
+    config.multiSpecies.enabled = false
+    server = await createServer()
+    await server.initialize()
+  })
+
+  afterAll(async () => {
+    await server.stop()
   })
 
   test('routes included', async () => {
-    const server = await createServer()
     const routePaths = []
     server.table().forEach((element) => {
       routePaths.push(element.path)
     })
+
     expect(routePaths).toEqual([
       '/apply',
       '/healthy',
@@ -29,23 +32,45 @@ describe('routes plugin test', () => {
       '/apply/signin-oidc',
       '/apply/start',
       '/apply/assets/{path*}',
-      '/apply/cookies'
+      '/apply/endemics/check-details',
+      '/apply/endemics/declaration',
+      '/apply/endemics/numbers',
+      '/apply/endemics/reviews',
+      '/apply/endemics/start',
+      '/apply/endemics/timings',
+      '/apply/cookies',
+      '/apply/endemics/check-details',
+      '/apply/endemics/declaration',
+      '/apply/endemics/numbers',
+      '/apply/endemics/reviews',
+      '/apply/endemics/timings'
     ])
+
+    await server.stop()
+  })
+})
+
+describe('routes plugin test - multi species enabled', () => {
+  let server
+
+  beforeAll(async () => {
+    jest.resetModules()
+    jest.clearAllMocks()
+    config.multiSpecies.enabled = true
+    server = await createServer()
+    await server.initialize()
   })
 
-  test('routes included - endemics enabled', async () => {
-    jest.mock('../../../../app/config', () => ({
-      ...jest.requireActual('../../../../app/config'),
-      endemics: {
-        enabled: true
-      }
-    }))
+  afterAll(async () => {
+    await server.stop()
+  })
 
-    const server = await createServer()
+  test('routes included', async () => {
     const routePaths = []
     server.table().forEach((element) => {
       routePaths.push(element.path)
     })
+
     expect(routePaths).toEqual([
       '/apply',
       '/healthy',
@@ -71,5 +96,7 @@ describe('routes plugin test', () => {
       '/apply/endemics/timings',
       '/apply/endemics/you-can-claim-multiple'
     ])
+
+    await server.stop()
   })
 })

@@ -33,6 +33,7 @@ export const numbersRouteHandlers = [
     path: pageUrl,
     options: {
       handler: async (request, h) => {
+        console.log('in')
         const organisation = getFarmerApplyData(request, organisationKey)
         return h.view(endemicsNumbers, {
           backLink,

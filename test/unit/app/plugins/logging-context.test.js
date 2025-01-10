@@ -22,7 +22,7 @@ describe('Logging context plugin', () => {
 
     server.route({
       method: 'GET',
-      path: `/apply/route1`,
+      path: '/apply/route1',
       handler: (request, h) => {
         logBindings = request.logger.bindings()
         return h.response('ok').code(200)
@@ -30,7 +30,7 @@ describe('Logging context plugin', () => {
     })
     server.route({
       method: 'GET',
-      path: `/apply/route2`,
+      path: '/apply/route2',
       handler: (request, h) => {
         request.logger.setBindings({
           extra: 'new-value'
@@ -54,7 +54,7 @@ describe('Logging context plugin', () => {
   test('should add contextual items to logs', async () => {
     const response = await server.inject({
       method: 'GET',
-      url: `/apply/route1`
+      url: '/apply/route1'
     })
 
     expect(response.statusCode).toBe(200)
@@ -67,7 +67,7 @@ describe('Logging context plugin', () => {
   test('specific contextual items can be mixed in', async () => {
     const response = await server.inject({
       method: 'GET',
-      url: `/apply/route2`
+      url: '/apply/route2'
     })
 
     expect(response.statusCode).toBe(200)

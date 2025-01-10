@@ -1,5 +1,5 @@
 import joi from 'joi'
-import * as applicationSchema from '../api-requests/application-api.config.schema.js'
+import { applicationApiConfigSchema } from '../api-requests/application-api.config.schema.js'
 import appInsights from 'applicationinsights'
 import { config as applicationApiConfig } from '../api-requests/application-api.config.js'
 
@@ -61,7 +61,7 @@ export const getConfig = () => {
     customerSurvey: {
       uri: joi.string().uri().optional()
     },
-    applicationApi: applicationSchema.schema,
+    applicationApi: applicationApiConfigSchema,
     wreckHttp: {
       timeoutMilliseconds: joi.number()
     },

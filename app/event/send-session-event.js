@@ -14,6 +14,6 @@ export const sendSessionEvent = (organisation, sessionId, entryKey, key, value, 
       data: { reference, [key]: value },
       ip
     }
-    retryRaiseEvent(event, 2).then(r => {})
+    retryRaiseEvent(event, 2)
   }
 }

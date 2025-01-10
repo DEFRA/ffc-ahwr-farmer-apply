@@ -1,21 +1,26 @@
 import * as cheerio from 'cheerio'
 import { ok } from '../../../../utils/phase-banner-expect'
+import { createServer } from '../../../../../app/server'
 
 describe('Farmer apply home page test', () => {
-  jest.mock('../../../../../app/config', () => ({
-    ...jest.requireActual('../../../../../app/config'),
-    endemics: {
-      enabled: true
-    }
-  }))
+  let server
 
-  test('GET / route returns 200 when not logged in', async () => {
+  beforeAll(async () => {
+    server = await createServer()
+    await server.initialize()
+  })
+
+  afterAll(async () => {
+    await server.stop()
+  })
+
+  test('GET /apply/endemics/start route returns 200 when not logged in', async () => {
     const options = {
       method: 'GET',
       url: '/apply/endemics/start'
     }
 
-    const res = await global.__SERVER__.inject(options)
+    const res = await server.inject(options)
 
     expect(res.statusCode).toBe(200)
     const $ = cheerio.load(res.payload)

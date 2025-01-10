@@ -6,6 +6,7 @@ import { endemicsCheckDetails, endemicsReviews, endemicsYouCanClaimMultiple } fr
 import { businessAppliedBefore } from '../../../../../app/api-requests/business-applied-before.js'
 import { requestAuthorizationCodeUrl } from '../../../../../app/auth/auth-code-grant/request-authorization-code-url.js'
 import { getCustomer, getFarmerApplyData } from '../../../../../app/session/index.js'
+import { createServer } from '../../../../../app/server'
 
 const endemicsReviewsUrl = `/apply/${endemicsReviews}`
 const endemicsYouCanClaimMultipleUrl = `/apply/${endemicsYouCanClaimMultiple}`
@@ -13,7 +14,6 @@ const endemicsYouCanClaimMultipleUrl = `/apply/${endemicsYouCanClaimMultiple}`
 jest.mock('../../../../../app/api-requests/business-applied-before')
 
 describe('Org review page test', () => {
-  let session
   const url = `/apply/${endemicsCheckDetails}`
   const auth = {
     credentials: { reference: '1111', sbi: '111111111' },
@@ -28,6 +28,18 @@ describe('Org review page test', () => {
     name: 'org-name',
     sbi: '123456789'
   }
+
+  let server
+
+  beforeAll(async () => {
+    server = await createServer()
+    await server.initialize()
+  })
+
+  afterAll(async () => {
+    await server.stop()
+  })
+
   describe(`GET ${url} route when logged in`, () => {
     beforeAll(async () => {
       jest.resetAllMocks()
@@ -75,7 +87,7 @@ describe('Org review page test', () => {
 
       requestAuthorizationCodeUrl.mockReturnValueOnce('https://somedefraidlogin')
 
-      const res = await global.__SERVER__.inject(options)
+      const res = await server.inject(options)
 
       expect(res.statusCode).toBe(200)
       const $ = cheerio.load(res.payload)
@@ -112,7 +124,7 @@ describe('Org review page test', () => {
         url
       }
 
-      const res = await global.__SERVER__.inject(options)
+      const res = await server.inject(options)
 
       expect(res.statusCode).toBe(404)
       const $ = cheerio.load(res.payload)
@@ -127,7 +139,7 @@ describe('Org review page test', () => {
     const method = 'POST'
 
     beforeEach(async () => {
-      crumb = await getCrumbs(global.__SERVER__)
+      crumb = await getCrumbs(server)
     })
 
     beforeAll(async () => {
@@ -156,7 +168,7 @@ describe('Org review page test', () => {
         headers: { cookie: `crumb=${crumb}` }
       }
 
-      const res = await global.__SERVER__.inject(options)
+      const res = await server.inject(options)
 
       expect(res.statusCode).toBe(302)
       expect(res.headers.location).toEqual(endemicsReviewsUrl)
@@ -171,7 +183,7 @@ describe('Org review page test', () => {
         headers: { cookie: `crumb=${crumb}` }
       }
 
-      const res = await global.__SERVER__.inject(options)
+      const res = await server.inject(options)
 
       expect(res.statusCode).toBe(302)
       expect(res.headers.location).toEqual(endemicsReviewsUrl)
@@ -186,7 +198,7 @@ describe('Org review page test', () => {
         headers: { cookie: `crumb=${crumb}` }
       }
 
-      const res = await global.__SERVER__.inject(options)
+      const res = await server.inject(options)
 
       expect(res.statusCode).toBe(200)
       const $ = cheerio.load(res.payload)
@@ -210,7 +222,7 @@ describe('Org review page test', () => {
           headers: { cookie: `crumb=${crumb}` }
         }
 
-        const res = await global.__SERVER__.inject(options)
+        const res = await server.inject(options)
 
         expect(res.statusCode).toBe(400)
         expect(res.request.response.variety).toBe('view')
@@ -231,7 +243,7 @@ describe('Org review page test', () => {
         headers: { cookie: `crumb=${crumb}` }
       }
 
-      const res = await global.__SERVER__.inject(options)
+      const res = await server.inject(options)
 
       expect(res.statusCode).toBe(400)
       const $ = cheerio.load(res.payload)
@@ -244,7 +256,7 @@ describe('Org review page test', () => {
     const method = 'POST'
 
     beforeEach(async () => {
-      crumb = await getCrumbs(global.__SERVER__)
+      crumb = await getCrumbs(server)
     })
 
     beforeAll(async () => {
@@ -288,7 +300,7 @@ describe('Org review page test', () => {
         headers: { cookie: `crumb=${crumb}` }
       }
 
-      const res = await global.__SERVER__.inject(options)
+      const res = await server.inject(options)
 
       expect(res.statusCode).toBe(302)
       expect(res.headers.location).toEqual(endemicsYouCanClaimMultipleUrl)

@@ -2,7 +2,6 @@ import { generateCodeChallenge } from '../../../../app/auth/auth-code-grant/proo
 import { setPkcecodes } from '../../../../app/session/index.js'
 
 jest.mock('../../../../app/session', () => ({
-  ...jest.requireActual('../../../../app/session'),
   setPkcecodes: jest.fn()
 }))
 

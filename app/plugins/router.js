@@ -30,11 +30,18 @@ if (config.endemics.enabled) {
   routes = routes.concat(
     ...indexRouteHandlers,
     ...numbersRouteHandlers,
-    ...claimMultipleRouteHandlers,
     ...reviewsRouteHandlers,
     ...declarationRouteHandlers,
     ...checkDetailsRouteHandlers,
     ...timingsRouteHandlers
+  )
+}
+
+console.log({ enabled: config.multiSpecies.enabled })
+
+if (config.multiSpecies.enabled) {
+  routes = routes.concat(
+    ...claimMultipleRouteHandlers
   )
 }
 

@@ -1,10 +1,4 @@
-import 'dotenv/config'
-import { createServer } from '../app/server.js'
+import { config } from 'dotenv'
 
-beforeEach(async () => {
-  // Set reference to server in order to close the server during teardown.
-  jest.setTimeout(10000)
-  const server = await createServer()
-  await server.initialize()
-  global.__SERVER__ = server
-})
+config()
+

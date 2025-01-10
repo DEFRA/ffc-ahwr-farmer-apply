@@ -1,3 +1,4 @@
+import { createServer } from '../../../../app/server'
 
 describe('Farmer apply home page test', () => {
   jest.mock('../../../../app/config', () => ({
@@ -35,13 +36,25 @@ describe('Farmer apply home page test', () => {
       }
     }
   }))
+
+  let server
+
+  beforeAll(async () => {
+    server = await createServer()
+    await server.initialize()
+  })
+
+  afterAll(async () => {
+    await server.stop()
+  })
+
   test('GET / route returns 302 when not logged in', async () => {
     const options = {
       method: 'GET',
       url: '/apply/start'
     }
 
-    const res = await global.__SERVER__.inject(options)
+    const res = await server.inject(options)
 
     expect(res.statusCode).toBe(302)
     expect(res.headers.location).toEqual('/apply/endemics/start')

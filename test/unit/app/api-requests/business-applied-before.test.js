@@ -1,14 +1,10 @@
-import { config } from '../../../../app/config/index.js'
 import { status, userType } from '../../../../app/constants/constants.js'
 import { getLatestApplicationsBySbi } from '../../../../app/api-requests/application-api.js'
 import { businessAppliedBefore } from '../../../../app/api-requests/business-applied-before.js'
 
-describe('Business Applied Before Tests', () => {
-  beforeAll(() => {
-    jest.mock('../../../../app/api-requests/application-api')
-    config.endemics.enabled = false
-  })
+jest.mock('../../../../app/api-requests/application-api', () => ({ getLatestApplicationsBySbi: jest.fn() }))
 
+describe('Business Applied Before Tests', () => {
   describe('Business is eligible when no existing applications found', () => {
     test('getLatestApplicationsBySbi is called', async () => {
       const SBI = 123456789

@@ -1,9 +1,11 @@
 import appInsights from 'applicationinsights'
 import * as insights from '../../app/insights.js'
 
-describe('App Insight', () => {
-  jest.mock('applicationinsights')
+jest.mock('applicationinsights', () => ({
+  setup: jest.fn()
+}))
 
+describe('App Insight', () => {
   const startMock = jest.fn()
   const setupMock = jest.fn(() => {
     return {

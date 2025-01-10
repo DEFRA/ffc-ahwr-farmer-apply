@@ -1,4 +1,5 @@
 import { config } from '../../../../app/config/index.js'
+import { createServer } from '../../../../app/server.js'
 
 describe('Annual Health and Welfare Review landing page', () => {
   beforeAll(async () => {
@@ -30,13 +31,25 @@ describe('Annual Health and Welfare Review landing page', () => {
       }
     }))
   })
+
+  let server
+
+  beforeAll(async () => {
+    server = await createServer()
+    await server.initialize()
+  })
+
+  afterAll(async () => {
+    await server.stop()
+  })
+
   test('GET / route returns 200 when not logged in', async () => {
     const options = {
       method: 'GET',
       url: `${config.urlPrefix}/`
     }
 
-    const res = await global.__SERVER__.inject(options)
+    const res = await server.inject(options)
 
     expect(res.statusCode).toBe(302)
     expect(res.headers.location).toEqual('/apply/endemics/start')

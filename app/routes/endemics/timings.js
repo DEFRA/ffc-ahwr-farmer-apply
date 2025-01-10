@@ -34,19 +34,20 @@ export const timingsRouteHandlers = [
             'yes'
           )
           return h.redirect(`${urlPrefix}/${endemicsDeclaration}`)
-        } else {
-          setFarmerApplyData(
-            request,
-            agreeVisitTimings,
-            'no'
-          )
-          request.cookieAuth.clear()
-          clear(request)
-          return h.view(endemicsOfferRejected, {
-            termsRejected: true,
-            ruralPaymentsAgency: config.ruralPaymentsAgency
-          })
         }
+
+        setFarmerApplyData(
+          request,
+          agreeVisitTimings,
+          'no'
+        )
+        request.cookieAuth.clear()
+        clear(request)
+
+        return h.view(endemicsOfferRejected, {
+          termsRejected: true,
+          ruralPaymentsAgency: config.ruralPaymentsAgency
+        })
       }
     }
   }]

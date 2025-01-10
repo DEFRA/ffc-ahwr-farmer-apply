@@ -1,23 +1,16 @@
+import { requestAuthorizationCodeUrl } from '../../../../app/auth/auth-code-grant/request-authorization-code-url'
+import { authenticate } from '../../../../app/auth/authenticate'
+import { verify } from '../../../../app/auth/auth-code-grant/state'
+// import { generate } from '../../../../app/auth/auth-code-grant/state'
+
+jest.mock('../../../../app/session')
+jest.mock('../../../../app/auth/auth-code-grant/state', () => ({
+  verify: jest.fn(),
+  generate: jest.fn()
+}))
+
 describe('Generate authentication url test', () => {
-  let auth
-  let sessionMock
-  const MOCK_VERIFY = jest.fn()
-
-  beforeAll(() => {
-    jest.resetModules()
-
-    sessionMock = require('../../../../app/session')
-    jest.mock('../../../../app/session')
-
-    jest.mock('../../../../app/auth/auth-code-grant/state', () => ({
-      ...jest.requireActual('../../../../app/auth/auth-code-grant/state'),
-      verify: MOCK_VERIFY
-    }))
-
-    auth = require('../../../../app/auth')
-  })
-
-  beforeEach(() => {
+  afterAll(() => {
     jest.resetAllMocks()
   })
 
@@ -28,7 +21,7 @@ describe('Generate authentication url test', () => {
       setPkcecodes: setPkcecodesMock,
       setToken: setTokenMock
     }
-    const result = auth.requestAuthorizationCodeUrl(session, undefined)
+    const result = requestAuthorizationCodeUrl(session, undefined)
     const params = new URL(result).searchParams
     expect(params.get('code_challenge')).not.toBeNull()
   })
@@ -40,23 +33,20 @@ describe('Generate authentication url test', () => {
       setPkcecodes: setPkcecodesMock,
       setToken: setTokenMock
     }
-    const result = auth.requestAuthorizationCodeUrl(session, undefined, false)
+    const result = requestAuthorizationCodeUrl(session, false)
     const params = new URL(result).searchParams
     expect(params.get('code_challenge')).toBeNull()
   })
 
-  test('when authenticate successfull returns access token', async () => {
-    MOCK_VERIFY.mockReturnValueOnce(true)
-    // const result = await auth.authenticate({}, sessionMock)
-    // expect(result).toEqual('dummy_access_token')
-  })
-
   test('when invalid state error is thrown', async () => {
-    MOCK_VERIFY.mockReturnValueOnce(false)
+    verify.mockReturnValueOnce(false)
+    const request = { yar: { id: '33' } }
+
     try {
-      await auth.authenticate({ yar: { id: '33' } }, sessionMock)
-    } catch (e) {
-      expect(e.message).toBe('Invalid state')
+      await authenticate(request)
+    } catch (error) {
+      expect(error.message).toEqual('Invalid state')
+      expect(verify).toHaveBeenCalledWith(request)
     }
   })
 })

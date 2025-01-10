@@ -1,11 +1,11 @@
-import { schema } from './application-api.config.schema.js'
+import { applicationApiConfigSchema } from './application-api.config.schema.js'
 
 const getConfig = () => {
   const config = {
     uri: process.env.APPLICATION_API_URI
   }
 
-  const result = schema.validate(config, {
+  const result = applicationApiConfigSchema.validate(config, {
     abortEarly: false
   })
 

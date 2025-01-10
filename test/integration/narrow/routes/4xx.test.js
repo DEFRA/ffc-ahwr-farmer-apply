@@ -1,14 +1,26 @@
 import * as cheerio from 'cheerio'
 import { ok } from '../../../utils/phase-banner-expect.js'
+import { createServer } from '../../../../app/server.js'
 
 describe('4xx error pages', () => {
+  let server
+
+  beforeAll(async () => {
+    server = await createServer()
+    await server.initialize()
+  })
+
+  afterAll(async () => {
+    await server.stop()
+  })
+
   test('GET /unknown route returns 404', async () => {
     const options = {
       method: 'GET',
       url: '/unknown'
     }
 
-    const res = await global.__SERVER__.inject(options)
+    const res = await server.inject(options)
 
     expect(res.statusCode).toBe(404)
     const $ = cheerio.load(res.payload)

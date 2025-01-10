@@ -1,11 +1,47 @@
 import { getCrumbs } from '../../../../utils/get-crumbs.js'
-
 import { endemicsCheckDetails, endemicsNumbers, endemicsYouCanClaimMultiple } from '../../../../../app/config/routes.js'
 import { clear, getFarmerApplyData, setFarmerApplyData } from '../../../../../app/session/index.js'
+import { createServer } from '../../../../../app/server.js'
+import { config } from '../../../../../app/config/index.js'
 
 const pageUrl = `/apply/${endemicsYouCanClaimMultiple}`
 const backLinkUrl = `/apply/${endemicsCheckDetails}`
 const nextPageUrl = `/apply/${endemicsNumbers}`
+
+// jest.mock('../../../../../app/config', () => ({
+//   ...jest.requireActual('../../../../../app/config'),
+//   endemics: {
+//     enabled: true
+//   },
+//   multiSpecies: {
+//     enabled: true
+//   },
+//   authConfig: {
+//     defraId: {
+//       hostname: 'https://tenant.b2clogin.com/tenant.onmicrosoft.com',
+//       oAuthAuthorisePath: '/oauth2/v2.0/authorize',
+//       policy: 'b2c_1a_signupsigninsfi',
+//       redirectUri: 'http://localhost:3000/apply/endemics/signin-oidc',
+//       clientId: 'dummy_client_id',
+//       serviceId: 'dummy_service_id',
+//       scope: 'openid dummy_client_id offline_access'
+//     },
+//     ruralPaymentsAgency: {
+//       hostname: 'dummy-host-name',
+//       getPersonSummaryUrl: 'dummy-get-person-summary-url',
+//       getOrganisationPermissionsUrl: 'dummy-get-organisation-permissions-url',
+//       getOrganisationUrl: 'dummy-get-organisation-url'
+//     }
+//   }
+// }))
+
+jest.mock('../../../../../app/session', () => ({
+  getFarmerApplyData: jest.fn((_request, _key) => ({ name: 'org-name', sbi: '123456789' })),
+  setFarmerApplyData: jest.fn(),
+  clear: jest.fn()
+}))
+
+jest.mock('../../../../../app/auth/authenticate')
 
 describe('you-can-claim-multiple page', () => {
   const optionsBase = {
@@ -13,40 +49,17 @@ describe('you-can-claim-multiple page', () => {
     url: pageUrl
   }
 
-  beforeAll(async () => {
-    jest.mock('../../../../../app/session', () => ({
-      getFarmerApplyData: jest.fn((_request, _key) => ({ name: 'org-name', sbi: '123456789' })),
-      setFarmerApplyData: jest.fn(),
-      clear: jest.fn()
-    }))
+  let server
 
-    jest.mock('../../../../../app/auth')
-    jest.mock('../../../../../app/config', () => ({
-      ...jest.requireActual('../../../../../app/config'),
-      endemics: {
-        enabled: true
-      },
-      multiSpecies: {
-        enabled: true
-      },
-      authConfig: {
-        defraId: {
-          hostname: 'https://tenant.b2clogin.com/tenant.onmicrosoft.com',
-          oAuthAuthorisePath: '/oauth2/v2.0/authorize',
-          policy: 'b2c_1a_signupsigninsfi',
-          redirectUri: 'http://localhost:3000/apply/endemics/signin-oidc',
-          clientId: 'dummy_client_id',
-          serviceId: 'dummy_service_id',
-          scope: 'openid dummy_client_id offline_access'
-        },
-        ruralPaymentsAgency: {
-          hostname: 'dummy-host-name',
-          getPersonSummaryUrl: 'dummy-get-person-summary-url',
-          getOrganisationPermissionsUrl: 'dummy-get-organisation-permissions-url',
-          getOrganisationUrl: 'dummy-get-organisation-url'
-        }
-      }
-    }))
+  afterAll(async () => {
+    await server.stop()
+  })
+
+  beforeAll(async () => {
+    config.endemics.enabled = true
+    config.multiSpecies.enabled = true
+    server = await createServer()
+    await server.initialize()
   })
 
   beforeEach(async () => {
@@ -55,7 +68,7 @@ describe('you-can-claim-multiple page', () => {
 
   describe('GET operation handler', () => {
     test('returns 200 and content is correct', async () => {
-      const res = await global.__SERVER__.inject({ ...optionsBase, method: 'GET' })
+      const res = await server.inject({ ...optionsBase, method: 'GET' })
 
       expect(getFarmerApplyData).toHaveBeenCalledTimes(1)
 
@@ -76,7 +89,7 @@ describe('you-can-claim-multiple page', () => {
     let postOptionsBase
 
     beforeEach(async () => {
-      const crumb = await getCrumbs(global.__SERVER__)
+      const crumb = await getCrumbs(server)
       postOptionsBase = {
         ...optionsBase,
         method: 'POST',
@@ -94,7 +107,7 @@ describe('you-can-claim-multiple page', () => {
         }
       }
 
-      const res = await global.__SERVER__.inject(options)
+      const res = await server.inject(options)
 
       expect(setFarmerApplyData).toHaveBeenCalledTimes(1)
 
@@ -111,7 +124,7 @@ describe('you-can-claim-multiple page', () => {
         }
       }
 
-      const res = await global.__SERVER__.inject(options)
+      const res = await server.inject(options)
 
       expect(setFarmerApplyData).toHaveBeenCalledTimes(1)
       expect(clear).toHaveBeenCalledTimes(1)

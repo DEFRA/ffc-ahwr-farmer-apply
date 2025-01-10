@@ -1,13 +1,19 @@
 import * as cheerio from 'cheerio'
 import { config } from '../../../../app/config/index.js'
 import { ok } from '../../../utils/phase-banner-expect'
+import { createServer } from '../../../../app/server.js'
 
 const { serviceName, urlPrefix } = config
 const url = `${urlPrefix}/cookies`
 describe('cookies route', () => {
+  let server
+
   beforeAll(async () => {
     jest.resetAllMocks()
     jest.resetModules()
+
+    server = await createServer()
+    await server.initialize()
     jest.mock('../../../../app/config', () => ({
       ...jest.requireActual('../../../../app/config'),
       endemics: {
@@ -32,13 +38,18 @@ describe('cookies route', () => {
       }
     }))
   })
+
+  afterAll(async () => {
+    await server.stop()
+  })
+
   test('GET /cookies returns 200', async () => {
     const options = {
       method: 'GET',
       url
     }
 
-    const result = await global.__SERVER__.inject(options)
+    const result = await server.inject(options)
     expect(result.statusCode).toBe(200)
   })
 
@@ -48,7 +59,7 @@ describe('cookies route', () => {
       url
     }
 
-    const result = await global.__SERVER__.inject(options)
+    const result = await server.inject(options)
     expect(result.request.response.variety).toBe('view')
     expect(result.request.response.source.template).toBe('cookies/cookie-policy')
   })
@@ -59,7 +70,7 @@ describe('cookies route', () => {
       url
     }
 
-    const result = await global.__SERVER__.inject(options)
+    const result = await server.inject(options)
     expect(result.request.response._payload._data).toContain('Cookies')
   })
 
@@ -70,7 +81,7 @@ describe('cookies route', () => {
       payload: { analytics: true }
     }
 
-    const result = await global.__SERVER__.inject(options)
+    const result = await server.inject(options)
     expect(result.statusCode).toBe(302)
   })
 
@@ -81,7 +92,7 @@ describe('cookies route', () => {
       payload: { analytics: true, async: true }
     }
 
-    const result = await global.__SERVER__.inject(options)
+    const result = await server.inject(options)
     expect(result.statusCode).toBe(200)
   })
 
@@ -92,7 +103,7 @@ describe('cookies route', () => {
       payload: { invalid: 'aaaaaa' }
     }
 
-    const result = await global.__SERVER__.inject(options)
+    const result = await server.inject(options)
     expect(result.statusCode).toBe(400)
   })
 
@@ -103,7 +114,7 @@ describe('cookies route', () => {
       payload: { analytics: true }
     }
 
-    const result = await global.__SERVER__.inject(options)
+    const result = await server.inject(options)
     expect(result.statusCode).toBe(302)
     expect(result.headers.location).toBe(`${urlPrefix}/cookies?updated=true`)
   })
@@ -113,10 +124,10 @@ describe('cookies route', () => {
       method: 'GET',
       url
     }
-    const response = await global.__SERVER__.inject(options)
+    const response = await server.inject(options)
     expect(response.statusCode).toBe(200)
     const $ = cheerio.load(response.payload)
-    expect($('.govuk-cookie-banner h2').text()).toContain(`Cookies on ${serviceName}`)
+    expect($('.govuk-cookie-banner h2').text()).toContain('Cookies on Get funding to improve animal health and welfare')
     expect($('.js-cookies-button-accept').text()).toContain('Accept analytics cookies')
     expect($('.js-cookies-button-reject').text()).toContain('Reject analytics cookies')
     ok($)

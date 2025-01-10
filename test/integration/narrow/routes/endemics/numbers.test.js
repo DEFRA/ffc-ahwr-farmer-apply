@@ -1,7 +1,6 @@
 import * as cheerio from 'cheerio'
 import { ok } from '../../../../utils/phase-banner-expect'
 import { getCrumbs } from '../../../../utils/get-crumbs.js'
-
 import {
   endemicsNumbers,
   endemicsReviews,
@@ -9,6 +8,7 @@ import {
   endemicsYouCanClaimMultiple
 } from '../../../../../app/config/routes.js'
 import { getFarmerApplyData } from '../../../../../app/session/index.js'
+import { createServer } from '../../../../../app/server'
 
 const endemicsNumbersUrl = `/apply/${endemicsNumbers}`
 const endemicsReviewsUrl = `/apply/${endemicsReviews}`
@@ -20,7 +20,6 @@ jest.mock('../../../../../app/session', () => ({
 }))
 
 describe('Check your eligible page test', () => {
-
   const auth = {
     strategy: 'cookie',
     credentials: { reference: '1111', sbi: '111111111' }
@@ -37,6 +36,17 @@ describe('Check your eligible page test', () => {
     auth,
     url: endemicsNumbersUrl
   }
+
+  let server
+
+  beforeAll(async () => {
+    server = await createServer()
+    await server.initialize()
+  })
+
+  afterAll(async () => {
+    await server.stop()
+  })
 
   describe(`GET ${endemicsNumbers} route when logged in`, () => {
     beforeAll(async () => {
@@ -74,10 +84,9 @@ describe('Check your eligible page test', () => {
     })
 
     test('returns 200 and has correct backLink when multispecies is disabled', async () => {
-
       getFarmerApplyData.mockImplementation(() => org)
 
-      const res = await global.__SERVER__.inject({ ...options, method: 'GET' })
+      const res = await server.inject({ ...options, method: 'GET' })
 
       expect(res.statusCode).toBe(200)
 
@@ -136,7 +145,7 @@ describe('Check your eligible page test', () => {
     test('returns 200 and has correct backLink when multispecies is enabled', async () => {
       getFarmerApplyData.mockReturnValue(org)
 
-      const res = await global.__SERVER__.inject({ ...options, method: 'GET' })
+      const res = await server.inject({ ...options, method: 'GET' })
 
       expect(res.statusCode).toBe(200)
 
@@ -160,7 +169,7 @@ describe('Check your eligible page test', () => {
     let crumb
 
     beforeEach(async () => {
-      crumb = await getCrumbs(global.__SERVER__)
+      crumb = await getCrumbs(server)
     })
 
     beforeAll(async () => {
@@ -178,7 +187,7 @@ describe('Check your eligible page test', () => {
     })
 
     test('returns 302 to next page when agree answer given', async () => {
-      const res = await global.__SERVER__.inject({
+      const res = await server.inject({
         ...options,
         method: 'POST',
         headers: { cookie: `crumb=${crumb}` },
@@ -190,7 +199,7 @@ describe('Check your eligible page test', () => {
     })
 
     test('returns 200 to rejected page when not agree answer given', async () => {
-      const res = await global.__SERVER__.inject({
+      const res = await server.inject({
         ...options,
         method: 'POST',
         headers: { cookie: `crumb=${crumb}` },
