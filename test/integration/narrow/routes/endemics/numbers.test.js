@@ -9,6 +9,7 @@ import {
 } from '../../../../../app/config/routes.js'
 import { getFarmerApplyData } from '../../../../../app/session/index.js'
 import { createServer } from '../../../../../app/server'
+import { config } from '../../../../../app/config'
 
 const endemicsNumbersUrl = `/apply/${endemicsNumbers}`
 const endemicsReviewsUrl = `/apply/${endemicsReviews}`
@@ -16,7 +17,10 @@ const endemicsYouCanClaimMultipleUrl = `/apply/${endemicsYouCanClaimMultiple}`
 const endemicsTimingsUrl = `/apply/${endemicsTimings}`
 
 jest.mock('../../../../../app/session', () => ({
-  getFarmerApplyData: jest.fn()
+  getFarmerApplyData: jest.fn(),
+  getCustomer: jest.fn().mockResolvedValue(111111111),
+  setFarmerApplyData: jest.fn(),
+  clear: jest.fn()
 }))
 
 describe('Check your eligible page test', () => {
@@ -37,53 +41,20 @@ describe('Check your eligible page test', () => {
     url: endemicsNumbersUrl
   }
 
-  let server
-
-  beforeAll(async () => {
-    server = await createServer()
-    await server.initialize()
-  })
-
-  afterAll(async () => {
-    await server.stop()
-  })
-
   describe(`GET ${endemicsNumbers} route when logged in`, () => {
-    beforeAll(async () => {
-      jest.resetAllMocks()
-      jest.resetModules()
-
+    test('returns 200 and has correct backLink when multispecies is disabled', async () => {
       jest.mock('../../../../../app/config', () => ({
-        ...jest.requireActual('../../../../../app/config'),
-        multiSpecies: {
-          enabled: false
-        },
-        endemics: {
-          enabled: true
-        },
-        authConfig: {
-          defraId: {
-            hostname: 'https://tenant.b2clogin.com/tenant.onmicrosoft.com',
-            oAuthAuthorisePath: '/oauth2/v2.0/authorize',
-            policy: 'b2c_1a_signupsigninsfi',
-            redirectUri: 'http://localhost:3000/apply/endemics/signin-oidc',
-            clientId: 'dummy_client_id',
-            serviceId: 'dummy_service_id',
-            scope: 'openid dummy_client_id offline_access'
-          },
-          ruralPaymentsAgency: {
-            hostname: 'dummy-host-name',
-            getPersonSummaryUrl: 'dummy-get-person-summary-url',
-            getOrganisationPermissionsUrl:
-              'dummy-get-organisation-permissions-url',
-            getOrganisationUrl: 'dummy-get-organisation-url'
+        config: {
+          ...jest.requireActual('../../../../../app/config'),
+          multiSpecies: {
+            enabled: false
           }
         }
       }))
-      jest.mock('../../../../../app/auth/authenticate')
-    })
 
-    test('returns 200 and has correct backLink when multispecies is disabled', async () => {
+      const server = await createServer()
+      await server.initialize()
+
       getFarmerApplyData.mockImplementation(() => org)
 
       const res = await server.inject({ ...options, method: 'GET' })
@@ -103,46 +74,17 @@ describe('Check your eligible page test', () => {
       expect($('.govuk-heading-s').text()).toEqual(`${org.name} - SBI ${org.sbi}`)
       expect(backLinkUrlByClassName).toContain(endemicsReviewsUrl)
       ok($)
+
+      await server.stop()
     })
   })
 
   describe(`GET ${endemicsNumbers} route when logged in - multispecies`, () => {
-    beforeAll(async () => {
-      jest.resetAllMocks()
-      jest.resetModules()
-
-      jest.mock('../../../../../app/session')
-      jest.mock('../../../../../app/config', () => ({
-        ...jest.requireActual('../../../../../app/config'),
-        multiSpecies: {
-          enabled: true
-        },
-        endemics: {
-          enabled: true
-        },
-        authConfig: {
-          defraId: {
-            hostname: 'https://tenant.b2clogin.com/tenant.onmicrosoft.com',
-            oAuthAuthorisePath: '/oauth2/v2.0/authorize',
-            policy: 'b2c_1a_signupsigninsfi',
-            redirectUri: 'http://localhost:3000/apply/endemics/signin-oidc',
-            clientId: 'dummy_client_id',
-            serviceId: 'dummy_service_id',
-            scope: 'openid dummy_client_id offline_access'
-          },
-          ruralPaymentsAgency: {
-            hostname: 'dummy-host-name',
-            getPersonSummaryUrl: 'dummy-get-person-summary-url',
-            getOrganisationPermissionsUrl:
-              'dummy-get-organisation-permissions-url',
-            getOrganisationUrl: 'dummy-get-organisation-url'
-          }
-        }
-      }))
-      jest.mock('../../../../../app/auth/authenticate')
-    })
-
     test('returns 200 and has correct backLink when multispecies is enabled', async () => {
+      config.multiSpecies.enabled = true
+      const server = await createServer()
+      await server.initialize()
+
       getFarmerApplyData.mockReturnValue(org)
 
       const res = await server.inject({ ...options, method: 'GET' })
@@ -162,28 +104,26 @@ describe('Check your eligible page test', () => {
       expect($('.govuk-heading-s').text()).toEqual(`${org.name} - SBI ${org.sbi}`)
       expect(backLinkUrlByClassName).toContain(endemicsYouCanClaimMultipleUrl)
       ok($)
+
+      await server.stop()
     })
   })
 
   describe(`POST ${endemicsNumbersUrl} route`, () => {
+    let server
     let crumb
 
     beforeEach(async () => {
       crumb = await getCrumbs(server)
     })
 
+    afterAll(async () => {
+      await server.stop()
+    })
+
     beforeAll(async () => {
-      jest.mock('../../../../../app/config', () => ({
-        ...jest.requireActual('../../../../../app/config'),
-        endemics: {
-          enabled: true
-        },
-        authConfig: {
-          defraId: {
-            enabled: true
-          }
-        }
-      }))
+      server = await createServer()
+      await server.initialize()
     })
 
     test('returns 302 to next page when agree answer given', async () => {

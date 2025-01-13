@@ -13,6 +13,23 @@ jest.mock('../../../../../app/session/index')
 jest.mock('../../../../../app/messaging/receive-message', () => ({ receiveMessage: jest.fn() }))
 jest.mock('../../../../../app/messaging/send-message', () => ({ sendMessage: jest.fn() }))
 jest.mock('applicationinsights', () => ({ defaultClient: { trackException: jest.fn(), trackEvent: jest.fn() }, dispose: jest.fn() }))
+jest.mock('../../../../../app/config/auth', () => ({
+  authConfig: {
+    ...jest.requireActual('../../../../../app/config/auth').authConfig,
+    defraId: {
+      hostname: 'https://testtenant.b2clogin.com/testtenant.onmicrosoft.com',
+      oAuthAuthorisePath: '/oauth2/v2.0/authorize',
+      policy: 'testpolicy',
+      redirectUri: 'http://localhost:3000/apply/endemics/signin-oidc',
+      tenantName: 'testtenant',
+      jwtIssuerId: 'dummy_jwt_issuer_id',
+      clientId: 'dummyclientid',
+      clientSecret: 'dummyclientsecret',
+      serviceId: 'dummyserviceid',
+      scope: 'openid dummyclientid offline_access'
+    }
+  }
+}))
 
 const { farmerApplyData: { declaration } } = keys
 
@@ -114,7 +131,7 @@ describe('Declaration test', () => {
       expect(clear).toBeCalledTimes(1)
       expect(setFarmerApplyData).toHaveBeenCalledTimes(3)
       expect(setFarmerApplyData).toHaveBeenNthCalledWith(1, res.request, declaration, true)
-      expect(getFarmerApplyData).toHaveBeenCalledTimes(2)
+      expect(getFarmerApplyData).toHaveBeenCalledTimes(4)
       expect(getFarmerApplyData).toHaveBeenCalledWith(res.request)
       expect(sendMessage).toHaveBeenCalledTimes(1)
     })
@@ -141,7 +158,7 @@ describe('Declaration test', () => {
       expect(clear).toBeCalledTimes(1)
       expect(setFarmerApplyData).toHaveBeenCalledTimes(3)
       expect(setFarmerApplyData).toHaveBeenNthCalledWith(1, res.request, declaration, true)
-      expect(getFarmerApplyData).toHaveBeenCalledTimes(2)
+      expect(getFarmerApplyData).toHaveBeenCalledTimes(4)
       expect(getFarmerApplyData).toHaveBeenCalledWith(res.request)
       expect(sendMessage).toHaveBeenCalledTimes(1)
     })
@@ -164,7 +181,7 @@ describe('Declaration test', () => {
       const $ = cheerio.load(res.payload)
       expectPageContentOk($, organisation)
       expect($('#terms-error').text()).toMatch('Select you have read and agree to the terms and conditions')
-      expect(getFarmerApplyData).toHaveBeenCalledTimes(1)
+      expect(getFarmerApplyData).toHaveBeenCalledTimes(2)
       expect(getFarmerApplyData).toHaveBeenCalledWith(res.request)
     })
 

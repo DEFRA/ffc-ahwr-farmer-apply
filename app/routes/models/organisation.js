@@ -1,6 +1,5 @@
 import { getYesNoRadios } from './form-component/yes-no-radios.js'
 import { config } from '../../config/index.js'
-
 import { keys } from '../../session/keys.js'
 import { getCustomer, getFarmerApplyData } from '../../session/index.js'
 import { requestAuthorizationCodeUrl } from '../../auth/auth-code-grant/request-authorization-code-url.js'

@@ -3,7 +3,7 @@ import { config } from '../../../../app/config/index.js'
 import { ok } from '../../../utils/phase-banner-expect'
 import { createServer } from '../../../../app/server.js'
 
-const { serviceName, urlPrefix } = config
+const { urlPrefix } = config
 const url = `${urlPrefix}/cookies`
 describe('cookies route', () => {
   let server

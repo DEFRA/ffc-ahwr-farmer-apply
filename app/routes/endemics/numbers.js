@@ -13,8 +13,6 @@ const { agreeSpeciesNumbers, organisation: organisationKey } = keys.farmerApplyD
 const urlPrefix = config.urlPrefix
 
 const pageUrl = `${urlPrefix}/${endemicsNumbers}`
-const backLink = (config.multiSpecies.enabled) ? `${urlPrefix}/${endemicsYouCanClaimMultiple}` : `${urlPrefix}/${endemicsReviews}`
-const nextPage = `${urlPrefix}/${endemicsTimings}`
 
 const agreementStatus = {
   agree: {
@@ -33,8 +31,9 @@ export const numbersRouteHandlers = [
     path: pageUrl,
     options: {
       handler: async (request, h) => {
-        console.log('in')
+        const backLink = (config.multiSpecies.enabled) ? `${urlPrefix}/${endemicsYouCanClaimMultiple}` : `${urlPrefix}/${endemicsReviews}`
         const organisation = getFarmerApplyData(request, organisationKey)
+
         return h.view(endemicsNumbers, {
           backLink,
           agreementStatus,
@@ -54,6 +53,7 @@ export const numbersRouteHandlers = [
             agreeSpeciesNumbers,
             'yes'
           )
+          const nextPage = `${urlPrefix}/${endemicsTimings}`
           return h.redirect(nextPage)
         } else {
           setFarmerApplyData(

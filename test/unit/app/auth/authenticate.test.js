@@ -14,6 +14,16 @@ jest.mock('jsonwebtoken', () => ({
   decode: jest.requireActual('jsonwebtoken').decode
 }))
 jest.mock('applicationinsights', () => ({ defaultClient: { trackException: jest.fn(), trackEvent: () => 'hello' }, dispose: jest.fn() }))
+jest.mock('../../../../app/config/auth', () => ({
+  authConfig: {
+    ...jest.requireActual('../../../../app/config/auth').authConfig,
+    defraId: {
+      ...jest.requireActual('../../../../app/config/auth').authConfig.defraId,
+      tenantName: 'testtenant',
+      jwtIssuerId: 'dummy_jwt_issuer_id'
+    }
+  }
+}))
 
 const MOCK_NOW = new Date()
 const MOCK_COOKIE_AUTH_SET = jest.fn()
@@ -80,14 +90,14 @@ describe('authenticate', () => {
               "lastName": "Doe",
               "email": "john.doe@email.com",
               "iat": 1516239022,
-              "iss": "https://dcidmtest.b2clogin.com/131a35fb-0422-49c9-8753-15217cec5411/v2.0/",
+              "iss": "https://testtenant.b2clogin.com/dummy_jwt_issuer_id/v2.0/",
               "roles": [
                 "5384769:Agent:3"
               ],
               "contactId": "1234567890",
               "currentRelationshipId": "123456789"
             } */
-            access_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiZmlyc3ROYW1lIjoiSm9obiIsImxhc3ROYW1lIjoiRG9lIiwiZW1haWwiOiJqb2huLmRvZUBlbWFpbC5jb20iLCJpYXQiOjE1MTYyMzkwMjIsImlzcyI6Imh0dHBzOi8vZGNpZG10ZXN0LmIyY2xvZ2luLmNvbS8xMzFhMzVmYi0wNDIyLTQ5YzktODc1My0xNTIxN2NlYzU0MTEvdjIuMC8iLCJyb2xlcyI6WyI1Mzg0NzY5OkFnZW50OjMiXSwiY29udGFjdElkIjoiMTIzNDU2Nzg5MCIsImN1cnJlbnRSZWxhdGlvbnNoaXBJZCI6IjEyMzQ1Njc4OSJ9.Hhc2yxPh8KG1djlTf9JHXoEsrjjw4-fqBLt5-E8p35g',
+            access_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiZmlyc3ROYW1lIjoiSm9obiIsImxhc3ROYW1lIjoiRG9lIiwiZW1haWwiOiJqb2huLmRvZUBlbWFpbC5jb20iLCJpYXQiOjE1MTYyMzkwMjIsImlzcyI6Imh0dHBzOi8vdGVzdHRlbmFudC5iMmNsb2dpbi5jb20vZHVtbXlfand0X2lzc3Vlcl9pZC92Mi4wLyIsInJvbGVzIjpbIjUzODQ3Njk6QWdlbnQ6MyJdLCJjb250YWN0SWQiOiIxMjM0NTY3ODkwIiwiY3VycmVudFJlbGF0aW9uc2hpcElkIjoiMTIzNDU2Nzg5In0.Pt3RWu8F2ObAKWVIeQxSDvZvfBDIrkvM_0HuNJBZSwM',
             id_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJub25jZSI6IjEyMyJ9.EFgheK9cJjMwoszwDYbf9n_XF8NJ3qBvLYqUB8uRrzk',
             expires_in: 10
           }
@@ -206,14 +216,14 @@ describe('authenticate', () => {
               "lastName": "Doe",
               "email": "john.doe@email.com",
               "iat": 1516239022,
-              "iss": "https://dcidmtest.b2clogin.com/131a35fb-0422-49c9-8753-15217cec5411/v2.0/",
+              "iss": "https://testtenant.b2clogin.com/dummy_jwt_issuer_id/v2.0/",
               "roles": [
                 "5384769:Agent:3"
               ],
               "contactId": "1234567890",
               "currentRelationshipId": "123456789"
             } */
-            access_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiZmlyc3ROYW1lIjoiSm9obiIsImxhc3ROYW1lIjoiRG9lIiwiZW1haWwiOiJqb2huLmRvZUBlbWFpbC5jb20iLCJpYXQiOjE1MTYyMzkwMjIsImlzcyI6Imh0dHBzOi8vZGNpZG10ZXN0LmIyY2xvZ2luLmNvbS8xMzFhMzVmYi0wNDIyLTQ5YzktODc1My0xNTIxN2NlYzU0MTEvdjIuMC8iLCJyb2xlcyI6WyI1Mzg0NzY5OkFnZW50OjMiXSwiY29udGFjdElkIjoiMTIzNDU2Nzg5MCIsImN1cnJlbnRSZWxhdGlvbnNoaXBJZCI6IjEyMzQ1Njc4OSJ9.Hhc2yxPh8KG1djlTf9JHXoEsrjjw4-fqBLt5-E8p35g',
+            access_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiZmlyc3ROYW1lIjoiSm9obiIsImxhc3ROYW1lIjoiRG9lIiwiZW1haWwiOiJqb2huLmRvZUBlbWFpbC5jb20iLCJpYXQiOjE1MTYyMzkwMjIsImlzcyI6Imh0dHBzOi8vdGVzdHRlbmFudC5iMmNsb2dpbi5jb20vZHVtbXlfand0X2lzc3Vlcl9pZC92Mi4wLyIsInJvbGVzIjpbIjUzODQ3Njk6QWdlbnQ6MyJdLCJjb250YWN0SWQiOiIxMjM0NTY3ODkwIiwiY3VycmVudFJlbGF0aW9uc2hpcElkIjoiMTIzNDU2Nzg5In0.Pt3RWu8F2ObAKWVIeQxSDvZvfBDIrkvM_0HuNJBZSwM',
             id_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJub25jZSI6IjEyMyJ9.EFgheK9cJjMwoszwDYbf9n_XF8NJ3qBvLYqUB8uRrzk',
             expires_in: 10
           }

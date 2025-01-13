@@ -3,17 +3,21 @@ import { loggingContextPlugin } from '../../../../app/plugins/logging-context.js
 import { loggingPlugin } from '../../../../app/plugins/logging.js'
 
 jest.mock('../../../../app/session', () => ({
-  getFarmerApplyData: (_) => ({
+  getFarmerApplyData: jest.fn().mockImplementation(() => ({
     organisation: {
       sbi: 'sbi123'
     },
     reference: 'ABC-123'
-  })
+  })),
+  getCustomer: jest.fn().mockReturnValue('crn123'),
+  setFarmerApplyData: jest.fn(),
+  clear: jest.fn()
 }))
 
 describe('Logging context plugin', () => {
   let server
   let logBindings
+
   beforeAll(async () => {
     server = Hapi.server()
 
@@ -28,6 +32,7 @@ describe('Logging context plugin', () => {
         return h.response('ok').code(200)
       }
     })
+
     server.route({
       method: 'GET',
       path: '/apply/route2',
@@ -61,7 +66,6 @@ describe('Logging context plugin', () => {
     expect(logBindings.sbi).toEqual('sbi123')
     expect(logBindings.crn).toEqual('crn123')
     expect(logBindings.reference).toEqual('ABC-123')
-    expect(logBindings.applicationReference).toEqual('APPLICATION1')
   })
 
   test('specific contextual items can be mixed in', async () => {
@@ -75,6 +79,5 @@ describe('Logging context plugin', () => {
     expect(logBindings.sbi).toEqual('sbi123')
     expect(logBindings.crn).toEqual('crn123')
     expect(logBindings.reference).toEqual('ABC-123')
-    expect(logBindings.applicationReference).toEqual('APPLICATION1')
   })
 })

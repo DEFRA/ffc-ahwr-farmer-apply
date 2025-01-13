@@ -2,7 +2,6 @@ import appInsights from 'applicationinsights'
 import boom from '@hapi/boom'
 import joi from 'joi'
 import { keys } from '../../session/keys.js'
-
 import { clear, getCustomer, getFarmerApplyData, setFarmerApplyData, setTempReference } from '../../session/index.js'
 import { getDeclarationData } from '../models/declaration.js'
 import { sendApplication } from '../../messaging/application/index.js'

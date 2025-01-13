@@ -15,41 +15,42 @@ import { declarationRouteHandlers } from '../routes/endemics/declaration.js'
 import { checkDetailsRouteHandlers } from '../routes/endemics/check-details.js'
 import { timingsRouteHandlers } from '../routes/endemics/timings.js'
 
-let routes = [
-  ...accessibilityRouteHandlers,
-  ...assetsRouteHandlers,
-  ...cookieHandlers,
-  ...healthHandlers,
-  ...oldWorldEntryRouteHandlers,
-  ...oldWorldStartRouteHandlers,
-  ...privacyPolicyRouteHandlers,
-  ...signinRouteHandlers
-]
+export const buildRoutes = () => {
+  let routes = [
+    ...accessibilityRouteHandlers,
+    ...assetsRouteHandlers,
+    ...cookieHandlers,
+    ...healthHandlers,
+    ...oldWorldEntryRouteHandlers,
+    ...oldWorldStartRouteHandlers,
+    ...privacyPolicyRouteHandlers,
+    ...signinRouteHandlers
+  ]
 
-if (config.endemics.enabled) {
-  routes = routes.concat(
-    ...indexRouteHandlers,
-    ...numbersRouteHandlers,
-    ...reviewsRouteHandlers,
-    ...declarationRouteHandlers,
-    ...checkDetailsRouteHandlers,
-    ...timingsRouteHandlers
-  )
-}
+  if (config.endemics.enabled) {
+    routes = [
+      ...routes,
+      ...indexRouteHandlers,
+      ...numbersRouteHandlers,
+      ...reviewsRouteHandlers,
+      ...declarationRouteHandlers,
+      ...checkDetailsRouteHandlers,
+      ...timingsRouteHandlers
+    ]
+  }
 
-console.log({ enabled: config.multiSpecies.enabled })
+  if (config.multiSpecies.enabled) {
+    routes = [...routes, ...claimMultipleRouteHandlers]
+  }
 
-if (config.multiSpecies.enabled) {
-  routes = routes.concat(
-    ...claimMultipleRouteHandlers
-  )
+  return routes
 }
 
 export const routerPlugin = {
   plugin: {
     name: 'router',
     register: (server, _) => {
-      server.route(routes)
+      server.route(buildRoutes())
     }
   }
 }

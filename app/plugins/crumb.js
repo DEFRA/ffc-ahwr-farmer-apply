@@ -7,6 +7,8 @@ export const crumbPlugin = {
     cookieOptions: {
       isSecure: config.cookie.isSecure
     },
-    skip: (request) => request.route.path === `${config.urlPrefix}/cookies` && request.method.toLowerCase() === 'post' // Exclude from crumb token changes
+    skip: (request) =>
+      request.route.path === `${config.urlPrefix}/cookies` &&
+        request.method.toLowerCase() === 'post' // Exclude from crumb token changes
   }
 }

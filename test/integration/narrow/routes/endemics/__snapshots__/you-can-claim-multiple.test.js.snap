@@ -244,7 +244,7 @@ exports[`you-can-claim-multiple page GET operation handler returns 200 and conte
    id="back">Back</a>
 
   
-  <h3 class="govuk-heading-s govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-text-align-right govuk-!-padding-right-9 govuk-!-padding-bottom-3">org-name - SBI 123456789</h3>
+  <h3 class="govuk-heading-s govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-text-align-right govuk-!-padding-right-9 govuk-!-padding-bottom-3">org-name - SBI 0123456789</h3>
 
 
         <main class="govuk-main-wrapper" id="main-content">
@@ -379,7 +379,7 @@ exports[`you-can-claim-multiple page GET operation handler returns 200 and conte
 
     
   
-    <script src="/apply/assets/js/9fdb692604d7d31d6cd5.js"></script>
+    <script src="/apply/assets/js/aeca7828a685e3b7d61f.js"></script>
   
 
   </body>
