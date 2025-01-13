@@ -7,7 +7,11 @@ export const indexRouteHandlers = [{
   options: {
     auth: false,
     handler: async (request, h) => {
-      return h.view('endemics/index', {
+      const loginView = config.devLogin.enabled ? 'endemics/devindex' : 'endemics/index'
+      const devLogin = config.devLogin.enabled ? `${config.urlPrefix}/endemics/dev-sign-in` : undefined
+
+      return h.view(loginView, {
+        devLogin,
         defraIdLogin: requestAuthorizationCodeUrl(request),
         ruralPaymentsAgency: config.ruralPaymentsAgency
       })

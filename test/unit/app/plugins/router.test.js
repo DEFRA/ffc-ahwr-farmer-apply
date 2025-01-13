@@ -77,4 +77,32 @@ describe('routes plugin test ', () => {
 
     await server.stop()
   })
+
+  test('when isDev is true, dev-sign-in included in routes', async () => {
+    config.devLogin.enabled = true
+
+    const server = await createServer()
+    await server.initialize()
+
+    const routePaths = []
+    server.table().forEach((element) => {
+      routePaths.push(element.path)
+    })
+
+    expect(routePaths).toContain('/apply/endemics/dev-sign-in')
+  })
+
+  test('when isDev is false, dev-sign-in not included in routes', async () => {
+    config.devLogin.enabled = false
+
+    const server = await createServer()
+    await server.initialize()
+
+    const routePaths = []
+    server.table().forEach((element) => {
+      routePaths.push(element.path)
+    })
+
+    expect(routePaths).not.toContain('/apply/endemics/dev-sign-in')
+  })
 })
