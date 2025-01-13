@@ -1,9 +1,9 @@
-const config = require('../config')
+import { config } from '../config/index.js'
 
 const deprecatedOldEntryPoint = `${config.urlPrefix}/start`
 const newAppEntryPoint = `${config.urlPrefix}/endemics/start`
 
-module.exports = {
+export const oldWorldStartRouteHandlers = [{
   method: 'GET',
   path: deprecatedOldEntryPoint,
   options: {
@@ -13,4 +13,4 @@ module.exports = {
       return h.redirect(newAppEntryPoint)
     }
   }
-}
+}]

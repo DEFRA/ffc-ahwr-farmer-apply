@@ -1,6 +1,6 @@
-const retryRaiseEvent = require('./retry-raise-event')
+import { retryRaiseEvent } from './retry-raise-event.js'
 
-const sendSessionEvent = (organisation, sessionId, entryKey, key, value, ip, reference = '') => {
+export const sendSessionEvent = (organisation, sessionId, entryKey, key, value, ip, reference = '') => {
   if (sessionId && organisation) {
     const event = {
       id: sessionId,
@@ -17,5 +17,3 @@ const sendSessionEvent = (organisation, sessionId, entryKey, key, value, ip, ref
     retryRaiseEvent(event, 2)
   }
 }
-
-module.exports = sendSessionEvent

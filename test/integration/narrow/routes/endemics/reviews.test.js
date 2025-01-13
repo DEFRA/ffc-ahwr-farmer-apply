@@ -1,18 +1,18 @@
-const cheerio = require('cheerio')
-const getCrumbs = require('../../../../utils/get-crumbs')
-const expectPhaseBanner = require('../../../../utils/phase-banner-expect')
-const {
-  endemicsNumbers,
-  endemicsReviews,
-  endemicsCheckDetails
-} = require('../../../../../app/config/routes')
-const endemicsNumbersUrl = `/apply/${endemicsNumbers}`
-const endemicsReviewsUrl = `/apply/${endemicsReviews}`
-const endemicsCheckDetailsUrl = `/apply/${endemicsCheckDetails}`
+import * as cheerio from 'cheerio'
+import { ok } from '../../../../utils/phase-banner-expect'
+import { endemicsNumbers } from '../../../../../app/config/routes.js'
+import { createServer } from '../../../../../app/server'
+import { getCrumbs } from '../../../../utils/get-crumbs'
+import { getFarmerApplyData } from '../../../../../app/session'
+
+jest.mock('../../../../../app/session')
+jest.mock('../../../../../app/auth/authenticate')
+
+const endemicsNumbersUrl = '/apply/endemics/numbers'
+const endemicsReviewsUrl = '/apply/endemics/reviews'
+const endemicsCheckDetailsUrl = '/apply/endemics/check-details'
 
 describe('Check your eligible page test', () => {
-  let session
-
   const auth = {
     strategy: 'cookie',
     credentials: { reference: '1111', sbi: '111111111' }
@@ -30,45 +30,22 @@ describe('Check your eligible page test', () => {
     url: endemicsReviewsUrl
   }
 
+  let server
+
+  beforeAll(async () => {
+    server = await createServer()
+    await server.initialize()
+  })
+
+  afterAll(async () => {
+    await server.stop()
+  })
+
   describe(`GET ${endemicsNumbers} route when logged in`, () => {
-    beforeAll(async () => {
-      jest.resetAllMocks()
-      jest.resetModules()
-
-      session = require('../../../../../app/session')
-
-      jest.mock('../../../../../app/session')
-      jest.mock('../../../../../app/config', () => ({
-        ...jest.requireActual('../../../../../app/config'),
-        endemics: {
-          enabled: true
-        },
-        authConfig: {
-          defraId: {
-            hostname: 'https://tenant.b2clogin.com/tenant.onmicrosoft.com',
-            oAuthAuthorisePath: '/oauth2/v2.0/authorize',
-            policy: 'b2c_1a_signupsigninsfi',
-            redirectUri: 'http://localhost:3000/apply/endemics/signin-oidc',
-            clientId: 'dummy_client_id',
-            serviceId: 'dummy_service_id',
-            scope: 'openid dummy_client_id offline_access'
-          },
-          ruralPaymentsAgency: {
-            hostname: 'dummy-host-name',
-            getPersonSummaryUrl: 'dummy-get-person-summary-url',
-            getOrganisationPermissionsUrl:
-              'dummy-get-organisation-permissions-url',
-            getOrganisationUrl: 'dummy-get-organisation-url'
-          }
-        }
-      }))
-      jest.mock('../../../../../app/auth')
-    })
-
     test('returns 200', async () => {
-      session.getFarmerApplyData.mockReturnValue(org)
+      getFarmerApplyData.mockReturnValue(org)
 
-      const res = await global.__SERVER__.inject({ ...options, method: 'GET' })
+      const res = await server.inject({ ...options, method: 'GET' })
 
       expect(res.statusCode).toBe(200)
 
@@ -86,7 +63,7 @@ describe('Check your eligible page test', () => {
       expect(pageTitleByClassName).toEqual(title)
       expect($('.govuk-heading-s').text()).toEqual(`${org.name} - SBI ${org.sbi}`)
       expect(backLinkUrlByClassName).toContain(endemicsCheckDetailsUrl)
-      expectPhaseBanner.ok($)
+      ok($)
     })
   })
 
@@ -94,25 +71,11 @@ describe('Check your eligible page test', () => {
     let crumb
 
     beforeEach(async () => {
-      crumb = await getCrumbs(global.__SERVER__)
-    })
-
-    beforeAll(async () => {
-      jest.mock('../../../../../app/config', () => ({
-        ...jest.requireActual('../../../../../app/config'),
-        endemics: {
-          enabled: true
-        },
-        authConfig: {
-          defraId: {
-            enabled: true
-          }
-        }
-      }))
+      crumb = await getCrumbs(server)
     })
 
     test('returns 302 to next page when agree answer given', async () => {
-      const res = await global.__SERVER__.inject({
+      const res = await server.inject({
         ...options,
         method: 'POST',
         headers: { cookie: `crumb=${crumb}` },
@@ -124,7 +87,7 @@ describe('Check your eligible page test', () => {
     })
 
     test('returns 200 to rejected page when not agree answer given', async () => {
-      const res = await global.__SERVER__.inject({
+      const res = await server.inject({
         ...options,
         method: 'POST',
         headers: { cookie: `crumb=${crumb}` },

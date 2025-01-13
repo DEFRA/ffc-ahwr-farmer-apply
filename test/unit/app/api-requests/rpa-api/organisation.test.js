@@ -1,35 +1,17 @@
-let mockSession
-let mockJwtDecode
-let mockBase
-let organisation
-jest.mock('../../../../../app/session/index')
-jest.mock('../../../../../app/auth/token-verify/jwt-decode')
-jest.mock('../../../../../app/api-requests/rpa-api/base')
+import { getToken } from '../../../../../app/session/index'
+import { decodeJwt } from '../../../../../app/auth/token-verify/jwt-decode'
+import { get } from '../../../../../app/api-requests/rpa-api/base'
+import { getOrganisationAddress, organisationIsEligible } from '../../../../../app/api-requests/rpa-api/organisation'
+
+jest.mock('../../../../../app/session/index', () => ({ getToken: jest.fn() }))
+jest.mock('../../../../../app/auth/token-verify/jwt-decode', () => ({ decodeJwt: jest.fn() }))
+jest.mock('../../../../../app/api-requests/rpa-api/base', () => ({ get: jest.fn() }))
 
 describe('Organisation', () => {
   const env = process.env
 
   beforeEach(async () => {
     process.env = { ...env }
-
-    jest.mock('../../../../../app/config', () => ({
-      ...jest.requireActual('../../../../../app/config'),
-      authConfig: {
-        defraId: {
-          enabled: true
-        },
-        ruralPaymentsAgency: {
-          hostname: 'dummy-host-name',
-          getPersonSummaryUrl: 'dummy-get-person-summary-url',
-          getOrganisationPermissionsUrl: 'dummy-get-organisationId-permissions-url',
-          getOrganisationUrl: 'dummy-get-organisationId-url'
-        }
-      }
-    }))
-    mockSession = require('../../../../../app/session/index')
-    mockJwtDecode = require('../../../../../app/auth/token-verify/jwt-decode')
-    mockBase = require('../../../../../app/api-requests/rpa-api/base')
-    organisation = require('../../../../../app/api-requests/rpa-api/organisation')
   })
 
   afterEach(() => {
@@ -42,9 +24,9 @@ describe('Organisation', () => {
   test('when organisationIsEligible called and has valid permissions - returns valid organisation', async () => {
     const personId = 1234567
     const apimToken = 'apim_token'
-    mockSession.getToken.mockResolvedValueOnce({ access_token: 1234567 })
-    mockJwtDecode.mockResolvedValue({ currentRelationshipId: 1234567 })
-    mockBase.get.mockResolvedValueOnce({
+    getToken.mockResolvedValueOnce({ access_token: 1234567 })
+    decodeJwt.mockResolvedValue({ currentRelationshipId: 1234567 })
+    get.mockResolvedValueOnce({
       data: {
         personRoles: [
           {
@@ -68,7 +50,7 @@ describe('Organisation', () => {
         ]
       }
     })
-    mockBase.get.mockResolvedValueOnce({
+    get.mockResolvedValueOnce({
       _data: {
         id: personId,
         name: 'Mrs Jane Black',
@@ -98,32 +80,34 @@ describe('Organisation', () => {
       }
     })
 
-    const result = await organisation.organisationIsEligible(expect.anything(), personId, apimToken)
+    const result = await organisationIsEligible(expect.anything(), personId, apimToken)
 
-    expect(mockSession.getToken).toHaveBeenCalledTimes(1)
-    expect(mockJwtDecode).toHaveBeenCalledTimes(1)
-    expect(mockBase.get).toHaveBeenCalledTimes(2)
+    expect(getToken).toHaveBeenCalledTimes(1)
+    expect(decodeJwt).toHaveBeenCalledTimes(1)
+    expect(get).toHaveBeenCalledTimes(2)
     expect(result.organisationPermission).toBeTruthy()
-    expect(result.organisation.id).toEqual(1234567)
-    expect(result.organisation.name).toMatch('Mrs Jane Black')
-    expect(result.organisation.sbi).toEqual(106979907)
-    expect(result.organisation.address.address1).toMatch('1 Test House')
-    expect(result.organisation.address.city).toMatch('Test City')
-    expect(result.organisation.address.county).toMatch('Test County')
-    expect(result.organisation.address.postalCode).toMatch('TS1 1TS')
+    const { organisation } = result
+    expect(organisation.id).toEqual(personId)
+    expect(organisation.name).toMatch('Mrs Jane Black')
+    expect(organisation.sbi).toEqual(106979907)
+    expect(organisation.address.address1).toMatch('1 Test House')
+    expect(organisation.address.city).toMatch('Test City')
+    expect(organisation.address.county).toMatch('Test County')
+    expect(organisation.address.postalCode).toMatch('TS1 1TS')
   })
 
   test('when organisationIsEligible called and has invalid permissions - throws error', async () => {
     const personId = 7654321
     const organisationId = 1234567
     const apimToken = 'apim_token'
-    mockSession.getToken.mockResolvedValueOnce({ access_token: organisationId })
-    mockJwtDecode.mockImplementation(() => {
+    getToken.mockResolvedValueOnce({ access_token: organisationId })
+
+    decodeJwt.mockImplementation(() => {
       return {
         currentRelationshipId: organisationId
       }
     })
-    mockBase.get.mockResolvedValueOnce({
+    get.mockResolvedValueOnce({
       data: {
         personRoles: [
           {
@@ -143,14 +127,14 @@ describe('Organisation', () => {
     })
 
     try {
-      await organisation.organisationIsEligible(expect.anything(), personId, apimToken)
+      await organisationIsEligible(expect.anything(), personId, apimToken)
     } catch (error) {
       expect(error).toBeInstanceOf(Error)
       expect(error).toHaveProperty('message', `Person id ${personId} does not have the required permissions for organisation id ${organisationId}`)
     }
-    expect(mockSession.getToken).toHaveBeenCalledTimes(1)
-    expect(mockJwtDecode).toHaveBeenCalledTimes(1)
-    expect(mockBase.get).toHaveBeenCalledTimes(2)
+    expect(getToken).toHaveBeenCalledTimes(1)
+    expect(decodeJwt).toHaveBeenCalledTimes(1)
+    expect(get).toHaveBeenCalledTimes(2)
   })
 
   test.each([
@@ -168,7 +152,7 @@ describe('Organisation', () => {
         county,
         postalCode
       }
-      const result = organisation.getOrganisationAddress(address)
+      const result = getOrganisationAddress(address)
       expect(result).toEqual(expectedResult)
     })
 })

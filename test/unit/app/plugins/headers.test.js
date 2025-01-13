@@ -1,6 +1,20 @@
-const { urlPrefix } = require('../../../../app/config')
+import { config } from '../../../../app/config/index.js'
+import { createServer } from '../../../../app/server.js'
+
+const { urlPrefix } = config
 
 describe('headers plugin tests', () => {
+  let server
+
+  beforeAll(async () => {
+    server = await createServer()
+    await server.initialize()
+  })
+
+  afterAll(async () => {
+    await server.stop()
+  })
+
   test.each([
     { key: 'X-Frame-Options', value: 'deny' },
     { key: 'X-Content-Type-Options', value: 'nosniff' },
@@ -23,7 +37,7 @@ describe('headers plugin tests', () => {
       method: 'GET',
       url
     }
-    const res = await global.__SERVER__.inject(options)
+    const res = await server.inject(options)
     expect(res.headers[key.toLowerCase()]).toEqual(value)
   })
 })

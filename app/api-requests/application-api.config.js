@@ -1,15 +1,19 @@
-const schema = require('./application-api.config.schema')
+import { applicationApiConfigSchema } from './application-api.config.schema.js'
 
-const config = {
-  uri: process.env.APPLICATION_API_URI
+const getConfig = () => {
+  const config = {
+    uri: process.env.APPLICATION_API_URI
+  }
+
+  const result = applicationApiConfigSchema.validate(config, {
+    abortEarly: false
+  })
+
+  if (result.error) {
+    throw new Error(`The config is invalid: ${result.error.message}`)
+  }
+
+  return config
 }
 
-const result = schema.validate(config, {
-  abortEarly: false
-})
-
-if (result.error) {
-  throw new Error(`The config is invalid: ${result.error.message}`)
-}
-
-module.exports = result.value
+export const config = getConfig()

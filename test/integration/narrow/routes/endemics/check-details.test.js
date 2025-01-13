@@ -1,17 +1,38 @@
-const cheerio = require('cheerio')
-const expectPhaseBanner = require('../../../../utils/phase-banner-expect')
-const getCrumbs = require('../../../../utils/get-crumbs')
-const { endemicsCheckDetails, endemicsReviews, endemicsYouCanClaimMultiple } = require('../../../../../app/config/routes')
-const businessAppliedBeforeMock = require('../../../../../app/api-requests/business-applied-before')
+import * as cheerio from 'cheerio'
+import { ok } from '../../../../utils/phase-banner-expect'
+import { getCrumbs } from '../../../../utils/get-crumbs.js'
+import { endemicsCheckDetails, endemicsReviews, endemicsYouCanClaimMultiple } from '../../../../../app/config/routes.js'
+import { businessAppliedBefore } from '../../../../../app/api-requests/business-applied-before.js'
+import { requestAuthorizationCodeUrl } from '../../../../../app/auth/auth-code-grant/request-authorization-code-url.js'
+import { getCustomer, getFarmerApplyData } from '../../../../../app/session/index.js'
+import { createServer } from '../../../../../app/server'
+import { config } from '../../../../../app/config'
 
 const endemicsReviewsUrl = `/apply/${endemicsReviews}`
 const endemicsYouCanClaimMultipleUrl = `/apply/${endemicsYouCanClaimMultiple}`
 
 jest.mock('../../../../../app/api-requests/business-applied-before')
 
+jest.mock('../../../../../app/auth/auth-code-grant/request-authorization-code-url.js', () => ({
+  requestAuthorizationCodeUrl: jest.fn()
+}))
+
+jest.mock('../../../../../app/session', () => ({
+  getCustomer: jest.fn().mockReturnValue({ crn: '123123123' }),
+  getFarmerApplyData: jest.fn().mockReturnValue({
+    farmerName: 'Dailry Farmer',
+    address: ' org-address-here',
+    cph: '11/222/3333',
+    email: 'org@test.com',
+    orgEmail: 'org@test.com',
+    name: 'org-name',
+    sbi: '123456789'
+  }),
+  setFarmerApplyData: jest.fn(),
+  clear: jest.fn()
+}))
+
 describe('Org review page test', () => {
-  let session
-  let authMock
   const url = `/apply/${endemicsCheckDetails}`
   const auth = {
     credentials: { reference: '1111', sbi: '111111111' },
@@ -26,56 +47,34 @@ describe('Org review page test', () => {
     name: 'org-name',
     sbi: '123456789'
   }
-  describe(`GET ${url} route when logged in`, () => {
-    beforeAll(async () => {
-      jest.resetAllMocks()
-      jest.resetModules()
 
-      session = require('../../../../../app/session')
-      jest.mock('../../../../../app/session')
-      session.getCustomer.mockReturnValue({ crn: '123123123' })
-      jest.mock('../../../../../app/config', () => ({
-        ...jest.requireActual('../../../../../app/config'),
-        multiSpecies: {
-          enabled: false
-        },
-        endemics: {
-          enabled: true
-        },
-        authConfig: {
-          defraId: {
-            hostname: 'https://tenant.b2clogin.com/tenant.onmicrosoft.com',
-            oAuthAuthorisePath: '/oauth2/v2.0/authorize',
-            policy: 'b2c_1a_signupsigninsfi',
-            redirectUri: 'http://localhost:3000/apply/endemics/signin-oidc',
-            clientId: 'dummy_client_id',
-            serviceId: 'dummy_service_id',
-            scope: 'openid dummy_client_id offline_access'
-          },
-          ruralPaymentsAgency: {
-            hostname: 'dummy-host-name',
-            getPersonSummaryUrl: 'dummy-get-person-summary-url',
-            getOrganisationPermissionsUrl: 'dummy-get-organisation-permissions-url',
-            getOrganisationUrl: 'dummy-get-organisation-url'
-          }
-        }
-      }))
-      jest.mock('../../../../../app/auth')
-      authMock = require('../../../../../app/auth')
+  let server
+
+  beforeAll(async () => {
+    server = await createServer()
+    await server.initialize()
+  })
+
+  afterAll(async () => {
+    await server.stop()
+  })
+
+  describe(`GET ${url} route when logged in`, () => {
+    afterAll(() => {
+      jest.resetAllMocks()
     })
 
     test('returns 200', async () => {
-      businessAppliedBeforeMock.mockReturnValue('newUser')
-      session.getFarmerApplyData.mockReturnValue(org)
+      businessAppliedBefore.mockReturnValue('newUser')
       const options = {
         auth,
         method: 'GET',
         url
       }
 
-      authMock.requestAuthorizationCodeUrl.mockReturnValueOnce('https://somedefraidlogin')
+      requestAuthorizationCodeUrl.mockReturnValueOnce('https://somedefraidlogin')
 
-      const res = await global.__SERVER__.inject(options)
+      const res = await server.inject(options)
 
       expect(res.statusCode).toBe(200)
       const $ = cheerio.load(res.payload)
@@ -100,25 +99,25 @@ describe('Org review page test', () => {
       expect($('.govuk-back-link').attr('href')).toContain('https://somedefraidlogin')
       expect($('legend').text().trim()).toEqual('Are these details correct?')
       expect($('.govuk-radios__item').length).toEqual(2)
-      expect(authMock.requestAuthorizationCodeUrl).toBeCalledTimes(1)
-      expectPhaseBanner.ok($)
+      expect(requestAuthorizationCodeUrl).toBeCalledTimes(1)
+      ok($)
     })
 
     test('returns 404 when no orgranisation', async () => {
-      session.getFarmerApplyData.mockReturnValue(undefined)
+      getFarmerApplyData.mockReturnValue(undefined)
       const options = {
         auth,
         method: 'GET',
         url
       }
 
-      const res = await global.__SERVER__.inject(options)
+      const res = await server.inject(options)
 
       expect(res.statusCode).toBe(404)
       const $ = cheerio.load(res.payload)
       expect($('.govuk-heading-l').text()).toEqual('404 - Not Found')
       expect($('#_404 div p').text()).toEqual('Not Found')
-      expectPhaseBanner.ok($)
+      ok($)
     })
   })
 
@@ -127,24 +126,7 @@ describe('Org review page test', () => {
     const method = 'POST'
 
     beforeEach(async () => {
-      crumb = await getCrumbs(global.__SERVER__)
-    })
-
-    beforeAll(async () => {
-      jest.mock('../../../../../app/config', () => ({
-        ...jest.requireActual('../../../../../app/config'),
-        multiSpecies: {
-          enabled: false
-        },
-        endemics: {
-          enabled: true
-        },
-        authConfig: {
-          defraId: {
-            enabled: true
-          }
-        }
-      }))
+      crumb = await getCrumbs(server)
     })
 
     test('returns 302 to next page when acceptable answer given', async () => {
@@ -156,7 +138,7 @@ describe('Org review page test', () => {
         headers: { cookie: `crumb=${crumb}` }
       }
 
-      const res = await global.__SERVER__.inject(options)
+      const res = await server.inject(options)
 
       expect(res.statusCode).toBe(302)
       expect(res.headers.location).toEqual(endemicsReviewsUrl)
@@ -171,7 +153,7 @@ describe('Org review page test', () => {
         headers: { cookie: `crumb=${crumb}` }
       }
 
-      const res = await global.__SERVER__.inject(options)
+      const res = await server.inject(options)
 
       expect(res.statusCode).toBe(302)
       expect(res.headers.location).toEqual(endemicsReviewsUrl)
@@ -186,7 +168,7 @@ describe('Org review page test', () => {
         headers: { cookie: `crumb=${crumb}` }
       }
 
-      const res = await global.__SERVER__.inject(options)
+      const res = await server.inject(options)
 
       expect(res.statusCode).toBe(200)
       const $ = cheerio.load(res.payload)
@@ -201,7 +183,8 @@ describe('Org review page test', () => {
     ])(
       'returns error when unacceptable answer is given',
       async ({ confirmCheckDetails }) => {
-        session.getFarmerApplyData.mockReturnValue(org)
+        getFarmerApplyData.mockReturnValue(org)
+        getCustomer.mockReturnValue({ crn: '123123' })
         const options = {
           method,
           url,
@@ -210,11 +193,11 @@ describe('Org review page test', () => {
           headers: { cookie: `crumb=${crumb}` }
         }
 
-        const res = await global.__SERVER__.inject(options)
+        const res = await server.inject(options)
 
         expect(res.statusCode).toBe(400)
         expect(res.request.response.variety).toBe('view')
-        expect(res.request.response.source.template).toBe(`${endemicsCheckDetails}`)
+        expect(res.request.response.source.template).toBe(endemicsCheckDetails)
         expect(res.result).toContain(org.sbi)
         expect(res.result).toContain(org.farmerName)
         expect(res.result).toContain(org.address)
@@ -231,7 +214,7 @@ describe('Org review page test', () => {
         headers: { cookie: `crumb=${crumb}` }
       }
 
-      const res = await global.__SERVER__.inject(options)
+      const res = await server.inject(options)
 
       expect(res.statusCode).toBe(400)
       const $ = cheerio.load(res.payload)
@@ -244,42 +227,11 @@ describe('Org review page test', () => {
     const method = 'POST'
 
     beforeEach(async () => {
-      crumb = await getCrumbs(global.__SERVER__)
-    })
-
-    beforeAll(async () => {
-      jest.resetAllMocks()
-      jest.resetModules()
-
-      jest.mock('../../../../../app/config', () => ({
-        ...jest.requireActual('../../../../../app/config'),
-        multiSpecies: {
-          enabled: true
-        },
-        endemics: {
-          enabled: true
-        },
-        authConfig: {
-          defraId: {
-            hostname: 'https://tenant.b2clogin.com/tenant.onmicrosoft.com',
-            oAuthAuthorisePath: '/oauth2/v2.0/authorize',
-            policy: 'b2c_1a_signupsigninsfi',
-            redirectUri: 'http://localhost:3000/apply/endemics/signin-oidc',
-            clientId: 'dummy_client_id',
-            serviceId: 'dummy_service_id',
-            scope: 'openid dummy_client_id offline_access'
-          },
-          ruralPaymentsAgency: {
-            hostname: 'dummy-host-name',
-            getPersonSummaryUrl: 'dummy-get-person-summary-url',
-            getOrganisationPermissionsUrl: 'dummy-get-organisation-permissions-url',
-            getOrganisationUrl: 'dummy-get-organisation-url'
-          }
-        }
-      }))
+      crumb = await getCrumbs(server)
     })
 
     test('navigates to multiple species page when multiple species is enabled', async () => {
+      config.multiSpecies.enabled = true
       const options = {
         method,
         url,
@@ -288,7 +240,7 @@ describe('Org review page test', () => {
         headers: { cookie: `crumb=${crumb}` }
       }
 
-      const res = await global.__SERVER__.inject(options)
+      const res = await server.inject(options)
 
       expect(res.statusCode).toBe(302)
       expect(res.headers.location).toEqual(endemicsYouCanClaimMultipleUrl)

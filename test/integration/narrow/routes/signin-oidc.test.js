@@ -1,50 +1,82 @@
-const cheerio = require('cheerio')
-const sessionMock = require('../../../../app/session')
-jest.mock('../../../../app/session')
-const authMock = require('../../../../app/auth')
-jest.mock('../../../../app/auth')
-const personMock = require('../../../../app/api-requests/rpa-api/person')
-jest.mock('../../../../app/api-requests/rpa-api/person')
-const organisationMock = require('../../../../app/api-requests/rpa-api/organisation')
-jest.mock('../../../../app/api-requests/rpa-api/organisation')
-const cphNumbersMock = require('../../../../app/api-requests/rpa-api/cph-numbers')
-jest.mock('../../../../app/api-requests/rpa-api/cph-numbers')
-const sendIneligibilityEventMock = require('../../../../app/event/raise-ineligibility-event')
-jest.mock('../../../../app/event/raise-ineligibility-event')
-const cphCheckMock = require('../../../../app/api-requests/rpa-api/cph-check').customerMustHaveAtLeastOneValidCph
-jest.mock('../../../../app/api-requests/rpa-api/cph-check')
-const businessEligibleToApplyMock = require('../../../../app/api-requests/business-eligible-to-apply')
-jest.mock('../../../../app/api-requests/business-eligible-to-apply')
-const businessAppliedBeforeMock = require('../../../../app/api-requests/business-applied-before')
-jest.mock('../../../../app/api-requests/business-applied-before')
+import * as cheerio from 'cheerio'
+import { requestAuthorizationCodeUrl } from '../../../../app/auth/auth-code-grant/request-authorization-code-url'
+import { getCustomer, setFarmerApplyData } from '../../../../app/session/index'
+import { getPersonSummary } from '../../../../app/api-requests/rpa-api/person'
+import { organisationIsEligible } from '../../../../app/api-requests/rpa-api/organisation'
+import { getCphNumbers } from '../../../../app/api-requests/rpa-api/cph-numbers'
+import { raiseIneligibilityEvent } from '../../../../app/event/raise-ineligibility-event'
+import { customerMustHaveAtLeastOneValidCph } from '../../../../app/api-requests/rpa-api/cph-check'
+import { businessEligibleToApply } from '../../../../app/api-requests/business-eligible-to-apply'
+import { InvalidStateError } from '../../../../app/exceptions/InvalidStateError'
+import { AlreadyAppliedError } from '../../../../app/exceptions/AlreadyAppliedError'
+import { NoEligibleCphError } from '../../../../app/exceptions/NoEligibleCphError'
+import { CannotReapplyTimeLimitError } from '../../../../app/exceptions/CannotReapplyTimeLimitError'
+import { OutstandingAgreementError } from '../../../../app/exceptions/OutstandingAgreementError'
+import { authenticate } from '../../../../app/auth/authenticate'
+import { setAuthCookie } from '../../../../app/auth/cookie-auth/cookie-auth'
+import { retrieveApimAccessToken } from '../../../../app/auth/client-credential-grant/retrieve-apim-access-token'
+import { createServer } from '../../../../app/server'
+import { config } from '../../../../app/config'
 
-const { InvalidStateError, AlreadyAppliedError, NoEligibleCphError, CannotReapplyTimeLimitError, OutstandingAgreementError } = require('../../../../app/exceptions')
+jest.mock('applicationinsights', () => ({ defaultClient: { trackException: jest.fn(), trackEvent: () => 'hello' }, dispose: jest.fn() }))
+jest.mock('../../../../app/session/index', () => ({
+  getCustomer: jest.fn(),
+  getFarmerApplyData: jest.fn().mockReturnValue({
+    id: 7654321,
+    name: 'Mrs Gill Black',
+    sbi: 101122201,
+    address: {
+      address1: 'The Test House',
+      address2: 'Test road',
+      address3: 'Wicklewood',
+      buildingNumberRange: '11',
+      buildingName: 'TestHouse',
+      street: 'Test ROAD',
+      city: 'Test City',
+      postalCode: 'TS1 1TS',
+      country: 'United Kingdom',
+      dependentLocality: 'Test Local'
+    },
+    email: 'org1@testemail.com'
+  }),
+  setFarmerApplyData: jest.fn(),
+  setCustomer: jest.fn()
+}))
+jest.mock('../../../../app/auth/authenticate')
+jest.mock('../../../../app/auth/cookie-auth/cookie-auth')
+jest.mock('../../../../app/auth/client-credential-grant/retrieve-apim-access-token')
+jest.mock('../../../../app/auth/auth-code-grant/request-authorization-code-url')
+jest.mock('../../../../app/api-requests/rpa-api/person')
+jest.mock('../../../../app/api-requests/rpa-api/organisation', () => ({ organisationIsEligible: jest.fn(), getOrganisationAddress: jest.fn() }))
+jest.mock('../../../../app/api-requests/rpa-api/cph-numbers')
+jest.mock('../../../../app/event/raise-ineligibility-event', () => ({ raiseIneligibilityEvent: jest.fn() }))
+jest.mock('../../../../app/api-requests/rpa-api/cph-check')
+jest.mock('../../../../app/api-requests/business-eligible-to-apply')
+jest.mock('../../../../app/api-requests/business-applied-before', () => ({ businessAppliedBefore: jest.fn(() => '') }))
+
+const person = {
+  firstName: 'Bill',
+  middleName: 'sss',
+  lastName: 'Smith',
+  email: 'billsmith@testemail.com',
+  id: 1234567,
+  customerReferenceNumber: '1103452436'
+}
 
 describe('FarmerApply defra ID redirection test', () => {
-  jest.mock('../../../../app/config', () => ({
-    ...jest.requireActual('../../../../app/config'),
-    serviceUri: 'http://localhost:3000/apply',
-    authConfig: {
-      defraId: {
-        enabled: true
-      },
-      ruralPaymentsAgency: {
-        hostname: 'dummy-host-name',
-        getPersonSummaryUrl: 'dummy-get-person-summary-url',
-        getOrganisationPermissionsUrl: 'dummy-get-organisation-permissions-url',
-        getOrganisationUrl: 'dummy-get-organisation-url'
-      }
-    },
-    endemics: {
-      enabled: false
-    }
-  }))
-  const configMock = require('../../../../app/config')
-  jest.mock('applicationinsights', () => ({ defaultClient: { trackException: jest.fn(), trackEvent: jest.fn() }, dispose: jest.fn() }))
-  businessAppliedBeforeMock.mockResolvedValue('')
-
-  const urlPrefix = configMock.urlPrefix
+  const urlPrefix = '/apply'
   const url = `${urlPrefix}/signin-oidc`
+
+  let server
+
+  beforeAll(async () => {
+    server = await createServer()
+    await server.initialize()
+  })
+
+  afterAll(async () => {
+    await server.stop()
+  })
 
   beforeEach(async () => {
     jest.clearAllMocks()
@@ -62,10 +94,10 @@ describe('FarmerApply defra ID redirection test', () => {
         url: baseUrl
       }
 
-      const res = await global.__SERVER__.inject(options)
+      const res = await server.inject(options)
       expect(res.statusCode).toBe(400)
       const $ = cheerio.load(res.payload)
-      expect(authMock.requestAuthorizationCodeUrl).toBeCalledTimes(1)
+      expect(requestAuthorizationCodeUrl).toBeCalledTimes(1)
       expect($('.govuk-heading-l').text()).toMatch('Login failed')
     })
 
@@ -76,10 +108,10 @@ describe('FarmerApply defra ID redirection test', () => {
         url: baseUrl
       }
 
-      const res = await global.__SERVER__.inject(options)
+      const res = await server.inject(options)
       expect(res.statusCode).toBe(400)
       const $ = cheerio.load(res.payload)
-      expect(authMock.requestAuthorizationCodeUrl).toBeCalledTimes(1)
+      expect(requestAuthorizationCodeUrl).toBeCalledTimes(1)
       expect($('.govuk-heading-l').text()).toMatch('Login failed')
     })
 
@@ -90,10 +122,10 @@ describe('FarmerApply defra ID redirection test', () => {
         url: baseUrl
       }
 
-      const res = await global.__SERVER__.inject(options)
+      const res = await server.inject(options)
       expect(res.statusCode).toBe(400)
       const $ = cheerio.load(res.payload)
-      expect(authMock.requestAuthorizationCodeUrl).toBeCalledTimes(1)
+      expect(requestAuthorizationCodeUrl).toBeCalledTimes(1)
       expect($('.govuk-heading-l').text()).toMatch('Login failed')
     })
 
@@ -104,14 +136,14 @@ describe('FarmerApply defra ID redirection test', () => {
         url: baseUrl
       }
 
-      authMock.authenticate.mockImplementation(() => {
+      authenticate.mockImplementation(() => {
         throw new InvalidStateError('Invalid state')
       })
 
-      const res = await global.__SERVER__.inject(options)
+      const res = await server.inject(options)
       expect(res.statusCode).toBe(302)
-      expect(authMock.authenticate).toBeCalledTimes(1)
-      expect(authMock.requestAuthorizationCodeUrl).toBeCalledTimes(1)
+      expect(authenticate).toBeCalledTimes(1)
+      expect(requestAuthorizationCodeUrl).toBeCalledTimes(1)
     })
 
     test('returns 302 and redirected to org view when authenticate successful', async () => {
@@ -121,16 +153,9 @@ describe('FarmerApply defra ID redirection test', () => {
         url: baseUrl
       }
 
-      authMock.authenticate.mockResolvedValueOnce({ accessToken: '2323' })
-      personMock.getPersonSummary.mockResolvedValueOnce({
-        firstName: 'Bill',
-        middleName: 'sss',
-        lastName: 'Smith',
-        email: 'billsmith@testemail.com',
-        id: 1234567,
-        customerReferenceNumber: '1103452436'
-      })
-      organisationMock.organisationIsEligible.mockResolvedValueOnce({
+      authenticate.mockResolvedValueOnce({ accessToken: '2323' })
+      getPersonSummary.mockResolvedValueOnce(person)
+      organisationIsEligible.mockResolvedValueOnce({
         organisationPermission: true,
         organisation: {
           id: 7654321,
@@ -152,23 +177,23 @@ describe('FarmerApply defra ID redirection test', () => {
         }
       })
 
-      cphNumbersMock.mockResolvedValueOnce([
+      getCphNumbers.mockResolvedValueOnce([
         '08/178/0064'
       ])
 
-      businessEligibleToApplyMock.mockResolvedValueOnce()
+      businessEligibleToApply.mockResolvedValueOnce()
 
-      const res = await global.__SERVER__.inject(options)
+      const res = await server.inject(options)
       expect(res.statusCode).toBe(302)
       expect(res.headers.location).toEqual('/apply/endemics/check-details')
-      expect(sessionMock.setFarmerApplyData).toBeCalledWith(expect.anything(), 'organisation', expect.objectContaining({
+      expect(setFarmerApplyData).toBeCalledWith(expect.anything(), 'organisation', expect.objectContaining({
         email: 'billsmith@testemail.com'
       }))
-      expect(businessEligibleToApplyMock).toBeCalledTimes(1)
-      expect(authMock.authenticate).toBeCalledTimes(1)
-      expect(personMock.getPersonSummary).toBeCalledTimes(1)
-      expect(organisationMock.organisationIsEligible).toBeCalledTimes(1)
-      expect(authMock.setAuthCookie).toBeCalledTimes(1)
+      expect(businessEligibleToApply).toBeCalledTimes(1)
+      expect(authenticate).toBeCalledTimes(1)
+      expect(getPersonSummary).toBeCalledTimes(1)
+      expect(organisationIsEligible).toBeCalledTimes(1)
+      expect(setAuthCookie).toBeCalledTimes(1)
     })
 
     test('returns 302 and organisation email set in session when customer email missing', async () => {
@@ -178,16 +203,9 @@ describe('FarmerApply defra ID redirection test', () => {
         url: baseUrl
       }
 
-      authMock.authenticate.mockResolvedValueOnce({ accessToken: '2323' })
-      personMock.getPersonSummary.mockResolvedValueOnce({
-        firstName: 'Bill',
-        middleName: 'sss',
-        lastName: 'Smith',
-        email: null,
-        id: 1234567,
-        customerReferenceNumber: '1103452436'
-      })
-      organisationMock.organisationIsEligible.mockResolvedValueOnce({
+      authenticate.mockResolvedValueOnce({ accessToken: '2323' })
+      getPersonSummary.mockResolvedValueOnce({ ...person, email: undefined })
+      organisationIsEligible.mockResolvedValueOnce({
         organisationPermission: true,
         organisation: {
           id: 7654321,
@@ -209,23 +227,23 @@ describe('FarmerApply defra ID redirection test', () => {
         }
       })
 
-      cphNumbersMock.mockResolvedValueOnce([
+      getCphNumbers.mockResolvedValueOnce([
         '08/178/0064'
       ])
 
-      businessEligibleToApplyMock.mockResolvedValueOnce()
+      businessEligibleToApply.mockResolvedValueOnce()
 
-      const res = await global.__SERVER__.inject(options)
+      const res = await server.inject(options)
       expect(res.statusCode).toBe(302)
       expect(res.headers.location).toEqual('/apply/endemics/check-details')
-      expect(sessionMock.setFarmerApplyData).toBeCalledWith(expect.anything(), 'organisation', expect.objectContaining({
+      expect(setFarmerApplyData).toBeCalledWith(expect.anything(), 'organisation', expect.objectContaining({
         email: 'org1@testemail.com'
       }))
-      expect(businessEligibleToApplyMock).toBeCalledTimes(1)
-      expect(authMock.authenticate).toBeCalledTimes(1)
-      expect(personMock.getPersonSummary).toBeCalledTimes(1)
-      expect(organisationMock.organisationIsEligible).toBeCalledTimes(1)
-      expect(authMock.setAuthCookie).toBeCalledTimes(1)
+      expect(businessEligibleToApply).toBeCalledTimes(1)
+      expect(authenticate).toBeCalledTimes(1)
+      expect(getPersonSummary).toBeCalledTimes(1)
+      expect(organisationIsEligible).toBeCalledTimes(1)
+      expect(setAuthCookie).toBeCalledTimes(1)
     })
 
     test('returns 400 and login failed view when apim access token auth fails', async () => {
@@ -235,15 +253,15 @@ describe('FarmerApply defra ID redirection test', () => {
         url: baseUrl
       }
 
-      authMock.authenticate.mockResolvedValueOnce({ accessToken: '2323' })
-      authMock.retrieveApimAccessToken.mockImplementation(() => {
+      authenticate.mockResolvedValueOnce({ accessToken: '2323' })
+      retrieveApimAccessToken.mockImplementation(() => {
         throw new Error('APIM Access Token Retrieval Failed')
       })
 
-      const res = await global.__SERVER__.inject(options)
+      const res = await server.inject(options)
       expect(res.statusCode).toBe(400)
-      expect(authMock.authenticate).toBeCalledTimes(1)
-      expect(authMock.retrieveApimAccessToken).toBeCalledTimes(1)
+      expect(authenticate).toBeCalledTimes(1)
+      expect(retrieveApimAccessToken).toBeCalledTimes(1)
       const $ = cheerio.load(res.payload)
       expect($('.govuk-heading-l').text()).toMatch('Login failed')
     })
@@ -255,17 +273,10 @@ describe('FarmerApply defra ID redirection test', () => {
         url: baseUrl
       }
 
-      authMock.authenticate.mockResolvedValueOnce({ accessToken: '2323' })
-      authMock.retrieveApimAccessToken.mockResolvedValueOnce('Bearer 2323')
-      personMock.getPersonSummary.mockResolvedValueOnce({
-        firstName: 'Bill',
-        middleName: null,
-        lastName: 'Smith',
-        email: 'billsmith@testemail.com',
-        id: 1234567,
-        customerReferenceNumber: '1103452436'
-      })
-      organisationMock.organisationIsEligible.mockResolvedValueOnce({
+      authenticate.mockResolvedValueOnce({ accessToken: '2323' })
+      retrieveApimAccessToken.mockResolvedValueOnce('Bearer 2323')
+      getPersonSummary.mockResolvedValueOnce(person)
+      organisationIsEligible.mockResolvedValueOnce({
         organisation: {
           id: 7654321,
           name: 'Mrs Gill Black',
@@ -287,45 +298,26 @@ describe('FarmerApply defra ID redirection test', () => {
         organisationPermission: false
       })
 
-      sessionMock.getCustomer.mockResolvedValueOnce({
+      getCustomer.mockResolvedValueOnce({
         attachedToMultipleBusinesses: false
       })
 
-      sessionMock.getFarmerApplyData.mockResolvedValueOnce({
-        organisation: {
-          id: 7654321,
-          name: 'Mrs Gill Black',
-          sbi: 101122201,
-          address: {
-            address1: 'The Test House',
-            address2: 'Test road',
-            address3: 'Wicklewood',
-            buildingNumberRange: '11',
-            buildingName: 'TestHouse',
-            street: 'Test ROAD',
-            city: 'Test City',
-            postalCode: 'TS1 1TS',
-            country: 'United Kingdom',
-            dependentLocality: 'Test Local'
-          },
-          email: 'org1@testemail.com'
-        }
-      })
-
-      const res = await global.__SERVER__.inject(options)
+      const res = await server.inject(options)
       expect(res.statusCode).toBe(400)
-      expect(authMock.authenticate).toBeCalledTimes(1)
-      expect(authMock.retrieveApimAccessToken).toBeCalledTimes(1)
-      expect(authMock.requestAuthorizationCodeUrl).toBeCalledTimes(1)
-      expect(personMock.getPersonSummary).toBeCalledTimes(1)
-      expect(organisationMock.organisationIsEligible).toBeCalledTimes(1)
-      expect(sendIneligibilityEventMock).toBeCalledTimes(1)
+      expect(authenticate).toBeCalledTimes(1)
+      expect(retrieveApimAccessToken).toBeCalledTimes(1)
+      expect(requestAuthorizationCodeUrl).toBeCalledTimes(1)
+      expect(getPersonSummary).toBeCalledTimes(1)
+      expect(organisationIsEligible).toBeCalledTimes(1)
+      expect(raiseIneligibilityEvent).toBeCalledTimes(1)
       const $ = cheerio.load(res.payload)
       expect($('.govuk-heading-l').text()).toMatch('You cannot apply for reviews or follow-ups for this business')
     })
 
     // TODO: This test can be removed when the 10 month rule toggle and AlreadyAppliedError are removed
     test('returns 400 and exception view when already applied', async () => {
+      const serviceUri = 'http://localhost:3000/apply'
+      config.serviceUri = serviceUri
       const expectedError = new AlreadyAppliedError('Business with SBI 101122201 is not eligible to apply')
       const baseUrl = `${url}?code=432432&state=83d2b160-74ce-4356-9709-3f8da7868e35`
       const options = {
@@ -333,17 +325,10 @@ describe('FarmerApply defra ID redirection test', () => {
         url: baseUrl
       }
 
-      authMock.authenticate.mockResolvedValueOnce({ accessToken: '2323' })
-      authMock.retrieveApimAccessToken.mockResolvedValueOnce('Bearer 2323')
-      personMock.getPersonSummary.mockResolvedValueOnce({
-        firstName: 'Bill',
-        middleName: null,
-        lastName: 'Smith',
-        email: 'billsmith@testemail.com',
-        id: 1234567,
-        customerReferenceNumber: '1103452436'
-      })
-      organisationMock.organisationIsEligible.mockResolvedValueOnce({
+      authenticate.mockResolvedValueOnce({ accessToken: '2323' })
+      retrieveApimAccessToken.mockResolvedValueOnce('Bearer 2323')
+      getPersonSummary.mockResolvedValueOnce(person)
+      organisationIsEligible.mockResolvedValueOnce({
         organisation: {
           id: 7654321,
           name: 'Mrs Gill Black',
@@ -365,45 +350,24 @@ describe('FarmerApply defra ID redirection test', () => {
         organisationPermission: true
       })
 
-      businessEligibleToApplyMock.mockRejectedValueOnce(expectedError)
+      businessEligibleToApply.mockRejectedValueOnce(expectedError)
 
-      sessionMock.getCustomer.mockResolvedValueOnce({
+      getCustomer.mockResolvedValueOnce({
         attachedToMultipleBusinesses: false
       })
 
-      sessionMock.getFarmerApplyData.mockResolvedValueOnce({
-        organisation: {
-          id: 7654321,
-          name: 'Mrs Gill Black',
-          sbi: 101122201,
-          address: {
-            address1: 'The Test House',
-            address2: 'Test road',
-            address3: 'Wicklewood',
-            buildingNumberRange: '11',
-            buildingName: 'TestHouse',
-            street: 'Test ROAD',
-            city: 'Test City',
-            postalCode: 'TS1 1TS',
-            country: 'United Kingdom',
-            dependentLocality: 'Test Local'
-          },
-          email: 'org1@testemail.com'
-        }
-      })
-
-      cphNumbersMock.mockResolvedValueOnce([
+      getCphNumbers.mockResolvedValueOnce([
         '08/178/0064'
       ])
 
-      const res = await global.__SERVER__.inject(options)
+      const res = await server.inject(options)
       expect(res.statusCode).toBe(400)
-      expect(authMock.authenticate).toBeCalledTimes(1)
-      expect(authMock.retrieveApimAccessToken).toBeCalledTimes(1)
-      expect(personMock.getPersonSummary).toBeCalledTimes(1)
-      expect(organisationMock.organisationIsEligible).toBeCalledTimes(1)
-      expect(businessEligibleToApplyMock).toBeCalledTimes(1)
-      expect(sendIneligibilityEventMock).toBeCalledTimes(1)
+      expect(authenticate).toBeCalledTimes(1)
+      expect(retrieveApimAccessToken).toBeCalledTimes(1)
+      expect(getPersonSummary).toBeCalledTimes(1)
+      expect(organisationIsEligible).toBeCalledTimes(1)
+      expect(businessEligibleToApply).toBeCalledTimes(1)
+      expect(raiseIneligibilityEvent).toBeCalledTimes(1)
       const $ = cheerio.load(res.payload)
       expect($('.govuk-heading-l').text()).toMatch('You cannot apply for reviews or follow-ups for this business')
       expect($('#guidanceLink').attr('href')).toMatch('http://localhost:3000/apply')
@@ -417,17 +381,10 @@ describe('FarmerApply defra ID redirection test', () => {
         url: baseUrl
       }
 
-      authMock.authenticate.mockResolvedValueOnce({ accessToken: '2323' })
-      authMock.retrieveApimAccessToken.mockResolvedValueOnce('Bearer 2323')
-      personMock.getPersonSummary.mockResolvedValueOnce({
-        firstName: 'Bill',
-        middleName: null,
-        lastName: 'Smith',
-        email: 'billsmith@testemail.com',
-        id: 1234567,
-        customerReferenceNumber: '1103452436'
-      })
-      organisationMock.organisationIsEligible.mockResolvedValueOnce({
+      authenticate.mockResolvedValueOnce({ accessToken: '2323' })
+      retrieveApimAccessToken.mockResolvedValueOnce('Bearer 2323')
+      getPersonSummary.mockResolvedValueOnce(person)
+      organisationIsEligible.mockResolvedValueOnce({
         organisation: {
           id: 7654321,
           name: 'Mrs Gill Black',
@@ -449,45 +406,24 @@ describe('FarmerApply defra ID redirection test', () => {
         organisationPermission: true
       })
 
-      businessEligibleToApplyMock.mockRejectedValueOnce(expectedError)
+      businessEligibleToApply.mockRejectedValueOnce(expectedError)
 
-      sessionMock.getCustomer.mockResolvedValueOnce({
+      getCustomer.mockResolvedValueOnce({
         attachedToMultipleBusinesses: false
       })
 
-      sessionMock.getFarmerApplyData.mockResolvedValueOnce({
-        organisation: {
-          id: 7654321,
-          name: 'Mrs Gill Black',
-          sbi: 101122201,
-          address: {
-            address1: 'The Test House',
-            address2: 'Test road',
-            address3: 'Wicklewood',
-            buildingNumberRange: '11',
-            buildingName: 'TestHouse',
-            street: 'Test ROAD',
-            city: 'Test City',
-            postalCode: 'TS1 1TS',
-            country: 'United Kingdom',
-            dependentLocality: 'Test Local'
-          },
-          email: 'org1@testemail.com'
-        }
-      })
-
-      cphNumbersMock.mockResolvedValueOnce([
+      getCphNumbers.mockResolvedValueOnce([
         '08/178/0064'
       ])
 
-      const res = await global.__SERVER__.inject(options)
+      const res = await server.inject(options)
       expect(res.statusCode).toBe(400)
-      expect(authMock.authenticate).toBeCalledTimes(1)
-      expect(authMock.retrieveApimAccessToken).toBeCalledTimes(1)
-      expect(personMock.getPersonSummary).toBeCalledTimes(1)
-      expect(organisationMock.organisationIsEligible).toBeCalledTimes(1)
-      expect(businessEligibleToApplyMock).toBeCalledTimes(1)
-      expect(sendIneligibilityEventMock).toBeCalledTimes(1)
+      expect(authenticate).toBeCalledTimes(1)
+      expect(retrieveApimAccessToken).toBeCalledTimes(1)
+      expect(getPersonSummary).toBeCalledTimes(1)
+      expect(organisationIsEligible).toBeCalledTimes(1)
+      expect(businessEligibleToApply).toBeCalledTimes(1)
+      expect(raiseIneligibilityEvent).toBeCalledTimes(1)
       const $ = cheerio.load(res.payload)
       expect($('.govuk-heading-l').text()).toMatch('You cannot apply for reviews or follow-ups for this business')
       expect($('.govuk-body').text()).toMatch(/ on 2 Oct 2023/)
@@ -501,17 +437,10 @@ describe('FarmerApply defra ID redirection test', () => {
         url: baseUrl
       }
 
-      authMock.authenticate.mockResolvedValueOnce({ accessToken: '2323' })
-      authMock.retrieveApimAccessToken.mockResolvedValueOnce('Bearer 2323')
-      personMock.getPersonSummary.mockResolvedValueOnce({
-        firstName: 'Bill',
-        middleName: null,
-        lastName: 'Smith',
-        email: 'billsmith@testemail.com',
-        id: 1234567,
-        customerReferenceNumber: '1103452436'
-      })
-      organisationMock.organisationIsEligible.mockResolvedValueOnce({
+      authenticate.mockResolvedValueOnce({ accessToken: '2323' })
+      retrieveApimAccessToken.mockResolvedValueOnce('Bearer 2323')
+      getPersonSummary.mockResolvedValueOnce(person)
+      organisationIsEligible.mockResolvedValueOnce({
         organisation: {
           id: 7654321,
           name: 'Mrs Gill Black',
@@ -533,68 +462,40 @@ describe('FarmerApply defra ID redirection test', () => {
         organisationPermission: true
       })
 
-      businessEligibleToApplyMock.mockRejectedValueOnce(expectedError)
+      businessEligibleToApply.mockRejectedValueOnce(expectedError)
 
-      sessionMock.getCustomer.mockResolvedValueOnce({
+      getCustomer.mockResolvedValueOnce({
         attachedToMultipleBusinesses: false
       })
 
-      sessionMock.getFarmerApplyData.mockResolvedValueOnce({
-        organisation: {
-          id: 7654321,
-          name: 'Mrs Gill Black',
-          sbi: 101122201,
-          address: {
-            address1: 'The Test House',
-            address2: 'Test road',
-            address3: 'Wicklewood',
-            buildingNumberRange: '11',
-            buildingName: 'TestHouse',
-            street: 'Test ROAD',
-            city: 'Test City',
-            postalCode: 'TS1 1TS',
-            country: 'United Kingdom',
-            dependentLocality: 'Test Local'
-          },
-          email: 'org1@testemail.com'
-        }
-      })
-
-      cphNumbersMock.mockResolvedValueOnce([
+      getCphNumbers.mockResolvedValueOnce([
         '08/178/0064'
       ])
 
-      const res = await global.__SERVER__.inject(options)
+      const res = await server.inject(options)
       expect(res.statusCode).toBe(400)
-      expect(authMock.authenticate).toBeCalledTimes(1)
-      expect(authMock.retrieveApimAccessToken).toBeCalledTimes(1)
-      expect(personMock.getPersonSummary).toBeCalledTimes(1)
-      expect(organisationMock.organisationIsEligible).toBeCalledTimes(1)
-      expect(businessEligibleToApplyMock).toBeCalledTimes(1)
-      expect(sendIneligibilityEventMock).toBeCalledTimes(1)
+      expect(authenticate).toBeCalledTimes(1)
+      expect(retrieveApimAccessToken).toBeCalledTimes(1)
+      expect(getPersonSummary).toBeCalledTimes(1)
+      expect(organisationIsEligible).toBeCalledTimes(1)
+      expect(businessEligibleToApply).toBeCalledTimes(1)
+      expect(raiseIneligibilityEvent).toBeCalledTimes(1)
       const $ = cheerio.load(res.payload)
       expect($('.govuk-heading-l').text()).toMatch('You cannot apply for reviews or follow-ups for this business')
     })
 
     test('returns 400 and exception view when no eligible cph', async () => {
-      const expectedError = new NoEligibleCphError('Customer must have at least one valid CPH')
+      const error = new NoEligibleCphError('Customer must have at least one valid CPH')
       const baseUrl = `${url}?code=432432&state=83d2b160-74ce-4356-9709-3f8da7868e35`
       const options = {
         method: 'GET',
         url: baseUrl
       }
 
-      authMock.authenticate.mockResolvedValueOnce({ accessToken: '2323' })
-      authMock.retrieveApimAccessToken.mockResolvedValueOnce('Bearer 2323')
-      personMock.getPersonSummary.mockResolvedValueOnce({
-        firstName: 'Bill',
-        middleName: null,
-        lastName: 'Smith',
-        email: 'billsmith@testemail.com',
-        id: 1234567,
-        customerReferenceNumber: '1103452436'
-      })
-      organisationMock.organisationIsEligible.mockResolvedValueOnce({
+      authenticate.mockResolvedValueOnce({ accessToken: '2323' })
+      retrieveApimAccessToken.mockResolvedValueOnce('Bearer 2323')
+      getPersonSummary.mockResolvedValueOnce(person)
+      organisationIsEligible.mockResolvedValueOnce({
         organisation: {
           id: 7654321,
           name: 'Mrs Gill Black',
@@ -616,45 +517,25 @@ describe('FarmerApply defra ID redirection test', () => {
         organisationPermission: true
       })
 
-      sessionMock.getCustomer.mockResolvedValueOnce({
+      getCustomer.mockReturnValueOnce({
         attachedToMultipleBusinesses: false
       })
 
-      sessionMock.getFarmerApplyData.mockResolvedValueOnce({
-        organisation: {
-          id: 7654321,
-          name: 'Mrs Gill Black',
-          sbi: 101122201,
-          address: {
-            address1: 'The Test House',
-            address2: 'Test road',
-            address3: 'Wicklewood',
-            buildingNumberRange: '11',
-            buildingName: 'TestHouse',
-            street: 'Test ROAD',
-            city: 'Test City',
-            postalCode: 'TS1 1TS',
-            country: 'United Kingdom',
-            dependentLocality: 'Test Local'
-          },
-          email: 'org1@testemail.com'
-        }
-      })
-
-      cphNumbersMock.mockResolvedValueOnce([
+      getCphNumbers.mockResolvedValueOnce([
         '08/178/0064'
       ])
 
-      cphCheckMock.mockRejectedValueOnce(expectedError)
+      customerMustHaveAtLeastOneValidCph.mockRejectedValueOnce(error)
 
-      const res = await global.__SERVER__.inject(options)
+      const res = await server.inject(options)
+
       expect(res.statusCode).toBe(400)
-      expect(authMock.authenticate).toBeCalledTimes(1)
-      expect(authMock.retrieveApimAccessToken).toBeCalledTimes(1)
-      expect(authMock.requestAuthorizationCodeUrl).toBeCalledTimes(1)
-      expect(personMock.getPersonSummary).toBeCalledTimes(1)
-      expect(organisationMock.organisationIsEligible).toBeCalledTimes(1)
-      expect(sendIneligibilityEventMock).toBeCalledTimes(1)
+      expect(authenticate).toBeCalledTimes(1)
+      expect(retrieveApimAccessToken).toBeCalledTimes(1)
+      expect(requestAuthorizationCodeUrl).toBeCalledTimes(1)
+      expect(getPersonSummary).toBeCalledTimes(1)
+      expect(organisationIsEligible).toBeCalledTimes(1)
+      expect(raiseIneligibilityEvent).toBeCalledTimes(1)
       const $ = cheerio.load(res.payload)
       expect($('.govuk-heading-l').text()).toMatch('You cannot apply for reviews or follow-ups for this business')
     })

@@ -1,9 +1,11 @@
-const urlPrefix = require('../config/index').urlPrefix
-module.exports = {
+import { config } from '../config/index.js'
+
+export const assetsRouteHandlers = [{
   method: 'GET',
-  path: `${urlPrefix}/assets/{path*}`,
+  path: `${config.urlPrefix}/assets/{path*}`,
   options: {
     auth: false,
+    tags: ['assets'],
     handler: {
       directory: {
         path: ['app/frontend/dist', 'node_modules/govuk-frontend/dist/govuk/assets']
@@ -13,4 +15,4 @@ module.exports = {
       privacy: 'private'
     }
   }
-}
+}]

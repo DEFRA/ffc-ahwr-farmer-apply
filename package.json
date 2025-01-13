@@ -1,19 +1,20 @@
 {
   "name": "ffc-ahwr-farmer-apply",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Web frontend for the farmer apply journey",
   "homepage": "https://github.com/DEFRA/ffc-ahwr-farmer-apply",
   "main": "app/index.js",
+  "type": "module",
   "scripts": {
     "build": "webpack",
     "build:watch": "webpack --watch",
-    "pretest": "npm run test:lint",
+    "pretest": "npm run lint",
     "test": "jest --runInBand",
     "test:watch": "jest --coverage=false --onlyChanged --watch --runInBand",
     "test:watch:all": "npm-run-all --parallel test:watch build:watch",
-    "test:lint": "standard",
-    "test:lint-fix": "standard --fix",
     "test:debug": "node --inspect-brk=0.0.0.0 ./node_modules/jest/bin/jest.js --coverage=false --onlyChanged --watch --runInBand --no-cache",
+    "lint": "standard",
+    "lint:fix": "standard --fix",
     "start:watch": "npm-run-all --parallel build:watch start:nodemon",
     "start:debug": "nodemon --inspect-brk=0.0.0.0 --ext css,js,njk --legacy-watch app/index.js",
     "start:nodemon": "nodemon --inspect=0.0.0.0 --ext css,js,njk --legacy-watch app/index.js"
@@ -22,7 +23,7 @@
   "license": "OGL-UK-3.0",
   "dependencies": {
     "@2toad/profanity": "^3.1.1",
-    "@azure/identity": "^4.2.1",
+    "@azure/identity": "^4.4.1",
     "@hapi/boom": "^9.1.4",
     "@hapi/catbox-redis": "^6.0.2",
     "@hapi/cookie": "^11.0.2",
@@ -35,34 +36,26 @@
     "applicationinsights": "^2.9.6",
     "crypto-js": "^4.2.0",
     "ffc-ahwr-event-publisher": "1.0.3",
-    "ffc-messaging": "^2.6.2",
+    "ffc-messaging": "^2.10.1",
     "form-data": "^4.0.1",
     "govuk-frontend": "5.4.0",
     "hapi-pino": "11.0.1",
     "joi": "17.6.4",
     "jsonwebtoken": "^9.0.0",
     "jwk-to-pem": "^2.0.5",
-    "mssql": "^10.0.2",
     "nunjucks": "^3.2.3",
     "pg-promise": "^11.5.5",
-    "uuid": "^8.3.2",
-    "webdriverio": "8.39.0"
-  },
-  "overrides": {
-    "mssql": {
-      "@azure/identity": "4.2.1"
-    },
-    "puppeteer-core": {
-      "ws": "^8.17.1"
-    },
-    "semver": "7.5.2"
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@babel/core": "^7.26.0",
+    "@babel/plugin-transform-modules-commonjs": "^7.26.3",
     "@hapi/catbox-memory": "^5.0.1",
     "@types/cheerio": "^0.22.31",
     "@types/hapi__hapi": "^20.0.10",
     "@types/jest": "^27.4.0",
     "@types/node": "^17.0.19",
+    "babel-jest": "^29.7.0",
     "blipp": "^4.0.2",
     "cheerio": "^1.0.0-rc.10",
     "clean-webpack-plugin": "^4.0.0",
@@ -74,7 +67,7 @@
     "jest-junit": "^13.0.0",
     "jest-when": "^3.5.2",
     "mini-css-extract-plugin": "^2.5.3",
-    "nodemon": "^2.0.12",
+    "nodemon": "^2.0.22",
     "npm-run-all": "^4.1.5",
     "pino-pretty": "11.2.2",
     "resolve-url-loader": "^5.0.0",
@@ -94,9 +87,11 @@
     ],
     "ignore": [
       "app/frontend/dist/**/*.js",
+      "app/index.js",
       "test/acceptance/**/*.js",
       "test/acceptance/**/*.mjs",
-      "test/acceptance/**/*.cjs"
+      "test/acceptance/**/*.cjs",
+      "test/setup.js"
     ]
   },
   "nodemonConfig": {

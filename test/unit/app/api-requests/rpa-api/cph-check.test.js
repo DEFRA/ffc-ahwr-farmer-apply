@@ -1,39 +1,13 @@
-const { when, resetAllWhenMocks } = require('jest-when')
-const Wreck = require('@hapi/wreck')
-const session = require('../../../../../app/session')
-const sessionKeys = require('../../../../../app/session/keys')
+import Wreck from '@hapi/wreck'
+import { when, resetAllWhenMocks } from 'jest-when'
+import { keys } from '../../../../../app/session/keys'
+import { getCustomer, getToken } from '../../../../../app/session'
+import { customerMustHaveAtLeastOneValidCph } from '../../../../../app/api-requests/rpa-api/cph-check'
 
-jest.mock('@hapi/wreck')
-jest.mock('../../../../../app/session')
-
-const MOCK_RPA_HOSTNAME = 'hostname'
-const MOCK_TIMEOUT = 1000
-const MOCK_OCP_SUB_KEY = 'ocpSubscriptionKey'
+jest.mock('@hapi/wreck', () => ({ get: jest.fn() }))
+jest.mock('../../../../../app/session', () => ({ getCustomer: jest.fn(), getToken: jest.fn() }))
 
 describe('CPH check', () => {
-  let cphCheck
-
-  beforeAll(() => {
-    jest.mock('../../../../../app/config', () => ({
-      ...jest.requireActual('../../../../../app/config'),
-      authConfig: {
-        defraId: {},
-        ruralPaymentsAgency: {
-          hostname: MOCK_RPA_HOSTNAME,
-          getCphNumbersUrl: '...cph/organisation/organisationId/cph-numbers'
-        },
-        apim: {
-          ocpSubscriptionKey: MOCK_OCP_SUB_KEY
-        }
-      },
-      wreckHttp: {
-        timeoutMilliseconds: MOCK_TIMEOUT
-      }
-    }))
-
-    cphCheck = require('../../../../../app/api-requests/rpa-api/cph-check')
-  })
-
   afterAll(() => {
     resetAllWhenMocks()
   })
@@ -137,31 +111,17 @@ describe('CPH check', () => {
       }
     }
   ])('%s', async (testCase) => {
-    when(session.getToken)
-      .calledWith(expect.anything(), sessionKeys.tokens.accessToken)
+    when(getToken)
+      .calledWith(expect.anything(), keys.tokens.accessToken)
       .mockReturnValue(testCase.given.session.accessToken)
-    when(session.getCustomer)
-      .calledWith(expect.anything(), sessionKeys.customer.organisationId)
+    when(getCustomer)
+      .calledWith(expect.anything(), keys.customer.organisationId)
       .mockReturnValue(testCase.given.session.organisationId)
-    when(session.getCustomer)
-      .calledWith(expect.anything(), sessionKeys.customer.crn)
+    when(getCustomer)
+      .calledWith(expect.anything(), keys.customer.crn)
       .mockReturnValue(testCase.given.session.crn)
 
     when(Wreck.get)
-      .calledWith(
-        `${MOCK_RPA_HOSTNAME}...cph/organisation/${testCase.given.session.organisationId}/cph-numbers`,
-        {
-          headers: {
-            'X-Forwarded-Authorization': testCase.given.session.accessToken,
-            'Ocp-Apim-Subscription-Key': MOCK_OCP_SUB_KEY,
-            Authorization: testCase.given.apimAccessToken,
-            crn: testCase.given.session.crn
-          },
-          json: true,
-          rejectUnauthorized: false,
-          timeout: MOCK_TIMEOUT
-        }
-      )
       .mockResolvedValue({
         res: {
           statusCode: 200
@@ -174,18 +134,18 @@ describe('CPH check', () => {
 
     if (testCase.expect.error) {
       await expect(
-        () => cphCheck.customerMustHaveAtLeastOneValidCph(testCase.given.request, testCase.given.apimAccessToken)
+        () => customerMustHaveAtLeastOneValidCph(testCase.given.request, testCase.given.apimAccessToken)
       ).rejects.toThrowError(testCase.expect.error)
     } else {
       await expect(
-        cphCheck.customerMustHaveAtLeastOneValidCph(testCase.given.request, testCase.given.apimAccessToken)
+        customerMustHaveAtLeastOneValidCph(testCase.given.request, testCase.given.apimAccessToken)
       ).resolves.toEqual(undefined)
     }
   })
 
   test('success false is returned', async () => {
-    when(session.getCustomer)
-      .calledWith(expect.anything(), sessionKeys.customer.organisationId)
+    when(getCustomer)
+      .calledWith(expect.anything(), keys.customer.organisationId)
       .mockReturnValue('unsuccessful')
 
     when(Wreck.get)
@@ -201,7 +161,7 @@ describe('CPH check', () => {
       })
 
     await expect(
-      () => cphCheck.customerMustHaveAtLeastOneValidCph({}, 'apimAccessToken')
+      () => customerMustHaveAtLeastOneValidCph({}, 'apimAccessToken')
     ).rejects.toThrowError('cph failed')
   })
 })

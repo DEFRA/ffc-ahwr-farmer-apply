@@ -1,6 +1,8 @@
-const { urlPrefix } = require('../../app/config')
+import { config } from '../../app/config/index.js'
 
-module.exports = async (server, options = { url: `${urlPrefix}/cookies`, crumbKey: 'crumb' }, mockForRequest = () => {}) => {
+const { urlPrefix } = config
+
+export const getCrumbs = async (server, options = { url: `${urlPrefix}/cookies`, crumbKey: 'crumb' }, mockForRequest = () => {}) => {
   mockForRequest()
   const { crumbKey, url } = options
   const res = await server.inject({ method: 'GET', url })

@@ -1,9 +1,10 @@
-const mockSession = require('../../../../../app/session/index')
-const Wreck = require('@hapi/wreck')
-const base = require('../../../../../app/api-requests/rpa-api/base')
-const mockJwtDecode = require('../../../../../app/auth/token-verify/jwt-decode')
+import Wreck from '@hapi/wreck'
+import { getToken } from '../../../../../app/session/index'
+import { get } from '../../../../../app/api-requests/rpa-api/base'
+import { decodeJwt } from '../../../../../app/auth/token-verify/jwt-decode'
+
 jest.mock('../../../../../app/session/index')
-jest.mock('@hapi/wreck')
+jest.mock('@hapi/wreck', () => ({ get: jest.fn() }))
 jest.mock('../../../../../app/auth/token-verify/jwt-decode')
 
 describe('Base', () => {
@@ -38,10 +39,10 @@ describe('Base', () => {
       return wreckResponse
     })
 
-    mockSession.getToken.mockResolvedValueOnce(accessToken)
-    mockJwtDecode.mockResolvedValue(contactId)
+    getToken.mockResolvedValueOnce(accessToken)
+    decodeJwt.mockResolvedValue(contactId)
 
-    const result = await base.get(hostname, url, expect.anything(), expect.anything())
+    const result = await get(hostname, url, expect.anything(), expect.anything())
 
     expect(result).not.toBeNull()
     expect(result.name).toMatch(contactName)
@@ -50,7 +51,7 @@ describe('Base', () => {
     expect(Wreck.get).toHaveBeenCalledWith(`${hostname}${url}`, options)
   })
 
-  test('when called and error occurs, throwns error', async () => {
+  test('when called and error occurs, throws error', async () => {
     const hostname = 'https://testhost'
     const url = '/get/test'
     const contactId = 1234567
@@ -61,11 +62,11 @@ describe('Base', () => {
       throw error
     })
 
-    mockSession.getToken.mockResolvedValueOnce(accessToken)
-    mockJwtDecode.mockResolvedValue(contactId)
+    getToken.mockResolvedValueOnce(accessToken)
+    decodeJwt.mockResolvedValue(contactId)
 
     expect(async () =>
-      await base.get(hostname, url, expect.anything(), expect.anything())
+      await get(hostname, url, expect.anything(), expect.anything())
     ).rejects.toThrowError(error)
   })
 })

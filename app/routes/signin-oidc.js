@@ -1,15 +1,28 @@
-const Joi = require('joi')
-const session = require('../session')
-const auth = require('../auth')
-const sessionKeys = require('../session/keys')
-const config = require('../config')
-const { farmerApply } = require('../constants/user-types')
-const { getPersonSummary, getPersonName, organisationIsEligible, getOrganisationAddress, cphCheck } = require('../api-requests/rpa-api')
-const businessEligibleToApply = require('../api-requests/business-eligible-to-apply')
-const { InvalidPermissionsError, AlreadyAppliedError, NoEligibleCphError, InvalidStateError, CannotReapplyTimeLimitError, OutstandingAgreementError, LockedBusinessError } = require('../exceptions')
-const { raiseIneligibilityEvent } = require('../event')
-const appInsights = require('applicationinsights')
-const createTempReference = require('../lib/create-temp-reference')
+import joi from 'joi'
+import { keys } from '../session/keys.js'
+import { config } from '../config/index.js'
+import appInsights from 'applicationinsights'
+import { getCustomer, getFarmerApplyData, setCustomer, setFarmerApplyData } from '../session/index.js'
+import { requestAuthorizationCodeUrl } from '../auth/auth-code-grant/request-authorization-code-url.js'
+import { authenticate } from '../auth/authenticate.js'
+import { retrieveApimAccessToken } from '../auth/client-credential-grant/retrieve-apim-access-token.js'
+import { generateRandomID } from '../lib/create-temp-reference.js'
+
+import { getOrganisationAddress, organisationIsEligible } from '../api-requests/rpa-api/organisation.js'
+import { getPersonName, getPersonSummary } from '../api-requests/rpa-api/person.js'
+import { customerMustHaveAtLeastOneValidCph } from '../api-requests/rpa-api/cph-check.js'
+import { businessEligibleToApply } from '../api-requests/business-eligible-to-apply.js'
+import { setAuthCookie } from '../auth/cookie-auth/cookie-auth.js'
+import { farmerApply } from '../constants/constants.js'
+import { raiseIneligibilityEvent } from '../event/raise-ineligibility-event.js'
+
+import { InvalidPermissionsError } from '../exceptions/InvalidPermissionsError.js'
+import { AlreadyAppliedError } from '../exceptions/AlreadyAppliedError.js'
+import { NoEligibleCphError } from '../exceptions/NoEligibleCphError.js'
+import { InvalidStateError } from '../exceptions/InvalidStateError.js'
+import { CannotReapplyTimeLimitError } from '../exceptions/CannotReapplyTimeLimitError.js'
+import { OutstandingAgreementError } from '../exceptions/OutstandingAgreementError.js'
+import { LockedBusinessError } from '../exceptions/LockedBusinessError.js'
 
 function setOrganisationSessionData (request, personSummary, { organisation: org }) {
   const organisation = {
@@ -22,22 +35,22 @@ function setOrganisationSessionData (request, personSummary, { organisation: org
     crn: personSummary.customerReferenceNumber,
     frn: org.businessReference
   }
-  session.setFarmerApplyData(
+  setFarmerApplyData(
     request,
-    sessionKeys.farmerApplyData.organisation,
+    keys.farmerApplyData.organisation,
     organisation
   )
 }
 
-module.exports = [{
+export const signinRouteHandlers = [{
   method: 'GET',
   path: `${config.urlPrefix}/signin-oidc`,
   options: {
     auth: false,
     validate: {
-      query: Joi.object({
-        code: Joi.string().required(),
-        state: Joi.string().required()
+      query: joi.object({
+        code: joi.string().required(),
+        state: joi.string().required()
       }).options({
         stripUnknown: true
       }),
@@ -45,7 +58,7 @@ module.exports = [{
         request.logger.warn(err, 'signin oidc')
         appInsights.defaultClient.trackException({ exception: err })
         return h.view('verify-login-failed', {
-          backLink: auth.requestAuthorizationCodeUrl(session, request),
+          backLink: requestAuthorizationCodeUrl(request),
           ruralPaymentsAgency: config.ruralPaymentsAgency
         }).code(400).takeover()
       }
@@ -53,16 +66,16 @@ module.exports = [{
     handler: async (request, h) => {
       let tempApplicationId
       try {
-        tempApplicationId = createTempReference()
+        tempApplicationId = generateRandomID()
         request.logger.setBindings({ tempApplicationId })
         // tempApplicationId added to reference to enable session event to report with temp id
-        session.setFarmerApplyData(request, sessionKeys.farmerApplyData.reference, tempApplicationId)
-        await auth.authenticate(request)
+        setFarmerApplyData(request, keys.farmerApplyData.reference, tempApplicationId)
+        await authenticate(request)
         request.logger.setBindings({ authenticated: true })
-        const apimAccessToken = await auth.retrieveApimAccessToken()
+        const apimAccessToken = await retrieveApimAccessToken()
 
         const personSummary = await getPersonSummary(request, apimAccessToken)
-        session.setCustomer(request, sessionKeys.customer.id, personSummary.id)
+        setCustomer(request, keys.customer.id, personSummary.id)
         const organisationSummary = await organisationIsEligible(request, personSummary.id, apimAccessToken)
 
         request.logger.setBindings({ sbi: organisationSummary.organisation.sbi })
@@ -77,18 +90,18 @@ module.exports = [{
           throw new InvalidPermissionsError(`Person id ${personSummary.id} does not have the required permissions for organisation id ${organisationSummary.organisation.id}`)
         }
 
-        await cphCheck.customerMustHaveAtLeastOneValidCph(request, apimAccessToken)
+        await customerMustHaveAtLeastOneValidCph(request, apimAccessToken)
         const previousApplication = await businessEligibleToApply(organisationSummary.organisation.sbi)
 
         request.logger.setBindings({ previousApplication })
 
-        auth.setAuthCookie(request, personSummary.email, farmerApply)
+        setAuthCookie(request, personSummary.email, farmerApply)
         appInsights.defaultClient.trackEvent({
           name: 'login',
           properties: {
             reference: tempApplicationId,
             sbi: organisationSummary.organisation.sbi,
-            crn: session.getCustomer(request, sessionKeys.customer.crn),
+            crn: getCustomer(request, keys.customer.crn),
             email: personSummary.email
           }
         })
@@ -96,9 +109,9 @@ module.exports = [{
       } catch (err) {
         request.logger.error(err, 'check details')
 
-        const attachedToMultipleBusinesses = session.getCustomer(request, sessionKeys.customer.attachedToMultipleBusinesses)
-        const organisation = session.getFarmerApplyData(request, sessionKeys.farmerApplyData.organisation)
-        const crn = session.getCustomer(request, sessionKeys.customer.crn)
+        const attachedToMultipleBusinesses = getCustomer(request, keys.customer.attachedToMultipleBusinesses)
+        const organisation = getFarmerApplyData(request, keys.farmerApplyData.organisation)
+        const crn = getCustomer(request, keys.customer.crn)
         switch (true) {
           case err instanceof InvalidStateError:
             appInsights.defaultClient.trackEvent({
@@ -107,14 +120,14 @@ module.exports = [{
                 reference: tempApplicationId
               }
             })
-            return h.redirect(auth.requestAuthorizationCodeUrl(session, request))
+            return h.redirect(requestAuthorizationCodeUrl(request))
           case err instanceof AlreadyAppliedError:
             appInsights.defaultClient.trackEvent({
               name: 'already-applied-error',
               properties: {
                 reference: tempApplicationId,
                 sbi: organisation.sbi,
-                crn: session.getCustomer(request, sessionKeys.customer.crn)
+                crn: getCustomer(request, keys.customer.crn)
               }
             })
             break
@@ -124,7 +137,7 @@ module.exports = [{
               properties: {
                 reference: tempApplicationId,
                 sbi: organisation.sbi,
-                crn: session.getCustomer(request, sessionKeys.customer.crn)
+                crn: getCustomer(request, keys.customer.crn)
               }
             })
             break
@@ -136,7 +149,7 @@ module.exports = [{
               properties: {
                 reference: tempApplicationId,
                 sbi: organisation.sbi,
-                crn: session.getCustomer(request, sessionKeys.customer.crn)
+                crn: getCustomer(request, keys.customer.crn)
               }
             })
             break
@@ -146,7 +159,7 @@ module.exports = [{
               properties: {
                 reference: tempApplicationId,
                 sbi: organisation.sbi,
-                crn: session.getCustomer(request, sessionKeys.customer.crn)
+                crn: getCustomer(request, keys.customer.crn)
               }
             })
             break
@@ -156,14 +169,14 @@ module.exports = [{
               properties: {
                 reference: tempApplicationId,
                 sbi: organisation.sbi,
-                crn: session.getCustomer(request, sessionKeys.customer.crn)
+                crn: getCustomer(request, keys.customer.crn)
               }
             })
             break
           default:
             appInsights.defaultClient.trackException({ exception: err })
             return h.view('verify-login-failed', {
-              backLink: auth.requestAuthorizationCodeUrl(session, request),
+              backLink: requestAuthorizationCodeUrl(request),
               ruralPaymentsAgency: config.ruralPaymentsAgency
             }).code(400).takeover()
         }
@@ -187,7 +200,7 @@ module.exports = [{
           lastApplicationDate: err.lastApplicationDate,
           nextApplicationDate: err.nextApplicationDate,
           hasMultipleBusinesses: attachedToMultipleBusinesses,
-          backLink: auth.requestAuthorizationCodeUrl(session, request),
+          backLink: requestAuthorizationCodeUrl(request),
           claimLink: config.claimServiceUri,
           sbiText: organisation?.sbi !== undefined ? `SBI ${organisation.sbi}` : null,
           organisationName: organisation?.name,

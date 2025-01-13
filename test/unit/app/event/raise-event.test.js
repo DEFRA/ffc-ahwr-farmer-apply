@@ -1,7 +1,7 @@
-const raiseEvent = require('../../../../app/event/raise-event')
+import { raiseEvent } from '../../../../app/event/raise-event.js'
+import { PublishEvent } from 'ffc-ahwr-event-publisher'
 
 jest.mock('ffc-ahwr-event-publisher')
-const mockEventPublisher = require('ffc-ahwr-event-publisher')
 
 describe('raise-event', () => {
   afterAll(() => {
@@ -10,6 +10,7 @@ describe('raise-event', () => {
 
   test('raise-event call sendEvent with the right params', async () => {
     const mockEvent = {
+      id: '1',
       name: 'mock Name',
       sbi: '123456789',
       cph: ' mock cph',
@@ -22,6 +23,6 @@ describe('raise-event', () => {
 
     await raiseEvent(mockEvent, 'mockStatus')
 
-    expect(mockEventPublisher.PublishEvent).toBeCalled()
+    expect(PublishEvent).toBeCalled()
   })
 })

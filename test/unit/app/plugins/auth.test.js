@@ -1,32 +1,46 @@
+import { requestAuthorizationCodeUrl } from '../../../../app/auth/auth-code-grant/request-authorization-code-url.js'
+import { config } from '../../../../app/config/index.js'
+import { createServer } from '../../../../app/server.js'
+
+jest.mock('../../../../app/auth/auth-code-grant/request-authorization-code-url')
+jest.mock('../../../../app/session')
+jest.mock('../../../../app/config/index', () => ({
+  ...jest.requireActual('../../../../app/config/index'),
+  authConfig: {
+    defraId: {
+      enabled: true
+    },
+    ruralPaymentsAgency: {
+      hostname: 'dummy-host-name'
+    }
+  },
+  endemics: {
+    enabled: true
+  }
+}))
+
 describe('Auth plugin test', () => {
-  describe('Aceessing secured route without auth cookie redirects to DEFRA ID login', () => {
+  describe('Accessing secured route without auth cookie redirects to DEFRA ID login', () => {
     let urlPrefix
     let url
-    let authMock
 
     beforeAll(async () => {
       jest.resetAllMocks()
       jest.resetModules()
-      jest.mock('../../../../app/session')
-      jest.mock('../../../../app/auth')
-      authMock = require('../../../../app/auth')
-      jest.mock('../../../../app/config', () => ({
-        ...jest.requireActual('../../../../app/config'),
-        authConfig: {
-          defraId: {
-            enabled: true
-          },
-          ruralPaymentsAgency: {
-            hostname: 'dummy-host-name'
-          }
-        },
-        endemics: {
-          enabled: true
-        }
-      }))
-      const config = require('../../../../app/config')
+
       urlPrefix = config.urlPrefix
       url = `${urlPrefix}/endemics/check-details`
+    })
+
+    let server
+
+    beforeAll(async () => {
+      server = await createServer()
+      await server.initialize()
+    })
+
+    afterAll(async () => {
+      await server.stop()
     })
 
     test('when not logged in redirects to defra id', async () => {
@@ -36,9 +50,9 @@ describe('Auth plugin test', () => {
         url
       }
 
-      authMock.requestAuthorizationCodeUrl.mockReturnValueOnce(defraIdLogin)
+      requestAuthorizationCodeUrl.mockReturnValueOnce(defraIdLogin)
 
-      const res = await global.__SERVER__.inject(options)
+      const res = await server.inject(options)
 
       expect(res.statusCode).toBe(302)
       expect(res.headers.location).toEqual(defraIdLogin)

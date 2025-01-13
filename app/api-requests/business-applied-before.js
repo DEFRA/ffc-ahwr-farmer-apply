@@ -1,10 +1,8 @@
-const applicationApi = require('./application-api')
-const status = require('../constants/status')
-const { userType } = require('../constants/user-types')
-const applicationType = require('../constants/application-type')
+import { getLatestApplicationsBySbi } from './application-api.js'
+import { applicationType, status, userType } from '../constants/constants.js'
 
-async function businessAppliedBefore (sbi) {
-  const latestApplicationsForSbi = await applicationApi.getLatestApplicationsBySbi(sbi)
+export async function businessAppliedBefore (sbi) {
+  const latestApplicationsForSbi = await getLatestApplicationsBySbi(sbi)
   if (latestApplicationsForSbi && Array.isArray(latestApplicationsForSbi)) {
     return applicationForBusinessInStateToApply(latestApplicationsForSbi)
   } else {
@@ -39,5 +37,3 @@ function getLatestApplication (latestApplicationsForSbi) {
     return new Date(a.createdAt) > new Date(b.createdAt) ? a : b
   })
 }
-
-module.exports = businessAppliedBefore

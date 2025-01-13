@@ -1,4 +1,8 @@
-const { createMessageReceiver, cachedReceivers, closeAllConnections } = require('../../../../app/messaging/create-message-receiver')
+import {
+  cachedReceivers,
+  closeAllConnections,
+  createMessageReceiver
+} from '../../../../app/messaging/create-message-receiver.js'
 
 const MOCK_CLOSE_CONNECTION = jest.fn()
 

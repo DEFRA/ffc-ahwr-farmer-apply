@@ -1,31 +1,22 @@
-const config = require('../../../../app/config')
-const status = require('../../../../app/constants/status')
-const { userType } = require('../../../../app/constants/user-types')
+import { status, userType } from '../../../../app/constants/constants.js'
+import { getLatestApplicationsBySbi } from '../../../../app/api-requests/application-api.js'
+import { businessAppliedBefore } from '../../../../app/api-requests/business-applied-before.js'
 
-let businessAppliedBefore
+jest.mock('../../../../app/api-requests/application-api', () => ({ getLatestApplicationsBySbi: jest.fn() }))
 
 describe('Business Applied Before Tests', () => {
-  let applicationApiMock
-
-  beforeAll(() => {
-    applicationApiMock = require('../../../../app/api-requests/application-api')
-    jest.mock('../../../../app/api-requests/application-api')
-    businessAppliedBefore = require('../../../../app/api-requests/business-applied-before')
-    config.endemics.enabled = false
-  })
-
   describe('Business is eligible when no existing applications found', () => {
     test('getLatestApplicationsBySbi is called', async () => {
       const SBI = 123456789
-      applicationApiMock.getLatestApplicationsBySbi.mockResolvedValueOnce([])
+      getLatestApplicationsBySbi.mockResolvedValueOnce([])
       await businessAppliedBefore(SBI)
-      expect(applicationApiMock.getLatestApplicationsBySbi).toHaveBeenCalledTimes(1)
-      expect(applicationApiMock.getLatestApplicationsBySbi).toHaveBeenCalledWith(SBI)
+      expect(getLatestApplicationsBySbi).toHaveBeenCalledTimes(1)
+      expect(getLatestApplicationsBySbi).toHaveBeenCalledWith(SBI)
     })
 
     test('No error is thrown', async () => {
       const SBI = 123456789
-      applicationApiMock.getLatestApplicationsBySbi.mockResolvedValueOnce([])
+      getLatestApplicationsBySbi.mockResolvedValueOnce([])
       await expect(businessAppliedBefore(SBI)).resolves.toEqual(userType.NEW_USER)
     })
   })
@@ -36,7 +27,7 @@ describe('Business Applied Before Tests', () => {
       { apiResponse: undefined }
     ])('Business is not eligible when application API response is null or undefined', async ({ apiResponse }) => {
       const SBI = 123456789
-      applicationApiMock.getLatestApplicationsBySbi.mockResolvedValueOnce(apiResponse)
+      getLatestApplicationsBySbi.mockResolvedValueOnce(apiResponse)
       await expect(businessAppliedBefore(SBI)).rejects.toEqual(new Error('Bad response from API'))
     })
   })
@@ -57,7 +48,7 @@ describe('Business Applied Before Tests', () => {
         type: 'VV'
       }
     ]
-    applicationApiMock.getLatestApplicationsBySbi.mockResolvedValueOnce(apiResponse)
+    getLatestApplicationsBySbi.mockResolvedValueOnce(apiResponse)
     await expect(businessAppliedBefore(SBI)).resolves.toEqual(userType.EXISTING_USER)
   })
 
@@ -77,7 +68,7 @@ describe('Business Applied Before Tests', () => {
         type: 'VV'
       }
     ]
-    applicationApiMock.getLatestApplicationsBySbi.mockResolvedValueOnce(apiResponse)
+    getLatestApplicationsBySbi.mockResolvedValueOnce(apiResponse)
     await expect(businessAppliedBefore(SBI)).resolves.toEqual(userType.NEW_USER)
   })
 
@@ -97,7 +88,7 @@ describe('Business Applied Before Tests', () => {
         type: 'VV'
       }
     ]
-    applicationApiMock.getLatestApplicationsBySbi.mockResolvedValueOnce(apiResponse)
+    getLatestApplicationsBySbi.mockResolvedValueOnce(apiResponse)
     await expect(businessAppliedBefore(SBI)).resolves.toEqual(userType.NEW_USER)
   })
 
@@ -117,7 +108,7 @@ describe('Business Applied Before Tests', () => {
         type: 'VV'
       }
     ]
-    applicationApiMock.getLatestApplicationsBySbi.mockResolvedValueOnce(apiResponse)
+    getLatestApplicationsBySbi.mockResolvedValueOnce(apiResponse)
     await expect(businessAppliedBefore(SBI)).resolves.toEqual(userType.NEW_USER)
   })
 })

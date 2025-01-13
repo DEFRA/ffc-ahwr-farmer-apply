@@ -1,7 +1,2 @@
 version: v1.25.0
 ignore:
-  SNYK-JS-ELLIPTIC-8187303:
-    - "*":
-      reason: No available fix in Elliptic yet (PR open)
-      expires: "2024-10-26T00:00:00.000Z"
-      created: "2024-10-16T00:00:00.000Z"

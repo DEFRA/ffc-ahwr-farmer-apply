@@ -1,8 +1,10 @@
-const { sendApplication } = require('../../../../../app/messaging/application')
-const { applicationResponseQueue } = require('../../../../../app/config').mqConfig
+import { applicationResponseQueue } from '../../../../../app/config/messaging.js'
+import { sendApplication } from '../../../../../app/messaging/application/index.js'
+import { receiveMessage } from '../../../../../app/messaging/receive-message.js'
+import { sendMessage } from '../../../../../app/messaging/send-message.js'
 
-jest.mock('../../../../../app/messaging')
-const { receiveMessage, sendMessage } = require('../../../../../app/messaging')
+jest.mock('../../../../../app/messaging/receive-message')
+jest.mock('../../../../../app/messaging/send-message')
 
 describe('application messaging tests', () => {
   const sessionId = 'a-session-id'

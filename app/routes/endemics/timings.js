@@ -1,23 +1,20 @@
-const session = require('../../session')
-const { agreeVisitTimings, organisation: organisationKey } = require('../../session/keys').farmerApplyData
-const urlPrefix = require('../../config/index').urlPrefix
-const config = require('../../config/index')
-const {
-  endemicsNumbers,
-  endemicsTimings,
-  endemicsOfferRejected,
-  endemicsDeclaration
-} = require('../../config/routes')
+import { clear, getFarmerApplyData, setFarmerApplyData } from '../../session/index.js'
+import { endemicsDeclaration, endemicsNumbers, endemicsOfferRejected, endemicsTimings } from '../../config/routes.js'
+import { config } from '../../config/index.js'
+import { keys } from '../../session/keys.js'
+
+const { agreeVisitTimings, organisation: organisationKey } = keys.farmerApplyData
+const urlPrefix = config.urlPrefix
 
 const backLink = `${urlPrefix}/${endemicsNumbers}`
 
-module.exports = [
+export const timingsRouteHandlers = [
   {
     method: 'GET',
     path: `${urlPrefix}/${endemicsTimings}`,
     options: {
       handler: async (request, h) => {
-        const organisation = session.getFarmerApplyData(request, organisationKey)
+        const organisation = getFarmerApplyData(request, organisationKey)
         return h.view(endemicsTimings, {
           backLink,
           organisation
@@ -31,25 +28,26 @@ module.exports = [
     options: {
       handler: async (request, h) => {
         if (request.payload.agreementStatus === 'agree') {
-          session.setFarmerApplyData(
+          setFarmerApplyData(
             request,
             agreeVisitTimings,
             'yes'
           )
           return h.redirect(`${urlPrefix}/${endemicsDeclaration}`)
-        } else {
-          session.setFarmerApplyData(
-            request,
-            agreeVisitTimings,
-            'no'
-          )
-          request.cookieAuth.clear()
-          session.clear(request)
-          return h.view(endemicsOfferRejected, {
-            termsRejected: true,
-            ruralPaymentsAgency: config.ruralPaymentsAgency
-          })
         }
+
+        setFarmerApplyData(
+          request,
+          agreeVisitTimings,
+          'no'
+        )
+        request.cookieAuth.clear()
+        clear(request)
+
+        return h.view(endemicsOfferRejected, {
+          termsRejected: true,
+          ruralPaymentsAgency: config.ruralPaymentsAgency
+        })
       }
     }
   }]

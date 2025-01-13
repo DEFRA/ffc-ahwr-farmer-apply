@@ -1,6 +1,7 @@
-const retryRaiseEvent = require('../../../../app/event/retry-raise-event')
-const raiseEventMock = require('../../../../app/event/raise-event')
-const appInsights = require('applicationinsights')
+import appInsights from 'applicationinsights'
+import { retryRaiseEvent } from '../../../../app/event/retry-raise-event.js'
+import { raiseEvent } from '../../../../app/event/raise-event.js'
+
 jest.mock('../../../../app/event/raise-event')
 jest.mock('applicationinsights', () => ({ defaultClient: { trackException: jest.fn() }, dispose: jest.fn() }))
 
@@ -24,14 +25,14 @@ describe('retryRaiseEvent function', () => {
 
   it('should succeed on the first attempt', async () => {
     await retryRaiseEvent(mockEvent, 2)
-    expect(raiseEventMock).toHaveBeenCalledTimes(1)
+    expect(raiseEvent).toHaveBeenCalledTimes(1)
   })
 
   it('should retry and fail after maxRetries attempts', async () => {
-    raiseEventMock.mockRejectedValue(new Error('Failed'))
+    raiseEvent.mockRejectedValue(new Error('Failed'))
     await retryRaiseEvent(mockEvent, 2)
 
-    expect(raiseEventMock).toHaveBeenCalledTimes(3)
+    expect(raiseEvent).toHaveBeenCalledTimes(3)
     expect(appInsights.defaultClient.trackException).toHaveBeenCalled()
   })
 })

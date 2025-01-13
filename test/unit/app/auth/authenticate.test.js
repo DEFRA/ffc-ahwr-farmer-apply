@@ -1,68 +1,37 @@
-const { when, resetAllWhenMocks } = require('jest-when')
-const MOCK_USE_ACTUAL_DECODE = require('jsonwebtoken').decode
-const sessionKeys = require('../../../../app/session/keys')
+import { when, resetAllWhenMocks } from 'jest-when'
+import { verify } from 'jsonwebtoken'
+import { keys } from '../../../../app/session/keys'
+import { getPkcecodes, getToken, setCustomer, setToken } from '../../../../app/session'
+import Wreck from '@hapi/wreck'
+import jwktopem from 'jwk-to-pem'
+import { authenticate } from '../../../../app/auth/authenticate'
+
+jest.mock('../../../../app/session')
+jest.mock('@hapi/wreck')
+jest.mock('jwk-to-pem')
+jest.mock('jsonwebtoken', () => ({
+  verify: jest.fn().mockReturnValue(true),
+  decode: jest.requireActual('jsonwebtoken').decode
+}))
+jest.mock('applicationinsights', () => ({ defaultClient: { trackException: jest.fn(), trackEvent: () => 'hello' }, dispose: jest.fn() }))
+jest.mock('../../../../app/config/auth', () => ({
+  authConfig: {
+    ...jest.requireActual('../../../../app/config/auth').authConfig,
+    defraId: {
+      ...jest.requireActual('../../../../app/config/auth').authConfig.defraId,
+      tenantName: 'testtenant',
+      jwtIssuerId: 'dummy_jwt_issuer_id'
+    }
+  }
+}))
 
 const MOCK_NOW = new Date()
-const MOCK_JWT_VERIFY = jest.fn()
 const MOCK_COOKIE_AUTH_SET = jest.fn()
 
 describe('authenticate', () => {
-  let Wreck
-  let jwktopem
-  let session
-  let authenticate
-
   beforeAll(() => {
     jest.useFakeTimers('modern')
     jest.setSystemTime(MOCK_NOW)
-
-    jest.mock('../../../../app/config', () => ({
-      ...jest.requireActual('../../../../app/config'),
-      authConfig: {
-        defraId: {
-          hostname: 'https://tenantname.b2clogin.com/tenantname.onmicrosoft.com',
-          tenantName: 'tenantname',
-          oAuthAuthorisePath: '/oauth2/v2.0/authorize',
-          policy: 'b2c_1a_signupsigninsfi',
-          redirectUri: 'http://localhost:3000/apply/signin-oidc',
-          clientId: 'dummy_client_id',
-          clientSecret: 'dummy_client_secret',
-          serviceId: 'dummy_service_id',
-          scope: 'openid dummy_client_id offline_access',
-          jwtIssuerId: 'jwtissuerid'
-        },
-        ruralPaymentsAgency: {
-          hostname: 'dummy-host-name',
-          getPersonSummaryUrl: 'dummy-get-person-summary-url',
-          getOrganisationPermissionsUrl: 'dummy-get-organisation-permissions-url',
-          getOrganisationUrl: 'dummy-get-organisation-url'
-        },
-        apim: {
-          ocpSubscriptionKey: 'dummy-ocp-subscription-key',
-          hostname: 'dummy-host-name',
-          oAuthPath: 'dummy-oauth-path',
-          clientId: 'dummy-client-id',
-          clientSecret: 'dummy-client-secret',
-          scope: 'dummy-scope'
-        }
-      }
-    }))
-
-    jest.mock('../../../../app/session')
-    session = require('../../../../app/session')
-
-    jest.mock('@hapi/wreck')
-    Wreck = require('@hapi/wreck')
-
-    jest.mock('jwk-to-pem')
-    jwktopem = require('jwk-to-pem')
-
-    jest.mock('jsonwebtoken', () => ({
-      verify: MOCK_JWT_VERIFY,
-      decode: MOCK_USE_ACTUAL_DECODE
-    }))
-
-    authenticate = require('../../../../app/auth/authenticate')
   })
 
   afterAll(() => {
@@ -121,14 +90,14 @@ describe('authenticate', () => {
               "lastName": "Doe",
               "email": "john.doe@email.com",
               "iat": 1516239022,
-              "iss": "https://tenantname.b2clogin.com/jwtissuerid/v2.0/",
+              "iss": "https://testtenant.b2clogin.com/dummy_jwt_issuer_id/v2.0/",
               "roles": [
                 "5384769:Agent:3"
               ],
               "contactId": "1234567890",
               "currentRelationshipId": "123456789"
             } */
-            access_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiZmlyc3ROYW1lIjoiSm9obiIsImxhc3ROYW1lIjoiRG9lIiwiZW1haWwiOiJqb2huLmRvZUBlbWFpbC5jb20iLCJpYXQiOjE1MTYyMzkwMjIsImlzcyI6Imh0dHBzOi8vdGVuYW50bmFtZS5iMmNsb2dpbi5jb20vand0aXNzdWVyaWQvdjIuMC8iLCJyb2xlcyI6WyI1Mzg0NzY5OkFnZW50OjMiXSwiY29udGFjdElkIjoiMTIzNDU2Nzg5MCIsImN1cnJlbnRSZWxhdGlvbnNoaXBJZCI6IjEyMzQ1Njc4OSJ9.pYC2VTlSnlIsLn4MknJl0YhLPCn2oW6K73FKFgzvAqE',
+            access_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiZmlyc3ROYW1lIjoiSm9obiIsImxhc3ROYW1lIjoiRG9lIiwiZW1haWwiOiJqb2huLmRvZUBlbWFpbC5jb20iLCJpYXQiOjE1MTYyMzkwMjIsImlzcyI6Imh0dHBzOi8vdGVzdHRlbmFudC5iMmNsb2dpbi5jb20vZHVtbXlfand0X2lzc3Vlcl9pZC92Mi4wLyIsInJvbGVzIjpbIjUzODQ3Njk6QWdlbnQ6MyJdLCJjb250YWN0SWQiOiIxMjM0NTY3ODkwIiwiY3VycmVudFJlbGF0aW9uc2hpcElkIjoiMTIzNDU2Nzg5In0.Pt3RWu8F2ObAKWVIeQxSDvZvfBDIrkvM_0HuNJBZSwM',
             id_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJub25jZSI6IjEyMyJ9.EFgheK9cJjMwoszwDYbf9n_XF8NJ3qBvLYqUB8uRrzk',
             expires_in: 10
           }
@@ -184,21 +153,21 @@ describe('authenticate', () => {
               "lastName": "Doe",
               "email": "john.doe@email.com",
               "iat": 1516239022,
-              "iss": "https://tenantname.b2clogin.com/WRONG_JWT_ISSUER_ID/v2.0/",
+              "iss": "www.something.wrong",
               "roles": [
                 "5384769:Agent:3"
               ],
               "contactId": "1234567890",
               "currentRelationshipId": "123456789"
             } */
-            access_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiZmlyc3ROYW1lIjoiSm9obiIsImxhc3ROYW1lIjoiRG9lIiwiZW1haWwiOiJqb2huLmRvZUBlbWFpbC5jb20iLCJpYXQiOjE1MTYyMzkwMjIsImlzcyI6Imh0dHBzOi8vdGVuYW50bmFtZS5iMmNsb2dpbi5jb20vV1JPTkdfSldUX0lTU1VFUl9JRC92Mi4wLyIsInJvbGVzIjpbIjUzODQ3Njk6QWdlbnQ6MyJdLCJjb250YWN0SWQiOiIxMjM0NTY3ODkwIiwiY3VycmVudFJlbGF0aW9uc2hpcElkIjoiMTIzNDU2Nzg5In0.CIzX3BNGBXDLfDbZ0opb3N9jFJv5tYQjQsB_Nrn-6jI',
+            access_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiZmlyc3ROYW1lIjoiSm9obiIsImxhc3ROYW1lIjoiRG9lIiwiZW1haWwiOiJqb2huLmRvZUBlbWFpbC5jb20iLCJpYXQiOjE1MTYyMzkwMjIsImlzcyI6Ind3dy5zb21ldGhpbmcud3JvbmciLCJyb2xlcyI6WyI1Mzg0NzY5OkFnZW50OjMiXSwiY29udGFjdElkIjoiMTIzNDU2Nzg5MCIsImN1cnJlbnRSZWxhdGlvbnNoaXBJZCI6IjEyMzQ1Njc4OSJ9.iur1MsXsxAjHfDlfKDne0JewXya_j_R8gI_iK9WSYCs',
             id_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJub25jZSI6IjEyMyJ9.EFgheK9cJjMwoszwDYbf9n_XF8NJ3qBvLYqUB8uRrzk',
             expires_in: 10
           }
         }
       },
       expect: {
-        error: new Error('Issuer not trusted: https://tenantname.b2clogin.com/WRONG_JWT_ISSUER_ID/v2.0/')
+        error: new Error('Issuer not trusted: www.something.wrong')
       }
     },
     {
@@ -247,14 +216,14 @@ describe('authenticate', () => {
               "lastName": "Doe",
               "email": "john.doe@email.com",
               "iat": 1516239022,
-              "iss": "https://tenantname.b2clogin.com/WRONG_JWT_ISSUER_ID/v2.0/",
+              "iss": "https://testtenant.b2clogin.com/dummy_jwt_issuer_id/v2.0/",
               "roles": [
                 "5384769:Agent:3"
               ],
               "contactId": "1234567890",
               "currentRelationshipId": "123456789"
             } */
-            access_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiZmlyc3ROYW1lIjoiSm9obiIsImxhc3ROYW1lIjoiRG9lIiwiZW1haWwiOiJqb2huLmRvZUBlbWFpbC5jb20iLCJpYXQiOjE1MTYyMzkwMjIsImlzcyI6Imh0dHBzOi8vdGVuYW50bmFtZS5iMmNsb2dpbi5jb20vV1JPTkdfSldUX0lTU1VFUl9JRC92Mi4wLyIsInJvbGVzIjpbIjUzODQ3Njk6QWdlbnQ6MyJdLCJjb250YWN0SWQiOiIxMjM0NTY3ODkwIiwiY3VycmVudFJlbGF0aW9uc2hpcElkIjoiMTIzNDU2Nzg5In0.CIzX3BNGBXDLfDbZ0opb3N9jFJv5tYQjQsB_Nrn-6jI',
+            access_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiZmlyc3ROYW1lIjoiSm9obiIsImxhc3ROYW1lIjoiRG9lIiwiZW1haWwiOiJqb2huLmRvZUBlbWFpbC5jb20iLCJpYXQiOjE1MTYyMzkwMjIsImlzcyI6Imh0dHBzOi8vdGVzdHRlbmFudC5iMmNsb2dpbi5jb20vZHVtbXlfand0X2lzc3Vlcl9pZC92Mi4wLyIsInJvbGVzIjpbIjUzODQ3Njk6QWdlbnQ6MyJdLCJjb250YWN0SWQiOiIxMjM0NTY3ODkwIiwiY3VycmVudFJlbGF0aW9uc2hpcElkIjoiMTIzNDU2Nzg5In0.Pt3RWu8F2ObAKWVIeQxSDvZvfBDIrkvM_0HuNJBZSwM',
             id_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJub25jZSI6IjEyMyJ9.EFgheK9cJjMwoszwDYbf9n_XF8NJ3qBvLYqUB8uRrzk',
             expires_in: 10
           }
@@ -265,27 +234,19 @@ describe('authenticate', () => {
       }
     }
   ])('%s', async (testCase) => {
-    when(session.getToken)
-      .calledWith(testCase.given.request, sessionKeys.tokens.state)
+    if (testCase.toString().includes('jwtVerify error')) {
+      verify.mockReturnValue(false)
+    }
+
+    when(getToken)
+      .calledWith(testCase.given.request, keys.tokens.state)
       .mockReturnValue(testCase.when.session.state)
-    when(session.getPkcecodes)
-      .calledWith(testCase.given.request, sessionKeys.pkcecodes.verifier)
+    when(getPkcecodes)
+      .calledWith(testCase.given.request, keys.pkcecodes.verifier)
       .mockReturnValue(testCase.when.session.pkcecodes.verifier)
     when(Wreck.post)
-      .calledWith(
-        'https://tenantname.b2clogin.com/tenantname.onmicrosoft.com/b2c_1a_signupsigninsfi/oauth2/v2.0/token',
-        {
-          headers: expect.anything(),
-          payload: expect.anything(),
-          json: true
-        }
-      )
       .mockResolvedValue(testCase.when.redeemResponse)
     when(Wreck.get)
-      .calledWith(
-        'https://tenantname.b2clogin.com/tenantname.onmicrosoft.com/discovery/v2.0/keys?p=b2c_1a_signupsigninsfi',
-        { json: true }
-      )
       .mockResolvedValue({
         res: {
           statusCode: 200
@@ -294,18 +255,13 @@ describe('authenticate', () => {
           keys: [testCase.when.acquiredSigningKey]
         }
       })
+
     when(jwktopem)
       .calledWith(testCase.when.acquiredSigningKey)
       .mockReturnValue(testCase.when.jwktopem)
-    when(MOCK_JWT_VERIFY)
-      .calledWith(
-        testCase.when.redeemResponse.payload.access_token,
-        'public_key',
-        { algorithms: ['RS256'], ignoreNotBefore: true }
-      )
-      .mockResolvedValue('verified')
-    when(session.getToken)
-      .calledWith(testCase.given.request, sessionKeys.tokens.nonce)
+
+    when(getToken)
+      .calledWith(testCase.given.request, keys.tokens.nonce)
       .mockReturnValue('123')
 
     if (testCase.expect.error) {
@@ -313,35 +269,35 @@ describe('authenticate', () => {
         authenticate(testCase.given.request)
       ).rejects.toEqual(testCase.expect.error)
 
-      expect(session.setToken).toHaveBeenCalledTimes(0)
-      expect(session.setCustomer).toHaveBeenCalledTimes(0)
+      expect(setToken).toHaveBeenCalledTimes(0)
+      expect(setCustomer).toHaveBeenCalledTimes(0)
       expect(MOCK_COOKIE_AUTH_SET).toHaveBeenCalledTimes(0)
     } else {
       await authenticate(testCase.given.request)
 
-      expect(session.setToken).toHaveBeenCalledWith(
+      expect(setToken).toHaveBeenCalledWith(
         testCase.given.request,
-        sessionKeys.tokens.accessToken,
+        keys.tokens.accessToken,
         testCase.when.redeemResponse.payload.access_token
       )
-      expect(session.setToken).toHaveBeenCalledWith(
+      expect(setToken).toHaveBeenCalledWith(
         testCase.given.request,
-        sessionKeys.tokens.tokenExpiry,
+        keys.tokens.tokenExpiry,
         new Date(MOCK_NOW.getTime() + 10 * 1000).toISOString()
       )
-      expect(session.setCustomer).toHaveBeenCalledWith(
+      expect(setCustomer).toHaveBeenCalledWith(
         testCase.given.request,
-        sessionKeys.customer.crn,
+        keys.customer.crn,
         '1234567890'
       )
-      expect(session.setCustomer).toHaveBeenCalledWith(
+      expect(setCustomer).toHaveBeenCalledWith(
         testCase.given.request,
-        sessionKeys.customer.organisationId,
+        keys.customer.organisationId,
         '123456789'
       )
-      expect(session.setCustomer).toHaveBeenCalledWith(
+      expect(setCustomer).toHaveBeenCalledWith(
         testCase.given.request,
-        sessionKeys.customer.attachedToMultipleBusinesses,
+        keys.customer.attachedToMultipleBusinesses,
         false
       )
       expect(MOCK_COOKIE_AUTH_SET).toHaveBeenCalledWith({

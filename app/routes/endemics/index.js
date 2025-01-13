@@ -1,17 +1,16 @@
-const config = require('../../config')
-const session = require('../../session')
-const { requestAuthorizationCodeUrl } = require('../../auth')
+import { requestAuthorizationCodeUrl } from '../../auth/auth-code-grant/request-authorization-code-url.js'
+import { config } from '../../config/index.js'
 
-module.exports = {
+export const indexRouteHandlers = [{
   method: 'GET',
   path: `${config.urlPrefix}/endemics/start`,
   options: {
     auth: false,
     handler: async (request, h) => {
       return h.view('endemics/index', {
-        defraIdLogin: requestAuthorizationCodeUrl(session, request),
+        defraIdLogin: requestAuthorizationCodeUrl(request),
         ruralPaymentsAgency: config.ruralPaymentsAgency
       })
     }
   }
-}
+}]

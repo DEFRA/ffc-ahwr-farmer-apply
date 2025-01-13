@@ -1,11 +1,14 @@
-const config = require('../config')
+import { config } from '../config/index.js'
+import crumb from '@hapi/crumb'
 
-module.exports = {
-  plugin: require('@hapi/crumb'),
+export const crumbPlugin = {
+  plugin: crumb,
   options: {
     cookieOptions: {
       isSecure: config.cookie.isSecure
     },
-    skip: (request) => request.route.path === `${config.urlPrefix}/cookies` && request.method.toLowerCase() === 'post' // Exclude from crumb token changes
+    skip: (request) =>
+      request.route.path === `${config.urlPrefix}/cookies` &&
+        request.method.toLowerCase() === 'post' // Exclude from crumb token changes
   }
 }

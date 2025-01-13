@@ -1,7 +1,5 @@
-const Joi = require('joi')
+import joi from 'joi'
 
-const schema = Joi.object({
-  uri: Joi.string().uri().default('http://host.docker.internal:3001/api')
+export const applicationApiConfigSchema = joi.object({
+  uri: joi.string().uri().default('http://host.docker.internal:3001/api')
 })
-
-module.exports = schema

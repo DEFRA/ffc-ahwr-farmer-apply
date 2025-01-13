@@ -1,7 +1,7 @@
-const appInsights = require('applicationinsights')
-const raiseEvent = require('./raise-event')
+import appInsights from 'applicationinsights'
+import { raiseEvent } from './raise-event.js'
 
-const retryRaiseEvent = async (event, maxRetries) => {
+export const retryRaiseEvent = async (event, maxRetries) => {
   let retries = 0
   while (retries < maxRetries) {
     try {
@@ -15,5 +15,3 @@ const retryRaiseEvent = async (event, maxRetries) => {
   }
   console.error(`Apply raiseEvent for event ${event} failed after ${maxRetries} attempts.`)
 }
-
-module.exports = retryRaiseEvent
