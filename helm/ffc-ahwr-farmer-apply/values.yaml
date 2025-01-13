@@ -79,6 +79,7 @@ container:
   tenMonthRuleEnabled:
   endemicsEnabled: 'true'
   multiSpeciesEnabled: 'false'
+  devLoginEnabled: 'false'
 
 ingress:
   class: nginx

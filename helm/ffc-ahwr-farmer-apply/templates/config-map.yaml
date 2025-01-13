@@ -43,4 +43,5 @@ data:
   TEN_MONTH_RULE_ENABLED: {{ quote .Values.container.tenMonthRuleEnabled }}
   ENDEMICS_ENABLED: {{ quote .Values.container.endemicsEnabled }}
   MULTI_SPECIES_ENABLED: {{ quote .Values.container.multiSpeciesEnabled }}
+  DEV_LOGIN_ENABLED: {{ quote .Values.container.devLoginEnabled }}
 {{- end -}}
