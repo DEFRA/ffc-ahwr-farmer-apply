@@ -78,6 +78,9 @@ export const getConfig = () => {
     },
     multiSpecies: {
       enabled: joi.bool().required()
+    },
+    devLogin: {
+      enabled: joi.bool().required()
     }
   })
 
@@ -148,6 +151,9 @@ export const getConfig = () => {
     },
     multiSpecies: {
       enabled: process.env.MULTI_SPECIES_ENABLED === 'true'
+    },
+    devLogin: {
+      enabled: process.env.DEV_LOGIN_ENABLED === 'true'
     }
   }
 

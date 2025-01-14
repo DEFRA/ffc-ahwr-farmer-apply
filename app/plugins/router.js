@@ -14,6 +14,7 @@ import { reviewsRouteHandlers } from '../routes/endemics/reviews.js'
 import { declarationRouteHandlers } from '../routes/endemics/declaration.js'
 import { checkDetailsRouteHandlers } from '../routes/endemics/check-details.js'
 import { timingsRouteHandlers } from '../routes/endemics/timings.js'
+import { devLoginHandlers } from '../routes/endemics/dev-sign-in.js'
 
 export const buildRoutes = () => {
   let routes = [
@@ -41,6 +42,10 @@ export const buildRoutes = () => {
 
   if (config.multiSpecies.enabled) {
     routes = [...routes, ...claimMultipleRouteHandlers]
+  }
+
+  if (config.devLogin.enabled) {
+    routes = [...routes, ...devLoginHandlers]
   }
 
   return routes
