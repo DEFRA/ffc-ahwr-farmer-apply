@@ -91,7 +91,7 @@ describe('Declaration test', () => {
       const headers = $('main h2')
       expect(headers.length).toBe(3)
       expect($(headers.get(2)).text())
-        .toBe('What to do if you completed a review in the old animal and health welfare service')
+        .toBe('What to do if you completed a review in the old animal health and welfare service')
     })
   })
 
