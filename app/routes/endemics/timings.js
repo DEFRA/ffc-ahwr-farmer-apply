@@ -1,4 +1,5 @@
 import { clear, getFarmerApplyData, setFarmerApplyData } from '../../session/index.js'
+import { userType } from '../../constants/constants.js'
 import { endemicsDeclaration, endemicsNumbers, endemicsOfferRejected, endemicsTimings } from '../../config/routes.js'
 import { config } from '../../config/index.js'
 import { keys } from '../../session/keys.js'
@@ -15,7 +16,10 @@ export const timingsRouteHandlers = [
     options: {
       handler: async (request, h) => {
         const organisation = getFarmerApplyData(request, organisationKey)
+        const hasOldWorldApplication = organisation.userType !== userType.NEW_USER
+
         return h.view(endemicsTimings, {
+          hasOldWorldApplication,
           backLink,
           organisation
         })
