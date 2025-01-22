@@ -1,11 +1,11 @@
-import { v4 as uuidv4 } from 'uuid'
+import { randomUUID } from 'node:crypto'
 import { getToken, setToken } from '../../session/index.js'
 import { keys } from '../../session/keys.js'
 import { config } from '../../config/index.js'
 
 export const generate = (request) => {
   const state = {
-    id: uuidv4(),
+    id: randomUUID(),
     namespace: config.namespace,
     source: 'apply'
   }
