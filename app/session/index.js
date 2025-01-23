@@ -1,5 +1,5 @@
 import { getSessionEvent } from '../event/get-session-event.js'
-import { retryRaiseEvent } from '../event/retry-raise-event.js'
+import { raiseEvent } from '../event/raise-event.js'
 
 export const entries = {
   farmerApplyData: 'farmerApplyData',
@@ -34,7 +34,7 @@ function set (request, entryKey, key, value) {
   const ip = xForwardedForHeader ? xForwardedForHeader.split(',')[0] : request.info.remoteAddress
   if (organisation) {
     const event = getSessionEvent(organisation, request.yar.id, entryKey, key, value, ip, reference)
-    retryRaiseEvent(event, request.logger)
+    raiseEvent(event, request.logger)
   }
 }
 

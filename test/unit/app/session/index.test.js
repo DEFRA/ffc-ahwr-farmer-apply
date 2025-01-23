@@ -1,7 +1,7 @@
 import * as session from '../../../../app/session/index.js'
-import { retryRaiseEvent } from '../../../../app/event/retry-raise-event.js'
+import { raiseEvent } from '../../../../app/event/raise-event.js'
 
-jest.mock('../../../../app/event/retry-raise-event.js')
+jest.mock('../../../../app/event/raise-event.js')
 
 afterEach(jest.resetAllMocks)
 
@@ -180,7 +180,7 @@ describe('session', () => {
       info: {}
     }
     session.setCustomer(request, 'key', 'value')
-    expect(retryRaiseEvent).toHaveBeenCalled()
+    expect(raiseEvent).toHaveBeenCalled()
   })
 
   test('does not raise event if no organisation exists', () => {
@@ -193,6 +193,6 @@ describe('session', () => {
       info: {}
     }
     session.setCustomer(request, 'key', 'value')
-    expect(retryRaiseEvent).not.toHaveBeenCalled()
+    expect(raiseEvent).not.toHaveBeenCalled()
   })
 })

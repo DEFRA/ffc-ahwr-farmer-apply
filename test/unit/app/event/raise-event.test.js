@@ -6,13 +6,8 @@ jest.mock('applicationinsights', () => ({
   defaultClient: { trackException: jest.fn() }
 }))
 
-afterEach(() => {
-  jest.resetAllMocks()
-})
-
-afterAll(() => {
-  jest.restoreAllMocks()
-})
+afterEach(jest.resetAllMocks)
+afterAll(jest.restoreAllMocks)
 
 test('raiseEvent', async () => {
   const mockSendEvent = jest.fn()
