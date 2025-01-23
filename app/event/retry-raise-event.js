@@ -1,17 +1,16 @@
-import appInsights from 'applicationinsights'
+
 import { raiseEvent } from './raise-event.js'
 
-export const retryRaiseEvent = async (event, maxRetries) => {
+export const retryRaiseEvent = async (event, logger) => {
   let retries = 0
+  const maxRetries = 2
+
   while (retries < maxRetries) {
     try {
-      await raiseEvent(event)
+      await raiseEvent(event, logger)
       return
-    } catch (error) {
-      console.error(`Apply raiseEvent error ${retries + 1}:`, error)
-      appInsights.defaultClient.trackException({ exception: error })
+    } catch (err) {
       retries++
     }
   }
-  console.error(`Apply raiseEvent for event ${event} failed after ${maxRetries} attempts.`)
 }

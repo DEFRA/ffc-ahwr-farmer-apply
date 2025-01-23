@@ -4,7 +4,7 @@ import { getCustomer, setFarmerApplyData } from '../../../../app/session/index'
 import { getPersonSummary } from '../../../../app/api-requests/rpa-api/person'
 import { organisationIsEligible } from '../../../../app/api-requests/rpa-api/organisation'
 import { getCphNumbers } from '../../../../app/api-requests/rpa-api/cph-numbers'
-import { raiseIneligibilityEvent } from '../../../../app/event/raise-ineligibility-event'
+import { getIneligibilityEvent } from '../../../../app/event/get-ineligibility-event'
 import { customerMustHaveAtLeastOneValidCph } from '../../../../app/api-requests/rpa-api/cph-check'
 import { businessEligibleToApply } from '../../../../app/api-requests/business-eligible-to-apply'
 import { InvalidStateError } from '../../../../app/exceptions/InvalidStateError'
@@ -49,7 +49,7 @@ jest.mock('../../../../app/auth/auth-code-grant/request-authorization-code-url')
 jest.mock('../../../../app/api-requests/rpa-api/person')
 jest.mock('../../../../app/api-requests/rpa-api/organisation', () => ({ organisationIsEligible: jest.fn(), getOrganisationAddress: jest.fn() }))
 jest.mock('../../../../app/api-requests/rpa-api/cph-numbers')
-jest.mock('../../../../app/event/raise-ineligibility-event', () => ({ raiseIneligibilityEvent: jest.fn() }))
+jest.mock('../../../../app/event/get-ineligibility-event', () => ({ getIneligibilityEvent: jest.fn() }))
 jest.mock('../../../../app/api-requests/rpa-api/cph-check')
 jest.mock('../../../../app/api-requests/business-eligible-to-apply')
 jest.mock('../../../../app/api-requests/business-applied-before', () => ({ businessAppliedBefore: jest.fn(() => '') }))
@@ -309,7 +309,7 @@ describe('FarmerApply defra ID redirection test', () => {
       expect(requestAuthorizationCodeUrl).toBeCalledTimes(1)
       expect(getPersonSummary).toBeCalledTimes(1)
       expect(organisationIsEligible).toBeCalledTimes(1)
-      expect(raiseIneligibilityEvent).toBeCalledTimes(1)
+      expect(getIneligibilityEvent).toBeCalledTimes(1)
       const $ = cheerio.load(res.payload)
       expect($('.govuk-heading-l').text()).toMatch('You cannot apply for reviews or follow-ups for this business')
     })
@@ -367,7 +367,7 @@ describe('FarmerApply defra ID redirection test', () => {
       expect(getPersonSummary).toBeCalledTimes(1)
       expect(organisationIsEligible).toBeCalledTimes(1)
       expect(businessEligibleToApply).toBeCalledTimes(1)
-      expect(raiseIneligibilityEvent).toBeCalledTimes(1)
+      expect(getIneligibilityEvent).toBeCalledTimes(1)
       const $ = cheerio.load(res.payload)
       expect($('.govuk-heading-l').text()).toMatch('You cannot apply for reviews or follow-ups for this business')
       expect($('#guidanceLink').attr('href')).toMatch('http://localhost:3000/apply')
@@ -423,7 +423,7 @@ describe('FarmerApply defra ID redirection test', () => {
       expect(getPersonSummary).toBeCalledTimes(1)
       expect(organisationIsEligible).toBeCalledTimes(1)
       expect(businessEligibleToApply).toBeCalledTimes(1)
-      expect(raiseIneligibilityEvent).toBeCalledTimes(1)
+      expect(getIneligibilityEvent).toBeCalledTimes(1)
       const $ = cheerio.load(res.payload)
       expect($('.govuk-heading-l').text()).toMatch('You cannot apply for reviews or follow-ups for this business')
       expect($('.govuk-body').text()).toMatch(/ on 2 Oct 2023/)
@@ -479,7 +479,7 @@ describe('FarmerApply defra ID redirection test', () => {
       expect(getPersonSummary).toBeCalledTimes(1)
       expect(organisationIsEligible).toBeCalledTimes(1)
       expect(businessEligibleToApply).toBeCalledTimes(1)
-      expect(raiseIneligibilityEvent).toBeCalledTimes(1)
+      expect(getIneligibilityEvent).toBeCalledTimes(1)
       const $ = cheerio.load(res.payload)
       expect($('.govuk-heading-l').text()).toMatch('You cannot apply for reviews or follow-ups for this business')
     })
@@ -535,7 +535,7 @@ describe('FarmerApply defra ID redirection test', () => {
       expect(requestAuthorizationCodeUrl).toBeCalledTimes(1)
       expect(getPersonSummary).toBeCalledTimes(1)
       expect(organisationIsEligible).toBeCalledTimes(1)
-      expect(raiseIneligibilityEvent).toBeCalledTimes(1)
+      expect(getIneligibilityEvent).toBeCalledTimes(1)
       const $ = cheerio.load(res.payload)
       expect($('.govuk-heading-l').text()).toMatch('You cannot apply for reviews or follow-ups for this business')
     })

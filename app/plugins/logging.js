@@ -49,5 +49,6 @@ export const loggingPlugin = {
       err
     },
     ...(process.env.USE_PRETTY_PRINT === 'true' && { transport })
-  }
+  },
+  redact: ['event.action.raisedBy', 'event.action.ip']
 }

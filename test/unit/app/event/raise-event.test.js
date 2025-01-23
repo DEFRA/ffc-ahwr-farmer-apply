@@ -1,28 +1,59 @@
 import { raiseEvent } from '../../../../app/event/raise-event.js'
 import { PublishEvent } from 'ffc-ahwr-event-publisher'
+import appInsights from 'applicationinsights'
 
-jest.mock('ffc-ahwr-event-publisher')
+jest.mock('applicationinsights', () => ({
+  defaultClient: { trackException: jest.fn() }
+}))
 
-describe('raise-event', () => {
-  afterAll(() => {
-    jest.resetAllMocks()
-  })
+afterEach(() => {
+  jest.resetAllMocks()
+})
 
-  test('raise-event call sendEvent with the right params', async () => {
-    const mockEvent = {
+afterAll(() => {
+  jest.restoreAllMocks()
+})
+
+test('raiseEvent', async () => {
+  const mockSendEvent = jest.fn()
+  jest.spyOn(PublishEvent.prototype, 'sendEvent')
+    .mockImplementation(mockSendEvent)
+
+  const mockEvent = {
+    name: 'Mock Name',
+    properties: {
       id: '1',
-      name: 'mock Name',
       sbi: '123456789',
-      cph: ' mock cph',
+      cph: 'mock cph',
       reference: 'ABCD-1234-5678',
-      type: 'macktype',
-      message: 'the mock message',
-      data: { some: 'data' },
-      email: 'mock@emial.com'
+      checkpoint: 'ffc-ahwr-farmer-apply-test',
+      status: 'alert',
+      action: {
+        type: 'mocktype',
+        message: 'the mock message',
+        data: { some: 'data' },
+        raisedBy: 'mock@email.com'
+      }
     }
+  }
 
-    await raiseEvent(mockEvent, 'mockStatus')
+  const logger = { error: jest.fn() }
+  await raiseEvent(mockEvent, logger)
+  expect(mockSendEvent.mock.calls).toEqual([
+    [mockEvent]
+  ])
+})
 
-    expect(PublishEvent).toBeCalled()
-  })
+test('raiseEvent tracks errors', async () => {
+  const error = new Error('boom')
+  jest.spyOn(PublishEvent.prototype, 'sendEvent')
+    .mockRejectedValueOnce(error)
+
+  const logger = { error: jest.fn() }
+  await raiseEvent({}, logger)
+
+  expect(appInsights.defaultClient.trackException.mock.calls)
+    .toEqual([
+      [{ exception: error }]
+    ])
 })
