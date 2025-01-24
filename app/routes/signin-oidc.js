@@ -184,7 +184,7 @@ export const signinRouteHandlers = [{
 
         const event = getIneligibilityEvent(
           request.yar.id,
-          organisation?.sbi,
+          organisation.sbi,
           crn,
           organisation.email,
           err.name,
