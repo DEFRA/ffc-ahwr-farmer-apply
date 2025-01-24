@@ -14,7 +14,8 @@ import { customerMustHaveAtLeastOneValidCph } from '../api-requests/rpa-api/cph-
 import { businessEligibleToApply } from '../api-requests/business-eligible-to-apply.js'
 import { setAuthCookie } from '../auth/cookie-auth/cookie-auth.js'
 import { farmerApply } from '../constants/constants.js'
-import { raiseIneligibilityEvent } from '../event/raise-ineligibility-event.js'
+import { getIneligibilityEvent } from '../event/get-ineligibility-event.js'
+import { raiseEvent } from '../event/raise-event.js'
 
 import { InvalidPermissionsError } from '../exceptions/InvalidPermissionsError.js'
 import { AlreadyAppliedError } from '../exceptions/AlreadyAppliedError.js'
@@ -180,14 +181,17 @@ export const signinRouteHandlers = [{
               ruralPaymentsAgency: config.ruralPaymentsAgency
             }).code(400).takeover()
         }
-        await raiseIneligibilityEvent(
+
+        const event = getIneligibilityEvent(
           request.yar.id,
-          organisation?.sbi,
+          organisation.sbi,
           crn,
-          organisation?.email,
+          organisation.email,
           err.name,
           tempApplicationId
         )
+        raiseEvent(event, request.logger)
+        raiseEvent({ ...event, name: 'send-session-event' }, request.logger)
 
         return h.view('cannot-apply-for-livestock-review-exception', {
           ruralPaymentsAgency: config.ruralPaymentsAgency,

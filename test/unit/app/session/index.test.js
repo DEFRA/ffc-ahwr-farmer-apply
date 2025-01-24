@@ -1,4 +1,9 @@
 import * as session from '../../../../app/session/index.js'
+import { raiseEvent } from '../../../../app/event/raise-event.js'
+
+jest.mock('../../../../app/event/raise-event.js')
+
+afterEach(jest.resetAllMocks)
 
 describe('session', () => {
   const farmerApplyDataSectionKey = 'farmerApplyData'
@@ -19,7 +24,6 @@ describe('session', () => {
     { func: 'getCustomer', expectedSectionKey: customerSectionKey },
     { func: 'getPkcecodes', expectedSectionKey: pkcecodesSectionKey },
     { func: 'getReturnRoute', expectedSectionKey: routeReturn }
-
   ]
 
   const setFunctionsToTest = [
@@ -162,5 +166,33 @@ describe('session', () => {
     expect(requestSetMock.yar.clear).toHaveBeenCalledWith('customer')
     expect(requestSetMock.yar.clear).toHaveBeenCalledWith('tempReference')
     expect(requestSetMock.yar.clear).toHaveBeenCalledWith('returnRoute')
+  })
+
+  test('raises an event if organisation exists', () => {
+    const organisation = {}
+
+    const request = {
+      yar: {
+        set: jest.fn(),
+        get: jest.fn().mockReturnValue({ organisation })
+      },
+      headers: {},
+      info: {}
+    }
+    session.setCustomer(request, 'key', 'value')
+    expect(raiseEvent).toHaveBeenCalled()
+  })
+
+  test('does not raise event if no organisation exists', () => {
+    const request = {
+      yar: {
+        set: jest.fn(),
+        get: jest.fn()
+      },
+      headers: {},
+      info: {}
+    }
+    session.setCustomer(request, 'key', 'value')
+    expect(raiseEvent).not.toHaveBeenCalled()
   })
 })

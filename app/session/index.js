@@ -1,4 +1,5 @@
-import { sendSessionEvent } from '../event/send-session-event.js'
+import { getSessionEvent } from '../event/get-session-event.js'
+import { raiseEvent } from '../event/raise-event.js'
 
 export const entries = {
   farmerApplyData: 'farmerApplyData',
@@ -31,7 +32,10 @@ function set (request, entryKey, key, value) {
   const reference = getFarmerApplyData(request, 'reference')
   const xForwardedForHeader = request.headers['x-forwarded-for']
   const ip = xForwardedForHeader ? xForwardedForHeader.split(',')[0] : request.info.remoteAddress
-  sendSessionEvent(organisation, request.yar.id, entryKey, key, value, ip, reference)
+  if (organisation) {
+    const event = getSessionEvent(organisation, request.yar.id, entryKey, key, value, ip, reference)
+    raiseEvent(event, request.logger)
+  }
 }
 
 function get (request, entryKey, key) {
