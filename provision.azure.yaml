@@ -1,3 +1,5 @@
 resources:
   queues:
     - name: event
+      role: sender
+      session: false
