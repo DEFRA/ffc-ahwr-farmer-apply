@@ -9,8 +9,8 @@ export const getMessagingConfig = () => {
       host: joi.string().required(),
       username: joi.string(),
       password: joi.string(),
-      useCredentialChain: Joi.bool().required(),
-      managedIdentityClientId: Joi.string().optional(),
+      useCredentialChain: joi.bool().required(),
+      managedIdentityClientId: joi.string().optional(),
       appInsights: joi.object()
     },
     applicationRequestQueue: {
