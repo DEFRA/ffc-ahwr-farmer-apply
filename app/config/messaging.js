@@ -9,7 +9,8 @@ export const getMessagingConfig = () => {
       host: joi.string().required(),
       username: joi.string(),
       password: joi.string(),
-      useCredentialChain: joi.bool(),
+      useCredentialChain: Joi.bool().required(),
+      managedIdentityClientId: Joi.string().optional(),
       appInsights: joi.object()
     },
     applicationRequestQueue: {
@@ -32,6 +33,7 @@ export const getMessagingConfig = () => {
     username: process.env.MESSAGE_QUEUE_USER,
     password: process.env.MESSAGE_QUEUE_PASSWORD,
     useCredentialChain: process.env.NODE_ENV === 'production',
+    managedIdentityClientId: process.env.AZURE_CLIENT_ID,
     appInsights
   }
 
