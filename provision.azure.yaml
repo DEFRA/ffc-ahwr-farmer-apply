@@ -1,4 +1,5 @@
 resources:
+  identity: ahwr-farmer-apply
   queues:
     - name: event
       role: sender
