@@ -24,3 +24,13 @@
 development-values.yaml
 postgres-values.yaml
 artemis-values.yaml
+# AHWR Repository values
+app/
+appconfig/
+docs/
+scripts/
+test/
+zap/
+*.js
+*.md
+docker-compose*
