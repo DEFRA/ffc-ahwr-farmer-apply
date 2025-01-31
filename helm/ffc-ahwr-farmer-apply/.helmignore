@@ -31,6 +31,15 @@ docs/
 scripts/
 test/
 zap/
+.*
 *.js
 *.md
+*.cjs
+*.json
 docker-compose*
+Dockerfile
+Jenkinsfile
+LICENCE
+README.md
+provision.azure.yaml
+sonar-project.properties
