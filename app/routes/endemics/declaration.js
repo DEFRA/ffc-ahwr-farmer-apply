@@ -14,7 +14,7 @@ import {
   endemicsTimings
 } from '../../config/routes.js'
 
-const { reference, declaration, offerStatus, organisation: organisationKey, customer: crn } = keys.farmerApplyData
+const { reference, declaration, offerStatus, organisation: organisationKey, customer: crnKey } = keys.farmerApplyData
 
 const resetFarmerApplyDataBeforeApplication = (application) => {
   // NOTE AHWR-426 investigate why these aren't being stored in the database
@@ -61,8 +61,10 @@ export const declarationRouteHandlers = [{
       setFarmerApplyData(request, declaration, true)
       setFarmerApplyData(request, offerStatus, request.payload.offerStatus)
 
+      const crn = getCustomer(request, crnKey)
       const application = getFarmerApplyData(request)
       const tempApplicationReference = application.reference
+      application.organisation.crn = crn
 
       request.logger.setBindings({
         tempApplicationReference,
@@ -71,7 +73,6 @@ export const declarationRouteHandlers = [{
 
       resetFarmerApplyDataBeforeApplication(application)
 
-      console.log({ application })
       const newApplicationReference = await sendApplication({ ...application, type: applicationType.ENDEMICS }, request.yar.id)
 
       request.logger.setBindings({ newApplicationReference })
@@ -87,7 +88,7 @@ export const declarationRouteHandlers = [{
             reference: newApplicationReference,
             tempReference: tempApplicationReference,
             sbi: organisation.sbi,
-            crn: getCustomer(request, crn)
+            crn,
           }
         })
       }
