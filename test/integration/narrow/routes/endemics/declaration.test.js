@@ -33,7 +33,7 @@ jest.mock('../../../../../app/config/auth', () => ({
 
 const { farmerApplyData: { declaration } } = keys
 
-function expectPageContentOk($, organisation) {
+function expectPageContentOk ($, organisation) {
   expect($('h1.govuk-heading-l').text()).toEqual('Review your agreement offer')
   expect($('title').text()).toMatch('Review your agreement offer - Get funding to improve animal health and welfare')
   expect($('#organisation-name').text()).toEqual(organisation.name)
@@ -133,9 +133,9 @@ describe('Declaration test', () => {
       expect(setFarmerApplyData).toHaveBeenNthCalledWith(1, res.request, declaration, true)
       expect(getFarmerApplyData).toHaveBeenCalledTimes(4)
       expect(getFarmerApplyData).toHaveBeenCalledWith(res.request)
-      expect(sendMessage).toHaveBeenCalledTimes(1)  
+      expect(sendMessage).toHaveBeenCalledTimes(1)
     })
-      
+
     test('returns 200, shows offer rejection content on rejection', async () => {
       const application = { organisation }
       getFarmerApplyData.mockReturnValue(application)
