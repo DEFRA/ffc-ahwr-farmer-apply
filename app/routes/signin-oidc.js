@@ -80,7 +80,7 @@ export const signinRouteHandlers = [{
         const organisationSummary = await organisationIsEligible(request, personSummary.id, apimAccessToken)
 
         request.logger.setBindings({ sbi: organisationSummary.organisation.sbi })
-        
+
         const crn = getCustomer(request, keys.customer.crn)
         setOrganisationSessionData(request, personSummary, { ...organisationSummary }, crn)
 
