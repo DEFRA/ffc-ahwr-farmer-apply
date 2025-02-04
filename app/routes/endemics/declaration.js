@@ -71,6 +71,7 @@ export const declarationRouteHandlers = [{
 
       resetFarmerApplyDataBeforeApplication(application)
 
+      console.log({application})
       const newApplicationReference = await sendApplication({ ...application, type: applicationType.ENDEMICS }, request.yar.id)
 
       request.logger.setBindings({ newApplicationReference })

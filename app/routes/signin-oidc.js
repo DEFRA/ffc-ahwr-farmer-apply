@@ -76,6 +76,7 @@ export const signinRouteHandlers = [{
         const apimAccessToken = await retrieveApimAccessToken()
 
         const personSummary = await getPersonSummary(request, apimAccessToken)
+        console.log({personSummary})
         setCustomer(request, keys.customer.id, personSummary.id)
         const organisationSummary = await organisationIsEligible(request, personSummary.id, apimAccessToken)
 
