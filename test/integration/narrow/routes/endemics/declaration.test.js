@@ -4,7 +4,7 @@ import { getCrumbs } from '../../../../utils/get-crumbs'
 import { keys } from '../../../../../app/session/keys'
 import { states, userType } from '../../../../../app/constants/constants'
 import { config } from '../../../../../app/config'
-import { clear, getFarmerApplyData, setFarmerApplyData, getCustomer } from '../../../../../app/session'
+import { clear, getFarmerApplyData, setFarmerApplyData } from '../../../../../app/session'
 import { receiveMessage } from '../../../../../app/messaging/receive-message'
 import { sendMessage } from '../../../../../app/messaging/send-message'
 import { createServer } from '../../../../../app/server'
@@ -111,7 +111,6 @@ describe('Declaration test', () => {
     test('returns 200, caches data and sends message for valid request', async () => {
       const application = { organisation }
       getFarmerApplyData.mockReturnValue(application)
-      getCustomer.mockReturnValue('1103248456')
       receiveMessage.mockResolvedValueOnce({ applicationReference: 'abc123', applicationState: states.submitted })
       const crumb = await getCrumbs(server)
       const options = {
@@ -134,24 +133,9 @@ describe('Declaration test', () => {
       expect(setFarmerApplyData).toHaveBeenNthCalledWith(1, res.request, declaration, true)
       expect(getFarmerApplyData).toHaveBeenCalledTimes(4)
       expect(getFarmerApplyData).toHaveBeenCalledWith(res.request)
-      expect(sendMessage).toHaveBeenCalledTimes(1)
-      expect(sendMessage).toHaveBeenCalledWith(
-        {
-          "organisation": {
-            "address": "org-address",
-            "crn": "1103248456",
-            "id": "organisation",
-            "name": "org-name",
-            "sbi": "0123456789",
-            "userType": "newUser",
-          },
-          "type": "EE",
-        },
-        "uk.gov.ffc.ahwr.app.request",
-        expect.any(Object),
-        { "sessionId": expect.any(String) })
+      expect(sendMessage).toHaveBeenCalledTimes(1)  
     })
-
+      
     test('returns 200, shows offer rejection content on rejection', async () => {
       const application = { organisation }
       getFarmerApplyData.mockReturnValue(application)

@@ -20,7 +20,7 @@ import { config } from '../../../../app/config'
 
 jest.mock('applicationinsights', () => ({ defaultClient: { trackException: jest.fn(), trackEvent: () => 'hello' }, dispose: jest.fn() }))
 jest.mock('../../../../app/session/index', () => ({
-  getCustomer: jest.fn(),
+  getCustomer: jest.fn().mockReturnValue('1100014934'),
   getFarmerApplyData: jest.fn().mockReturnValue({
     id: 7654321,
     name: 'Mrs Gill Black',
@@ -187,7 +187,8 @@ describe('FarmerApply defra ID redirection test', () => {
       expect(res.statusCode).toBe(302)
       expect(res.headers.location).toEqual('/apply/endemics/check-details')
       expect(setFarmerApplyData).toBeCalledWith(expect.anything(), 'organisation', expect.objectContaining({
-        email: 'billsmith@testemail.com'
+        email: 'billsmith@testemail.com',
+        crn: '1100014934'
       }))
       expect(businessEligibleToApply).toBeCalledTimes(1)
       expect(authenticate).toBeCalledTimes(1)

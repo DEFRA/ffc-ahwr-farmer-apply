@@ -63,7 +63,6 @@ export const declarationRouteHandlers = [{
 
       const application = getFarmerApplyData(request)
       const tempApplicationReference = application.reference
-      application.organisation.crn = getCustomer(request, keys.customer.crn)
 
       request.logger.setBindings({
         tempApplicationReference,
