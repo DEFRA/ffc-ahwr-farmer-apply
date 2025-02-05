@@ -25,7 +25,7 @@ import { CannotReapplyTimeLimitError } from '../exceptions/CannotReapplyTimeLimi
 import { OutstandingAgreementError } from '../exceptions/OutstandingAgreementError.js'
 import { LockedBusinessError } from '../exceptions/LockedBusinessError.js'
 
-function setOrganisationSessionData (request, personSummary, { organisation: org }) {
+function setOrganisationSessionData (request, personSummary, { organisation: org }, crn) {
   const organisation = {
     sbi: org.sbi?.toString(),
     farmerName: getPersonName(personSummary),
@@ -33,7 +33,7 @@ function setOrganisationSessionData (request, personSummary, { organisation: org
     email: personSummary.email ? personSummary.email : org.email,
     orgEmail: org.email,
     address: getOrganisationAddress(org.address),
-    crn: personSummary.customerReferenceNumber,
+    crn,
     frn: org.businessReference
   }
   setFarmerApplyData(
@@ -81,7 +81,8 @@ export const signinRouteHandlers = [{
 
         request.logger.setBindings({ sbi: organisationSummary.organisation.sbi })
 
-        setOrganisationSessionData(request, personSummary, { ...organisationSummary })
+        const crn = getCustomer(request, keys.customer.crn)
+        setOrganisationSessionData(request, personSummary, { ...organisationSummary }, crn)
 
         if (organisationSummary.organisation.locked) {
           throw new LockedBusinessError(`Organisation id ${organisationSummary.organisation.id} is locked by RPA`)
@@ -102,7 +103,7 @@ export const signinRouteHandlers = [{
           properties: {
             reference: tempApplicationId,
             sbi: organisationSummary.organisation.sbi,
-            crn: getCustomer(request, keys.customer.crn),
+            crn,
             email: personSummary.email
           }
         })
