@@ -132,7 +132,7 @@ export const getConfig = () => {
       telephone: '03000 200 301'
     },
     customerSurvey: {
-      uri: 'https://defragroup.eu.qualtrics.com/jfe/form/SV_4IsQyL0cOUbFDQG'
+      uri: 'https://forms.office.com/pages/responsepage.aspx?id=UCQKdycCYkyQx044U38RAsIdAEqqafZCk2LjifrI4h1UOUVRSThFNEE1RFdWRVk5U0VGSUM3SDcyNi4u&route=shorturl'
     },
     applicationApi: applicationApiConfig,
     wreckHttp: {
