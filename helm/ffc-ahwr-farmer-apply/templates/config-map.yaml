@@ -21,6 +21,7 @@ data:
   REDIS_PORT: {{ quote .Values.container.redisPort }}
   SERVICE_URI: {{ quote .Values.container.serviceUri }}
   CLAIM_SERVICE_URI: {{ quote .Values.container.claimServiceUri }}
+  CUSTOMER_SURVEY_APPLY_URI: {{ quote .Values.container.customerSurveyApplyUri }}
   DASHBOARD_SERVICE_URI: {{ quote .Values.container.dashboardServiceUri }}
   URL_PREFIX: {{ quote .Values.container.urlPrefix }}
   APPLICATION_API_URI: {{ quote .Values.container.applicationApiUri }}

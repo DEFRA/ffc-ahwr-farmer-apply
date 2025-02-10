@@ -132,7 +132,7 @@ export const getConfig = () => {
       telephone: '03000 200 301'
     },
     customerSurvey: {
-      uri: 'https://forms.office.com/pages/responsepage.aspx?id=UCQKdycCYkyQx044U38RAsIdAEqqafZCk2LjifrI4h1UOUVRSThFNEE1RFdWRVk5U0VGSUM3SDcyNi4u&route=shorturl'
+      uri: process.env.CUSTOMER_SURVEY_APPLY_URI
     },
     applicationApi: applicationApiConfig,
     wreckHttp: {
