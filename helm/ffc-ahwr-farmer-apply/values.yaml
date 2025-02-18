@@ -51,6 +51,7 @@ container:
   redisPort: 6379
   serviceUri:
   claimServiceUri:
+  customerSurveyApplyUri: https://forms.office.com/pages/responsepage.aspx?id=UCQKdycCYkyQx044U38RAsIdAEqqafZCk2LjifrI4h1UOUVRSThFNEE1RFdWRVk5U0VGSUM3SDcyNi4u&route=shorturl
   dashboardServiceUri:
   urlPrefix: /apply
   termsAndConditionsUrl:
