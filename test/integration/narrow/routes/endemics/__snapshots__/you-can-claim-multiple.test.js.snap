@@ -225,7 +225,7 @@ exports[`you-can-claim-multiple page GET operation handler returns 200 and conte
       beta
     </strong>
     <span class="govuk-phase-banner__text">
-      This is a new service. Your <a href="https://defragroup.eu.qualtrics.com/jfe/form/SV_4IsQyL0cOUbFDQG" target="https://defragroup.eu.qualtrics.com/jfe/form/SV_4IsQyL0cOUbFDQG" rel="noopener noreferrer">feedback</a> will help us to improve it.
+      This is a new service. Your <a href="undefined" target="undefined" rel="noopener noreferrer">feedback</a> will help us to improve it.
     </span>
   </p>
 </div>
