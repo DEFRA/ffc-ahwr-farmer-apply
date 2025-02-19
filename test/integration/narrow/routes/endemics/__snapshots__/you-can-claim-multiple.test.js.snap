@@ -225,7 +225,7 @@ exports[`you-can-claim-multiple page GET operation handler returns 200 and conte
       beta
     </strong>
     <span class="govuk-phase-banner__text">
-      This is a new service. Your <a href="https://defragroup.eu.qualtrics.com/jfe/form/SV_4IsQyL0cOUbFDQG" target="_blank" rel="noopener noreferrer">feedback</a> will help us to improve it.
+      This is a new service. Your <a href="https://forms.office.com/pages/responsepage.aspx?id=UCQKdycCYkyQx044U38RAsIdAEqqafZCk2LjifrI4h1UOUVRSThFNEE1RFdWRVk5U0VGSUM3SDcyNi4u&route=shorturl" target="https://forms.office.com/pages/responsepage.aspx?id=UCQKdycCYkyQx044U38RAsIdAEqqafZCk2LjifrI4h1UOUVRSThFNEE1RFdWRVk5U0VGSUM3SDcyNi4u&route=shorturl" rel="noopener noreferrer">feedback</a> will help us to improve it.
     </span>
   </p>
 </div>
@@ -318,7 +318,7 @@ exports[`you-can-claim-multiple page GET operation handler returns 200 and conte
         
         <div class="govuk-footer__meta-custom">
           <h2>Data Protection</h2>
-          <p class="data-entry">For information on how we handle personal data go to GOV.UK and search for <a href="https://www.gov.uk/government/organisations/rural-payments-agency/about/personal-information-charter" target="_blank" rel="noopener noreferrer" ga-click ga-category="Footer" ga-action="Link clicked: Rural Payments Agency personal information charter">Rural Payments Agency personal information charter</a>.</p>
+          <p class="data-entry">For information on how we handle personal data go to GOV.UK and search for <a href="https://www.gov.uk/government/organisations/rural-payments-agency/about/personal-information-charter" target="https://www.gov.uk/government/organisations/rural-payments-agency/about/personal-information-charter" rel="noopener noreferrer" ga-click ga-category="Footer" ga-action="Link clicked: Rural Payments Agency personal information charter">Rural Payments Agency personal information charter</a>.</p>
           <ul class="govuk-footer__inline-list">
                
             <li class="govuk-footer__inline-list-item">
