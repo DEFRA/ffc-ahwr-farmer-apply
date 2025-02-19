@@ -109,7 +109,6 @@ export const declarationRouteHandlers = [{
         reference: newApplicationReference,
         isNewUser: userType.NEW_USER === application.organisation.userType,
         ruralPaymentsAgency: config.ruralPaymentsAgency,
-        applySurveyUri: config.customerSurvey.uri,
         latestTermsAndConditionsUri: config.latestTermsAndConditionsUri
       })
     }
