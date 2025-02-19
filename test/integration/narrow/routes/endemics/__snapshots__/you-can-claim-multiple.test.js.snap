@@ -17,14 +17,26 @@ exports[`you-can-claim-multiple page GET operation handler returns 200 and conte
       <link rel="manifest" href="/apply/assets/manifest.json">
     
 
-     <!--[if !IE 8]><!--><link href="/apply/assets/css/a8de85589c38af6a64f0.css" rel="stylesheet"><!--<![endif]-->  <!--[if IE 8]>
+    
+  
+  <!--[if !IE 8]><!-->
+  
+    <link href="/apply/assets/css/3edf113072379bddb25c.css" rel="stylesheet">
+  
+  <!--<![endif]-->
+  
+  
+  <!--[if IE 8]>
     <link href="/apply/assets/govuk-frontend/dist/govuk/all-ie8.css" rel="stylesheet" />
-  <![endif]--> 
+  <![endif]-->
+
     
   </head>
   <body class="govuk-template__body">
     <script>document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');</script>
-      
+    
+  
+    
 <noscript>
   
 <div class="govuk-cookie-banner" data-nosnippet role="region" aria-label="Cookies on Get funding to improve animal health and welfare">
@@ -158,14 +170,19 @@ exports[`you-can-claim-multiple page GET operation handler returns 200 and conte
   
 </div>
 
-</div>   
+</div>
+  
+
+  
+
 
     
       <a href="#main-content" class="govuk-skip-link" data-module="govuk-skip-link">Skip to main content</a>
 
     
 
-     <header class="govuk-header" data-module="govuk-header">
+    
+  <header class="govuk-header" data-module="govuk-header">
   <div class="govuk-header__container govuk-width-container">
     <div class="govuk-header__logo">
       <a href="https://www.gov.uk/" class="govuk-header__link govuk-header__link--homepage">
@@ -199,7 +216,9 @@ exports[`you-can-claim-multiple page GET operation handler returns 200 and conte
   
   </div>
 </header>
-<div class="govuk-grid-row govuk-width-container">
+
+  <div class="govuk-grid-row govuk-width-container">
+    
 <div class="govuk-phase-banner">
   <p class="govuk-phase-banner__content">
     <strong class="govuk-tag govuk-phase-banner__content__tag">
@@ -210,7 +229,9 @@ exports[`you-can-claim-multiple page GET operation handler returns 200 and conte
     </span>
   </p>
 </div>
-</div>
+
+  </div>
+
 
     
       <div class="govuk-width-container">
@@ -285,7 +306,8 @@ exports[`you-can-claim-multiple page GET operation handler returns 200 and conte
       </div>
     
 
-     <footer class="govuk-footer">
+    
+  <footer class="govuk-footer">
   <div class="govuk-width-container">
     
     <div class="govuk-footer__meta">
@@ -295,7 +317,22 @@ exports[`you-can-claim-multiple page GET operation handler returns 200 and conte
         
         
         <div class="govuk-footer__meta-custom">
-          <h2>Data Protection</h2><p class="data-entry">For information on how we handle personal data go to GOV.UK and search for <a href="https://www.gov.uk/government/organisations/rural-payments-agency/about/personal-information-charter" target="https://www.gov.uk/government/organisations/rural-payments-agency/about/personal-information-charter" rel="noopener noreferrer" ga-click ga-category="Footer" ga-action="Link clicked: Rural Payments Agency personal information charter">Rural Payments Agency personal information charter</a>.</p><ul class="govuk-footer__inline-list"><li class="govuk-footer__inline-list-item"><a class="govuk-footer__link" href="/apply/accessibility">Accessibility</a></li><li class="govuk-footer__inline-list-item"><a class="govuk-footer__link" href="/apply/cookies">Cookies</a></li></ul>
+          <h2>Data Protection</h2>
+          <p class="data-entry">For information on how we handle personal data go to GOV.UK and search for <a href="https://www.gov.uk/government/organisations/rural-payments-agency/about/personal-information-charter" target="https://www.gov.uk/government/organisations/rural-payments-agency/about/personal-information-charter" rel="noopener noreferrer" ga-click ga-category="Footer" ga-action="Link clicked: Rural Payments Agency personal information charter">Rural Payments Agency personal information charter</a>.</p>
+          <ul class="govuk-footer__inline-list">
+               
+            <li class="govuk-footer__inline-list-item">
+              <a class="govuk-footer__link" href="/apply/accessibility">
+                Accessibility
+              </a>
+            </li>
+          
+            <li class="govuk-footer__inline-list-item">
+              <a class="govuk-footer__link" href="/apply/cookies">
+                Cookies
+              </a>
+            </li>
+          </ul>
         </div>
         
         
@@ -337,9 +374,14 @@ exports[`you-can-claim-multiple page GET operation handler returns 200 and conte
     </div>
   </div>
 </footer>
- 
 
-    <script src="/apply/assets/js/9d00bc6983419ad6c3b2.js"></script>
+
+
+    
+  
+    <script src="/apply/assets/js/aeca7828a685e3b7d61f.js"></script>
+  
+
   </body>
 </html>
 "
