@@ -8,7 +8,7 @@ import {
   endemicsYouCanClaimMultiple
 } from '../../config/routes.js'
 
-const { agreeSameSpecies, organisation: organisationKey } = keys.farmerApplyData
+const { agreeMultipleSpecies, organisation: organisationKey } = keys.farmerApplyData
 const urlPrefix = config.urlPrefix
 
 const pageUrl = `${urlPrefix}/${endemicsYouCanClaimMultiple}`
@@ -51,7 +51,7 @@ export const claimMultipleRouteHandlers = [
 
         setFarmerApplyData(
           request,
-          agreeSameSpecies, // NOTE AHWR-427 switch to agreeMultipleSpecies, once MI report supports it
+          agreeMultipleSpecies,
           status.value
         )
 
