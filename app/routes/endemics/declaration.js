@@ -77,7 +77,7 @@ export const declarationRouteHandlers = [{
 
       if (newApplicationReference) {
         setFarmerApplyData(request, reference, newApplicationReference)
-        setTempReference(request, keys.tempReference, tempApplicationReference)
+        setTempReference(request, keys.tempReference.tempReference, tempApplicationReference)
 
         const organisation = getFarmerApplyData(request, organisationKey)
         appInsights.defaultClient.trackEvent({
