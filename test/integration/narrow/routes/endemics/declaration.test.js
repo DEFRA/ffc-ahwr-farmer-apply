@@ -4,7 +4,7 @@ import { getCrumbs } from '../../../../utils/get-crumbs'
 import { keys } from '../../../../../app/session/keys'
 import { states, userType } from '../../../../../app/constants/constants'
 import { config } from '../../../../../app/config'
-import { clear, getFarmerApplyData, setFarmerApplyData } from '../../../../../app/session'
+import { clear, getFarmerApplyData, setFarmerApplyData, setTempReference } from '../../../../../app/session'
 import { receiveMessage } from '../../../../../app/messaging/receive-message'
 import { sendMessage } from '../../../../../app/messaging/send-message'
 import { createServer } from '../../../../../app/server'
@@ -109,7 +109,7 @@ describe('Declaration test', () => {
 
   describe(`POST ${url} route`, () => {
     test('returns 200, caches data and sends message for valid request', async () => {
-      const application = { organisation }
+      const application = { organisation, reference: 'TEMP-PJ7E-WSI8' }
       getFarmerApplyData.mockReturnValue(application)
       receiveMessage.mockResolvedValueOnce({ applicationReference: 'abc123', applicationState: states.submitted })
       const crumb = await getCrumbs(server)
@@ -131,6 +131,8 @@ describe('Declaration test', () => {
       expect(clear).toBeCalledTimes(1)
       expect(setFarmerApplyData).toHaveBeenCalledTimes(3)
       expect(setFarmerApplyData).toHaveBeenNthCalledWith(1, res.request, declaration, true)
+      expect(setTempReference).toHaveBeenCalledTimes(1)
+      expect(setTempReference).toHaveBeenCalledWith(res.request, 'tempReference', 'TEMP-PJ7E-WSI8')
       expect(getFarmerApplyData).toHaveBeenCalledTimes(4)
       expect(getFarmerApplyData).toHaveBeenCalledWith(res.request)
       expect(sendMessage).toHaveBeenCalledTimes(1)
