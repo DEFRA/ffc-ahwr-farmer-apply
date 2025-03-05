@@ -66,9 +66,6 @@ export const getConfig = () => {
       timeoutMilliseconds: joi.number()
     },
     latestTermsAndConditionsUri: joi.string().required(),
-    dateOfTesting: {
-      enabled: joi.bool().required()
-    },
     tenMonthRule: {
       enabled: joi.bool().required()
     },
@@ -139,9 +136,6 @@ export const getConfig = () => {
       timeoutMilliseconds: Number(process.env.WRECK_HTTP_TIMEOUT_MILLISECONDS) || tenSecondsInMilliseconds
     },
     latestTermsAndConditionsUri: process.env.TERMS_AND_CONDITIONS_URL,
-    dateOfTesting: {
-      enabled: process.env.DATE_OF_TESTING_ENABLED === 'true'
-    },
     tenMonthRule: {
       enabled: process.env.TEN_MONTH_RULE_ENABLED === 'true'
     },

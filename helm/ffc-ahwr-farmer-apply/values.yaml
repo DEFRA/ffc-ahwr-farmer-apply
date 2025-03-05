@@ -76,7 +76,6 @@ container:
   apimClientId:
   apimClientSecret:
   apimScope:
-  dateOfTestingEnabled:
   tenMonthRuleEnabled:
   endemicsEnabled: 'true'
   multiSpeciesEnabled: 'false'
