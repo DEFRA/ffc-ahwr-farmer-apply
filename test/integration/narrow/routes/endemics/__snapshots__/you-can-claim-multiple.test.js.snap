@@ -225,7 +225,7 @@ exports[`you-can-claim-multiple page GET operation handler returns 200 and conte
       beta
     </strong>
     <span class="govuk-phase-banner__text">
-      This is a new service. Your <a href="https://forms.office.com/pages/responsepage.aspx?id=UCQKdycCYkyQx044U38RAsIdAEqqafZCk2LjifrI4h1UOUVRSThFNEE1RFdWRVk5U0VGSUM3SDcyNi4u&route=shorturl" target="https://forms.office.com/pages/responsepage.aspx?id=UCQKdycCYkyQx044U38RAsIdAEqqafZCk2LjifrI4h1UOUVRSThFNEE1RFdWRVk5U0VGSUM3SDcyNi4u&route=shorturl" rel="noopener noreferrer">feedback</a> will help us to improve it.
+      This is a new service. Your <a href="http://this-is-a-test-uri" target="http://this-is-a-test-uri" rel="noopener noreferrer">feedback</a> will help us to improve it.
     </span>
   </p>
 </div>
