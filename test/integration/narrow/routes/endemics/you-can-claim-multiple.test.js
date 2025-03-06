@@ -12,6 +12,9 @@ jest.mock('../../../../../app/config/index.js', () => ({
     ...jest.requireActual('../../../../../app/config/index.js').config,
     multiSpecies: {
       enabled: true
+    },
+    customerSurvey: {
+      uri: 'http://this-is-a-test-uri'
     }
   }
 }))
@@ -39,13 +42,8 @@ describe('you-can-claim-multiple page', () => {
 
   let server
 
-  afterAll(async () => {
-    await server.stop()
-  })
-
   beforeAll(async () => {
     server = await createServer()
-    await server.initialize()
   })
 
   beforeEach(async () => {
