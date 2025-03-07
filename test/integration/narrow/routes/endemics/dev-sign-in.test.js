@@ -4,6 +4,7 @@ import * as cheerio from 'cheerio'
 import { ok } from '../../../../utils/phase-banner-expect.js'
 import { getCrumbs } from '../../../../utils/get-crumbs.js'
 import { businessEligibleToApply } from '../../../../../app/api-requests/business-eligible-to-apply.js'
+import { AlreadyAppliedError } from '../../../../../app/exceptions/AlreadyAppliedError.js'
 
 jest.mock('../../../../../app/session/index')
 jest.mock('../../../../../app/api-requests/business-eligible-to-apply')
@@ -45,7 +46,7 @@ describe('Dev sign in page test', () => {
     })
 
     test('POST to dev login successfully returns a 302 and redirects to journey', async () => {
-      businessEligibleToApply.mockReturnValueOnce('no previous application')
+      businessEligibleToApply.mockResolvedValueOnce('no previous application')
 
       const options = {
         method: 'POST',
@@ -61,6 +62,29 @@ describe('Dev sign in page test', () => {
 
       expect(res.statusCode).toBe(302)
       expect(res.headers.location).toEqual('/apply/endemics/check-details')
+    })
+
+    test('POST to dev login successfully returns a 302 and redirects to journey', async () => {
+      const sbi = '123456789'
+      businessEligibleToApply.mockImplementation(() => {
+        throw new AlreadyAppliedError(`Business with SBI ${sbi} already has an endemics agreement`)
+      })
+
+      const options = {
+        method: 'POST',
+        url: '/apply/endemics/dev-sign-in',
+        payload: {
+          crumb,
+          sbi
+        },
+        headers: { cookie: `crumb=${crumb}` }
+      }
+
+      const res = await server.inject(options)
+
+      const $ = cheerio.load(res.payload)
+      expect(res.statusCode).toBe(400)
+      expect($('h1').text().trim()).toMatch(`You cannot sign in with SBI ${sbi}`)
     })
   })
 })
