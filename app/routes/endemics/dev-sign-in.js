@@ -37,10 +37,10 @@ const createDevDetails = async (sbi) => {
 
 function setOrganisationSessionData (request, personSummary, { organisation: org }) {
   const organisation = {
-    sbi: org.sbi?.toString(),
+    sbi: org.sbi,
     farmerName: getPersonName(personSummary),
     name: org.name,
-    email: personSummary.email ? personSummary.email : org.email,
+    email: personSummary.email,
     orgEmail: org.email,
     address: getOrganisationAddress(org.address),
     crn: personSummary.customerReferenceNumber,

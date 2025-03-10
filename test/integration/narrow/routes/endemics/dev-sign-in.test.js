@@ -86,5 +86,26 @@ describe('Dev sign in page test', () => {
       expect(res.statusCode).toBe(400)
       expect($('h1').text().trim()).toMatch(`You cannot sign in with SBI ${sbi}`)
     })
+
+    test('POST to dev login which throws an error redirects to standard error 500 page', async () => {
+      const sbi = '123456789'
+      businessEligibleToApply.mockImplementation(() => { throw new Error('I am an error') })
+
+      const options = {
+        method: 'POST',
+        url: '/apply/endemics/dev-sign-in',
+        payload: {
+          crumb,
+          sbi
+        },
+        headers: { cookie: `crumb=${crumb}` }
+      }
+
+      const res = await server.inject(options)
+
+      const $ = cheerio.load(res.payload)
+      expect(res.statusCode).toBe(500)
+      expect($('h1').text()).toEqual('Sorry, there is a problem with the service')
+    })
   })
 })
