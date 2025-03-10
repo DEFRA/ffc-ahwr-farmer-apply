@@ -7,6 +7,7 @@ import { getPersonName } from '../../api-requests/rpa-api/person.js'
 import { getOrganisationAddress } from '../../api-requests/rpa-api/organisation.js'
 import { businessEligibleToApply } from '../../api-requests/business-eligible-to-apply.js'
 import { farmerApply } from '../../constants/constants.js'
+import { AlreadyAppliedError } from '../../exceptions/AlreadyAppliedError.js'
 
 const urlPrefix = config.urlPrefix
 const pageUrl = `${urlPrefix}/endemics/dev-sign-in`
@@ -18,7 +19,7 @@ const createDevDetails = async (sbi) => {
       sbi,
       name: 'madeUpCo',
       email: 'org@company.com',
-      frn: 'frn123456',
+      frn: '1100918140',
       address: {
         address1: 'Somewhere'
       }
@@ -26,7 +27,7 @@ const createDevDetails = async (sbi) => {
   }
   const personSummary = {
     email: 'farmer@farm.com',
-    customerReferenceNumber: 'abc123',
+    customerReferenceNumber: '2054561445',
     firstName: 'John',
     lastName: 'Smith'
   }
@@ -36,10 +37,10 @@ const createDevDetails = async (sbi) => {
 
 function setOrganisationSessionData (request, personSummary, { organisation: org }) {
   const organisation = {
-    sbi: org.sbi?.toString(),
+    sbi: org.sbi,
     farmerName: getPersonName(personSummary),
     name: org.name,
-    email: personSummary.email ? personSummary.email : org.email,
+    email: personSummary.email,
     orgEmail: org.email,
     address: getOrganisationAddress(org.address),
     crn: personSummary.customerReferenceNumber,
@@ -77,11 +78,22 @@ export const devLoginHandlers = [
         request.logger.setBindings({ sbi })
         const [personSummary, organisationSummary] = await createDevDetails(sbi)
 
-        setCustomer(request, keys.customer.id, personSummary.id)
-        setOrganisationSessionData(request, personSummary, { ...organisationSummary })
-        const previousApplication = await businessEligibleToApply(organisationSummary.organisation.sbi)
+        try {
+          const previousApplication = await businessEligibleToApply(sbi)
 
-        request.logger.setBindings({ previousApplication })
+          request.logger.setBindings({ previousApplication })
+        } catch (error) {
+          if (error instanceof AlreadyAppliedError) {
+            const errorMessage = `${sbi} already has an active agreement in the database.`
+            return h.view('dev-sign-in-exception', { backLink: `${config.urlPrefix}/endemics/dev-sign-in`, sbi, errorMessage }).code(400).takeover()
+          }
+
+          throw error
+        }
+
+        setCustomer(request, keys.customer.id, personSummary.id)
+        setCustomer(request, keys.customer.crn, personSummary.customerReferenceNumber)
+        setOrganisationSessionData(request, personSummary, { ...organisationSummary })
 
         setAuthCookie(request, personSummary.email, farmerApply)
 
