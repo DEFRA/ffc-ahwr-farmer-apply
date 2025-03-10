@@ -64,7 +64,7 @@ describe('Dev sign in page test', () => {
       expect(res.headers.location).toEqual('/apply/endemics/check-details')
     })
 
-    test('POST to dev login successfully returns a 302 and redirects to journey', async () => {
+    test('POST to dev login with an SBI which already has applied redirects user to the dev sign in exception page', async () => {
       const sbi = '123456789'
       businessEligibleToApply.mockImplementation(() => {
         throw new AlreadyAppliedError(`Business with SBI ${sbi} already has an endemics agreement`)

@@ -79,7 +79,7 @@ export const devLoginHandlers = [
         const [personSummary, organisationSummary] = await createDevDetails(sbi)
 
         try {
-          const previousApplication = await businessEligibleToApply(organisationSummary.organisation.sbi)
+          const previousApplication = await businessEligibleToApply(sbi)
 
           request.logger.setBindings({ previousApplication })
         } catch (error) {
