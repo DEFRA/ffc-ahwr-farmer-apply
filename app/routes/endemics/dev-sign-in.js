@@ -60,8 +60,7 @@ export const devLoginHandlers = [
     options: {
       auth: false,
       handler: async (request, h) => {
-        return h.view('dev-sign-in', {
-        })
+        return h.view('dev-sign-in', { backLink: '/apply/endemics/start' })
       }
     }
   },
