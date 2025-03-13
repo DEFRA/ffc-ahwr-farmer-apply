@@ -5,9 +5,9 @@
 ## Prerequisites
 
 - Access to an instance of an
-[Azure Service Bus](https://docs.microsoft.com/en-us/azure/service-bus-messaging/).
+  [Azure Service Bus](https://docs.microsoft.com/en-us/azure/service-bus-messaging/).
 - Access to an instance of an
-[Azure Storage Account](https://docs.microsoft.com/en-us/azure/storage/common/storage-account-overview).
+  [Azure Storage Account](https://docs.microsoft.com/en-us/azure/storage/common/storage-account-overview).
   This could be an actual account or
   [Azurite](https://docs.microsoft.com/en-us/azure/storage/common/storage-use-azurite),
   a storage emulator
@@ -28,35 +28,35 @@ overridden by build and release pipelines.
 
 Please ask a developer for an example `.env` file that you can include in the root of your project that will contain environment variables overrirdes for local development that are different than the docker-compose file.
 
-| Name                                  | Description                                                                                      |
-| ----                                  | -----------                                                                                      |
-| APPLICATIONREQUEST_QUEUE_ADDRESS      | Name of message queue used to send application requests                                          |
-| APPLICATIONRESPONSE_QUEUE_ADDRESS     | Name of session enabled message queue used to receive application responses                      |
-| MESSAGE_QUEUE_HOST                    | Azure Service Bus hostname, e.g. `myservicebus.servicebus.windows.net`                           |
-| MESSAGE_QUEUE_PASSWORD                | Azure Service Bus SAS policy key                                                                 |
-| MESSAGE_QUEUE_SUFFIX                  | Developer initials                                                                               |
-| MESSAGE_QUEUE_USER                    | Azure Service Bus SAS policy name, e.g. `RootManageSharedAccessKey`                              |
-| SERVICE_URI                           | URI of service (used in links, in emails) e.g. `http://localhost:3000` or `https://defra.gov.uk` |
-| AZURE_STORAGE_CREATE_CONTAINERS       | Set true to use connection string, false to connect using azure credentials for blobstorage      |
-| DEFRA_ID_TENANT                       | The Azure tenant for Defra Id                                                                    |
-| DEFRA_ID_POLICY                       | Defra Id policy                                                                                  |
-| DEFRA_ID_REDIRECT_URI                 | Defra Id redirect URI                                                                            |
-| DEFRA_ID_JWT_ISSUER_ID                | Defra Id JWT Issuer id                                                                           |
-| DEFRA_ID_CLIENT_ID                    | The application ID assigned to your app during the registration with Defra Id                    |
-| DEFRA_ID_CLIENT_SECRET                | Secret supplied by Defra Id                                                                      |
-| DEFRA_ID_SERVICE_ID                   | The unique identifier for your service provided as part of being on-boarded to Defra Id          |
-| RPA_HOST_NAME                         | Rural payment agency api endpoint host name                                                      |
-| RPA_GET_PERSON_SUMMARY_URL            | Rural payment agency URL for the get person summary api                                          |
-| RPA_GET_ORGANISATION_PERMISSIONS_URL  | Rural payment agency URL for the get organisation permissions api                                |
-| RPA_GET_ORGANISATION_URL              | Rural payment agency URL for the get organisation api                                            |
-| APIM_OCP_SUBSCRIPTION_KEY             | Unique key used to manage auth requests with Azure API management                                |
-| APIM_HOST_NAME                        | Azure API management host name                                                                   |
-| APIM_OAUTH_PATH                       | Azure API management authorisation endpoint path                                                 |
-| APIM_CLIENT_ID                        | Client Id as registered with Azure API management                                                |
-| APIM_CLIENT_SECRET                    | Client Secret as registered with Azure API management                                            |
-| APIM_SCOPE                            | Scope of the access token being requested from Azure API management
-| TERMS_AND_CONDITIONS_URL              | URL for latest service terms and conditions
-| USE_PRETTY_PRINT                      | Flag to enable pretty logs |
+| Name                                 | Description                                                                                      |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------ |
+| APPLICATIONREQUEST_QUEUE_ADDRESS     | Name of message queue used to send application requests                                          |
+| APPLICATIONRESPONSE_QUEUE_ADDRESS    | Name of session enabled message queue used to receive application responses                      |
+| MESSAGE_QUEUE_HOST                   | Azure Service Bus hostname, e.g. `myservicebus.servicebus.windows.net`                           |
+| MESSAGE_QUEUE_PASSWORD               | Azure Service Bus SAS policy key                                                                 |
+| MESSAGE_QUEUE_SUFFIX                 | Developer initials                                                                               |
+| MESSAGE_QUEUE_USER                   | Azure Service Bus SAS policy name, e.g. `RootManageSharedAccessKey`                              |
+| SERVICE_URI                          | URI of service (used in links, in emails) e.g. `http://localhost:3000` or `https://defra.gov.uk` |
+| AZURE_STORAGE_CREATE_CONTAINERS      | Set true to use connection string, false to connect using azure credentials for blobstorage      |
+| DEFRA_ID_TENANT                      | The Azure tenant for Defra Id                                                                    |
+| DEFRA_ID_POLICY                      | Defra Id policy                                                                                  |
+| DEFRA_ID_REDIRECT_URI                | Defra Id redirect URI                                                                            |
+| DEFRA_ID_JWT_ISSUER_ID               | Defra Id JWT Issuer id                                                                           |
+| DEFRA_ID_CLIENT_ID                   | The application ID assigned to your app during the registration with Defra Id                    |
+| DEFRA_ID_CLIENT_SECRET               | Secret supplied by Defra Id                                                                      |
+| DEFRA_ID_SERVICE_ID                  | The unique identifier for your service provided as part of being on-boarded to Defra Id          |
+| RPA_HOST_NAME                        | Rural payment agency api endpoint host name                                                      |
+| RPA_GET_PERSON_SUMMARY_URL           | Rural payment agency URL for the get person summary api                                          |
+| RPA_GET_ORGANISATION_PERMISSIONS_URL | Rural payment agency URL for the get organisation permissions api                                |
+| RPA_GET_ORGANISATION_URL             | Rural payment agency URL for the get organisation api                                            |
+| APIM_OCP_SUBSCRIPTION_KEY            | Unique key used to manage auth requests with Azure API management                                |
+| APIM_HOST_NAME                       | Azure API management host name                                                                   |
+| APIM_OAUTH_PATH                      | Azure API management authorisation endpoint path                                                 |
+| APIM_CLIENT_ID                       | Client Id as registered with Azure API management                                                |
+| APIM_CLIENT_SECRET                   | Client Secret as registered with Azure API management                                            |
+| APIM_SCOPE                           | Scope of the access token being requested from Azure API management                              |
+| TERMS_AND_CONDITIONS_URL             | URL for latest service terms and conditions                                                      |
+| USE_PRETTY_PRINT                     | Flag to enable pretty logs                                                                       |
 
 ## Running the application
 
@@ -67,7 +67,7 @@ for production deployments to Kubernetes).
 Configuration and secret data are held in Azure Key Vault and populated during
 the deployment to non-local environments.
 
-*NOTE:*
+_NOTE:_
 User data is currently loaded from a file in Azure Storage, an example file is
 available ([users.json](./data/users.json)) where the structure of the data can
 be seen along with examples. If user record has isTest property set to true and
@@ -134,4 +134,4 @@ scripts/test -w
 This service uses the
 [FFC CI pipeline](https://github.com/DEFRA/ffc-jenkins-pipeline-library)
 
-#Note: Always make sure to include new parameters in the docker-compose.yaml file before adding  to jenkins
+#Note: Always make sure to include new parameters in the docker-compose.yaml file before adding to jenkins

@@ -1,9 +1,9 @@
-import jwt from 'jsonwebtoken'
+import jwt from "jsonwebtoken";
 
 export const decodeJwt = (token) => {
-  const decodedToken = jwt.decode(token, { complete: true })
+  const decodedToken = jwt.decode(token, { complete: true });
   if (!decodedToken) {
-    throw new Error('The token has not been decoded')
+    throw new Error("The token has not been decoded");
   }
-  return decodedToken.payload
-}
+  return decodedToken.payload;
+};

@@ -1,36 +1,36 @@
-import { createMessage } from '../../../../app/messaging/create-message.js'
-import { createMessageSender } from '../../../../app/messaging/create-message-sender.js'
-import { sendMessage } from '../../../../app/messaging/send-message.js'
+import { createMessage } from "../../../../app/messaging/create-message.js";
+import { createMessageSender } from "../../../../app/messaging/create-message-sender.js";
+import { sendMessage } from "../../../../app/messaging/send-message.js";
 
-jest.mock('../../../../app/messaging/create-message')
-jest.mock('../../../../app/messaging/create-message-sender')
+jest.mock("../../../../app/messaging/create-message");
+jest.mock("../../../../app/messaging/create-message-sender");
 
-describe('sendMessage', () => {
+describe("sendMessage", () => {
   beforeEach(() => {
-    jest.clearAllMocks()
-  })
+    jest.clearAllMocks();
+  });
 
-  it('should create a message and send it using the message sender', async () => {
-    const body = { message: 'Hello' }
-    const type = 'text'
-    const options = { priority: 'high' }
-    const config = { url: 'https://example.com', apiKey: '123456' }
+  it("should create a message and send it using the message sender", async () => {
+    const body = { message: "Hello" };
+    const type = "text";
+    const options = { priority: "high" };
+    const config = { url: "https://example.com", apiKey: "123456" };
 
-    const message = { body, type, options }
-    const sender = { sendMessage: jest.fn() }
+    const message = { body, type, options };
+    const sender = { sendMessage: jest.fn() };
 
-    createMessage.mockReturnValueOnce(message)
-    createMessageSender.mockReturnValueOnce(sender)
+    createMessage.mockReturnValueOnce(message);
+    createMessageSender.mockReturnValueOnce(sender);
 
-    await sendMessage(body, type, config, options)
+    await sendMessage(body, type, config, options);
 
-    expect(createMessage).toHaveBeenCalledTimes(1)
-    expect(createMessage).toHaveBeenCalledWith(body, type, options)
+    expect(createMessage).toHaveBeenCalledTimes(1);
+    expect(createMessage).toHaveBeenCalledWith(body, type, options);
 
-    expect(createMessageSender).toHaveBeenCalledTimes(1)
-    expect(createMessageSender).toHaveBeenCalledWith(config)
+    expect(createMessageSender).toHaveBeenCalledTimes(1);
+    expect(createMessageSender).toHaveBeenCalledWith(config);
 
-    expect(sender.sendMessage).toHaveBeenCalledTimes(1)
-    expect(sender.sendMessage).toHaveBeenCalledWith(message)
-  })
-})
+    expect(sender.sendMessage).toHaveBeenCalledTimes(1);
+    expect(sender.sendMessage).toHaveBeenCalledWith(message);
+  });
+});
