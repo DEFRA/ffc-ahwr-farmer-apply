@@ -1,25 +1,27 @@
-const { generateRandomID } = require('../../../../app/lib/create-temp-reference.js')
+const {
+  generateRandomID,
+} = require("../../../../app/lib/create-temp-reference.js");
 
-test('should return a string temp reference', () => {
-  const tempRef = generateRandomID()
+test("should return a string temp reference", () => {
+  const tempRef = generateRandomID();
 
-  expect(typeof tempRef).toBe('string')
+  expect(typeof tempRef).toBe("string");
   // A-Z excluding O, and 1-9
-  const regex = /^TEMP-[A-NP-Z1-9]{4}-[A-NP-Z1-9]{4}$/
-  expect(tempRef).toMatch(regex)
-})
+  const regex = /^TEMP-[A-NP-Z1-9]{4}-[A-NP-Z1-9]{4}$/;
+  expect(tempRef).toMatch(regex);
+});
 
-test('should not generate the same ID twice in 20,000 IDs', () => {
-  const ids = []
-  const numberToCreate = 20000
+test("should not generate the same ID twice in 20,000 IDs", () => {
+  const ids = [];
+  const numberToCreate = 20000;
 
   for (let index = 0; index < numberToCreate; index++) {
-    ids.push(generateRandomID())
+    ids.push(generateRandomID());
   }
 
-  expect(ids.length).toEqual(numberToCreate)
+  expect(ids.length).toEqual(numberToCreate);
 
-  const set = new Set(ids)
+  const set = new Set(ids);
 
-  expect(set.size).toEqual(numberToCreate)
-})
+  expect(set.size).toEqual(numberToCreate);
+});

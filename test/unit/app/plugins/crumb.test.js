@@ -1,64 +1,64 @@
-import Hapi from '@hapi/hapi'
-import { crumbPlugin } from '../../../../app/plugins/crumb.js'
-import { config } from '../../../../app/config/index.js'
+import Hapi from "@hapi/hapi";
+import { crumbPlugin } from "../../../../app/plugins/crumb.js";
+import { config } from "../../../../app/config/index.js";
 
-jest.mock('../../../../app/config', () => ({
-  ...jest.requireActual('../../../../app/config'),
-  urlPrefix: '/apply'
-}))
+jest.mock("../../../../app/config", () => ({
+  ...jest.requireActual("../../../../app/config"),
+  urlPrefix: "/apply",
+}));
 
-describe('Crumb Plugin', () => {
-  test('is correctly configured', () => {
-    expect(crumbPlugin.options.cookieOptions).toHaveProperty('isSecure')
-    expect(crumbPlugin.options.cookieOptions.isSecure).toEqual(false)
-  })
+describe("Crumb Plugin", () => {
+  test("is correctly configured", () => {
+    expect(crumbPlugin.options.cookieOptions).toHaveProperty("isSecure");
+    expect(crumbPlugin.options.cookieOptions.isSecure).toEqual(false);
+  });
 
-  describe('Skip Function', () => {
-    let server
+  describe("Skip Function", () => {
+    let server;
 
     beforeAll(async () => {
-      server = Hapi.server()
+      server = Hapi.server();
 
-      await server.register(crumbPlugin)
+      await server.register(crumbPlugin);
 
       server.route({
-        method: 'POST',
+        method: "POST",
         path: `${config.urlPrefix}/cookies`,
         handler: (request, h) => {
-          return h.response('ok').code(200)
-        }
-      })
+          return h.response("ok").code(200);
+        },
+      });
       server.route({
-        method: 'POST',
+        method: "POST",
         path: `${config.urlPrefix}/other`,
         handler: (request, h) => {
-          return h.response('ok').code(200)
-        }
-      })
+          return h.response("ok").code(200);
+        },
+      });
 
-      await server.initialize()
-    })
+      await server.initialize();
+    });
 
     afterAll(async () => {
-      await server.stop()
-    })
+      await server.stop();
+    });
 
-    test('should skip crumb token changes for /cookies endpoint', async () => {
+    test("should skip crumb token changes for /cookies endpoint", async () => {
       const response = await server.inject({
-        method: 'POST',
-        url: `${config.urlPrefix}/cookies`
-      })
+        method: "POST",
+        url: `${config.urlPrefix}/cookies`,
+      });
 
-      expect(response.statusCode).toBe(200)
-    })
+      expect(response.statusCode).toBe(200);
+    });
 
-    test('should generate and validate crumb token for other endpoints', async () => {
+    test("should generate and validate crumb token for other endpoints", async () => {
       const response = await server.inject({
-        method: 'POST',
-        url: `${config.urlPrefix}/other`
-      })
+        method: "POST",
+        url: `${config.urlPrefix}/other`,
+      });
 
-      expect(response.statusCode).toBe(403)
-    })
-  })
-})
+      expect(response.statusCode).toBe(403);
+    });
+  });
+});

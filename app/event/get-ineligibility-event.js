@@ -1,23 +1,30 @@
-export const getIneligibilityEvent = (sessionId, sbi, crn, email, exception, reference) => ({
-  name: 'send-ineligibility-event',
+export const getIneligibilityEvent = (
+  sessionId,
+  sbi,
+  crn,
+  email,
+  exception,
+  reference
+) => ({
+  name: "send-ineligibility-event",
   properties: {
     id: sessionId,
     sbi,
-    cph: 'n/a',
+    cph: "n/a",
     reference,
     checkpoint: process.env.APPINSIGHTS_CLOUDROLE,
-    status: 'alert',
+    status: "alert",
     action: {
-      type: 'ineligibility-event',
+      type: "ineligibility-event",
       message: `Apply: ${exception}`,
       data: {
         sbi,
         crn,
         exception,
         raisedAt: new Date(),
-        journey: 'apply'
+        journey: "apply",
       },
-      raisedBy: email
-    }
-  }
-})
+      raisedBy: email,
+    },
+  },
+});

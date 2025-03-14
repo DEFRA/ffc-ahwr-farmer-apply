@@ -1,36 +1,36 @@
-import { createServer } from '../../../../app/server'
+import { createServer } from "../../../../app/server";
 
-describe('Health test', () => {
-  let server
+describe("Health test", () => {
+  let server;
 
   beforeAll(async () => {
-    server = await createServer()
-    await server.initialize()
-  })
+    server = await createServer();
+    await server.initialize();
+  });
 
   afterAll(async () => {
-    await server.stop()
-  })
+    await server.stop();
+  });
 
-  test('GET /healthy route returns 200', async () => {
+  test("GET /healthy route returns 200", async () => {
     const options = {
-      method: 'GET',
-      url: '/healthy'
-    }
+      method: "GET",
+      url: "/healthy",
+    };
 
-    const res = await server.inject(options)
+    const res = await server.inject(options);
 
-    expect(res.statusCode).toBe(200)
-  })
+    expect(res.statusCode).toBe(200);
+  });
 
-  test('GET /healthz route returns 200', async () => {
+  test("GET /healthz route returns 200", async () => {
     const options = {
-      method: 'GET',
-      url: '/healthz'
-    }
+      method: "GET",
+      url: "/healthz",
+    };
 
-    const res = await server.inject(options)
+    const res = await server.inject(options);
 
-    expect(res.statusCode).toBe(200)
-  })
-})
+    expect(res.statusCode).toBe(200);
+  });
+});

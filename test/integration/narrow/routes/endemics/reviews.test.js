@@ -1,100 +1,102 @@
-import * as cheerio from 'cheerio'
-import { ok } from '../../../../utils/phase-banner-expect'
-import { endemicsNumbers } from '../../../../../app/config/routes.js'
-import { createServer } from '../../../../../app/server'
-import { getCrumbs } from '../../../../utils/get-crumbs'
-import { getFarmerApplyData } from '../../../../../app/session'
+import * as cheerio from "cheerio";
+import { ok } from "../../../../utils/phase-banner-expect";
+import { endemicsNumbers } from "../../../../../app/config/routes.js";
+import { createServer } from "../../../../../app/server";
+import { getCrumbs } from "../../../../utils/get-crumbs";
+import { getFarmerApplyData } from "../../../../../app/session";
 
-jest.mock('../../../../../app/session')
-jest.mock('../../../../../app/auth/authenticate')
+jest.mock("../../../../../app/session");
+jest.mock("../../../../../app/auth/authenticate");
 
-const endemicsNumbersUrl = '/apply/endemics/numbers'
-const endemicsReviewsUrl = '/apply/endemics/reviews'
-const endemicsCheckDetailsUrl = '/apply/endemics/check-details'
+const endemicsNumbersUrl = "/apply/endemics/numbers";
+const endemicsReviewsUrl = "/apply/endemics/reviews";
+const endemicsCheckDetailsUrl = "/apply/endemics/check-details";
 
-describe('Check your eligible page test', () => {
+describe("Check your eligible page test", () => {
   const auth = {
-    strategy: 'cookie',
-    credentials: { reference: '1111', sbi: '111111111' }
-  }
+    strategy: "cookie",
+    credentials: { reference: "1111", sbi: "111111111" },
+  };
   const org = {
-    farmerName: 'Dailry Farmer',
-    address: ' org-address-here',
-    cph: '11/222/3333',
-    email: 'org@test.com',
-    name: 'org-name',
-    sbi: '123456789'
-  }
+    farmerName: "Dailry Farmer",
+    address: " org-address-here",
+    cph: "11/222/3333",
+    email: "org@test.com",
+    name: "org-name",
+    sbi: "123456789",
+  };
   const options = {
     auth,
-    url: endemicsReviewsUrl
-  }
+    url: endemicsReviewsUrl,
+  };
 
-  let server
+  let server;
 
   beforeAll(async () => {
-    server = await createServer()
-    await server.initialize()
-  })
+    server = await createServer();
+    await server.initialize();
+  });
 
   afterAll(async () => {
-    await server.stop()
-  })
+    await server.stop();
+  });
 
   describe(`GET ${endemicsNumbers} route when logged in`, () => {
-    test('returns 200', async () => {
-      getFarmerApplyData.mockReturnValue(org)
+    test("returns 200", async () => {
+      getFarmerApplyData.mockReturnValue(org);
 
-      const res = await server.inject({ ...options, method: 'GET' })
+      const res = await server.inject({ ...options, method: "GET" });
 
-      expect(res.statusCode).toBe(200)
+      expect(res.statusCode).toBe(200);
 
-      const $ = cheerio.load(res.payload)
-      const titleClassName = '.govuk-heading-l'
-      const title = 'Reviews and follow-ups must be for the same species'
-      const pageTitleByClassName = $(titleClassName).text()
-      const pageTitleByName = $('title').text()
-      const fullTitle = `${title} - Get funding to improve animal health and welfare`
-      const backLinkUrlByClassName = $('.govuk-back-link').attr('href')
+      const $ = cheerio.load(res.payload);
+      const titleClassName = ".govuk-heading-l";
+      const title = "Reviews and follow-ups must be for the same species";
+      const pageTitleByClassName = $(titleClassName).text();
+      const pageTitleByName = $("title").text();
+      const fullTitle = `${title} - Get funding to improve animal health and welfare`;
+      const backLinkUrlByClassName = $(".govuk-back-link").attr("href");
 
-      console.log(' asdjflkdajslfjals f ', $('.govuk-heading-s').text())
+      console.log(" asdjflkdajslfjals f ", $(".govuk-heading-s").text());
 
-      expect(pageTitleByName).toMatch(fullTitle)
-      expect(pageTitleByClassName).toEqual(title)
-      expect($('.govuk-heading-s').text()).toEqual(`${org.name} - SBI ${org.sbi}`)
-      expect(backLinkUrlByClassName).toContain(endemicsCheckDetailsUrl)
-      ok($)
-    })
-  })
+      expect(pageTitleByName).toMatch(fullTitle);
+      expect(pageTitleByClassName).toEqual(title);
+      expect($(".govuk-heading-s").text()).toEqual(
+        `${org.name} - SBI ${org.sbi}`
+      );
+      expect(backLinkUrlByClassName).toContain(endemicsCheckDetailsUrl);
+      ok($);
+    });
+  });
 
   describe(`POST ${endemicsReviewsUrl} route`, () => {
-    let crumb
+    let crumb;
 
     beforeEach(async () => {
-      crumb = await getCrumbs(server)
-    })
+      crumb = await getCrumbs(server);
+    });
 
-    test('returns 302 to next page when agree answer given', async () => {
+    test("returns 302 to next page when agree answer given", async () => {
       const res = await server.inject({
         ...options,
-        method: 'POST',
+        method: "POST",
         headers: { cookie: `crumb=${crumb}` },
-        payload: { crumb, agreementStatus: 'agree' }
-      })
+        payload: { crumb, agreementStatus: "agree" },
+      });
 
-      expect(res.statusCode).toBe(302)
-      expect(res.headers.location).toEqual(endemicsNumbersUrl)
-    })
+      expect(res.statusCode).toBe(302);
+      expect(res.headers.location).toEqual(endemicsNumbersUrl);
+    });
 
-    test('returns 200 to rejected page when not agree answer given', async () => {
+    test("returns 200 to rejected page when not agree answer given", async () => {
       const res = await server.inject({
         ...options,
-        method: 'POST',
+        method: "POST",
         headers: { cookie: `crumb=${crumb}` },
-        payload: { crumb, agreementStatus: 'notAgree' }
-      })
+        payload: { crumb, agreementStatus: "notAgree" },
+      });
 
-      expect(res.statusCode).toBe(200)
-    })
-  })
-})
+      expect(res.statusCode).toBe(200);
+    });
+  });
+});
