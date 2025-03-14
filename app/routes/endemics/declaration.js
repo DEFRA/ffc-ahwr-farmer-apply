@@ -9,7 +9,6 @@ import {
   setFarmerApplyData,
   setTempReference,
 } from "../../session/index.js";
-import { getDeclarationData } from "../models/declaration.js";
 import { sendApplication } from "../../messaging/application/index.js";
 import { applicationType, userType } from "../../constants/constants.js";
 import { config } from "../../config/index.js";
@@ -38,7 +37,7 @@ const resetFarmerApplyDataBeforeApplication = (application) => {
 
 export const declarationRouteHandlers = [
   {
-    method: "GET",
+    method: "get",
     path: `${config.urlPrefix}/${endemicsDeclaration}`,
     options: {
       handler: async (request, h) => {
@@ -46,32 +45,30 @@ export const declarationRouteHandlers = [
         if (!application) {
           return boom.notFound();
         }
-        const viewData = getDeclarationData(application);
+
         return h.view(endemicsDeclaration, {
           backLink: `${config.urlPrefix}/${endemicsTimings}`,
           latestTermsAndConditionsUri: `${config.latestTermsAndConditionsUri}?continue=true&backLink=${config.urlPrefix}/${endemicsDeclaration}`,
-          ...viewData,
+          organisation: application.organisation,
         });
       },
     },
   },
   {
-    method: "POST",
+    method: "post",
     path: `${config.urlPrefix}/${endemicsDeclaration}`,
     options: {
       validate: {
         payload: joi.object({
           offerStatus: joi.string().required().valid("accepted", "rejected"),
-          terms: joi
-            .string()
-            .when("offerStatus", {
-              is: "accepted",
-              then: joi.valid("agree").required(),
-            }),
+          terms: joi.string().when("offerStatus", {
+            is: "accepted",
+            then: joi.valid("agree").required(),
+          }),
         }),
         failAction: async (request, h, _) => {
           const application = getFarmerApplyData(request);
-          const viewData = getDeclarationData(application);
+
           return h
             .view(endemicsDeclaration, {
               backLink: `${config.urlPrefix}/${endemicsTimings}`,
@@ -79,7 +76,7 @@ export const declarationRouteHandlers = [
               errorMessage: {
                 text: "Select you have read and agree to the terms and conditions",
               },
-              ...viewData,
+              organisation: application.organisation,
             })
             .code(400)
             .takeover();

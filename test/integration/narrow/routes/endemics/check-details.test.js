@@ -145,6 +145,25 @@ describe("Org review page test", () => {
       crumb = await getCrumbs(server);
     });
 
+    test("returns 404 when no orgranisation on failed validation", async () => {
+      getFarmerApplyData.mockReturnValue(undefined);
+      const options = {
+        auth,
+        method: "post",
+        url,
+        payload: { crumb, confirmCheckDetails: "notYesOrNo" },
+        headers: { cookie: `crumb=${crumb}` },
+      };
+
+      const res = await server.inject(options);
+
+      expect(res.statusCode).toBe(404);
+      const $ = cheerio.load(res.payload);
+      expect($(".govuk-heading-l").text()).toEqual("404 - Not Found");
+      expect($("#_404 div p").text()).toEqual("Not Found");
+      ok($);
+    });
+
     test("returns 302 to next page when acceptable answer given", async () => {
       const options = {
         method,

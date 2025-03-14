@@ -53,6 +53,18 @@ describe("Business Applied Before Tests", () => {
         statusId: status.READY_TO_PAY,
         type: "VV",
       },
+      {
+        data: {
+          organisation: {
+            sbi: "122333",
+          },
+          visitDate: new Date(),
+        },
+        createdAt: "2019-06-06T13:52:14.207Z",
+        updatedAt: "2019-06-06T13:52:14.207Z",
+        statusId: status.READY_TO_PAY,
+        type: "VV",
+      },
     ];
     getLatestApplicationsBySbi.mockResolvedValueOnce(apiResponse);
     await expect(businessAppliedBefore(SBI)).resolves.toEqual(

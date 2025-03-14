@@ -575,5 +575,38 @@ describe("FarmerApply defra ID redirection test", () => {
         "You cannot apply for reviews or follow-ups for this business"
       );
     });
+
+    test("returns 400 and exception view when business locked", async () => {
+      const baseUrl = `${url}?code=432432&state=83d2b160-74ce-4356-9709-3f8da7868e35`;
+      const options = {
+        method: "GET",
+        url: baseUrl,
+      };
+
+      authenticate.mockResolvedValueOnce({ accessToken: "2323" });
+      retrieveApimAccessToken.mockResolvedValueOnce("Bearer 2323");
+      getPersonSummary.mockResolvedValueOnce(person);
+      organisationIsEligible.mockResolvedValueOnce({
+        organisation: {
+          locked: true,
+          sbi: 101122201,
+        },
+        organisationPermission: true,
+      });
+
+      const res = await server.inject(options);
+
+      expect(res.statusCode).toBe(400);
+      expect(authenticate).toBeCalledTimes(1);
+      expect(retrieveApimAccessToken).toBeCalledTimes(1);
+      expect(requestAuthorizationCodeUrl).toBeCalledTimes(1);
+      expect(getPersonSummary).toBeCalledTimes(1);
+      expect(organisationIsEligible).toBeCalledTimes(1);
+      expect(getIneligibilityEvent).toBeCalledTimes(1);
+      const $ = cheerio.load(res.payload);
+      expect($(".govuk-heading-l").text()).toMatch(
+        "You cannot apply for reviews or follow-ups for this business"
+      );
+    });
   });
 });
