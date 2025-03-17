@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 # This override file should be used when running this service in isolation
 # to provide dependencies and expose ports for local testing
@@ -14,10 +14,10 @@ services:
       DEV_LOGIN_ENABLED: ${DEV_LOGIN_ENABLED:-true}
     ports:
       - "3000:3000"
-      - "9229:9229"    
+      - "9229:9229"
     volumes:
       - ./app:/home/node/app
-      - ./package.json:/home/node/package.json    
+      - ./package.json:/home/node/package.json
 
   redis:
     image: redis:4.0.14

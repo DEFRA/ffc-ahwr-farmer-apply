@@ -25,7 +25,6 @@ $govuk-global-styles: true; // https://frontend.design-system.service.gov.uk/sas
 }
 
 .govuk-prose-scope {
-
   // @extend inheritance
 
   // Contextual heading and paragraph combinations are inherited
@@ -100,12 +99,12 @@ $govuk-global-styles: true; // https://frontend.design-system.service.gov.uk/sas
 .navigation-container {
   padding: 20px 0 20px 0;
   margin-top: 30px;
-  border-top: 1px solid #b1b4b6
+  border-top: 1px solid #b1b4b6;
 }
 
 .list-item--dashed:before {
   content: "—";
-  position: relative ;
+  position: relative;
   left: 0;
   width: 20px;
   padding-right: 10px;
@@ -143,11 +142,10 @@ $govuk-global-styles: true; // https://frontend.design-system.service.gov.uk/sas
   color: white;
 }
 
-
 hr.related-content {
-  margin: 0  0 18px 0;
+  margin: 0 0 18px 0;
 }
 
 .related-content a {
-  margin: 0  0 12px 0;
+  margin: 0 0 12px 0;
 }

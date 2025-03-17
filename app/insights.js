@@ -1,12 +1,13 @@
-import appInsights from 'applicationinsights'
+import appInsights from "applicationinsights";
 
-export function setup () {
+export function setup() {
   if (process.env.APPLICATIONINSIGHTS_CONNECTION_STRING) {
-    appInsights.setup().start()
-    console.log('App Insights Running')
-    const cloudRoleTag = appInsights.defaultClient.context.keys.cloudRole
-    appInsights.defaultClient.context.tags[cloudRoleTag] = process.env.APPINSIGHTS_CLOUDROLE ?? ''
+    appInsights.setup().start();
+    console.log("App Insights Running");
+    const cloudRoleTag = appInsights.defaultClient.context.keys.cloudRole;
+    appInsights.defaultClient.context.tags[cloudRoleTag] =
+      process.env.APPINSIGHTS_CLOUDROLE ?? "";
   } else {
-    console.log('App Insights Not Running!')
+    console.log("App Insights Not Running!");
   }
 }
