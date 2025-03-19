@@ -145,8 +145,7 @@ export const signinRouteHandlers = [
             properties: {
               reference: tempApplicationId,
               sbi: organisationSummary.organisation.sbi,
-              crn,
-              email: personSummary.email,
+              crn
             },
           });
           return h.redirect(`${config.urlPrefix}/endemics/check-details`);
