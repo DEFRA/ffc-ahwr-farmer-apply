@@ -24,7 +24,6 @@ const {
   declaration,
   offerStatus,
   organisation: organisationKey,
-  customer: crn,
 } = keys.farmerApplyData;
 
 const resetFarmerApplyDataBeforeApplication = (application) => {
@@ -118,7 +117,7 @@ export const declarationRouteHandlers = [
               reference: newApplicationReference,
               tempReference: tempApplicationReference,
               sbi: organisation.sbi,
-              crn: getCustomer(request, crn),
+              crn: getCustomer(request, keys.customer.crn),
             },
           });
         }
