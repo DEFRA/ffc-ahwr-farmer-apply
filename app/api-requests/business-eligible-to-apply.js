@@ -29,21 +29,25 @@ function applicationForBusinessInStateToApply(latestApplicationsForSbi) {
     return "latest application either WITHDRAWN or NOT_AGREED";
   } else {
     // this was previously else if endemics enabled, followed by other branches - endemics is on permanently now, so
-    // the others could never be reached and have been removed
-    if (
-      latestApplication.statusId === status.AGREED &&
-      latestApplication.type === applicationType.ENDEMICS
-    ) {
-      throw new AlreadyAppliedError(
-        `Business with SBI ${latestApplication.data.organisation.sbi} already has an endemics agreement`
-      );
-    } else if (
-      !closedApplicationStatuses.includes(latestApplication.statusId)
-    ) {
-      // Open agreement on the old system must be closed
-      throw new OutstandingAgreementError(
-        `Business with SBI ${latestApplication.data.organisation.sbi} must claim or withdraw agreement before creating another.`
-      );
-    }
+    // the others could never be reached and have been removed. We could simplify this even further
+    throwErrorIfApplicationCannotProceed(latestApplication)
+  }
+}
+
+function throwErrorIfApplicationCannotProceed(latestApplication) {
+  if (
+    latestApplication.statusId === status.AGREED &&
+    latestApplication.type === applicationType.ENDEMICS
+  ) {
+    throw new AlreadyAppliedError(
+      `Business with SBI ${latestApplication.data.organisation.sbi} already has an endemics agreement`
+    );
+  } else if (
+    !closedApplicationStatuses.includes(latestApplication.statusId)
+  ) {
+    // Open agreement on the old system must be closed
+    throw new OutstandingAgreementError(
+      `Business with SBI ${latestApplication.data.organisation.sbi} must claim or withdraw agreement before creating another.`
+    );
   }
 }
