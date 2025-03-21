@@ -1,40 +1,28 @@
-import joi from "joi";
-import { keys } from "../session/keys.js";
-import { config } from "../config/index.js";
-import appInsights from "applicationinsights";
-import {
-  getCustomer,
-  getFarmerApplyData,
-  setCustomer,
-  setFarmerApplyData,
-} from "../session/index.js";
-import { requestAuthorizationCodeUrl } from "../auth/auth-code-grant/request-authorization-code-url.js";
-import { authenticate } from "../auth/authenticate.js";
-import { retrieveApimAccessToken } from "../auth/client-credential-grant/retrieve-apim-access-token.js";
-import { generateRandomID } from "../lib/create-temp-reference.js";
+import joi from 'joi'
+import { keys } from '../session/keys.js'
+import { config } from '../config/index.js'
+import appInsights from 'applicationinsights'
+import { getCustomer, getFarmerApplyData, setCustomer, setFarmerApplyData, } from '../session/index.js'
+import { requestAuthorizationCodeUrl } from '../auth/auth-code-grant/request-authorization-code-url.js'
+import { authenticate } from '../auth/authenticate.js'
+import { retrieveApimAccessToken } from '../auth/client-credential-grant/retrieve-apim-access-token.js'
+import { generateRandomID } from '../lib/create-temp-reference.js'
 
-import {
-  getOrganisationAddress,
-  organisationIsEligible,
-} from "../api-requests/rpa-api/organisation.js";
-import {
-  getPersonName,
-  getPersonSummary,
-} from "../api-requests/rpa-api/person.js";
-import { customerMustHaveAtLeastOneValidCph } from "../api-requests/rpa-api/cph-check.js";
-import { businessEligibleToApply } from "../api-requests/business-eligible-to-apply.js";
-import { setAuthCookie } from "../auth/cookie-auth/cookie-auth.js";
-import { farmerApply } from "../constants/constants.js";
-import { getIneligibilityEvent } from "../event/get-ineligibility-event.js";
-import { raiseEvent } from "../event/raise-event.js";
+import { getOrganisationAddress, organisationIsEligible, } from '../api-requests/rpa-api/organisation.js'
+import { getPersonName, getPersonSummary, } from '../api-requests/rpa-api/person.js'
+import { customerMustHaveAtLeastOneValidCph } from '../api-requests/rpa-api/cph-check.js'
+import { businessEligibleToApply } from '../api-requests/business-eligible-to-apply.js'
+import { setAuthCookie } from '../auth/cookie-auth/cookie-auth.js'
+import { farmerApply } from '../constants/constants.js'
+import { getIneligibilityEvent } from '../event/get-ineligibility-event.js'
+import { raiseEvent } from '../event/raise-event.js'
 
-import { InvalidPermissionsError } from "../exceptions/InvalidPermissionsError.js";
-import { AlreadyAppliedError } from "../exceptions/AlreadyAppliedError.js";
-import { NoEligibleCphError } from "../exceptions/NoEligibleCphError.js";
-import { InvalidStateError } from "../exceptions/InvalidStateError.js";
-import { CannotReapplyTimeLimitError } from "../exceptions/CannotReapplyTimeLimitError.js";
-import { OutstandingAgreementError } from "../exceptions/OutstandingAgreementError.js";
-import { LockedBusinessError } from "../exceptions/LockedBusinessError.js";
+import { InvalidPermissionsError } from '../exceptions/InvalidPermissionsError.js'
+import { AlreadyAppliedError } from '../exceptions/AlreadyAppliedError.js'
+import { NoEligibleCphError } from '../exceptions/NoEligibleCphError.js'
+import { InvalidStateError } from '../exceptions/InvalidStateError.js'
+import { OutstandingAgreementError } from '../exceptions/OutstandingAgreementError.js'
+import { LockedBusinessError } from '../exceptions/LockedBusinessError.js'
 
 function setOrganisationSessionData(
   request,
@@ -160,6 +148,7 @@ export const signinRouteHandlers = [
             request,
             keys.farmerApplyData.organisation
           );
+
           const crn = getCustomer(request, keys.customer.crn);
           switch (true) {
             case err instanceof InvalidStateError:
@@ -176,7 +165,7 @@ export const signinRouteHandlers = [
                 properties: {
                   reference: tempApplicationId,
                   sbi: organisation.sbi,
-                  crn: getCustomer(request, keys.customer.crn),
+                  crn
                 },
               });
               break;
@@ -186,7 +175,7 @@ export const signinRouteHandlers = [
                 properties: {
                   reference: tempApplicationId,
                   sbi: organisation.sbi,
-                  crn: getCustomer(request, keys.customer.crn),
+                  crn
                 },
               });
               break;
@@ -198,17 +187,7 @@ export const signinRouteHandlers = [
                 properties: {
                   reference: tempApplicationId,
                   sbi: organisation.sbi,
-                  crn: getCustomer(request, keys.customer.crn),
-                },
-              });
-              break;
-            case err instanceof CannotReapplyTimeLimitError:
-              appInsights.defaultClient.trackEvent({
-                name: "can-not-reapply-error",
-                properties: {
-                  reference: tempApplicationId,
-                  sbi: organisation.sbi,
-                  crn: getCustomer(request, keys.customer.crn),
+                  crn
                 },
               });
               break;
@@ -218,7 +197,7 @@ export const signinRouteHandlers = [
                 properties: {
                   reference: tempApplicationId,
                   sbi: organisation.sbi,
-                  crn: getCustomer(request, keys.customer.crn),
+                  crn
                 },
               });
               break;
@@ -251,7 +230,6 @@ export const signinRouteHandlers = [
               permissionError: err instanceof InvalidPermissionsError,
               cphError: err instanceof NoEligibleCphError,
               lockedBusinessError: err instanceof LockedBusinessError,
-              reapplyTimeLimitError: err instanceof CannotReapplyTimeLimitError,
               outstandingAgreementError:
                 err instanceof OutstandingAgreementError,
               lastApplicationDate: err.lastApplicationDate,

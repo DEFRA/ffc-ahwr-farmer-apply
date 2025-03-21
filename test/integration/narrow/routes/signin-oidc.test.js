@@ -1,22 +1,21 @@
-import * as cheerio from "cheerio";
-import { requestAuthorizationCodeUrl } from "../../../../app/auth/auth-code-grant/request-authorization-code-url";
-import { getCustomer, setFarmerApplyData } from "../../../../app/session/index";
-import { getPersonSummary } from "../../../../app/api-requests/rpa-api/person";
-import { organisationIsEligible } from "../../../../app/api-requests/rpa-api/organisation";
-import { getCphNumbers } from "../../../../app/api-requests/rpa-api/cph-numbers";
-import { getIneligibilityEvent } from "../../../../app/event/get-ineligibility-event";
-import { customerMustHaveAtLeastOneValidCph } from "../../../../app/api-requests/rpa-api/cph-check";
-import { businessEligibleToApply } from "../../../../app/api-requests/business-eligible-to-apply";
-import { InvalidStateError } from "../../../../app/exceptions/InvalidStateError";
-import { AlreadyAppliedError } from "../../../../app/exceptions/AlreadyAppliedError";
-import { NoEligibleCphError } from "../../../../app/exceptions/NoEligibleCphError";
-import { CannotReapplyTimeLimitError } from "../../../../app/exceptions/CannotReapplyTimeLimitError";
-import { OutstandingAgreementError } from "../../../../app/exceptions/OutstandingAgreementError";
-import { authenticate } from "../../../../app/auth/authenticate";
-import { setAuthCookie } from "../../../../app/auth/cookie-auth/cookie-auth";
-import { retrieveApimAccessToken } from "../../../../app/auth/client-credential-grant/retrieve-apim-access-token";
-import { createServer } from "../../../../app/server";
-import { config } from "../../../../app/config";
+import * as cheerio from 'cheerio'
+import { requestAuthorizationCodeUrl } from '../../../../app/auth/auth-code-grant/request-authorization-code-url'
+import { getCustomer, setFarmerApplyData } from '../../../../app/session/index'
+import { getPersonSummary } from '../../../../app/api-requests/rpa-api/person'
+import { organisationIsEligible } from '../../../../app/api-requests/rpa-api/organisation'
+import { getCphNumbers } from '../../../../app/api-requests/rpa-api/cph-numbers'
+import { getIneligibilityEvent } from '../../../../app/event/get-ineligibility-event'
+import { customerMustHaveAtLeastOneValidCph } from '../../../../app/api-requests/rpa-api/cph-check'
+import { businessEligibleToApply } from '../../../../app/api-requests/business-eligible-to-apply'
+import { InvalidStateError } from '../../../../app/exceptions/InvalidStateError'
+import { AlreadyAppliedError } from '../../../../app/exceptions/AlreadyAppliedError'
+import { NoEligibleCphError } from '../../../../app/exceptions/NoEligibleCphError'
+import { OutstandingAgreementError } from '../../../../app/exceptions/OutstandingAgreementError'
+import { authenticate } from '../../../../app/auth/authenticate'
+import { setAuthCookie } from '../../../../app/auth/cookie-auth/cookie-auth'
+import { retrieveApimAccessToken } from '../../../../app/auth/client-credential-grant/retrieve-apim-access-token'
+import { createServer } from '../../../../app/server'
+import { config } from '../../../../app/config'
 
 jest.mock("applicationinsights", () => ({
   defaultClient: { trackException: jest.fn(), trackEvent: () => "hello" },
@@ -340,8 +339,7 @@ describe("FarmerApply defra ID redirection test", () => {
 
     // TODO: This test can be removed when the 10 month rule toggle and AlreadyAppliedError are removed
     test("returns 400 and exception view when already applied", async () => {
-      const serviceUri = "http://localhost:3000/apply";
-      config.serviceUri = serviceUri;
+      config.serviceUri = "http://localhost:3000/apply";
       const expectedError = new AlreadyAppliedError(
         "Business with SBI 101122201 is not eligible to apply"
       );
@@ -399,66 +397,6 @@ describe("FarmerApply defra ID redirection test", () => {
       expect($("#guidanceLink").attr("href")).toMatch(
         "http://localhost:3000/apply"
       );
-    });
-
-    test("returns 400 and exception view when there is a cannot reapply time limit error", async () => {
-      const expectedError = new CannotReapplyTimeLimitError(
-        "Business with SBI 101122201 is not eligible to apply due to 10 month restrictions since the last agreement.",
-        "1 Jan 2023",
-        "2 Oct 2023"
-      );
-      const baseUrl = `${url}?code=432432&state=83d2b160-74ce-4356-9709-3f8da7868e35`;
-      const options = {
-        method: "GET",
-        url: baseUrl,
-      };
-
-      authenticate.mockResolvedValueOnce({ accessToken: "2323" });
-      retrieveApimAccessToken.mockResolvedValueOnce("Bearer 2323");
-      getPersonSummary.mockResolvedValueOnce(person);
-      organisationIsEligible.mockResolvedValueOnce({
-        organisation: {
-          id: 7654321,
-          name: "Mrs Gill Black",
-          sbi: 101122201,
-          address: {
-            address1: "The Test House",
-            address2: "Test road",
-            address3: "Wicklewood",
-            buildingNumberRange: "11",
-            buildingName: "TestHouse",
-            street: "Test ROAD",
-            city: "Test City",
-            postalCode: "TS1 1TS",
-            country: "United Kingdom",
-            dependentLocality: "Test Local",
-          },
-          email: "org1@testemail.com",
-        },
-        organisationPermission: true,
-      });
-
-      businessEligibleToApply.mockRejectedValueOnce(expectedError);
-
-      getCustomer.mockResolvedValueOnce({
-        attachedToMultipleBusinesses: false,
-      });
-
-      getCphNumbers.mockResolvedValueOnce(["08/178/0064"]);
-
-      const res = await server.inject(options);
-      expect(res.statusCode).toBe(400);
-      expect(authenticate).toBeCalledTimes(1);
-      expect(retrieveApimAccessToken).toBeCalledTimes(1);
-      expect(getPersonSummary).toBeCalledTimes(1);
-      expect(organisationIsEligible).toBeCalledTimes(1);
-      expect(businessEligibleToApply).toBeCalledTimes(1);
-      expect(getIneligibilityEvent).toBeCalledTimes(1);
-      const $ = cheerio.load(res.payload);
-      expect($(".govuk-heading-l").text()).toMatch(
-        "You cannot apply for reviews or follow-ups for this business"
-      );
-      expect($(".govuk-body").text()).toMatch(/ on 2 Oct 2023/);
     });
 
     test("returns 400 and exception view when there is an outstanding agreement error", async () => {
