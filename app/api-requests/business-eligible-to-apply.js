@@ -1,7 +1,7 @@
-import { getLatestApplicationsBySbi } from './application-api.js'
-import { applicationType, status } from '../constants/constants.js'
-import { AlreadyAppliedError } from '../exceptions/AlreadyAppliedError.js'
-import { OutstandingAgreementError } from '../exceptions/OutstandingAgreementError.js'
+import { getLatestApplicationsBySbi } from "./application-api.js";
+import { applicationType, status } from "../constants/constants.js";
+import { AlreadyAppliedError } from "../exceptions/AlreadyAppliedError.js";
+import { OutstandingAgreementError } from "../exceptions/OutstandingAgreementError.js";
 
 const validStatusForApplication = [status.NOT_AGREED, status.WITHDRAWN];
 const closedApplicationStatuses = [
@@ -30,7 +30,7 @@ function applicationForBusinessInStateToApply(latestApplicationsForSbi) {
   } else {
     // this was previously else if endemics enabled, followed by other branches - endemics is on permanently now, so
     // the others could never be reached and have been removed. We could simplify this even further
-    throwErrorIfApplicationCannotProceed(latestApplication)
+    throwErrorIfApplicationCannotProceed(latestApplication);
   }
 }
 
@@ -40,14 +40,12 @@ function throwErrorIfApplicationCannotProceed(latestApplication) {
     latestApplication.type === applicationType.ENDEMICS
   ) {
     throw new AlreadyAppliedError(
-      `Business with SBI ${latestApplication.data.organisation.sbi} already has an endemics agreement`
+      `Business with SBI ${latestApplication.data.organisation.sbi} already has an endemics agreement`,
     );
-  } else if (
-    !closedApplicationStatuses.includes(latestApplication.statusId)
-  ) {
+  } else if (!closedApplicationStatuses.includes(latestApplication.statusId)) {
     // Open agreement on the old system must be closed
     throw new OutstandingAgreementError(
-      `Business with SBI ${latestApplication.data.organisation.sbi} must claim or withdraw agreement before creating another.`
+      `Business with SBI ${latestApplication.data.organisation.sbi} must claim or withdraw agreement before creating another.`,
     );
   }
 }

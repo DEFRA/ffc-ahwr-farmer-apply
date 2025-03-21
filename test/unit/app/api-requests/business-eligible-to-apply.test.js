@@ -1,8 +1,8 @@
-import { getLatestApplicationsBySbi } from '../../../../app/api-requests/application-api.js'
-import { OutstandingAgreementError } from '../../../../app/exceptions/OutstandingAgreementError.js'
-import { AlreadyAppliedError } from '../../../../app/exceptions/AlreadyAppliedError.js'
-import { businessEligibleToApply } from '../../../../app/api-requests/business-eligible-to-apply.js'
-import { applicationType } from '../../../../app/constants/constants.js'
+import { getLatestApplicationsBySbi } from "../../../../app/api-requests/application-api.js";
+import { OutstandingAgreementError } from "../../../../app/exceptions/OutstandingAgreementError.js";
+import { AlreadyAppliedError } from "../../../../app/exceptions/AlreadyAppliedError.js";
+import { businessEligibleToApply } from "../../../../app/api-requests/business-eligible-to-apply.js";
+import { applicationType } from "../../../../app/constants/constants.js";
 
 jest.mock("../../../../app/api-requests/application-api");
 
@@ -26,7 +26,7 @@ describe("Business Eligible to Apply Tests", () => {
       const result = await businessEligibleToApply(SBI);
       expect(getLatestApplicationsBySbi).toHaveBeenCalledTimes(1);
       expect(getLatestApplicationsBySbi).toHaveBeenCalledWith(SBI);
-      expect (result).toEqual('no existing applications');
+      expect(result).toEqual("no existing applications");
     });
   });
 
@@ -36,13 +36,12 @@ describe("Business Eligible to Apply Tests", () => {
       const SBI = 123456789;
       getLatestApplicationsBySbi.mockResolvedValueOnce(apiResponse);
       await expect(businessEligibleToApply(SBI)).rejects.toEqual(
-        new Error("Bad response from API")
+        new Error("Bad response from API"),
       );
-    }
+    },
   );
 
   describe("When endemics is enabled", () => {
-
     test.each([
       {
         latestApplications: [
@@ -106,9 +105,9 @@ describe("Business Eligible to Apply Tests", () => {
         const SBI = 123456789;
         getLatestApplicationsBySbi.mockResolvedValueOnce(latestApplications);
         await expect(businessEligibleToApply(SBI)).resolves.not.toThrow(
-          new Error()
+          new Error(),
         );
-      }
+      },
     );
 
     test.each([
@@ -173,16 +172,16 @@ describe("Business Eligible to Apply Tests", () => {
       async ({ latestApplications }) => {
         const SBI = 123456789;
         const expectedError = new OutstandingAgreementError(
-          "Business with SBI 122333 must claim or withdraw agreement before creating another."
+          "Business with SBI 122333 must claim or withdraw agreement before creating another.",
         );
         getLatestApplicationsBySbi.mockResolvedValueOnce(latestApplications);
         const thrownError = await businessEligibleToApply(SBI).catch(
           (error) => {
             return error;
-          }
+          },
         );
         expect(thrownError).toEqual(expectedError);
-      }
+      },
     );
 
     test("Last application was an Endemics application so returns a AlreadyAppliedError", async () => {
@@ -201,7 +200,7 @@ describe("Business Eligible to Apply Tests", () => {
         },
       ];
       const expectedError = new AlreadyAppliedError(
-        "Business with SBI 122333 already has an endemics agreement"
+        "Business with SBI 122333 already has an endemics agreement",
       );
       getLatestApplicationsBySbi.mockResolvedValueOnce(apiResponse);
       const thrownError = await businessEligibleToApply(SBI).catch((error) => {
