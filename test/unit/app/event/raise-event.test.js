@@ -1,5 +1,5 @@
 import { raiseEvent } from "../../../../app/event/raise-event.js";
-import { PublishEvent } from "ffc-ahwr-event-publisher";
+import { PublishEvent } from "ffc-ahwr-common-library";
 import appInsights from "applicationinsights";
 
 jest.mock("applicationinsights", () => ({

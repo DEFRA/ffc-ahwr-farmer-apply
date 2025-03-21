@@ -26,7 +26,7 @@
     {% endif %}
     
     {# Should only get this error with 10 month rule toggle on #}
-    {% if reapplyTimeLimitError or outstandingAgreementError %}
+    {% if outstandingAgreementError %}
       {% if hasMultipleBusinesses %}
         <p class="govuk-body">{{ organisationName }} &#8212; {{ sbiText }} applied for an annual health and welfare review of livestock on {{ lastApplicationDate }}.</p>
         

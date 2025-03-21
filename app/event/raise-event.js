@@ -1,5 +1,5 @@
 import appInsights from "applicationinsights";
-import { PublishEvent } from "ffc-ahwr-event-publisher";
+import { PublishEvent } from "ffc-ahwr-common-library";
 import { eventQueue } from "../config/messaging.js";
 
 export const raiseEvent = async (event, logger) => {

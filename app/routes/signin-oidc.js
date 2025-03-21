@@ -32,7 +32,6 @@ import { InvalidPermissionsError } from "../exceptions/InvalidPermissionsError.j
 import { AlreadyAppliedError } from "../exceptions/AlreadyAppliedError.js";
 import { NoEligibleCphError } from "../exceptions/NoEligibleCphError.js";
 import { InvalidStateError } from "../exceptions/InvalidStateError.js";
-import { CannotReapplyTimeLimitError } from "../exceptions/CannotReapplyTimeLimitError.js";
 import { OutstandingAgreementError } from "../exceptions/OutstandingAgreementError.js";
 import { LockedBusinessError } from "../exceptions/LockedBusinessError.js";
 
@@ -40,7 +39,7 @@ function setOrganisationSessionData(
   request,
   personSummary,
   { organisation: org },
-  crn
+  crn,
 ) {
   const organisation = {
     sbi: org.sbi?.toString(),
@@ -91,7 +90,7 @@ export const signinRouteHandlers = [
           setFarmerApplyData(
             request,
             keys.farmerApplyData.reference,
-            tempApplicationId
+            tempApplicationId,
           );
           await authenticate(request);
           request.logger.setBindings({ authenticated: true });
@@ -99,13 +98,13 @@ export const signinRouteHandlers = [
 
           const personSummary = await getPersonSummary(
             request,
-            apimAccessToken
+            apimAccessToken,
           );
           setCustomer(request, keys.customer.id, personSummary.id);
           const organisationSummary = await organisationIsEligible(
             request,
             personSummary.id,
-            apimAccessToken
+            apimAccessToken,
           );
 
           request.logger.setBindings({
@@ -117,24 +116,24 @@ export const signinRouteHandlers = [
             request,
             personSummary,
             { ...organisationSummary },
-            crn
+            crn,
           );
 
           if (organisationSummary.organisation.locked) {
             throw new LockedBusinessError(
-              `Organisation id ${organisationSummary.organisation.id} is locked by RPA`
+              `Organisation id ${organisationSummary.organisation.id} is locked by RPA`,
             );
           }
 
           if (!organisationSummary.organisationPermission) {
             throw new InvalidPermissionsError(
-              `Person id ${personSummary.id} does not have the required permissions for organisation id ${organisationSummary.organisation.id}`
+              `Person id ${personSummary.id} does not have the required permissions for organisation id ${organisationSummary.organisation.id}`,
             );
           }
 
           await customerMustHaveAtLeastOneValidCph(request, apimAccessToken);
           const previousApplication = await businessEligibleToApply(
-            organisationSummary.organisation.sbi
+            organisationSummary.organisation.sbi,
           );
 
           request.logger.setBindings({ previousApplication });
@@ -145,7 +144,7 @@ export const signinRouteHandlers = [
             properties: {
               reference: tempApplicationId,
               sbi: organisationSummary.organisation.sbi,
-              crn
+              crn,
             },
           });
           return h.redirect(`${config.urlPrefix}/endemics/check-details`);
@@ -154,12 +153,13 @@ export const signinRouteHandlers = [
 
           const attachedToMultipleBusinesses = getCustomer(
             request,
-            keys.customer.attachedToMultipleBusinesses
+            keys.customer.attachedToMultipleBusinesses,
           );
           const organisation = getFarmerApplyData(
             request,
-            keys.farmerApplyData.organisation
+            keys.farmerApplyData.organisation,
           );
+
           const crn = getCustomer(request, keys.customer.crn);
           switch (true) {
             case err instanceof InvalidStateError:
@@ -176,7 +176,7 @@ export const signinRouteHandlers = [
                 properties: {
                   reference: tempApplicationId,
                   sbi: organisation.sbi,
-                  crn: getCustomer(request, keys.customer.crn),
+                  crn,
                 },
               });
               break;
@@ -186,7 +186,7 @@ export const signinRouteHandlers = [
                 properties: {
                   reference: tempApplicationId,
                   sbi: organisation.sbi,
-                  crn: getCustomer(request, keys.customer.crn),
+                  crn,
                 },
               });
               break;
@@ -198,17 +198,7 @@ export const signinRouteHandlers = [
                 properties: {
                   reference: tempApplicationId,
                   sbi: organisation.sbi,
-                  crn: getCustomer(request, keys.customer.crn),
-                },
-              });
-              break;
-            case err instanceof CannotReapplyTimeLimitError:
-              appInsights.defaultClient.trackEvent({
-                name: "can-not-reapply-error",
-                properties: {
-                  reference: tempApplicationId,
-                  sbi: organisation.sbi,
-                  crn: getCustomer(request, keys.customer.crn),
+                  crn,
                 },
               });
               break;
@@ -218,7 +208,7 @@ export const signinRouteHandlers = [
                 properties: {
                   reference: tempApplicationId,
                   sbi: organisation.sbi,
-                  crn: getCustomer(request, keys.customer.crn),
+                  crn,
                 },
               });
               break;
@@ -239,7 +229,7 @@ export const signinRouteHandlers = [
             crn,
             organisation.email,
             err.name,
-            tempApplicationId
+            tempApplicationId,
           );
           raiseEvent(event, request.logger);
           raiseEvent({ ...event, name: "send-session-event" }, request.logger);
@@ -251,7 +241,6 @@ export const signinRouteHandlers = [
               permissionError: err instanceof InvalidPermissionsError,
               cphError: err instanceof NoEligibleCphError,
               lockedBusinessError: err instanceof LockedBusinessError,
-              reapplyTimeLimitError: err instanceof CannotReapplyTimeLimitError,
               outstandingAgreementError:
                 err instanceof OutstandingAgreementError,
               lastApplicationDate: err.lastApplicationDate,
