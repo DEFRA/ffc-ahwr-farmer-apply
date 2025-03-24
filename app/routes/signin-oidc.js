@@ -236,22 +236,14 @@ export const signinRouteHandlers = [
 
           return h
             .view("cannot-apply-for-livestock-review-exception", {
+              errorName: err.name,
               ruralPaymentsAgency: config.ruralPaymentsAgency,
-              alreadyAppliedError: err instanceof AlreadyAppliedError,
-              permissionError: err instanceof InvalidPermissionsError,
-              cphError: err instanceof NoEligibleCphError,
-              lockedBusinessError: err instanceof LockedBusinessError,
-              outstandingAgreementError:
-                err instanceof OutstandingAgreementError,
               lastApplicationDate: err.lastApplicationDate,
               nextApplicationDate: err.nextApplicationDate,
               hasMultipleBusinesses: attachedToMultipleBusinesses,
               backLink: requestAuthorizationCodeUrl(request),
               claimLink: config.claimServiceUri,
-              sbiText:
-                organisation?.sbi !== undefined
-                  ? `SBI ${organisation.sbi}`
-                  : null,
+              sbiText: `SBI ${organisation.sbi ?? ''}`,
               organisationName: organisation?.name,
               guidanceLink: config.serviceUri,
             })

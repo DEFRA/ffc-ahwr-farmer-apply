@@ -93,6 +93,94 @@ describe("Dev sign in page test", () => {
       );
     });
 
+    test("POST to dev login with an SBI with suffix O redirects user to the cannot apply for review page", async () => {
+      const sbi = "123456789O";
+
+      const options = {
+        method: "POST",
+        url: "/apply/endemics/dev-sign-in",
+        payload: {
+          crumb,
+          sbi,
+        },
+        headers: { cookie: `crumb=${crumb}` },
+      };
+
+      const res = await server.inject(options);
+
+      const $ = cheerio.load(res.payload);
+      expect(res.statusCode).toBe(400);
+      expect($("h1").text().trim()).toMatch(
+        `You cannot apply for reviews or follow-ups for this business`
+      );
+    });
+
+    test("POST to dev login with an SBI with suffix I redirects user to the cannot apply for review page", async () => {
+      const sbi = "123456789I";
+
+      const options = {
+        method: "POST",
+        url: "/apply/endemics/dev-sign-in",
+        payload: {
+          crumb,
+          sbi,
+        },
+        headers: { cookie: `crumb=${crumb}` },
+      };
+
+      const res = await server.inject(options);
+
+      const $ = cheerio.load(res.payload);
+      expect(res.statusCode).toBe(400);
+      expect($("h1").text().trim()).toMatch(
+        `You cannot apply for reviews or follow-ups for this business`
+      );
+    });
+
+    test("POST to dev login with an SBI with suffix C redirects user to the cannot apply for review page", async () => {
+      const sbi = "123456789C";
+
+      const options = {
+        method: "POST",
+        url: "/apply/endemics/dev-sign-in",
+        payload: {
+          crumb,
+          sbi,
+        },
+        headers: { cookie: `crumb=${crumb}` },
+      };
+
+      const res = await server.inject(options);
+
+      const $ = cheerio.load(res.payload);
+      expect(res.statusCode).toBe(400);
+      expect($("h1").text().trim()).toMatch(
+        `You cannot apply for reviews or follow-ups for this business`
+      );
+    });
+
+    test("POST to dev login with an SBI with suffix L redirects user to the cannot apply for review page", async () => {
+      const sbi = "123456789L";
+
+      const options = {
+        method: "POST",
+        url: "/apply/endemics/dev-sign-in",
+        payload: {
+          crumb,
+          sbi,
+        },
+        headers: { cookie: `crumb=${crumb}` },
+      };
+
+      const res = await server.inject(options);
+
+      const $ = cheerio.load(res.payload);
+      expect(res.statusCode).toBe(400);
+      expect($("h1").text().trim()).toMatch(
+        `You cannot apply for reviews or follow-ups for this business`
+      );
+    });
+
     test("POST to dev login which throws an error redirects to standard error 500 page", async () => {
       const sbi = "123456789";
       businessEligibleToApply.mockImplementation(() => {

@@ -25,7 +25,7 @@
         <input type="hidden" name="crumb" value="{{crumb}}"/>
         {{ govukInput({
         label: {
-         text: "SBI to use?",
+         text: "SBI to use? (e.g. 123456789)",
         classes: "govuk-label--l",
        isPageHeading: true
         },
@@ -38,6 +38,11 @@
         value: sbi,
         errorMessage: errorMessage
       }) }}
+      <p class="govuk-body">Suffix SBI with the following letters to force a login exception</p>
+      <p class="govuk-body">C - for NoEligibleCphError</p>
+      <p class="govuk-body">I - for InvalidPermissionError</p>
+      <p class="govuk-body">L - for LockedBusinessException</p>
+      <p class="govuk-body">O - for OutstandingAgreementError</p>
         {{ govukButton({
           text: "Fake Sign in",
           attributes: {id: "btnContinue"},
