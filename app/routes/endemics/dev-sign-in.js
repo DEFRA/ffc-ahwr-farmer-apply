@@ -1,5 +1,5 @@
 import { config } from "../../config/index.js";
-import { setCustomer, setFarmerApplyData } from "../../session/index.js";
+import { getCustomer, setCustomer, setFarmerApplyData } from '../../session/index.js'
 import { setAuthCookie } from "../../auth/cookie-auth/cookie-auth.js";
 import { keys } from "../../session/keys.js";
 import { generateRandomID } from "../../lib/create-temp-reference.js";
@@ -8,6 +8,11 @@ import { getOrganisationAddress } from "../../api-requests/rpa-api/organisation.
 import { businessEligibleToApply } from "../../api-requests/business-eligible-to-apply.js";
 import { farmerApply } from "../../constants/constants.js";
 import { AlreadyAppliedError } from "../../exceptions/AlreadyAppliedError.js";
+import { LockedBusinessError } from '../../exceptions/LockedBusinessError.js'
+import { requestAuthorizationCodeUrl } from '../../auth/auth-code-grant/request-authorization-code-url.js'
+import { InvalidPermissionsError } from '../../exceptions/InvalidPermissionsError.js'
+import { NoEligibleCphError } from '../../exceptions/NoEligibleCphError.js'
+import { OutstandingAgreementError } from '../../exceptions/OutstandingAgreementError.js'
 
 const urlPrefix = config.urlPrefix;
 const pageUrl = `${urlPrefix}/endemics/dev-sign-in`;
@@ -53,6 +58,22 @@ function setOrganisationSessionData(
   setFarmerApplyData(request, keys.farmerApplyData.organisation, organisation);
 }
 
+function throwErrorBasedOnSuffix (sbi) {
+  if (sbi.toUpperCase().endsWith("L")) {
+    throw new LockedBusinessError(`Organisation is locked by RPA`);
+  } else if(sbi.toUpperCase().endsWith("I")) {
+    throw new InvalidPermissionsError(
+      `Person does not have the required permissions for organisation id`,
+    );
+  } else if(sbi.toUpperCase().endsWith("C")) {
+    throw new NoEligibleCphError("Customer must have at least one valid CPH");
+  } else if(sbi.toUpperCase().endsWith("O")) {
+    throw new OutstandingAgreementError(
+      `Business with SBI ${sbi} must claim or withdraw agreement before creating another.`,
+    );
+  }
+}
+
 export const devLoginHandlers = [
   {
     method: "GET",
@@ -84,6 +105,7 @@ export const devLoginHandlers = [
         );
 
         try {
+          throwErrorBasedOnSuffix(sbi);
           const previousApplication = await businessEligibleToApply(sbi);
 
           request.logger.setBindings({ previousApplication });
@@ -95,6 +117,23 @@ export const devLoginHandlers = [
                 backLink: `${config.urlPrefix}/endemics/dev-sign-in`,
                 sbi,
                 errorMessage,
+              })
+              .code(400)
+              .takeover();
+          } else if ( ["LockedBusinessError", "InvalidPermissionsError", "NoEligibleCphError", "OutstandingAgreementError"].includes(error.name)) {
+            return h
+              .view("cannot-apply-for-livestock-review-exception", {
+                errorName: error.name,
+                ruralPaymentsAgency: config.ruralPaymentsAgency,
+                hasMultipleBusinesses: getCustomer(
+                  request,
+                  keys.customer.attachedToMultipleBusinesses,
+                ),
+                backLink: requestAuthorizationCodeUrl(request),
+                claimLink: config.claimServiceUri,
+                sbiText:`SBI ${sbi}`,
+                organisationName: organisationSummary.name,
+                guidanceLink: config.serviceUri,
               })
               .code(400)
               .takeover();
