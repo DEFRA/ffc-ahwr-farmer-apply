@@ -1,20 +1,10 @@
 import { config } from "../../config/index.js";
-import { getCustomer, setCustomer, setFarmerApplyData } from '../../session/index.js'
-import { setAuthCookie } from "../../auth/cookie-auth/cookie-auth.js";
-import { keys } from "../../session/keys.js";
 import { generateRandomID } from "../../lib/create-temp-reference.js";
-import { getPersonName } from "../../api-requests/rpa-api/person.js";
-import { getOrganisationAddress } from "../../api-requests/rpa-api/organisation.js";
-import { businessEligibleToApply } from "../../api-requests/business-eligible-to-apply.js";
-import { farmerApply } from "../../constants/constants.js";
-import { AlreadyAppliedError } from "../../exceptions/AlreadyAppliedError.js";
-import { LockedBusinessError } from '../../exceptions/LockedBusinessError.js'
-import { requestAuthorizationCodeUrl } from '../../auth/auth-code-grant/request-authorization-code-url.js'
-import { InvalidPermissionsError } from '../../exceptions/InvalidPermissionsError.js'
-import { NoEligibleCphError } from '../../exceptions/NoEligibleCphError.js'
-import { OutstandingAgreementError } from '../../exceptions/OutstandingAgreementError.js'
+import { setCustomer, setFarmerApplyData } from "../../session/index.js";
+import { keys } from "../../session/keys.js";
 
 const urlPrefix = config.urlPrefix;
+const sendTo = config.dashboardServiceUri;
 const pageUrl = `${urlPrefix}/endemics/dev-sign-in`;
 
 const createDevDetails = async (sbi) => {
@@ -43,35 +33,19 @@ const createDevDetails = async (sbi) => {
 function setOrganisationSessionData(
   request,
   personSummary,
-  { organisation: org }
+  { organisation: org },
 ) {
   const organisation = {
     sbi: org.sbi,
-    farmerName: getPersonName(personSummary),
+    farmerName: "John Smith",
     name: org.name,
     email: personSummary.email,
     orgEmail: org.email,
-    address: getOrganisationAddress(org.address),
+    address: "Somewhere",
     crn: personSummary.customerReferenceNumber,
-    frn: org.businessReference,
+    frn: "1100918140",
   };
   setFarmerApplyData(request, keys.farmerApplyData.organisation, organisation);
-}
-
-function throwErrorBasedOnSuffix (sbi) {
-  if (sbi.toUpperCase().endsWith("L")) {
-    throw new LockedBusinessError(`Organisation is locked by RPA`);
-  } else if(sbi.toUpperCase().endsWith("I")) {
-    throw new InvalidPermissionsError(
-      `Person does not have the required permissions for organisation id`,
-    );
-  } else if(sbi.toUpperCase().endsWith("C")) {
-    throw new NoEligibleCphError("Customer must have at least one valid CPH");
-  } else if(sbi.toUpperCase().endsWith("O")) {
-    throw new OutstandingAgreementError(
-      `Business with SBI ${sbi} must claim or withdraw agreement before creating another.`,
-    );
-  }
 }
 
 export const devLoginHandlers = [
@@ -92,69 +66,26 @@ export const devLoginHandlers = [
       auth: false,
       handler: async (request, h) => {
         const tempApplicationId = generateRandomID();
-        setFarmerApplyData(
-          request,
-          keys.farmerApplyData.reference,
-          tempApplicationId
-        );
 
         const { sbi } = request.payload;
-        request.logger.setBindings({ sbi });
-        const [personSummary, organisationSummary] = await createDevDetails(
-          sbi
-        );
 
-        try {
-          throwErrorBasedOnSuffix(sbi);
-          const previousApplication = await businessEligibleToApply(sbi);
-
-          request.logger.setBindings({ previousApplication });
-        } catch (error) {
-          if (error instanceof AlreadyAppliedError) {
-            const errorMessage = `${sbi} already has an active agreement in the database.`;
-            return h
-              .view("dev-sign-in-exception", {
-                backLink: `${config.urlPrefix}/endemics/dev-sign-in`,
-                sbi,
-                errorMessage,
-              })
-              .code(400)
-              .takeover();
-          } else if ( ["LockedBusinessError", "InvalidPermissionsError", "NoEligibleCphError", "OutstandingAgreementError"].includes(error.name)) {
-            return h
-              .view("cannot-apply-for-livestock-review-exception", {
-                errorName: error.name,
-                ruralPaymentsAgency: config.ruralPaymentsAgency,
-                hasMultipleBusinesses: getCustomer(
-                  request,
-                  keys.customer.attachedToMultipleBusinesses,
-                ),
-                backLink: requestAuthorizationCodeUrl(request),
-                claimLink: config.claimServiceUri,
-                sbiText:`SBI ${sbi}`,
-                organisationName: organisationSummary.name,
-                guidanceLink: config.serviceUri,
-              })
-              .code(400)
-              .takeover();
-          }
-
-          throw error;
+        if (config.env === "development") {
+          const [personSummary, organisationSummary] =
+            await createDevDetails(sbi);
+          setCustomer(request, keys.customer.id, personSummary.id);
+          setCustomer(
+            request,
+            keys.customer.crn,
+            personSummary.customerReferenceNumber,
+          );
+          setOrganisationSessionData(request, personSummary, {
+            ...organisationSummary,
+          });
         }
 
-        setCustomer(request, keys.customer.id, personSummary.id);
-        setCustomer(
-          request,
-          keys.customer.crn,
-          personSummary.customerReferenceNumber
+        return h.redirect(
+          `${sendTo}/dev-sign-in?sbi=${sbi}&tempApplicationId=${tempApplicationId}&cameFrom=apply`,
         );
-        setOrganisationSessionData(request, personSummary, {
-          ...organisationSummary,
-        });
-
-        setAuthCookie(request, personSummary.email, farmerApply);
-
-        return h.redirect(`${urlPrefix}/endemics/check-details`);
       },
     },
   },

@@ -3,11 +3,8 @@ import { config } from "../../../../../app/config/index.js";
 import * as cheerio from "cheerio";
 import { ok } from "../../../../utils/phase-banner-expect.js";
 import { getCrumbs } from "../../../../utils/get-crumbs.js";
-import { businessEligibleToApply } from "../../../../../app/api-requests/business-eligible-to-apply.js";
-import { AlreadyAppliedError } from "../../../../../app/exceptions/AlreadyAppliedError.js";
 
 jest.mock("../../../../../app/session/index");
-jest.mock("../../../../../app/api-requests/business-eligible-to-apply");
 
 describe("Dev sign in page test", () => {
   let server;
@@ -35,7 +32,7 @@ describe("Dev sign in page test", () => {
     const $ = cheerio.load(res.payload);
     expect($("h1").text()).toMatch("SBI to use?");
     expect($("title").text().trim()).toContain(
-      "What is your SBI? - Get funding to improve animal health and welfare"
+      "What is your SBI? - Get funding to improve animal health and welfare",
     );
     ok($);
   });
@@ -47,9 +44,7 @@ describe("Dev sign in page test", () => {
       crumb = await getCrumbs(server);
     });
 
-    test("POST to dev login successfully returns a 302 and redirects to journey", async () => {
-      businessEligibleToApply.mockResolvedValueOnce("no previous application");
-
+    test("POST to dev login successfully returns a 302 and redirects to dashboard", async () => {
       const options = {
         method: "POST",
         url: "/apply/endemics/dev-sign-in",
@@ -61,148 +56,14 @@ describe("Dev sign in page test", () => {
       };
 
       const res = await server.inject(options);
+      const redirectedTo = res.headers.location;
 
       expect(res.statusCode).toBe(302);
-      expect(res.headers.location).toEqual("/apply/endemics/check-details");
-    });
-
-    test("POST to dev login with an SBI which already has applied redirects user to the dev sign in exception page", async () => {
-      const sbi = "123456789";
-      businessEligibleToApply.mockImplementation(() => {
-        throw new AlreadyAppliedError(
-          `Business with SBI ${sbi} already has an endemics agreement`
-        );
-      });
-
-      const options = {
-        method: "POST",
-        url: "/apply/endemics/dev-sign-in",
-        payload: {
-          crumb,
-          sbi,
-        },
-        headers: { cookie: `crumb=${crumb}` },
-      };
-
-      const res = await server.inject(options);
-
-      const $ = cheerio.load(res.payload);
-      expect(res.statusCode).toBe(400);
-      expect($("h1").text().trim()).toMatch(
-        `You cannot sign in with SBI ${sbi}`
+      expect(redirectedTo).toMatch(
+        `${config.dashboardServiceUri}/dev-sign-in?`,
       );
-    });
-
-    test("POST to dev login with an SBI with suffix O redirects user to the cannot apply for review page", async () => {
-      const sbi = "123456789O";
-
-      const options = {
-        method: "POST",
-        url: "/apply/endemics/dev-sign-in",
-        payload: {
-          crumb,
-          sbi,
-        },
-        headers: { cookie: `crumb=${crumb}` },
-      };
-
-      const res = await server.inject(options);
-
-      const $ = cheerio.load(res.payload);
-      expect(res.statusCode).toBe(400);
-      expect($("h1").text().trim()).toMatch(
-        `You cannot apply for reviews or follow-ups for this business`
-      );
-    });
-
-    test("POST to dev login with an SBI with suffix I redirects user to the cannot apply for review page", async () => {
-      const sbi = "123456789I";
-
-      const options = {
-        method: "POST",
-        url: "/apply/endemics/dev-sign-in",
-        payload: {
-          crumb,
-          sbi,
-        },
-        headers: { cookie: `crumb=${crumb}` },
-      };
-
-      const res = await server.inject(options);
-
-      const $ = cheerio.load(res.payload);
-      expect(res.statusCode).toBe(400);
-      expect($("h1").text().trim()).toMatch(
-        `You cannot apply for reviews or follow-ups for this business`
-      );
-    });
-
-    test("POST to dev login with an SBI with suffix C redirects user to the cannot apply for review page", async () => {
-      const sbi = "123456789C";
-
-      const options = {
-        method: "POST",
-        url: "/apply/endemics/dev-sign-in",
-        payload: {
-          crumb,
-          sbi,
-        },
-        headers: { cookie: `crumb=${crumb}` },
-      };
-
-      const res = await server.inject(options);
-
-      const $ = cheerio.load(res.payload);
-      expect(res.statusCode).toBe(400);
-      expect($("h1").text().trim()).toMatch(
-        `You cannot apply for reviews or follow-ups for this business`
-      );
-    });
-
-    test("POST to dev login with an SBI with suffix L redirects user to the cannot apply for review page", async () => {
-      const sbi = "123456789L";
-
-      const options = {
-        method: "POST",
-        url: "/apply/endemics/dev-sign-in",
-        payload: {
-          crumb,
-          sbi,
-        },
-        headers: { cookie: `crumb=${crumb}` },
-      };
-
-      const res = await server.inject(options);
-
-      const $ = cheerio.load(res.payload);
-      expect(res.statusCode).toBe(400);
-      expect($("h1").text().trim()).toMatch(
-        `You cannot apply for reviews or follow-ups for this business`
-      );
-    });
-
-    test("POST to dev login which throws an error redirects to standard error 500 page", async () => {
-      const sbi = "123456789";
-      businessEligibleToApply.mockImplementation(() => {
-        throw new Error("I am an error");
-      });
-
-      const options = {
-        method: "POST",
-        url: "/apply/endemics/dev-sign-in",
-        payload: {
-          crumb,
-          sbi,
-        },
-        headers: { cookie: `crumb=${crumb}` },
-      };
-
-      const res = await server.inject(options);
-
-      const $ = cheerio.load(res.payload);
-      expect(res.statusCode).toBe(500);
-      expect($("h1").text()).toEqual(
-        "Sorry, there is a problem with the service"
+      expect(redirectedTo).toMatch(
+        /sbi=123456789&tempApplicationId=TEMP-\w{4}-\w{4}&cameFrom=apply/,
       );
     });
   });

@@ -81,6 +81,6 @@ describe("Person", () => {
       };
       const result = getPersonName(personSummary);
       expect(result).toEqual(expectedResult);
-    }
+    },
   );
 });

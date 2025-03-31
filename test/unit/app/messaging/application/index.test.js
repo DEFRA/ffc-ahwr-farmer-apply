@@ -27,7 +27,7 @@ describe("application messaging tests", () => {
     expect(receiveMessage).toHaveBeenCalledTimes(1);
     expect(receiveMessage).toHaveBeenCalledWith(
       sessionId,
-      applicationResponseQueue
+      applicationResponseQueue,
     );
     expect(sendMessage).toHaveBeenCalledTimes(1);
   });
@@ -46,7 +46,7 @@ describe("application messaging tests", () => {
     expect(receiveMessage).toHaveBeenCalledTimes(1);
     expect(receiveMessage).toHaveBeenCalledWith(
       sessionId,
-      applicationResponseQueue
+      applicationResponseQueue,
     );
     expect(sendMessage).toHaveBeenCalledTimes(1);
   });

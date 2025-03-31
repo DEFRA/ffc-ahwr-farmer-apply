@@ -26,7 +26,7 @@ export const viewsPlugin = {
             {
               autoescape: true,
               watch: false,
-            }
+            },
           );
 
           return next();

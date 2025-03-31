@@ -76,9 +76,9 @@ describe("session", () => {
 
           expect(application).toEqual(value);
           expect(sectionKey).toEqual(expectedSectionKey);
-        }
+        },
       );
-    }
+    },
   );
 
   describe.each(setFunctionsToTest)(
@@ -100,16 +100,16 @@ describe("session", () => {
 
           expect(requestSetMock.yar.get).toHaveBeenCalledTimes(3);
           expect(requestSetMock.yar.get).toHaveBeenCalledWith(
-            expectedSectionKey
+            expectedSectionKey,
           );
           expect(requestSetMock.yar.set).toHaveBeenCalledTimes(1);
           expect(requestSetMock.yar.set).toHaveBeenCalledWith(
             expectedSectionKey,
-            { [key]: value }
+            { [key]: value },
           );
-        }
+        },
       );
-    }
+    },
   );
 
   describe.each(setFunctionsToTest)(
@@ -132,16 +132,16 @@ describe("session", () => {
 
           expect(requestSetMock.yar.get).toHaveBeenCalledTimes(3);
           expect(requestSetMock.yar.get).toHaveBeenCalledWith(
-            expectedSectionKey
+            expectedSectionKey,
           );
           expect(requestSetMock.yar.set).toHaveBeenCalledTimes(1);
           expect(requestSetMock.yar.set).toHaveBeenCalledWith(
             expectedSectionKey,
-            { ...{ [key]: value }, ...existingValue }
+            { ...{ [key]: value }, ...existingValue },
           );
-        }
+        },
       );
-    }
+    },
   );
 
   const valueToBeTrimmed = "    to be trimmed   ";
@@ -166,7 +166,7 @@ describe("session", () => {
       expect(requestSetMock.yar.set).toHaveBeenCalledWith(expectedSectionKey, {
         [key]: valueToBeTrimmed.trim(),
       });
-    }
+    },
   );
 
   test.each(setFunctionsToTest)(
@@ -190,7 +190,7 @@ describe("session", () => {
       expect(requestSetMock.yar.set).toHaveBeenCalledWith(expectedSectionKey, {
         [key]: objectValue,
       });
-    }
+    },
   );
 
   test.each(setFunctionsToTest)(
@@ -214,16 +214,16 @@ describe("session", () => {
       session[func](requestSetMock, "key2", "value2");
 
       expect(
-        session.lacksAny(requestSetMock, expectedSectionKey, ["key1", "key2"])
+        session.lacksAny(requestSetMock, expectedSectionKey, ["key1", "key2"]),
       ).toBeFalsy();
       expect(
         session.lacksAny(requestSetMock, expectedSectionKey, [
           "key1",
           "key2",
           "key3",
-        ])
+        ]),
       ).toBeTruthy();
-    }
+    },
   );
   test("session clear clears correct keys", async () => {
     const yarMock = {

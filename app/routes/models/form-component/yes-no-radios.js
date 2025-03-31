@@ -3,7 +3,7 @@ export function getYesNoRadios(
   id,
   previousAnswer,
   errorText = undefined,
-  options = {}
+  options = {},
 ) {
   const {
     isPageHeading = true,

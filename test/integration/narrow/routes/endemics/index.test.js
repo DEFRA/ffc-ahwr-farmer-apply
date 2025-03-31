@@ -27,13 +27,13 @@ describe("Farmer apply home page test", () => {
     expect(res.statusCode).toBe(200);
     const $ = cheerio.load(res.payload);
     expect($(".govuk-heading-l").text()).toEqual(
-      "Get funding to improve animal health and welfare"
+      "Get funding to improve animal health and welfare",
     );
     const button = $(".govuk-main-wrapper .govuk-button");
 
     expect(button.text()).toMatch("Start now");
     expect($("title").text()).toMatch(
-      "Get funding to improve animal health and welfare"
+      "Get funding to improve animal health and welfare",
     );
     ok($);
   });
@@ -50,14 +50,14 @@ describe("Farmer apply home page test", () => {
     expect(res.statusCode).toBe(200);
     const $ = cheerio.load(res.payload);
     expect($(".govuk-heading-l").text()).toEqual(
-      "Get funding to improve animal health and welfare"
+      "Get funding to improve animal health and welfare",
     );
     const button = $(".govuk-main-wrapper .govuk-button");
     expect(button.length).toEqual(2);
     expect(button.first().text()).toContain("Start now");
     expect(button.next().text()).toContain("Dev start now");
     expect($("title").text()).toMatch(
-      "Get funding to improve animal health and welfare"
+      "Get funding to improve animal health and welfare",
     );
     ok($);
   });

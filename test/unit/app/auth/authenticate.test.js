@@ -281,7 +281,7 @@ describe("authenticate", () => {
 
     if (testCase.expect.error) {
       await expect(authenticate(testCase.given.request)).rejects.toEqual(
-        testCase.expect.error
+        testCase.expect.error,
       );
 
       expect(setToken).toHaveBeenCalledTimes(0);
@@ -293,27 +293,27 @@ describe("authenticate", () => {
       expect(setToken).toHaveBeenCalledWith(
         testCase.given.request,
         keys.tokens.accessToken,
-        testCase.when.redeemResponse.payload.access_token
+        testCase.when.redeemResponse.payload.access_token,
       );
       expect(setToken).toHaveBeenCalledWith(
         testCase.given.request,
         keys.tokens.tokenExpiry,
-        new Date(MOCK_NOW.getTime() + 10 * 1000).toISOString()
+        new Date(MOCK_NOW.getTime() + 10 * 1000).toISOString(),
       );
       expect(setCustomer).toHaveBeenCalledWith(
         testCase.given.request,
         keys.customer.crn,
-        "1234567890"
+        "1234567890",
       );
       expect(setCustomer).toHaveBeenCalledWith(
         testCase.given.request,
         keys.customer.organisationId,
-        "123456789"
+        "123456789",
       );
       expect(setCustomer).toHaveBeenCalledWith(
         testCase.given.request,
         keys.customer.attachedToMultipleBusinesses,
-        false
+        false,
       );
       expect(MOCK_COOKIE_AUTH_SET).toHaveBeenCalledWith({
         account: {

@@ -4,7 +4,7 @@ export const getIneligibilityEvent = (
   crn,
   email,
   exception,
-  reference
+  reference,
 ) => ({
   name: "send-ineligibility-event",
   properties: {

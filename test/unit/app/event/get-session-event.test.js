@@ -47,7 +47,7 @@ test("getSessionEvent", () => {
     key,
     value,
     ip,
-    reference
+    reference,
   );
 
   expect(event).toEqual(expected);

@@ -243,7 +243,7 @@ export const signinRouteHandlers = [
               hasMultipleBusinesses: attachedToMultipleBusinesses,
               backLink: requestAuthorizationCodeUrl(request),
               claimLink: config.claimServiceUri,
-              sbiText: `SBI ${organisation.sbi ?? ''}`,
+              sbiText: `SBI ${organisation.sbi ?? ""}`,
               organisationName: organisation?.name,
               guidanceLink: config.serviceUri,
             })

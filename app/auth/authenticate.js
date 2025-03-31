@@ -26,19 +26,19 @@ export const authenticate = async (request) => {
   setToken(
     request,
     keys.tokens.tokenExpiry,
-    toISOString(redeemResponse.expires_in)
+    toISOString(redeemResponse.expires_in),
   );
   setCustomer(request, keys.customer.crn, accessToken.contactId);
   setCustomer(
     request,
     keys.customer.organisationId,
-    accessToken.currentRelationshipId
+    accessToken.currentRelationshipId,
   );
   setCustomer(
     request,
     keys.customer.attachedToMultipleBusinesses,
     typeof accessToken.enrolmentCount !== "undefined" &&
-      accessToken.enrolmentCount > 1
+      accessToken.enrolmentCount > 1,
   );
 
   setCookieAuth(request, accessToken);

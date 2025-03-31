@@ -9,13 +9,13 @@ export const getCphNumbers = async (request, apimAccessToken) => {
     authConfig.ruralPaymentsAgency.hostname,
     authConfig.ruralPaymentsAgency.getCphNumbersUrl.replace(
       "organisationId",
-      getCustomer(request, keys.customer.organisationId)
+      getCustomer(request, keys.customer.organisationId),
     ),
     request,
     {
       crn: getCustomer(request, keys.customer.crn),
       Authorization: apimAccessToken,
-    }
+    },
   );
   if (!response.success) {
     throw new Error(response.errorString);

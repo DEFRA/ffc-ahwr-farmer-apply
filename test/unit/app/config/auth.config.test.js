@@ -126,7 +126,7 @@ describe("Auth config", () => {
   ])("GIVEN $processEnv EXPECT $errorMessage", (testCase) => {
     process.env.DEFRA_ID_REDIRECT_URI = testCase.processEnv.redirectUri;
     expect(() => require("../../../../app/config/auth")).toThrow(
-      testCase.errorMessage
+      testCase.errorMessage,
     );
   });
 

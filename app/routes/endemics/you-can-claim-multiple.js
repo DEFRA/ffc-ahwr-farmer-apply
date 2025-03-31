@@ -53,7 +53,7 @@ export const claimMultipleRouteHandlers = [
     options: {
       handler: async (request, h) => {
         const status = agreementStatuses.find(
-          (s) => s.value === request.payload.agreementStatus
+          (s) => s.value === request.payload.agreementStatus,
         );
 
         setFarmerApplyData(request, agreeMultipleSpecies, status.value);

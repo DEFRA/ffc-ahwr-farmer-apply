@@ -48,7 +48,7 @@ test("getIneligibilityEvent", async () => {
     crn,
     email,
     exception,
-    reference
+    reference,
   );
   jest.useRealTimers();
 

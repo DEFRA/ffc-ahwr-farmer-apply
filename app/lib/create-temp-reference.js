@@ -10,7 +10,7 @@ const containsSwearWord = (input) => {
 export const generateRandomID = () => {
   const charset = "ABCDEFGHIJKLMNPQRSTUVWXYZ123456789";
   const id = Array.from({ length: 8 }, () =>
-    charset.charAt(randomInt(0, charset.length))
+    charset.charAt(randomInt(0, charset.length)),
   ).join("");
   const firstFour = id.slice(0, 4);
   const secondFour = id.slice(4);

@@ -12,7 +12,7 @@ export async function sendApplication(application, sessionId) {
     application,
     applicationRequestMsgType,
     applicationRequestQueue,
-    { sessionId }
+    { sessionId },
   );
   const response = await receiveMessage(sessionId, applicationResponseQueue);
 

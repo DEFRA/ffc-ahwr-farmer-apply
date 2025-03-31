@@ -97,7 +97,7 @@ export const declarationRouteHandlers = [
 
         const newApplicationReference = await sendApplication(
           { ...application, type: applicationType.ENDEMICS },
-          request.yar.id
+          request.yar.id,
         );
 
         request.logger.setBindings({ newApplicationReference });
@@ -107,7 +107,7 @@ export const declarationRouteHandlers = [
           setTempReference(
             request,
             keys.tempReference.tempReference,
-            tempApplicationReference
+            tempApplicationReference,
           );
 
           const organisation = getFarmerApplyData(request, organisationKey);
@@ -134,7 +134,7 @@ export const declarationRouteHandlers = [
 
         if (!newApplicationReference) {
           throw boom.internal(
-            "Apply declaration returned a null application reference."
+            "Apply declaration returned a null application reference.",
           );
         }
 

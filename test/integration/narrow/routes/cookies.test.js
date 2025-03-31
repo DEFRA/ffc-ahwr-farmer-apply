@@ -63,7 +63,7 @@ describe("cookies route", () => {
     const result = await server.inject(options);
     expect(result.request.response.variety).toBe("view");
     expect(result.request.response.source.template).toBe(
-      "cookies/cookie-policy"
+      "cookies/cookie-policy",
     );
   });
 
@@ -131,13 +131,13 @@ describe("cookies route", () => {
     expect(response.statusCode).toBe(200);
     const $ = cheerio.load(response.payload);
     expect($(".govuk-cookie-banner h2").text()).toContain(
-      "Cookies on Get funding to improve animal health and welfare"
+      "Cookies on Get funding to improve animal health and welfare",
     );
     expect($(".js-cookies-button-accept").text()).toContain(
-      "Accept analytics cookies"
+      "Accept analytics cookies",
     );
     expect($(".js-cookies-button-reject").text()).toContain(
-      "Reject analytics cookies"
+      "Reject analytics cookies",
     );
     ok($);
   });

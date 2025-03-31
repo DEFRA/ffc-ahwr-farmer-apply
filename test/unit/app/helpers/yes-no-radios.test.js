@@ -38,7 +38,7 @@ describe("getYesNoRadios", () => {
         },
       });
       expect(res.radios).not.toHaveProperty("errorMessage");
-    }
+    },
   );
 
   test("includes error message when test is supplied", () => {

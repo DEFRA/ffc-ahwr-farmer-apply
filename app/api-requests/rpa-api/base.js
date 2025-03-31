@@ -9,7 +9,7 @@ import { apiHeaders } from "../../constants/constants.js";
 export const get = async (hostname, url, request, headers = {}) => {
   headers[apiHeaders.xForwardedAuthorization] = getToken(
     request,
-    keys.tokens.accessToken
+    keys.tokens.accessToken,
   );
   headers[apiHeaders.ocpSubscriptionKey] = authConfig.apim.ocpSubscriptionKey;
 

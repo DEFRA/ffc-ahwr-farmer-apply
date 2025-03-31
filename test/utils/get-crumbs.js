@@ -5,7 +5,7 @@ const { urlPrefix } = config;
 export const getCrumbs = async (
   server,
   options = { url: `${urlPrefix}/cookies`, crumbKey: "crumb" },
-  mockForRequest = () => {}
+  mockForRequest = () => {},
 ) => {
   mockForRequest();
   const { crumbKey, url } = options;
@@ -16,7 +16,7 @@ export const getCrumbs = async (
   const crumb = cookieHeader[0].match(regex)[1];
   if (!crumb) {
     throw Error(
-      `Crumb was not found, ensure name of cookie key is set to '${crumbKey}'.`
+      `Crumb was not found, ensure name of cookie key is set to '${crumbKey}'.`,
     );
   }
   return crumb;

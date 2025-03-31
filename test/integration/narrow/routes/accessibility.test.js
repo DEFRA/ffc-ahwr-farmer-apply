@@ -31,10 +31,10 @@ describe("Farmer apply accessibility page test", () => {
     expect(res.statusCode).toBe(200);
     const $ = cheerio.load(res.payload);
     expect($(".govuk-heading-l").text()).toMatch(
-      "Accessibility statement: Get funding to improve animal health and welfare"
+      "Accessibility statement: Get funding to improve animal health and welfare",
     );
     expect($("title").text()).toMatch(
-      "Accessibility statement - Get funding to improve animal health and welfare - GOV.UKGOV.UK"
+      "Accessibility statement - Get funding to improve animal health and welfare - GOV.UKGOV.UK",
     );
     ok($);
   });

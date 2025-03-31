@@ -5,7 +5,7 @@ export const getSessionEvent = (
   key,
   value,
   ip,
-  reference
+  reference,
 ) => ({
   name: "send-session-event",
   properties: {

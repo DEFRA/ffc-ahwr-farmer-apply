@@ -23,13 +23,13 @@ jest.mock("../../../../../app/session", () => ({
   clear: jest.fn(),
 }));
 
-describe("Check your eligible page test", () => {
+describe("Check review numbers page test", () => {
   const auth = {
     strategy: "cookie",
     credentials: { reference: "1111", sbi: "111111111" },
   };
   const org = {
-    farmerName: "Dailry Farmer",
+    farmerName: "Dairy Farmer",
     address: " org-address-here",
     cph: "11/222/3333",
     email: "org@test.com",
@@ -72,7 +72,7 @@ describe("Check your eligible page test", () => {
       expect(pageTitleByName).toContain(fullTitle);
       expect(pageTitleByClassName).toEqual(title);
       expect($(".govuk-heading-s").text()).toEqual(
-        `${org.name} - SBI ${org.sbi}`
+        `${org.name} - SBI ${org.sbi}`,
       );
       expect(backLinkUrlByClassName).toContain(endemicsReviewsUrl);
       ok($);
@@ -104,7 +104,7 @@ describe("Check your eligible page test", () => {
       expect(pageTitleByName).toContain(fullTitle);
       expect(pageTitleByClassName).toEqual(title);
       expect($(".govuk-heading-s").text()).toEqual(
-        `${org.name} - SBI ${org.sbi}`
+        `${org.name} - SBI ${org.sbi}`,
       );
       expect(backLinkUrlByClassName).toContain(endemicsYouCanClaimMultipleUrl);
       ok($);
