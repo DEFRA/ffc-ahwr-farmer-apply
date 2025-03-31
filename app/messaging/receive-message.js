@@ -4,7 +4,7 @@ export async function receiveMessage(messageId, config) {
   const receiver = createMessageReceiver(config);
   const sessionReceiver = await receiver.sbClient.acceptSession(
     config.address,
-    messageId
+    messageId,
   );
   const messages = await sessionReceiver.receiveMessages(1, {
     maxWaitTimeInMs: 50000,

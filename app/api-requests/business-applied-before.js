@@ -19,7 +19,7 @@ const isWithin10Months = (d) => {
 function applicationForBusinessInStateToApply(latestApplicationsForSbi) {
   if (
     latestApplicationsForSbi.filter(
-      (application) => application.type === applicationType.VET_VISITS
+      (application) => application.type === applicationType.VET_VISITS,
     ).length === 0
   ) {
     return userType.NEW_USER;
@@ -28,12 +28,12 @@ function applicationForBusinessInStateToApply(latestApplicationsForSbi) {
   const latestApplication = getLatestApplication(latestApplicationsForSbi);
 
   const latestApplicationWithinLastTenMonths = isWithin10Months(
-    latestApplication.data.visitDate
+    latestApplication.data.visitDate,
   );
 
   if (
     [status.WITHDRAWN, status.REJECTED, status.NOT_AGREED].includes(
-      latestApplication.statusId
+      latestApplication.statusId,
     ) ||
     !latestApplicationWithinLastTenMonths
   ) {

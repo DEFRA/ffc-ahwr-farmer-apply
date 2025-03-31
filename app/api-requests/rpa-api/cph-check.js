@@ -23,7 +23,7 @@ const restrictedToCattlePigAndSheepLivestock = (cphNumber) => {
   return !between(
     cphNumber.slice(-4),
     slaughterHousesOrPoultry.MIN,
-    slaughterHousesOrPoultry.MAX
+    slaughterHousesOrPoultry.MAX,
   );
 };
 
@@ -33,13 +33,13 @@ const containAtLeastOneValidCph = (cphNumbers) => {
   }
   return cphNumbers.some(
     (cphNumber) =>
-      inEngland(cphNumber) && restrictedToCattlePigAndSheepLivestock(cphNumber)
+      inEngland(cphNumber) && restrictedToCattlePigAndSheepLivestock(cphNumber),
   );
 };
 
 export const customerMustHaveAtLeastOneValidCph = async (
   request,
-  apimAccessToken
+  apimAccessToken,
 ) => {
   const cphNumbers = await getCphNumbers(request, apimAccessToken);
   if (!containAtLeastOneValidCph(cphNumbers)) {

@@ -118,8 +118,8 @@ describe("radios", () => {
         testCase.given.legendText,
         testCase.given.id,
         testCase.given.errorText,
-        testCase.given.options
-      )(testCase.when.items)
+        testCase.given.options,
+      )(testCase.when.items),
     ).toEqual(testCase.expect);
   });
 });

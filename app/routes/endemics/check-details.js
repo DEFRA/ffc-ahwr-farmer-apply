@@ -29,6 +29,7 @@ export const checkDetailsRouteHandlers = [
     options: {
       handler: async (request, h) => {
         const organisation = getFarmerApplyData(request, organisationKey);
+
         if (!organisation) {
           return boom.notFound();
         }
@@ -43,7 +44,7 @@ export const checkDetailsRouteHandlers = [
 
         return h.view(
           endemicsCheckDetails,
-          getOrganisation(request, organisation)
+          getOrganisation(request, organisation),
         );
       },
     },
@@ -78,7 +79,7 @@ export const checkDetailsRouteHandlers = [
         setFarmerApplyData(
           request,
           confirmCheckDetailsKey,
-          confirmCheckDetails
+          confirmCheckDetails,
         );
 
         if (confirmCheckDetails === "yes") {

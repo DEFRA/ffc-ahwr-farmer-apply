@@ -19,8 +19,8 @@ export const cookieHandlers = [
           "cookies/cookie-policy",
           new ViewModel(
             request.state[cookieNameCookiePolicy],
-            request.query.updated
-          )
+            request.query.updated,
+          ),
         );
       },
     },

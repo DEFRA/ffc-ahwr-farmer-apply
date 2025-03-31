@@ -11,7 +11,7 @@ export const generate = (request) => {
   };
 
   const base64EncodedState = Buffer.from(JSON.stringify(state)).toString(
-    "base64"
+    "base64",
   );
   setToken(request, keys.tokens.state, base64EncodedState);
   return base64EncodedState;
@@ -24,12 +24,12 @@ export const verify = (request) => {
       return false;
     }
     const decodedState = JSON.parse(
-      Buffer.from(state, "base64").toString("ascii")
+      Buffer.from(state, "base64").toString("ascii"),
     );
     const savedState = JSON.parse(
       Buffer.from(getToken(request, keys.tokens.state), "base64").toString(
-        "ascii"
-      )
+        "ascii",
+      ),
     );
     return decodedState.id === savedState.id;
   } else {
@@ -38,7 +38,7 @@ export const verify = (request) => {
         error: request.query.error_description,
         yarId: request.yar.id,
       },
-      "verify request"
+      "verify request",
     );
     return false;
   }

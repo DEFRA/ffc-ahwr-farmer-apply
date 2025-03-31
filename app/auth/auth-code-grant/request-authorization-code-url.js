@@ -1,4 +1,3 @@
-import { config } from "../../config/index.js";
 import { authConfig } from "../../config/auth.js";
 import { setReturnRoute } from "../../session/index.js";
 import { generate as generateNonce } from "../id-token/nonce.js";
@@ -7,20 +6,18 @@ import { generateCodeChallenge } from "./proof-key-for-code-exchange.js";
 
 export const requestAuthorizationCodeUrl = (
   request,
-  useProofKeyForCodeExchange = true
+  useProofKeyForCodeExchange = true,
 ) => {
   const url = new URL(
-    `${authConfig.defraId.hostname}${authConfig.defraId.oAuthAuthorisePath}`
+    `${authConfig.defraId.hostname}${authConfig.defraId.oAuthAuthorisePath}`,
   );
-  if (config.endemics.enabled) setReturnRoute(request, "returnRoute", "apply");
+  setReturnRoute(request, "returnRoute", "apply");
   url.searchParams.append("p", authConfig.defraId.policy);
   url.searchParams.append("client_id", authConfig.defraId.clientId);
   url.searchParams.append("nonce", generateNonce(request));
   url.searchParams.append(
     "redirect_uri",
-    config.endemics.enabled
-      ? authConfig.defraId.dashboardRedirectUri
-      : authConfig.defraId.redirectUri
+    authConfig.defraId.dashboardRedirectUri,
   );
   url.searchParams.append("scope", authConfig.defraId.scope);
   url.searchParams.append("response_type", "code");
@@ -33,5 +30,6 @@ export const requestAuthorizationCodeUrl = (
     url.searchParams.append("code_challenge", codeChallenge);
     url.searchParams.append("code_challenge_method", "S256");
   }
+
   return url;
 };

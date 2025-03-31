@@ -63,7 +63,7 @@ describe("Declaration test", () => {
       const $ = cheerio.load(res.payload);
       expect($("h1").text()).toMatch("Timing of reviews and follow-ups");
       expect($("title").text()).toMatch(
-        "Timing of reviews and follow-ups - Get funding to improve animal health and welfare"
+        "Timing of reviews and follow-ups - Get funding to improve animal health and welfare",
       );
       expect($("h3").text()).toEqual("org-name - SBI 0123456789");
 
@@ -89,7 +89,7 @@ describe("Declaration test", () => {
       const headers = $("main h2");
       expect(headers.length).toBe(3);
       expect($(headers.get(2)).text()).toBe(
-        "What to do if you completed a review in the old annual health and welfare review service"
+        "What to do if you completed a review in the old annual health and welfare review service",
       );
     });
   });

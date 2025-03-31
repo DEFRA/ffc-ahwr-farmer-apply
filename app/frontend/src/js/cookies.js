@@ -53,7 +53,7 @@ if (cookieContainer) {
       JSON.stringify({
         analytics: accepted,
         async: true,
-      })
+      }),
     );
   }
 }

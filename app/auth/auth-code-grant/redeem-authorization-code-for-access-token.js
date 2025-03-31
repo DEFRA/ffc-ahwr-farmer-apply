@@ -22,7 +22,7 @@ export const redeemAuthorizationCodeForAccessToken = async (request) => {
     // The same code_verifier that was used to obtain the authorization_code.
     data.append(
       "code_verifier",
-      getPkcecodes(request, keys.pkcecodes.verifier)
+      getPkcecodes(request, keys.pkcecodes.verifier),
     );
     const response = await Wreck.post(
       `${authConfig.defraId.hostname}/${authConfig.defraId.policy}/oauth2/v2.0/token`,
@@ -30,7 +30,7 @@ export const redeemAuthorizationCodeForAccessToken = async (request) => {
         headers: data.getHeaders(),
         payload: data,
         json: true,
-      }
+      },
     );
 
     return response.payload;

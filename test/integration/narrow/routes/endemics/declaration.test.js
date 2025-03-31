@@ -50,7 +50,7 @@ const {
 function expectPageContentOk($, organisation) {
   expect($("h1.govuk-heading-l").text()).toEqual("Review your agreement offer");
   expect($("title").text()).toMatch(
-    "Review your agreement offer - Get funding to improve animal health and welfare"
+    "Review your agreement offer - Get funding to improve animal health and welfare",
   );
   expect($("#organisation-name").text()).toEqual(organisation.name);
   expect($("#organisation-address").text()).toEqual(organisation.address);
@@ -98,8 +98,8 @@ describe("Declaration test", () => {
       expect(res.statusCode).toBe(302);
       expect(res.headers.location.toString()).toEqual(
         expect.stringContaining(
-          "https://testtenant.b2clogin.com/testtenant.onmicrosoft.com/oauth2/v2.0/authorize"
-        )
+          "https://testtenant.b2clogin.com/testtenant.onmicrosoft.com/oauth2/v2.0/authorize",
+        ),
       );
     });
 
@@ -132,7 +132,7 @@ describe("Declaration test", () => {
       const $ = cheerio.load(res.payload);
       expect($("h1").text()).toMatch("Review your agreement offer");
       expect($("title").text()).toMatch(
-        "Review your agreement offer - Get funding to improve animal health and welfare"
+        "Review your agreement offer - Get funding to improve animal health and welfare",
       );
       ok($);
     });
@@ -161,7 +161,7 @@ describe("Declaration test", () => {
       const $ = cheerio.load(res.payload);
       expect($("h1").text()).toMatch("Application complete");
       expect($("title").text()).toMatch(
-        "Application complete - Get funding to improve animal health and welfare"
+        "Application complete - Get funding to improve animal health and welfare",
       );
       ok($);
       expect(clear).toBeCalledTimes(1);
@@ -170,13 +170,13 @@ describe("Declaration test", () => {
         1,
         res.request,
         declaration,
-        true
+        true,
       );
       expect(setTempReference).toHaveBeenCalledTimes(1);
       expect(setTempReference).toHaveBeenCalledWith(
         res.request,
         "tempReference",
-        "TEMP-PJ7E-WSI8"
+        "TEMP-PJ7E-WSI8",
       );
       expect(getFarmerApplyData).toHaveBeenCalledTimes(4);
       expect(getFarmerApplyData).toHaveBeenCalledWith(res.request);
@@ -204,7 +204,7 @@ describe("Declaration test", () => {
       expect(res.statusCode).toBe(200);
       const $ = cheerio.load(res.payload);
       expect($("title").text()).toMatch(
-        "Agreement offer rejected - Get funding to improve animal health and welfare"
+        "Agreement offer rejected - Get funding to improve animal health and welfare",
       );
       ok($);
       expect(clear).toBeCalledTimes(1);
@@ -213,7 +213,7 @@ describe("Declaration test", () => {
         1,
         res.request,
         declaration,
-        true
+        true,
       );
       expect(getFarmerApplyData).toHaveBeenCalledTimes(4);
       expect(getFarmerApplyData).toHaveBeenCalledWith(res.request);
@@ -238,7 +238,7 @@ describe("Declaration test", () => {
       const $ = cheerio.load(res.payload);
       expectPageContentOk($, organisation);
       expect($("#terms-error").text()).toMatch(
-        "Select you have read and agree to the terms and conditions"
+        "Select you have read and agree to the terms and conditions",
       );
       expect(getFarmerApplyData).toHaveBeenCalledTimes(2);
       expect(getFarmerApplyData).toHaveBeenCalledWith(res.request);
@@ -260,7 +260,7 @@ describe("Declaration test", () => {
       expect(res.statusCode).toBe(500);
       const $ = cheerio.load(res.payload);
       expect($("h1").text()).toEqual(
-        "Sorry, there is a problem with the service"
+        "Sorry, there is a problem with the service",
       );
     });
 
@@ -278,8 +278,8 @@ describe("Declaration test", () => {
       expect(res.statusCode).toBe(302);
       expect(res.headers.location.toString()).toEqual(
         expect.stringContaining(
-          "https://testtenant.b2clogin.com/testtenant.onmicrosoft.com/oauth2/v2.0/authorize"
-        )
+          "https://testtenant.b2clogin.com/testtenant.onmicrosoft.com/oauth2/v2.0/authorize",
+        ),
       );
     });
   });
@@ -302,7 +302,7 @@ describe("Declaration test", () => {
     expect(res.statusCode).toBe(500);
     const $ = cheerio.load(res.payload);
     expect($("h1").text()).toEqual(
-      "Sorry, there is a problem with the service"
+      "Sorry, there is a problem with the service",
     );
   });
 });

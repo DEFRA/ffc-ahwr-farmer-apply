@@ -86,7 +86,7 @@ describe("Organisation", () => {
     const result = await organisationIsEligible(
       expect.anything(),
       personId,
-      apimToken
+      apimToken,
     );
 
     expect(getToken).toHaveBeenCalledTimes(1);
@@ -137,7 +137,7 @@ describe("Organisation", () => {
       expect(error).toBeInstanceOf(Error);
       expect(error).toHaveProperty(
         "message",
-        `Person id ${personId} does not have the required permissions for organisation id ${organisationId}`
+        `Person id ${personId} does not have the required permissions for organisation id ${organisationId}`,
       );
     }
     expect(getToken).toHaveBeenCalledTimes(1);
@@ -193,6 +193,6 @@ describe("Organisation", () => {
       };
       const result = getOrganisationAddress(address);
       expect(result).toEqual(expectedResult);
-    }
+    },
   );
 });

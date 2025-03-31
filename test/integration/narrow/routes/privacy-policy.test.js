@@ -61,7 +61,7 @@ describe("Farmer apply privacy policy page test", () => {
     expect($(".govuk-heading-l").text()).toEqual("Privacy notice");
 
     expect($("title").text()).toContain(
-      "Get funding to improve animal health and welfare - GOV.UKGOV.UK"
+      "Get funding to improve animal health and welfare - GOV.UKGOV.UK",
     );
     ok($);
   });

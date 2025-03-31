@@ -1,24 +1,23 @@
 import * as cheerio from "cheerio";
 import { ok } from "../../../../utils/phase-banner-expect";
-import { endemicsNumbers } from "../../../../../app/config/routes.js";
+import { endemicsReviews } from "../../../../../app/config/routes.js";
 import { createServer } from "../../../../../app/server";
 import { getCrumbs } from "../../../../utils/get-crumbs";
 import { getFarmerApplyData } from "../../../../../app/session";
 
 jest.mock("../../../../../app/session");
-jest.mock("../../../../../app/auth/authenticate");
 
 const endemicsNumbersUrl = "/apply/endemics/numbers";
 const endemicsReviewsUrl = "/apply/endemics/reviews";
 const endemicsCheckDetailsUrl = "/apply/endemics/check-details";
 
-describe("Check your eligible page test", () => {
+describe("Check review info page test", () => {
   const auth = {
     strategy: "cookie",
     credentials: { reference: "1111", sbi: "111111111" },
   };
   const org = {
-    farmerName: "Dailry Farmer",
+    farmerName: "Dairy Farmer",
     address: " org-address-here",
     cph: "11/222/3333",
     email: "org@test.com",
@@ -41,7 +40,7 @@ describe("Check your eligible page test", () => {
     await server.stop();
   });
 
-  describe(`GET ${endemicsNumbers} route when logged in`, () => {
+  describe(`GET ${endemicsReviews} route when logged in`, () => {
     test("returns 200", async () => {
       getFarmerApplyData.mockReturnValue(org);
 
@@ -57,12 +56,10 @@ describe("Check your eligible page test", () => {
       const fullTitle = `${title} - Get funding to improve animal health and welfare`;
       const backLinkUrlByClassName = $(".govuk-back-link").attr("href");
 
-      console.log(" asdjflkdajslfjals f ", $(".govuk-heading-s").text());
-
       expect(pageTitleByName).toMatch(fullTitle);
       expect(pageTitleByClassName).toEqual(title);
       expect($(".govuk-heading-s").text()).toEqual(
-        `${org.name} - SBI ${org.sbi}`
+        `${org.name} - SBI ${org.sbi}`,
       );
       expect(backLinkUrlByClassName).toContain(endemicsCheckDetailsUrl);
       ok($);

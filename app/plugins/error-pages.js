@@ -20,7 +20,7 @@ export const errorPagesPlugin = {
               message: payload.message,
               stack: response.data ? response.data.stack : response.stack,
             },
-            "pre response error"
+            "pre response error",
           );
 
           return h.view("error-pages/500").code(payload.statusCode);

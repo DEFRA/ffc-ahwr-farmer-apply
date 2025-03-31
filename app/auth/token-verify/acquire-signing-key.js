@@ -6,7 +6,7 @@ export const acquireSigningKey = async () => {
     `${authConfig.defraId.hostname}/discovery/v2.0/keys?p=${authConfig.defraId.policy}`,
     {
       json: true,
-    }
+    },
   );
 
   return response.payload.keys[0];

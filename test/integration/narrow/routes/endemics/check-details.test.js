@@ -24,13 +24,13 @@ jest.mock(
   "../../../../../app/auth/auth-code-grant/request-authorization-code-url.js",
   () => ({
     requestAuthorizationCodeUrl: jest.fn(),
-  })
+  }),
 );
 
 jest.mock("../../../../../app/session", () => ({
   getCustomer: jest.fn().mockReturnValue({ crn: "123123123" }),
   getFarmerApplyData: jest.fn().mockReturnValue({
-    farmerName: "Dailry Farmer",
+    farmerName: "Dairy Farmer",
     address: " org-address-here",
     cph: "11/222/3333",
     email: "org@test.com",
@@ -49,7 +49,7 @@ describe("Org review page test", () => {
     strategy: "cookie",
   };
   const org = {
-    farmerName: "Dailry Farmer",
+    farmerName: "Dairy Farmer",
     address: " org-address-here",
     cph: "11/222/3333",
     email: "org@test.com",
@@ -83,7 +83,7 @@ describe("Org review page test", () => {
       };
 
       requestAuthorizationCodeUrl.mockReturnValueOnce(
-        "https://somedefraidlogin"
+        "https://somedefraidlogin",
       );
 
       const res = await server.inject(options);
@@ -108,10 +108,10 @@ describe("Org review page test", () => {
       expect(keys.eq(6).text()).toMatch("Address");
       expect(values.eq(6).text()).toMatch(org.address);
       expect($("title").text()).toContain(
-        "Check your details - Get funding to improve animal health and welfare"
+        "Check your details - Get funding to improve animal health and welfare",
       );
       expect($(".govuk-back-link").attr("href")).toContain(
-        "https://somedefraidlogin"
+        "https://somedefraidlogin",
       );
       expect($("legend").text().trim()).toEqual("Are these details correct?");
       expect($(".govuk-radios__item").length).toEqual(2);
@@ -237,7 +237,7 @@ describe("Org review page test", () => {
         expect(res.result).toContain(org.farmerName);
         expect(res.result).toContain(org.address);
         expect(res.result).toContain(org.name);
-      }
+      },
     );
 
     test("returns 400 and show error summary if user didn't select answer", async () => {
@@ -254,7 +254,7 @@ describe("Org review page test", () => {
       expect(res.statusCode).toBe(400);
       const $ = cheerio.load(res.payload);
       expect($(".govuk-error-summary .govuk-list").text().trim()).toEqual(
-        "Select if these details are correct"
+        "Select if these details are correct",
       );
     });
   });

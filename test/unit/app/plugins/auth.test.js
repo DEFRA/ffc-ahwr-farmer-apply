@@ -3,7 +3,7 @@ import { config } from "../../../../app/config/index.js";
 import { createServer } from "../../../../app/server.js";
 
 jest.mock(
-  "../../../../app/auth/auth-code-grant/request-authorization-code-url"
+  "../../../../app/auth/auth-code-grant/request-authorization-code-url",
 );
 jest.mock("../../../../app/session");
 jest.mock("../../../../app/config/index", () => ({

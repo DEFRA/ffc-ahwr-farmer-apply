@@ -20,7 +20,7 @@ describe("Business Applied Before Tests", () => {
       const SBI = 123456789;
       getLatestApplicationsBySbi.mockResolvedValueOnce([]);
       await expect(businessAppliedBefore(SBI)).resolves.toEqual(
-        userType.NEW_USER
+        userType.NEW_USER,
       );
     });
   });
@@ -32,9 +32,9 @@ describe("Business Applied Before Tests", () => {
         const SBI = 123456789;
         getLatestApplicationsBySbi.mockResolvedValueOnce(apiResponse);
         await expect(businessAppliedBefore(SBI)).rejects.toEqual(
-          new Error("Bad response from API")
+          new Error("Bad response from API"),
         );
-      }
+      },
     );
   });
 
@@ -68,7 +68,7 @@ describe("Business Applied Before Tests", () => {
     ];
     getLatestApplicationsBySbi.mockResolvedValueOnce(apiResponse);
     await expect(businessAppliedBefore(SBI)).resolves.toEqual(
-      userType.EXISTING_USER
+      userType.EXISTING_USER,
     );
   });
 
@@ -90,7 +90,7 @@ describe("Business Applied Before Tests", () => {
     ];
     getLatestApplicationsBySbi.mockResolvedValueOnce(apiResponse);
     await expect(businessAppliedBefore(SBI)).resolves.toEqual(
-      userType.NEW_USER
+      userType.NEW_USER,
     );
   });
 
@@ -112,7 +112,7 @@ describe("Business Applied Before Tests", () => {
     ];
     getLatestApplicationsBySbi.mockResolvedValueOnce(apiResponse);
     await expect(businessAppliedBefore(SBI)).resolves.toEqual(
-      userType.NEW_USER
+      userType.NEW_USER,
     );
   });
 
@@ -134,7 +134,7 @@ describe("Business Applied Before Tests", () => {
     ];
     getLatestApplicationsBySbi.mockResolvedValueOnce(apiResponse);
     await expect(businessAppliedBefore(SBI)).resolves.toEqual(
-      userType.NEW_USER
+      userType.NEW_USER,
     );
   });
 });

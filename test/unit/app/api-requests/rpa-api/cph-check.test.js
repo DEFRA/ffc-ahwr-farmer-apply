@@ -137,15 +137,15 @@ describe("CPH check", () => {
       await expect(() =>
         customerMustHaveAtLeastOneValidCph(
           testCase.given.request,
-          testCase.given.apimAccessToken
-        )
+          testCase.given.apimAccessToken,
+        ),
       ).rejects.toThrowError(testCase.expect.error);
     } else {
       await expect(
         customerMustHaveAtLeastOneValidCph(
           testCase.given.request,
-          testCase.given.apimAccessToken
-        )
+          testCase.given.apimAccessToken,
+        ),
       ).resolves.toEqual(undefined);
     }
   });
@@ -167,7 +167,7 @@ describe("CPH check", () => {
     });
 
     await expect(() =>
-      customerMustHaveAtLeastOneValidCph({}, "apimAccessToken")
+      customerMustHaveAtLeastOneValidCph({}, "apimAccessToken"),
     ).rejects.toThrowError("cph failed");
   });
 });

@@ -123,7 +123,9 @@
 .gem-c-contents-list__link:visited:focus {
   outline: 3px solid transparent;
   background-color: #fd0;
-  box-shadow: 0 -2px #fd0, 0 4px #0b0c0c;
+  box-shadow:
+    0 -2px #fd0,
+    0 4px #0b0c0c;
   text-decoration: none;
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;

@@ -5,6 +5,6 @@ test("messaging throws an error for invalid config", () => {
   delete process.env.MESSAGE_QUEUE_HOST;
 
   expect(() => getMessagingConfig()).toThrow(
-    'The message queue config is invalid. "messageQueue.host" is required'
+    'The message queue config is invalid. "messageQueue.host" is required',
   );
 });

@@ -20,6 +20,6 @@ test("throws an error for invalid config", () => {
   delete process.env.COOKIE_PASSWORD;
 
   expect(() => getConfig()).toThrow(
-    'The server config is invalid. "cookie.password" is required. "cookiePolicy.password" is required'
+    'The server config is invalid. "cookie.password" is required. "cookiePolicy.password" is required',
   );
 });

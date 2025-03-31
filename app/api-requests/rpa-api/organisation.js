@@ -21,7 +21,7 @@ const getOrganisationAuthorisation = async (request, organisationId) => {
     hostname,
     getOrganisationPermissionsUrl.replace("organisationId", organisationId),
     request,
-    { Authorization: apimToken }
+    { Authorization: apimToken },
   );
   return response?.data;
 };
@@ -34,17 +34,17 @@ const organisationHasPermission = async (
   request,
   permissions,
   personId,
-  organisationId
+  organisationId,
 ) => {
   const organisationAuthorisation = await getOrganisationAuthorisation(
     request,
-    organisationId
+    organisationId,
   );
   const personPrivileges = organisationAuthorisation.personPrivileges.filter(
-    (privilege) => privilege.personId === personId
+    (privilege) => privilege.personId === personId,
   );
   return personPrivileges.some((privilege) =>
-    permissionMatcher(privilege.privilegeNames, permissions)
+    permissionMatcher(privilege.privilegeNames, permissions),
   );
 };
 
@@ -53,7 +53,7 @@ const getOrganisation = async (request, organisationId) => {
     hostname,
     getOrganisationUrl.replace("organisationId", organisationId),
     request,
-    { Authorization: apimToken }
+    { Authorization: apimToken },
   );
   return response?._data;
 };
@@ -61,7 +61,7 @@ const getOrganisation = async (request, organisationId) => {
 export const organisationIsEligible = async (
   request,
   personId,
-  apimAccessToken
+  apimAccessToken,
 ) => {
   apimToken = apimAccessToken;
   const organisationId = parsedAccessToken(request).currentRelationshipId;
@@ -69,7 +69,7 @@ export const organisationIsEligible = async (
     request,
     validPermissions,
     personId,
-    organisationId
+    organisationId,
   );
   const organisation = await getOrganisation(request, organisationId);
 

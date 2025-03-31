@@ -42,7 +42,7 @@ function set(request, entryKey, key, value) {
       key,
       value,
       ip,
-      reference
+      reference,
     );
     raiseEvent(event, request.logger);
   }

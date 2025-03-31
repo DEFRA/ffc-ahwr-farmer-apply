@@ -1,9 +1,9 @@
 window.onload = function () {
   const submitDeclarationForm = document.querySelector(
-    "#submitDeclarationForm"
+    "#submitDeclarationForm",
   );
   const registrationOfInterestForm = document.querySelector(
-    "#registrationOfInterestForm"
+    "#registrationOfInterestForm",
   );
   preventDuplicateFormSubmission(submitDeclarationForm);
   preventDuplicateFormSubmission(registrationOfInterestForm);

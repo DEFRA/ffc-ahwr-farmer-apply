@@ -12,7 +12,7 @@ describe("generateCodeChallenge", () => {
     expect(setPkcecodes).toBeCalledWith(
       undefined,
       "verifier",
-      expect.anything()
+      expect.anything(),
     );
   });
 });

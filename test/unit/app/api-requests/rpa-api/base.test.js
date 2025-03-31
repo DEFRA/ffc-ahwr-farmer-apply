@@ -46,7 +46,7 @@ describe("Base", () => {
       hostname,
       url,
       expect.anything(),
-      expect.anything()
+      expect.anything(),
     );
 
     expect(result).not.toBeNull();
@@ -71,7 +71,8 @@ describe("Base", () => {
     decodeJwt.mockResolvedValue(contactId);
 
     expect(
-      async () => await get(hostname, url, expect.anything(), expect.anything())
+      async () =>
+        await get(hostname, url, expect.anything(), expect.anything()),
     ).rejects.toThrowError(error);
   });
 });

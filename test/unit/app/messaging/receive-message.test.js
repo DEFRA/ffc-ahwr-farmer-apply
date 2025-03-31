@@ -39,7 +39,7 @@ describe("receiveMessage", () => {
     expect(createMessageReceiver).toHaveBeenCalledWith(config);
     expect(receiverMock.sbClient.acceptSession).toHaveBeenCalledWith(
       "abc",
-      messageId
+      messageId,
     );
     expect(sessionReceiverMock.receiveMessages).toHaveBeenCalledWith(1, {
       maxWaitTimeInMs: 50000,
