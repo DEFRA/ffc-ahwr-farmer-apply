@@ -61,6 +61,7 @@ describe("Org review page test", () => {
   let server;
 
   beforeAll(async () => {
+    config.multiSpecies.enabled = false;
     server = await createServer();
     await server.initialize();
   });
