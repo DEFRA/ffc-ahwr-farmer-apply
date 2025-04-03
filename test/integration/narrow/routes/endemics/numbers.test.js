@@ -43,14 +43,7 @@ describe("Check review numbers page test", () => {
 
   describe(`GET ${endemicsNumbers} route when logged in`, () => {
     test("returns 200 and has correct backLink when multispecies is disabled", async () => {
-      jest.mock("../../../../../app/config", () => ({
-        config: {
-          ...jest.requireActual("../../../../../app/config"),
-          multiSpecies: {
-            enabled: false,
-          },
-        },
-      }));
+      config.multiSpecies.enabled = false;
 
       const server = await createServer();
       await server.initialize();
