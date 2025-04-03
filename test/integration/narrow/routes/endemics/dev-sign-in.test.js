@@ -63,7 +63,7 @@ describe("Dev sign in page test", () => {
         `${config.dashboardServiceUri}/dev-sign-in?`,
       );
       expect(redirectedTo).toMatch(
-        /sbi=123456789&tempApplicationId=TEMP-\w{4}-\w{4}&cameFrom=apply/,
+        /sbi=123456789&cameFrom=apply/,
       );
     });
   });

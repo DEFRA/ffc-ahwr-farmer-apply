@@ -1,5 +1,4 @@
 import { config } from "../../config/index.js";
-import { generateRandomID } from "../../lib/create-temp-reference.js";
 import { setCustomer, setFarmerApplyData } from "../../session/index.js";
 import { keys } from "../../session/keys.js";
 
@@ -65,8 +64,6 @@ export const devLoginHandlers = [
     options: {
       auth: false,
       handler: async (request, h) => {
-        const tempApplicationId = generateRandomID();
-
         const { sbi } = request.payload;
 
         if (config.env === "development") {
@@ -84,7 +81,7 @@ export const devLoginHandlers = [
         }
 
         return h.redirect(
-          `${sendTo}/dev-sign-in?sbi=${sbi}&tempApplicationId=${tempApplicationId}&cameFrom=apply`,
+          `${sendTo}/dev-sign-in?sbi=${sbi}&cameFrom=apply`,
         );
       },
     },
