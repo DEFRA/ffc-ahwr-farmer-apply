@@ -28,7 +28,7 @@ export const getConfig = () => {
       cookieNameCookiePolicy: joi.string(),
       cookieNameAuth: joi.string(),
       cookieNameSession: joi.string(),
-      isSameSite: joi.string(),
+      isSameSite: [joi.string(), joi.bool()],
       isSecure: joi.bool(),
       password: joi.string().min(32).required(),
       ttl: joi.number(),
@@ -36,7 +36,7 @@ export const getConfig = () => {
     cookiePolicy: {
       clearInvalid: joi.bool(),
       encoding: joi.string().valid("base64json"),
-      isSameSite: joi.string(),
+      isSameSite: [joi.string(), joi.bool()],
       isSecure: joi.bool(),
       password: joi.string().min(32).required(),
       path: joi.string(),
