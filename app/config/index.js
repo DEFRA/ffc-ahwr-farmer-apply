@@ -98,7 +98,7 @@ export const getConfig = () => {
       cookieNameCookiePolicy: "ffc_ahwr_cookie_policy",
       cookieNameAuth: "ffc_ahwr_auth",
       cookieNameSession: "ffc_ahwr_session",
-      isSameSite: "Lax",
+      isSameSite: process.env.DISABLE_COOKIE_SAME_SITE === "true" ? false : "Lax",
       isSecure: process.env.NODE_ENV === "production",
       password: process.env.COOKIE_PASSWORD,
       ttl: threeDaysInMilliseconds,
@@ -106,7 +106,7 @@ export const getConfig = () => {
     cookiePolicy: {
       clearInvalid: false,
       encoding: "base64json",
-      isSameSite: "Lax",
+      isSameSite: process.env.DISABLE_COOKIE_SAME_SITE === "true" ? false : "Lax",
       isSecure: process.env.NODE_ENV === "production",
       path: "/",
       password: process.env.COOKIE_PASSWORD,
