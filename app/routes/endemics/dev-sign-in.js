@@ -1,6 +1,8 @@
+import { setAuthCookie } from "../../auth/cookie-auth/cookie-auth.js";
 import { config } from "../../config/index.js";
 import { setCustomer, setFarmerApplyData } from "../../session/index.js";
 import { keys } from "../../session/keys.js";
+import { farmerApply } from "../../constants/constants.js";
 
 const urlPrefix = config.urlPrefix;
 const sendTo = config.dashboardServiceUri;
@@ -75,9 +77,8 @@ export const devLoginHandlers = [
             keys.customer.crn,
             personSummary.customerReferenceNumber,
           );
-          setOrganisationSessionData(request, personSummary, {
-            ...organisationSummary,
-          });
+          setOrganisationSessionData(request, personSummary, organisationSummary);
+          setAuthCookie(request, personSummary.email, farmerApply);
         }
 
         return h.redirect(
