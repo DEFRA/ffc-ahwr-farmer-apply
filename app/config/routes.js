@@ -1,6 +1,5 @@
 export const endemicsCheckDetails = "endemics/check-details";
 export const endemicsYouCanClaimMultiple = "endemics/you-can-claim-multiple";
-export const endemicsReviews = "endemics/reviews";
 export const endemicsNumbers = "endemics/numbers";
 export const endemicsTimings = "endemics/timings";
 export const endemicsDeclaration = "endemics/declaration";

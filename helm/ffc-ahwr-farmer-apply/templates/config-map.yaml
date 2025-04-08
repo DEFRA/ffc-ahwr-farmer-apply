@@ -40,8 +40,6 @@ data:
   APIM_SCOPE: {{ quote .Values.container.apimScope }}
   WRECK_HTTP_TIMEOUT_MILLISECONDS: {{ quote .Values.wreckHttp.timeoutMilliseconds }}
   TERMS_AND_CONDITIONS_URL: {{ quote .Values.container.termsAndConditionsUrl }}
-  TEN_MONTH_RULE_ENABLED: {{ quote .Values.container.tenMonthRuleEnabled }}
-  ENDEMICS_ENABLED: {{ quote .Values.container.endemicsEnabled }}
-  MULTI_SPECIES_ENABLED: {{ quote .Values.container.multiSpeciesEnabled }}
   DEV_LOGIN_ENABLED: {{ quote .Values.container.devLoginEnabled }}
+  MULTI_HERDS_ENABLED: {{ quote .Values.container.multiHerdsEnabled }}
 {{- end -}}

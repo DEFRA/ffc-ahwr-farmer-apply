@@ -10,11 +10,20 @@ import { oldWorldEntryRouteHandlers } from "../routes/old-world-entry.js";
 import { indexRouteHandlers } from "../routes/endemics/index.js";
 import { numbersRouteHandlers } from "../routes/endemics/numbers.js";
 import { claimMultipleRouteHandlers } from "../routes/endemics/you-can-claim-multiple.js";
-import { reviewsRouteHandlers } from "../routes/endemics/reviews.js";
+import { claimMultipleMHRouteHandlers } from "../routes/endemics/you-can-claim-multiple-mh.js";
+
 import { declarationRouteHandlers } from "../routes/endemics/declaration.js";
 import { checkDetailsRouteHandlers } from "../routes/endemics/check-details.js";
 import { timingsRouteHandlers } from "../routes/endemics/timings.js";
 import { devLoginHandlers } from "../routes/endemics/dev-sign-in.js";
+
+const multiHerdsOffHandlers = [
+  claimMultipleRouteHandlers,
+].flat()
+
+const multiHerdsOnHandlers = [
+  claimMultipleMHRouteHandlers
+].flat()
 
 export const buildRoutes = () => {
   let routes = [
@@ -26,26 +35,21 @@ export const buildRoutes = () => {
     ...oldWorldStartRouteHandlers,
     ...privacyPolicyRouteHandlers,
     ...signinRouteHandlers,
+    ...indexRouteHandlers,
+    ...numbersRouteHandlers,
+    ...declarationRouteHandlers,
+    ...checkDetailsRouteHandlers,
+    ...timingsRouteHandlers,
   ];
-
-  if (config.endemics.enabled) {
-    routes = [
-      ...routes,
-      ...indexRouteHandlers,
-      ...numbersRouteHandlers,
-      ...reviewsRouteHandlers,
-      ...declarationRouteHandlers,
-      ...checkDetailsRouteHandlers,
-      ...timingsRouteHandlers,
-    ];
-  }
-
-  if (config.multiSpecies.enabled) {
-    routes = [...routes, ...claimMultipleRouteHandlers];
-  }
 
   if (config.devLogin.enabled) {
     routes = [...routes, ...devLoginHandlers];
+  }
+
+  if (config.multiHerds.enabled) {
+    routes = routes.concat(multiHerdsOnHandlers)
+  } else {
+    routes = routes.concat(multiHerdsOffHandlers)
   }
 
   return routes;

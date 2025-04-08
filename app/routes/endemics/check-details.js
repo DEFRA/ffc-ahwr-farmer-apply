@@ -9,7 +9,6 @@ import { generateRandomID } from "../../lib/create-temp-reference.js";
 import {
   endemicsCheckDetails,
   endemicsDetailsNotCorrect,
-  endemicsReviews,
   endemicsYouCanClaimMultiple,
 } from "../../config/routes.js";
 
@@ -83,16 +82,12 @@ export const checkDetailsRouteHandlers = [
         );
 
         if (confirmCheckDetails === "yes") {
-          const urlSuffix = config.multiSpecies.enabled
-            ? endemicsYouCanClaimMultiple
-            : endemicsReviews;
-          return h.redirect(`${config.urlPrefix}/${urlSuffix}`);
+          return h.redirect(`${config.urlPrefix}/${endemicsYouCanClaimMultiple}`);
         }
 
         return h.view(endemicsDetailsNotCorrect, {
           ruralPaymentsAgency: config.ruralPaymentsAgency,
-          title: "Details are not correct",
-          endemics: config.endemics.enabled,
+          title: "Details are not correct"
         });
       },
     },

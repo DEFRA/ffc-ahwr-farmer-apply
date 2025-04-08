@@ -66,14 +66,8 @@ export const getConfig = () => {
       timeoutMilliseconds: joi.number(),
     },
     latestTermsAndConditionsUri: joi.string().required(),
-    tenMonthRule: {
-      enabled: joi.bool().required(),
-    },
     reapplyTimeLimitMonths: joi.number(),
-    endemics: {
-      enabled: joi.bool().required(),
-    },
-    multiSpecies: {
+    multiHerds: {
       enabled: joi.bool().required(),
     },
     devLogin: {
@@ -138,18 +132,12 @@ export const getConfig = () => {
         tenSecondsInMilliseconds,
     },
     latestTermsAndConditionsUri: process.env.TERMS_AND_CONDITIONS_URL,
-    tenMonthRule: {
-      enabled: process.env.TEN_MONTH_RULE_ENABLED === "true",
-    },
     reapplyTimeLimitMonths: 10,
-    endemics: {
-      enabled: process.env.ENDEMICS_ENABLED === "true",
-    },
-    multiSpecies: {
-      enabled: process.env.MULTI_SPECIES_ENABLED === "true",
-    },
     devLogin: {
       enabled: process.env.DEV_LOGIN_ENABLED === "true",
+    },
+    multiHerds: {
+      enabled: process.env.MULTI_HERDS_ENABLED === "true",
     },
   };
 

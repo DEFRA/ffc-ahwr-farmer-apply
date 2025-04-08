@@ -18,9 +18,6 @@ const nextPageUrl = `/apply/${endemicsNumbers}`;
 jest.mock("../../../../../app/config/index.js", () => ({
   config: {
     ...jest.requireActual("../../../../../app/config/index.js").config,
-    multiSpecies: {
-      enabled: true,
-    },
     customerSurvey: {
       uri: "http://this-is-a-test-uri",
     },

@@ -16,9 +16,6 @@ describe("cookies route", () => {
     await server.initialize();
     jest.mock("../../../../app/config", () => ({
       ...jest.requireActual("../../../../app/config"),
-      endemics: {
-        enabled: false,
-      },
       authConfig: {
         defraId: {
           hostname: "https://tenant.b2clogin.com/tenant.onmicrosoft.com",
