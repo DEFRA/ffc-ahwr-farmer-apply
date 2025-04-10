@@ -38,7 +38,6 @@ export const claimMultipleMHRouteHandlers = [
     path: pageUrl,
     options: {
       handler: async (request, h) => {
-        console.log('******** test')
         const organisation = getFarmerApplyData(request, organisationKey);
         return h.view(`${endemicsYouCanClaimMultiple}-mh`, {
           backLink,
@@ -46,6 +45,7 @@ export const claimMultipleMHRouteHandlers = [
           organisation,
         });
       },
+      tags: ['mh']
     },
   },
   {
