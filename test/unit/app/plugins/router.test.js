@@ -8,7 +8,7 @@ describe("routes plugin test ", () => {
 
     const routePaths = [];
     server.table()
-      .filter(x => !x.settings.tags?.includes('ms'))
+      .filter(x => !x.settings.tags?.includes('mh'))
       .forEach((element) => {
         routePaths.push(element.path)
       })
