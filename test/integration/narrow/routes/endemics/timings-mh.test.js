@@ -23,6 +23,12 @@ jest.mock("../../../../../app/config", () => ({
       enabled: true,
     },
   },
+  config: {
+    ...jest.requireActual("../../../../../app/config").config,
+    multiHerds: {
+      enabled: true
+    }
+  }
 }));
 
 jest.mock("applicationinsights", () => ({

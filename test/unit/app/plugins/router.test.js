@@ -3,6 +3,7 @@ import { createServer } from "../../../../app/server.js";
 
 describe("routes plugin test ", () => {
   test("routes included", async () => {
+    config.multiHerds.enabled = false;
     const server = await createServer();
     await server.initialize();
 
@@ -81,6 +82,11 @@ describe("routes plugin test ", () => {
         routePaths.push(element.path)
       })
 
-    expect(routePaths).toContain('/apply/endemics/you-can-claim-multiple')
+    expect(routePaths).toEqual([
+      "/apply/endemics/declaration", 
+      "/apply/endemics/numbers", 
+      "/apply/endemics/timings", 
+      "/apply/endemics/you-can-claim-multiple"
+    ])
   });
 });
