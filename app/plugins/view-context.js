@@ -1,6 +1,6 @@
 import { config } from "../config/index.js";
 
-const { serviceName, claimServiceUri, serviceUri, endemics, customerSurvey } =
+const { claimServiceUri, serviceUri, customerSurvey } =
   config;
 
 export const viewContextPlugin = {
@@ -20,9 +20,7 @@ export const viewContextPlugin = {
           if (path.startsWith("/apply/cookies")) {
             serviceUrl = "/apply/cookies";
           }
-          ctx.serviceName = !endemics.enabled
-            ? serviceName
-            : "Get funding to improve animal health and welfare";
+          ctx.serviceName = "Get funding to improve animal health and welfare";
           ctx.serviceUrl = serviceUrl;
           ctx.claimServiceUri = claimServiceUri;
           ctx.serviceUri = serviceUri;

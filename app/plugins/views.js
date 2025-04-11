@@ -3,7 +3,7 @@ import nunjucks from "nunjucks";
 import { config } from "../config/index.js";
 import vision from "@hapi/vision";
 
-const { googleTagManagerKey, isLocal, serviceName } = config;
+const { googleTagManagerKey, isLocal } = config;
 
 export const viewsPlugin = {
   plugin: vision,
@@ -39,7 +39,6 @@ export const viewsPlugin = {
     context: {
       appVersion: "1.0.0",
       assetPath: "/apply/assets",
-      pageTitle: serviceName,
       googleTagManagerKey,
     },
   },

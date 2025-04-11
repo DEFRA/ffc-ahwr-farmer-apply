@@ -3,16 +3,13 @@ import { ok } from "../../../../utils/phase-banner-expect";
 import { getCrumbs } from "../../../../utils/get-crumbs.js";
 import {
   endemicsNumbers,
-  endemicsReviews,
   endemicsTimings,
   endemicsYouCanClaimMultiple,
 } from "../../../../../app/config/routes.js";
 import { getFarmerApplyData } from "../../../../../app/session/index.js";
 import { createServer } from "../../../../../app/server";
-import { config } from "../../../../../app/config";
 
 const endemicsNumbersUrl = `/apply/${endemicsNumbers}`;
-const endemicsReviewsUrl = `/apply/${endemicsReviews}`;
 const endemicsYouCanClaimMultipleUrl = `/apply/${endemicsYouCanClaimMultiple}`;
 const endemicsTimingsUrl = `/apply/${endemicsTimings}`;
 
@@ -42,41 +39,7 @@ describe("Check review numbers page test", () => {
   };
 
   describe(`GET ${endemicsNumbers} route when logged in`, () => {
-    test("returns 200 and has correct backLink when multispecies is disabled", async () => {
-      config.multiSpecies.enabled = false;
-
-      const server = await createServer();
-      await server.initialize();
-
-      getFarmerApplyData.mockImplementation(() => org);
-
-      const res = await server.inject({ ...options, method: "GET" });
-
-      expect(res.statusCode).toBe(200);
-
-      const $ = cheerio.load(res.payload);
-      const titleClassName = ".govuk-heading-l";
-      const title = "Minimum number of livestock";
-      const pageTitleByClassName = $(titleClassName).text();
-      const pageTitleByName = $("title").text();
-      const fullTitle = `${title} - Get funding to improve animal health and welfare`;
-      const backLinkUrlByClassName = $(".govuk-back-link").attr("href");
-
-      expect(pageTitleByName).toContain(fullTitle);
-      expect(pageTitleByClassName).toEqual(title);
-      expect($(".govuk-heading-s").text()).toEqual(
-        `${org.name} - SBI ${org.sbi}`,
-      );
-      expect(backLinkUrlByClassName).toContain(endemicsReviewsUrl);
-      ok($);
-
-      await server.stop();
-    });
-  });
-
-  describe(`GET ${endemicsNumbers} route when logged in - multispecies`, () => {
-    test("returns 200 and has correct backLink when multispecies is enabled", async () => {
-      config.multiSpecies.enabled = true;
+    test("returns 200 and has correct backLink", async () => {
       const server = await createServer();
       await server.initialize();
 

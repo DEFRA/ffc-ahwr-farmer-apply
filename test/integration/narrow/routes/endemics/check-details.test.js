@@ -3,7 +3,6 @@ import { ok } from "../../../../utils/phase-banner-expect";
 import { getCrumbs } from "../../../../utils/get-crumbs.js";
 import {
   endemicsCheckDetails,
-  endemicsReviews,
   endemicsYouCanClaimMultiple,
 } from "../../../../../app/config/routes.js";
 import { businessAppliedBefore } from "../../../../../app/api-requests/business-applied-before.js";
@@ -13,9 +12,7 @@ import {
   getFarmerApplyData,
 } from "../../../../../app/session/index.js";
 import { createServer } from "../../../../../app/server";
-import { config } from "../../../../../app/config";
 
-const endemicsReviewsUrl = `/apply/${endemicsReviews}`;
 const endemicsYouCanClaimMultipleUrl = `/apply/${endemicsYouCanClaimMultiple}`;
 
 jest.mock("../../../../../app/api-requests/business-applied-before");
@@ -61,7 +58,6 @@ describe("Org review page test", () => {
   let server;
 
   beforeAll(async () => {
-    config.multiSpecies.enabled = false;
     server = await createServer();
     await server.initialize();
   });
@@ -177,7 +173,7 @@ describe("Org review page test", () => {
       const res = await server.inject(options);
 
       expect(res.statusCode).toBe(302);
-      expect(res.headers.location).toEqual(endemicsReviewsUrl);
+      expect(res.headers.location).toEqual(endemicsYouCanClaimMultipleUrl);
     });
 
     test("navigates to same species page when multiple species is disabled", async () => {
@@ -192,7 +188,7 @@ describe("Org review page test", () => {
       const res = await server.inject(options);
 
       expect(res.statusCode).toBe(302);
-      expect(res.headers.location).toEqual(endemicsReviewsUrl);
+      expect(res.headers.location).toEqual(endemicsYouCanClaimMultipleUrl);
     });
 
     test("returns 200 with update your details recognised when no is answered", async () => {
@@ -260,28 +256,4 @@ describe("Org review page test", () => {
     });
   });
 
-  describe(`POST ${url} route - multispecies`, () => {
-    let crumb;
-    const method = "POST";
-
-    beforeEach(async () => {
-      crumb = await getCrumbs(server);
-    });
-
-    test("navigates to multiple species page when multiple species is enabled", async () => {
-      config.multiSpecies.enabled = true;
-      const options = {
-        method,
-        url,
-        payload: { crumb, confirmCheckDetails: "yes" },
-        auth,
-        headers: { cookie: `crumb=${crumb}` },
-      };
-
-      const res = await server.inject(options);
-
-      expect(res.statusCode).toBe(302);
-      expect(res.headers.location).toEqual(endemicsYouCanClaimMultipleUrl);
-    });
-  });
 });

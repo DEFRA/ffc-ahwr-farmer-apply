@@ -10,6 +10,7 @@ import {
   setFarmerApplyData,
 } from "../../../../../app/session/index.js";
 import { createServer } from "../../../../../app/server.js";
+import { config } from "../../../../../app/config";
 
 const pageUrl = `/apply/${endemicsYouCanClaimMultiple}`;
 const backLinkUrl = `/apply/${endemicsCheckDetails}`;
@@ -49,6 +50,7 @@ describe("you-can-claim-multiple page", () => {
   let server;
 
   beforeAll(async () => {
+    config.multiHerds.enabled = true;
     server = await createServer();
   });
 

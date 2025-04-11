@@ -16,9 +16,6 @@ jest.mock("../../../../app/config/index", () => ({
       hostname: "dummy-host-name",
     },
   },
-  endemics: {
-    enabled: true,
-  },
 }));
 
 describe("Auth plugin test", () => {

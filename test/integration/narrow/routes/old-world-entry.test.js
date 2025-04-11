@@ -9,9 +9,6 @@ describe("Annual Health and Welfare Review landing page", () => {
     jest.mock("../../../../app/session");
     jest.mock("../../../../app/config", () => ({
       ...jest.requireActual("../../../../app/config"),
-      endemics: {
-        enabled: false,
-      },
       authConfig: {
         defraId: {
           hostname: "https://tenant.b2clogin.com/tenant.onmicrosoft.com",

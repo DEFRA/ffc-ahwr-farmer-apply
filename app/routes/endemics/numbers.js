@@ -8,7 +8,6 @@ import { keys } from "../../session/keys.js";
 import {
   endemicsNumbers,
   endemicsOfferRejected,
-  endemicsReviews,
   endemicsTimings,
   endemicsYouCanClaimMultiple,
 } from "../../config/routes.js";
@@ -36,9 +35,7 @@ export const numbersRouteHandlers = [
     path: pageUrl,
     options: {
       handler: async (request, h) => {
-        const backLink = config.multiSpecies.enabled
-          ? `${urlPrefix}/${endemicsYouCanClaimMultiple}`
-          : `${urlPrefix}/${endemicsReviews}`;
+        const backLink = `${urlPrefix}/${endemicsYouCanClaimMultiple}`;
         const organisation = getFarmerApplyData(request, organisationKey);
 
         return h.view(endemicsNumbers, {
