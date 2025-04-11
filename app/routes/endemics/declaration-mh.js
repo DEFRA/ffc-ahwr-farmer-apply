@@ -77,7 +77,7 @@ export const declarationRouteMHHandlers = [
               },
               organisation: application.organisation,
             })
-            .code(400)
+            .code(boom.badRequest)
             .takeover();
         },
       },
