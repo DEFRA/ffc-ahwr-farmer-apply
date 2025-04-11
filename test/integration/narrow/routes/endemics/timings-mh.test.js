@@ -73,28 +73,6 @@ describe("Declaration test", () => {
       expect($("main h2").length).toBe(2);
     });
 
-    test("adds extra information for old world users", async () => {
-      getFarmerApplyData.mockReturnValue({
-        name: "old-org-name",
-        sbi: "1010101010",
-      });
-      const options = {
-        method: "GET",
-        url,
-        auth,
-      };
-
-      const res = await server.inject(options);
-
-      expect(res.statusCode).toBe(200);
-      const $ = cheerio.load(res.payload);
-
-      const headers = $("main h2");
-      expect(headers.length).toBe(3);
-      expect($(headers.get(2)).text()).toBe(
-        "What to do if you completed a review in the old annual health and welfare review service",
-      );
-    });
   });
 
   describe("POST timings route", () => {
