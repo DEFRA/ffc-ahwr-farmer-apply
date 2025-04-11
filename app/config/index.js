@@ -49,7 +49,6 @@ export const getConfig = () => {
     serviceUri: joi.string().uri(),
     claimServiceUri: joi.string().uri(),
     dashboardServiceUri: joi.string().uri(),
-    serviceName: joi.string(),
     useRedis: joi.bool(),
     urlPrefix: joi.string(),
     ruralPaymentsAgency: {
@@ -113,7 +112,6 @@ export const getConfig = () => {
     serviceUri: process.env.SERVICE_URI,
     claimServiceUri: process.env.CLAIM_SERVICE_URI,
     dashboardServiceUri: process.env.DASHBOARD_SERVICE_URI,
-    serviceName: "Annual health and welfare review of livestock",
     useRedis: process.env.NODE_ENV !== "test",
     urlPrefix: process.env.URL_PREFIX || urlPrefix,
     ruralPaymentsAgency: {
