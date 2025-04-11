@@ -20,17 +20,20 @@ const pageUrl = `${urlPrefix}/${endemicsYouCanClaimMultiple}`;
 const backLink = `${urlPrefix}/${endemicsCheckDetails}`;
 const nextPage = `${urlPrefix}/${endemicsNumbers}`;
 
-const agreeStatusValue = "yes";
-const agreementStatuses = [
-  {
-    value: agreeStatusValue,
-    text: "I agree",
-  },
-  {
-    value: "no",
-    text: "I do not agree",
-  },
-];
+const AGREEMENT_OPTIONS = {
+  YES: "yes",
+  NO: "no",
+};
+
+const AGREEMENT_LABELS = {
+  [AGREEMENT_OPTIONS.YES]: "I agree",
+  [AGREEMENT_OPTIONS.NO]: "I do not agree",
+};
+
+const AGREEMENT_STATUSES = Object.entries(AGREEMENT_LABELS).map(([value, text]) => ({
+  value,
+  text,
+}));
 
 export const claimMultipleMHRouteHandlers = [
   {
@@ -41,7 +44,7 @@ export const claimMultipleMHRouteHandlers = [
         const organisation = getFarmerApplyData(request, organisationKey);
         return h.view(`${endemicsYouCanClaimMultiple}-mh`, {
           backLink,
-          agreementStatuses,
+          agreementStatuses: AGREEMENT_STATUSES,
           organisation,
         });
       },
@@ -53,13 +56,11 @@ export const claimMultipleMHRouteHandlers = [
     path: pageUrl,
     options: {
       handler: async (request, h) => {
-        const status = agreementStatuses.find(
-          (s) => s.value === request.payload.agreementStatus,
-        );
+        const { agreementStatus } = request.payload;
+        
+        setFarmerApplyData(request, agreeMultipleSpecies, agreementStatus);
 
-        setFarmerApplyData(request, agreeMultipleSpecies, status.value);
-
-        if (status.value !== agreeStatusValue) {
+        if (agreementStatus !== AGREEMENT_OPTIONS.YES) {
           clear(request);
           request.cookieAuth.clear();
           return h.view(endemicsOfferRejected, {
