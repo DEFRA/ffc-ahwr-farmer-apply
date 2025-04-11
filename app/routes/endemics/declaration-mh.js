@@ -44,7 +44,7 @@ export const declarationRouteMHHandlers = [
         if (!application) {
           return boom.notFound();
         }
-        return h.view(endemicsDeclaration, {
+        return h.view(`${endemicsDeclaration}-mh`, {
           backLink: `${config.urlPrefix}/${endemicsTimings}`,
           latestTermsAndConditionsUri: `${config.latestTermsAndConditionsUri}?continue=true&backLink=${config.urlPrefix}/${endemicsDeclaration}`,
           organisation: application.organisation,

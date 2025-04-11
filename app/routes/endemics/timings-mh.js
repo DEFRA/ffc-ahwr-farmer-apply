@@ -27,8 +27,8 @@ export const timingsRouteMHHandlers = [
       handler: async (request, h) => {
         const organisation = getFarmerApplyData(request, organisationKey);
         const hasOldWorldApplication = organisation.userType !== userType.NEW_USER;
-        
-        return h.view(endemicsTimings, {
+
+        return h.view(`${endemicsTimings}-mh`, {
           hasOldWorldApplication,
           backLink,
           organisation,
