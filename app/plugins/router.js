@@ -9,29 +9,11 @@ import { signinRouteHandlers } from "../routes/signin-oidc.js";
 import { oldWorldEntryRouteHandlers } from "../routes/old-world-entry.js";
 import { indexRouteHandlers } from "../routes/endemics/index.js";
 import { numbersRouteHandlers } from "../routes/endemics/numbers.js";
-import { numbersRouteMHHandlers } from "../routes/endemics/numbers-mh.js";
 import { claimMultipleRouteHandlers } from "../routes/endemics/you-can-claim-multiple.js";
-import { claimMultipleMHRouteHandlers } from "../routes/endemics/you-can-claim-multiple-mh.js";
 import { declarationRouteHandlers } from "../routes/endemics/declaration.js";
-import { declarationRouteMHHandlers } from "../routes/endemics/declaration-mh.js";
 import { checkDetailsRouteHandlers } from "../routes/endemics/check-details.js";
 import { timingsRouteHandlers } from "../routes/endemics/timings.js";
-import { timingsRouteMHHandlers } from "../routes/endemics/timings-mh.js";
 import { devLoginHandlers } from "../routes/endemics/dev-sign-in.js";
-
-const multiHerdsOffHandlers = [
-  claimMultipleRouteHandlers,
-  timingsRouteHandlers,
-  declarationRouteHandlers,
-  numbersRouteHandlers,
-].flat()
-
-const multiHerdsOnHandlers = [
-  claimMultipleMHRouteHandlers,
-  timingsRouteMHHandlers,
-  declarationRouteMHHandlers,
-  numbersRouteMHHandlers,
-].flat()
 
 export const buildRoutes = () => {
   let routes = [
@@ -45,16 +27,14 @@ export const buildRoutes = () => {
     ...signinRouteHandlers,
     ...indexRouteHandlers,
     ...checkDetailsRouteHandlers,
+    ...claimMultipleRouteHandlers,
+    ...timingsRouteHandlers,
+    ...declarationRouteHandlers,
+    ...numbersRouteHandlers,
   ];
 
   if (config.devLogin.enabled) {
     routes = [...routes, ...devLoginHandlers];
-  }
-
-  if (config.multiHerds.enabled) {
-    routes = routes.concat(multiHerdsOnHandlers)
-  } else {
-    routes = routes.concat(multiHerdsOffHandlers)
   }
 
   return routes;

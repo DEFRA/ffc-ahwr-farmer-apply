@@ -45,7 +45,7 @@ export const declarationRouteHandlers = [
           return boom.notFound();
         }
 
-        return h.view(endemicsDeclaration, {
+        return h.view(config.multiHerds.enabled ? `${endemicsDeclaration}-mh` : endemicsDeclaration, {
           backLink: `${config.urlPrefix}/${endemicsTimings}`,
           latestTermsAndConditionsUri: `${config.latestTermsAndConditionsUri}?continue=true&backLink=${config.urlPrefix}/${endemicsDeclaration}`,
           organisation: application.organisation,

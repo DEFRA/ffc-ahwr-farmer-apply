@@ -38,7 +38,7 @@ export const numbersRouteHandlers = [
         const backLink = `${urlPrefix}/${endemicsYouCanClaimMultiple}`;
         const organisation = getFarmerApplyData(request, organisationKey);
 
-        return h.view(endemicsNumbers, {
+        return h.view(config.multiHerds.enabled ? `${endemicsNumbers}-mh` : endemicsNumbers, {
           backLink,
           agreementStatus,
           organisation,
