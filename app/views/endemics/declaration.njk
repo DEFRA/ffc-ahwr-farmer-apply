@@ -28,7 +28,7 @@
       <p class="govuk-body">This is an offer of funding to improve animal health and welfare for this business:</p>
       <div class="govuk-inset-text">
         <span id="organisation-name">{{ organisation.name }}</span><br>
-        <span id="organisation-address">{{ organisation.address | replace(',', '\n') | escape | nl2br }}</span><br>
+        <span id="organisation-address">{% for line in organisation.address %}{{ line }}{% if not loop.last %}<br>{% endif %}{% endfor %}</span><br>
       SBI: <span id="organisation-sbi">{{ organisation.sbi }}</span>
       </div>
 
