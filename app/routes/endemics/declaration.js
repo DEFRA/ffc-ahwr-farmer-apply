@@ -34,6 +34,12 @@ const resetFarmerApplyDataBeforeApplication = (application) => {
   delete application.agreeVisitTimings;
 };
 
+const formatOrganisation = (organisation) => ({
+  ...organisation,
+  address: organisation.address.split(',')
+    .map(line => line.trim())
+})
+
 export const declarationRouteHandlers = [
   {
     method: "get",
@@ -45,11 +51,14 @@ export const declarationRouteHandlers = [
           return boom.notFound();
         }
 
-        return h.view(endemicsDeclaration, {
-          backLink: `${config.urlPrefix}/${endemicsTimings}`,
-          latestTermsAndConditionsUri: `${config.latestTermsAndConditionsUri}?continue=true&backLink=${config.urlPrefix}/${endemicsDeclaration}`,
-          organisation: application.organisation,
-        });
+        return h.view(
+          config.multiHerds.enabled ? `${endemicsDeclaration}-mh` : endemicsDeclaration,
+          {
+            backLink: `${config.urlPrefix}/${endemicsTimings}`,
+            latestTermsAndConditionsUri: `${config.latestTermsAndConditionsUri}?continue=true&backLink=${config.urlPrefix}/${endemicsDeclaration}`,
+            organisation: formatOrganisation(application.organisation)
+          }
+        );
       },
     },
   },
@@ -69,14 +78,16 @@ export const declarationRouteHandlers = [
           const application = getFarmerApplyData(request);
 
           return h
-            .view(endemicsDeclaration, {
-              backLink: `${config.urlPrefix}/${endemicsTimings}`,
-              latestTermsAndConditionsUri: `${config.latestTermsAndConditionsUri}?continue=true&backLink=${config.urlPrefix}/${endemicsDeclaration}`,
-              errorMessage: {
-                text: "Select you have read and agree to the terms and conditions",
-              },
-              organisation: application.organisation,
-            })
+            .view(
+              config.multiHerds.enabled ? `${endemicsDeclaration}-mh` : endemicsDeclaration,
+              {
+                backLink: `${config.urlPrefix}/${endemicsTimings}`,
+                latestTermsAndConditionsUri: `${config.latestTermsAndConditionsUri}?continue=true&backLink=${config.urlPrefix}/${endemicsDeclaration}`,
+                errorMessage: {
+                  text: "Select you have read and agree to the terms and conditions",
+                },
+                organisation: formatOrganisation(application.organisation)
+              })
             .code(400)
             .takeover();
         },

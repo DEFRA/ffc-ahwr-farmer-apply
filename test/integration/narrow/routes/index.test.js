@@ -3,9 +3,6 @@ import { createServer } from "../../../../app/server";
 describe("Farmer apply home page test", () => {
   jest.mock("../../../../app/config", () => ({
     ...jest.requireActual("../../../../app/config"),
-    endemics: {
-      enabled: false,
-    },
     authConfig: {
       defraId: {
         hostname: "https://testtenant.b2clogin.com/testtenant.onmicrosoft.com",

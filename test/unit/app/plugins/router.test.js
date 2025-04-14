@@ -68,19 +68,4 @@ describe("routes plugin test ", () => {
     expect(routePaths).not.toContain("/apply/endemics/dev-sign-in");
   });
 
-  test('when multiHerds is enabled, include correct routes', async () => {
-    config.multiHerds.enabled = true;
-
-    const server = await createServer()
-    await server.initialize();
-
-    const routePaths = []
-    server.table()
-      .filter(x => x.settings.tags?.includes('mh'))
-      .forEach((element) => {
-        routePaths.push(element.path)
-      })
-
-    expect(routePaths).toContain('/apply/endemics/you-can-claim-multiple')
-  });
 });
