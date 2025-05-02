@@ -1,4 +1,4 @@
-ARG PARENT_VERSION=2.3.0-node20.15.0
+ARG PARENT_VERSION=2.7.2-node22.15.0
 ARG PORT=3000
 ARG PORT_DEBUG=9229
 
@@ -9,7 +9,7 @@ LABEL uk.gov.defra.ffc.parent-image=defradigital/node-development:${PARENT_VERSI
 
 ARG PORT
 ARG PORT_DEBUG
-ENV PORT ${PORT}
+ENV PORT=${PORT}
 EXPOSE ${PORT} ${PORT_DEBUG}
 
 COPY --chown=root:node --chmod=755 package*.json ./
@@ -24,7 +24,7 @@ ARG PARENT_VERSION
 LABEL uk.gov.defra.ffc.parent-image=defradigital/node:${PARENT_VERSION}
 
 ARG PORT
-ENV PORT ${PORT}
+ENV PORT=${PORT}
 EXPOSE ${PORT}
 
 COPY --from=development /home/node/app/ ./app/
