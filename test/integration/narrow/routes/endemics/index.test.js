@@ -31,6 +31,7 @@ describe("Farmer apply home page test", () => {
     );
     const button = $(".govuk-main-wrapper .govuk-button");
 
+    expect(button.length).toEqual(1);
     expect(button.text()).toMatch("Start now");
     expect($("title").text()).toMatch(
       "Get funding to improve animal health and welfare",
@@ -59,6 +60,29 @@ describe("Farmer apply home page test", () => {
     expect($("title").text()).toMatch(
       "Get funding to improve animal health and welfare",
     );
+    ok($);
+  });
+
+  test("GET /apply/endemics/start changes Start now href to dev login when in development environment", async () => {
+    config.devLogin.enabled = true;
+    config.env = "development";
+    const options = {
+      method: "GET",
+      url: "/apply/endemics/start",
+    };
+
+    const res = await server.inject(options);
+
+    expect(res.statusCode).toBe(200);
+    const $ = cheerio.load(res.payload);
+    expect($(".govuk-heading-l").text()).toEqual(
+      "Get funding to improve animal health and welfare",
+    );
+    const button = $(".govuk-main-wrapper .govuk-button");
+    expect(button.length).toEqual(2);
+    expect(button.first().text()).toContain("Start now");
+    expect(button.first().attr().href).toMatch("/dev-defraid");
+
     ok($);
   });
 });

@@ -14,8 +14,7 @@ export const indexRouteHandlers = [
             devLogin: `${config.urlPrefix}/endemics/dev-sign-in`,
           } :
           {
-            loginView: "endemics/index",
-            devLogin: undefined
+            loginView: "endemics/index"
           };
 
         const defraIdLogin = config.devLogin.enabled && config.env === 'development' ?

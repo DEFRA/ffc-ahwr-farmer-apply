@@ -45,6 +45,7 @@ describe("Dev sign in page test", () => {
     });
 
     test("POST to dev login successfully returns a 302 and redirects to dashboard", async () => {
+      config.env = 'development';
       const options = {
         method: "POST",
         url: "/apply/endemics/dev-sign-in",
