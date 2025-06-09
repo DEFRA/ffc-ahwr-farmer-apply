@@ -23,7 +23,7 @@ export const localDevAuthPlugin = {
         redirectTo: (_request) => {
           return `${config.dashboardServiceUri}/dev-defraid`;
         },
-        validateFunc: async (request, s) => {
+        validateFunc: async (request, _s) => {
           const result = { valid: false };
 
           if(request.query?.org) {
