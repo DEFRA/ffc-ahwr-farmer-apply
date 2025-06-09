@@ -17,8 +17,7 @@ describe("Dev auth plugin test", () => {
       jest.resetModules();
 
       urlPrefix = config.urlPrefix;
-      // url = `${urlPrefix}/endemics/check-details`;
-      url = `${urlPrefix}/endemics/timings`;
+      url = `${urlPrefix}/endemics/check-details`;
     });
 
     let server;
@@ -26,7 +25,6 @@ describe("Dev auth plugin test", () => {
     beforeAll(async () => {
       config.env = "development";
       server = await createServer();
-      // await server.initialize();
     });
 
     afterAll(async () => {

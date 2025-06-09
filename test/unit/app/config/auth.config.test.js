@@ -12,7 +12,6 @@ describe("Auth config", () => {
         hostname: "https://tenant.b2clogin.com/tenant.onmicrosoft.com",
         oAuthAuthorisePath: "/oauth2/v2.0/authorize",
         policy: "b2c_1a_signupsigninsfi",
-        redirectUri: "http://localhost:3000/apply/signin-oidc",
         clientId: "dummy_client_id",
         serviceId: "dummy_service_id",
         scope: "openid dummy_client_id offline_access",
@@ -25,17 +24,9 @@ describe("Auth config", () => {
       processEnv: {
         tenant: "testtenant",
         policy: "testpolicy",
-        redirectUri: "http://localhost:3000/apply/signin-oidc",
         dashboardRedirectUri: "http://localhost:3003/signin-oidc",
         clientId: "dummyclientid",
-        clientSecret: "dummyclientsecret",
         serviceId: "dummyserviceid",
-        rpaHostname: "dummy-host-name",
-        rpaGetPersonSummaryUrl: "dummy-get-person-summary-url",
-        rpaGetOrganisationPermissionsUrl:
-          "dummy-get-organisation-permissions-url",
-        rpaGetOrganisationUrl: "dummy-get-organisation-url",
-        rpaGetCphNumbersUrl: "dummy-get-cph-numbers-url",
       },
       config: {
         defraId: {
@@ -56,7 +47,6 @@ describe("Auth config", () => {
     process.env.DEFRA_ID_DASHBOARD_REDIRECT_URI =
       testCase.processEnv.dashboardRedirectUri;
     process.env.DEFRA_ID_CLIENT_ID = testCase.processEnv.clientId;
-    process.env.DEFRA_ID_CLIENT_SECRET = testCase.processEnv.clientSecret;
     process.env.DEFRA_ID_SERVICE_ID = testCase.processEnv.serviceId;
 
     const config = getAuthConfig();

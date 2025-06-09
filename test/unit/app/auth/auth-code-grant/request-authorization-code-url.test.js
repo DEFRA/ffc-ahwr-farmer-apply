@@ -1,7 +1,7 @@
-import { requestAuthorizationCodeUrl } from "../../../../app/auth/auth-code-grant/request-authorization-code-url";
+import { requestAuthorizationCodeUrl } from "../../../../../app/auth/auth-code-grant/request-authorization-code-url.js";
 
-jest.mock("../../../../app/session");
-jest.mock("../../../../app/auth/auth-code-grant/state", () => ({
+jest.mock("../../../../../app/session/index.js");
+jest.mock("../../../../../app/auth/auth-code-grant/state.js", () => ({
   generate: jest.fn(),
 }));
 
