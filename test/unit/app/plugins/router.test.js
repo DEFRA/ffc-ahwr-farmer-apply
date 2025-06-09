@@ -20,7 +20,6 @@ describe("routes plugin test ", () => {
       "/apply/accessibility",
       "/apply/cookies",
       "/apply/privacy-policy",
-      "/apply/signin-oidc",
       "/apply/start",
       "/apply/assets/{path*}",
       "/apply/endemics/check-details",

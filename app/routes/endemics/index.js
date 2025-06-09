@@ -8,16 +8,23 @@ export const indexRouteHandlers = [
     options: {
       auth: false,
       handler: async (request, h) => {
-        const loginView = config.devLogin.enabled
-          ? "endemics/devindex"
-          : "endemics/index";
-        const devLogin = config.devLogin.enabled
-          ? `${config.urlPrefix}/endemics/dev-sign-in`
-          : undefined;
+        const { loginView, devLogin } = config.devLogin.enabled ?
+          {
+            loginView: "endemics/devindex",
+            devLogin: `${config.urlPrefix}/endemics/dev-sign-in`,
+          } :
+          {
+            loginView: "endemics/index",
+            devLogin: undefined
+          };
+
+        const defraIdLogin = config.devLogin.enabled && config.env === 'development' ?
+          `${config.dashboardServiceUri}/dev-defraid` :
+          requestAuthorizationCodeUrl(request);
 
         return h.view(loginView, {
           devLogin,
-          defraIdLogin: requestAuthorizationCodeUrl(request),
+          defraIdLogin,
           ruralPaymentsAgency: config.ruralPaymentsAgency,
         });
       },

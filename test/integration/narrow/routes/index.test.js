@@ -8,29 +8,11 @@ describe("Farmer apply home page test", () => {
         hostname: "https://testtenant.b2clogin.com/testtenant.onmicrosoft.com",
         oAuthAuthorisePath: "/oauth2/v2.0/authorize",
         policy: "testpolicy",
-        redirectUri: "http://localhost:3000/apply/endemics/signin-oidc",
-        tenantName: "testtenant",
-        jwtIssuerId: "dummy_jwt_issuer_id",
+        dashboardRedirectUri: "http://localhost:3003/endemics/signin-oidc",
         clientId: "dummyclientid",
-        clientSecret: "dummyclientsecret",
         serviceId: "dummyserviceid",
         scope: "openid dummyclientid offline_access",
-      },
-      ruralPaymentsAgency: {
-        hostname: "dummy-host-name",
-        getPersonSummaryUrl: "dummy-get-person-summary-url",
-        getOrganisationPermissionsUrl: "dummy-get-organisation-permissions-url",
-        getOrganisationUrl: "dummy-get-organisation-url",
-        getCphNumbersUrl: "dummy-get-cph-numbers-url",
-      },
-      apim: {
-        ocpSubscriptionKey: "dummy-ocp-subscription-key",
-        hostname: "dummy-host-name",
-        oAuthPath: "dummy-oauth-path",
-        clientId: "dummy-client-id",
-        clientSecret: "dummy-client-secret",
-        scope: "dummy-scope",
-      },
+      }
     },
   }));
 

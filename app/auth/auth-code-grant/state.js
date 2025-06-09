@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { getToken, setToken } from "../../session/index.js";
+import { setToken } from "../../session/index.js";
 import { keys } from "../../session/keys.js";
 import { config } from "../../config/index.js";
 
@@ -15,31 +15,4 @@ export const generate = (request) => {
   );
   setToken(request, keys.tokens.state, base64EncodedState);
   return base64EncodedState;
-};
-
-export const verify = (request) => {
-  if (!request.query.error) {
-    const state = request.query.state;
-    if (!state) {
-      return false;
-    }
-    const decodedState = JSON.parse(
-      Buffer.from(state, "base64").toString("ascii"),
-    );
-    const savedState = JSON.parse(
-      Buffer.from(getToken(request, keys.tokens.state), "base64").toString(
-        "ascii",
-      ),
-    );
-    return decodedState.id === savedState.id;
-  } else {
-    request.logger.error(
-      {
-        error: request.query.error_description,
-        yarId: request.yar.id,
-      },
-      "verify request",
-    );
-    return false;
-  }
 };

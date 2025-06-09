@@ -1,4 +1,3 @@
-import { setAuthCookie } from "../../auth/cookie-auth/cookie-auth.js";
 import { config } from "../../config/index.js";
 import { setCustomer, setFarmerApplyData } from "../../session/index.js";
 import { keys } from "../../session/keys.js";
@@ -78,7 +77,7 @@ export const devLoginHandlers = [
             personSummary.customerReferenceNumber,
           );
           setOrganisationSessionData(request, personSummary, organisationSummary);
-          setAuthCookie(request, personSummary.email, farmerApply);
+          request.cookieAuth.set({ email: personSummary.email, userType: farmerApply });
         }
 
         return h.redirect(

@@ -1,11 +1,7 @@
 import { requestAuthorizationCodeUrl } from "../../../../app/auth/auth-code-grant/request-authorization-code-url";
-import { authenticate } from "../../../../app/auth/authenticate";
-import { verify } from "../../../../app/auth/auth-code-grant/state";
-// import { generate } from '../../../../app/auth/auth-code-grant/state'
 
 jest.mock("../../../../app/session");
 jest.mock("../../../../app/auth/auth-code-grant/state", () => ({
-  verify: jest.fn(),
   generate: jest.fn(),
 }));
 
@@ -38,15 +34,4 @@ describe("Generate authentication url test", () => {
     expect(params.get("code_challenge")).toBeNull();
   });
 
-  test("when invalid state error is thrown", async () => {
-    verify.mockReturnValueOnce(false);
-    const request = { yar: { id: "33" } };
-
-    try {
-      await authenticate(request);
-    } catch (error) {
-      expect(error.message).toEqual("Invalid state");
-      expect(verify).toHaveBeenCalledWith(request);
-    }
-  });
 });

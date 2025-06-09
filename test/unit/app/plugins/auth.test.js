@@ -11,10 +11,7 @@ jest.mock("../../../../app/config/index", () => ({
   authConfig: {
     defraId: {
       enabled: true,
-    },
-    ruralPaymentsAgency: {
-      hostname: "dummy-host-name",
-    },
+    }
   },
 }));
 
