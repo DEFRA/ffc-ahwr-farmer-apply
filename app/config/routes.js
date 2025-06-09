@@ -5,7 +5,4 @@ export const endemicsTimings = "endemics/timings";
 export const endemicsDeclaration = "endemics/declaration";
 export const endemicsConfirmation = "endemics/confirmation";
 export const endemicsOfferRejected = "endemics/offer-rejected";
-export const endemicsGuidanceForFarmers = "endemics/apply-guidance-for-farmers"; // TODO unused
-export const endemicsGuidanceVetVisit = "endemics/vet-visit-guidance"; // TODO unused
-export const endemicsClaimGuidance = "endemics/claim-guidance"; // TODO unused
 export const endemicsDetailsNotCorrect = "endemics/details-not-correct";

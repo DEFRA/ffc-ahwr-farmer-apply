@@ -55,27 +55,12 @@ container:
   dashboardServiceUri:
   urlPrefix: /apply
   termsAndConditionsUrl:
-  eligibilityApiUri:
   applicationApiUri:
   defraIdTenant:
-  defraIdRedirectUri:
   defraIdDashboardRedirectUri:
-  defraIdJwtIssuerId:
   defraIdClientId:
-  defraIdClientSecret:
   defraIdServiceId:
   defraIdPolicy:
-  rpaHostname:
-  rpaGetPersonSummaryUrl:
-  rpaGetOrganisationPermissionsUrl:
-  rpaGetOrganisationUrl:
-  rpaGetCphNumbersUrl:
-  apimOcpSubscriptionKey:
-  apimHostname:
-  apimOAuthPath:
-  apimClientId:
-  apimClientSecret:
-  apimScope:
   devLoginEnabled: 'false'
   multiHerdsEnabled: 'false'
 

@@ -19,13 +19,6 @@ describe("Annual Health and Welfare Review landing page", () => {
           serviceId: "dummy_service_id",
           scope: "openid dummy_client_id offline_access",
         },
-        ruralPaymentsAgency: {
-          hostname: "dummy-host-name",
-          getPersonSummaryUrl: "dummy-get-person-summary-url",
-          getOrganisationPermissionsUrl:
-            "dummy-get-organisation-permissions-url",
-          getOrganisationUrl: "dummy-get-organisation-url",
-        },
       },
     }));
   });

@@ -1,6 +1,7 @@
-import { status, userType } from "../../../../app/constants/constants.js";
+import { userType } from "../../../../app/constants/constants.js";
 import { getLatestApplicationsBySbi } from "../../../../app/api-requests/application-api.js";
 import { businessAppliedBefore } from "../../../../app/api-requests/business-applied-before.js";
+import { CLAIM_STATUS } from 'ffc-ahwr-common-library'
 
 jest.mock("../../../../app/api-requests/application-api", () => ({
   getLatestApplicationsBySbi: jest.fn(),
@@ -50,7 +51,7 @@ describe("Business Applied Before Tests", () => {
         },
         createdAt: "2020-06-06T13:52:14.207Z",
         updatedAt: "2020-06-06T13:52:14.207Z",
-        statusId: status.READY_TO_PAY,
+        statusId: CLAIM_STATUS.READY_TO_PAY,
         type: "VV",
       },
       {
@@ -62,7 +63,7 @@ describe("Business Applied Before Tests", () => {
         },
         createdAt: "2019-06-06T13:52:14.207Z",
         updatedAt: "2019-06-06T13:52:14.207Z",
-        statusId: status.READY_TO_PAY,
+        statusId: CLAIM_STATUS.READY_TO_PAY,
         type: "VV",
       },
     ];
@@ -84,7 +85,7 @@ describe("Business Applied Before Tests", () => {
         },
         createdAt: "2020-06-06T13:52:14.207Z",
         updatedAt: "2020-06-06T13:52:14.207Z",
-        statusId: status.WITHDRAWN,
+        statusId: CLAIM_STATUS.WITHDRAWN,
         type: "VV",
       },
     ];
@@ -106,7 +107,7 @@ describe("Business Applied Before Tests", () => {
         },
         createdAt: "2020-06-06T13:52:14.207Z",
         updatedAt: "2020-06-06T13:52:14.207Z",
-        statusId: status.READY_TO_PAY,
+        statusId: CLAIM_STATUS.READY_TO_PAY,
         type: "VV",
       },
     ];
@@ -128,7 +129,7 @@ describe("Business Applied Before Tests", () => {
         },
         createdAt: "2020-06-06T13:52:14.207Z",
         updatedAt: "2020-06-06T13:52:14.207Z",
-        statusId: status.WITHDRAWN,
+        statusId: CLAIM_STATUS.WITHDRAWN,
         type: "VV",
       },
     ];

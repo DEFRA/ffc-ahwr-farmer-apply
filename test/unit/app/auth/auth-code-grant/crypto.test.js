@@ -1,7 +1,7 @@
-import { generateCodeChallenge } from "../../../../app/auth/auth-code-grant/proof-key-for-code-exchange.js";
-import { setPkcecodes } from "../../../../app/session/index.js";
+import { generateCodeChallenge } from "../../../../../app/auth/auth-code-grant/proof-key-for-code-exchange.js";
+import { setPkcecodes } from "../../../../../app/session/index.js";
 
-jest.mock("../../../../app/session", () => ({
+jest.mock("../../../../../app/session/index.js", () => ({
   setPkcecodes: jest.fn(),
 }));
 

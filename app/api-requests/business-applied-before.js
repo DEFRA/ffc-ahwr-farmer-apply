@@ -1,5 +1,6 @@
 import { getLatestApplicationsBySbi } from "./application-api.js";
-import { applicationType, status, userType } from "../constants/constants.js";
+import { applicationType, userType } from "../constants/constants.js";
+import { CLAIM_STATUS } from "ffc-ahwr-common-library"
 
 export async function businessAppliedBefore(sbi) {
   const latestApplicationsForSbi = await getLatestApplicationsBySbi(sbi);
@@ -32,7 +33,7 @@ function applicationForBusinessInStateToApply(latestApplicationsForSbi) {
   );
 
   if (
-    [status.WITHDRAWN, status.REJECTED, status.NOT_AGREED].includes(
+    [CLAIM_STATUS.WITHDRAWN, CLAIM_STATUS.REJECTED, CLAIM_STATUS.NOT_AGREED].includes(
       latestApplication.statusId,
     ) ||
     !latestApplicationWithinLastTenMonths

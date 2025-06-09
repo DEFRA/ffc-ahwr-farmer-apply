@@ -1,48 +1,21 @@
-import { verify } from "../../../../../app/auth/auth-code-grant/state";
-import { getToken } from "../../../../../app/session";
+import { setToken } from "../../../../../app/session";
+import { generate } from '../../../../../app/auth/auth-code-grant/state.js'
+import { config } from '../../../../../app/config/index.js'
+import { keys } from '../../../../../app/session/keys.js'
 
 jest.mock("../../../../../app/session");
 
-test("verify: no error, no state", () => {
+test("generate: state generated and inserted into session", () => {
   const request = {
     query: {},
   };
 
-  expect(verify(request)).toBe(false);
-});
+  const result = generate(request);
 
-test("verify: no error, state mismatch", () => {
-  getToken.mockReturnValueOnce("eyJpZCI6MX0=");
-  const request = {
-    query: {
-      state: "eyJpZCI6Mn0=",
-    },
-  };
+  const decodedState = JSON.parse(Buffer.from(result, "base64").toString("ascii"))
 
-  expect(verify(request)).toBe(false);
-});
+  expect(decodedState.source).toBe("apply");
+  expect(decodedState.namespace).toBe(config.namespace);
 
-test("verify: no error, state match", () => {
-  getToken.mockReturnValueOnce("eyJpZCI6MX0=");
-  const request = {
-    query: {
-      state: "eyJpZCI6MX0=",
-    },
-  };
-
-  expect(verify(request)).toBe(true);
-});
-
-test("verify: error", () => {
-  const request = {
-    query: {
-      error: "boom",
-    },
-    logger: {
-      error: jest.fn(),
-    },
-    yar: {},
-  };
-
-  expect(verify(request)).toBe(false);
+  expect(setToken).toHaveBeenCalledWith(request, keys.tokens.state, result);
 });

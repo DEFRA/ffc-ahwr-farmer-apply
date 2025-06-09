@@ -1,8 +1,15 @@
 import { authConfig } from "../../config/auth.js";
-import { setReturnRoute } from "../../session/index.js";
-import { generate as generateNonce } from "../id-token/nonce.js";
+import { setReturnRoute, setToken } from '../../session/index.js';
 import { generate as generateState } from "./state.js";
 import { generateCodeChallenge } from "./proof-key-for-code-exchange.js";
+import { randomUUID } from 'node:crypto'
+import { keys } from '../../session/keys.js'
+
+const generateNonce = (request) => {
+  const nonce = randomUUID();
+  setToken(request, keys.tokens.nonce, nonce);
+  return nonce;
+};
 
 export const requestAuthorizationCodeUrl = (
   request,
