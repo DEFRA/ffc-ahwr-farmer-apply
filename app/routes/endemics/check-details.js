@@ -27,6 +27,8 @@ export const checkDetailsRouteHandlers = [
     path: pageUrl,
     options: {
       handler: async (request, h) => {
+        // on way in we must scrub any lingering reference
+        setFarmerApplyData(request, referenceKey, null);
         const organisation = getFarmerApplyData(request, organisationKey);
 
         if (!organisation) {
