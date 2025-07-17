@@ -34,7 +34,7 @@ function set(request, entryKey, key, value) {
   const ip = xForwardedForHeader
     ? xForwardedForHeader.split(",")[0]
     : request.info.remoteAddress;
-  if (organisation) {
+  if (organisation && reference) {
     const event = getSessionEvent(
       organisation,
       request.yar.id,

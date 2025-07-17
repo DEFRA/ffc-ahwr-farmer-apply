@@ -247,13 +247,14 @@ describe("session", () => {
     expect(requestSetMock.yar.clear).toHaveBeenCalledWith("returnRoute");
   });
 
-  test("raises an event if organisation exists", () => {
+  test("raises an event if organisation and reference set", () => {
     const organisation = {};
+    const reference = 'dummy'
 
     const request = {
       yar: {
         set: jest.fn(),
-        get: jest.fn().mockReturnValue({ organisation }),
+        get: jest.fn().mockReturnValue({ organisation, reference }),
       },
       headers: {},
       info: {},
@@ -262,11 +263,28 @@ describe("session", () => {
     expect(raiseEvent).toHaveBeenCalled();
   });
 
-  test("does not raise event if no organisation exists", () => {
+  test("does not raise event if no organisation set", () => {
+    const reference = 'dummy'
+
     const request = {
       yar: {
         set: jest.fn(),
-        get: jest.fn(),
+        get: jest.fn().mockReturnValue({ reference }),
+      },
+      headers: {},
+      info: {},
+    };
+    session.setCustomer(request, "key", "value");
+    expect(raiseEvent).not.toHaveBeenCalled();
+  });
+
+  test("does not raise event if no reference set", () => {
+    const organisation = {};
+
+    const request = {
+      yar: {
+        set: jest.fn(),
+        get: jest.fn().mockReturnValue({ organisation }),
       },
       headers: {},
       info: {},
