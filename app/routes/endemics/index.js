@@ -10,6 +10,7 @@ export const indexRouteHandlers = [
     options: {
       auth: false,
       handler: async (request, h) => {
+        // prevents previous session's reference being used when returning to the service
         setFarmerApplyData(request, keys.farmerApplyData.reference, null);
 
         const { loginView, devLogin } = config.devLogin.enabled ?
