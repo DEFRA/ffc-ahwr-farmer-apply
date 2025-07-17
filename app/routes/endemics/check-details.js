@@ -27,10 +27,11 @@ export const checkDetailsRouteHandlers = [
     path: pageUrl,
     options: {
       handler: async (request, h) => {
-        // on way in we must scrub any lingering reference
-        setFarmerApplyData(request, referenceKey, null);
-        const organisation = getFarmerApplyData(request, organisationKey);
+        // on way in we must generate a new reference
+        const tempApplicationId = generateRandomID();
+        setFarmerApplyData(request, referenceKey, tempApplicationId);
 
+        const organisation = getFarmerApplyData(request, organisationKey);
         if (!organisation) {
           return boom.notFound();
         }
@@ -73,9 +74,6 @@ export const checkDetailsRouteHandlers = [
         },
       },
       handler: async (request, h) => {
-        const tempApplicationId = generateRandomID();
-        setFarmerApplyData(request, referenceKey, tempApplicationId);
-
         const { confirmCheckDetails } = request.payload;
         setFarmerApplyData(
           request,

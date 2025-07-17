@@ -1,5 +1,7 @@
 import { requestAuthorizationCodeUrl } from "../../auth/auth-code-grant/request-authorization-code-url.js";
 import { config } from "../../config/index.js";
+import { keys } from "../../session/keys.js";
+import { setFarmerApplyData } from "../../session/index.js";
 
 export const indexRouteHandlers = [
   {
@@ -8,6 +10,9 @@ export const indexRouteHandlers = [
     options: {
       auth: false,
       handler: async (request, h) => {
+        // prevents previous session's reference being used when returning to the service
+        setFarmerApplyData(request, keys.farmerApplyData.reference, null);
+
         const { loginView, devLogin } = config.devLogin.enabled ?
           {
             loginView: "endemics/devindex",
