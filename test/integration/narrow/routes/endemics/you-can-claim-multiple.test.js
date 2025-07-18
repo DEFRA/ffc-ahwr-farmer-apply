@@ -10,7 +10,6 @@ import {
   setFarmerApplyData,
 } from "../../../../../app/session/index.js";
 import { createServer } from "../../../../../app/server.js";
-import { config } from "../../../../../app/config/index.js";
 
 const pageUrl = `/apply/${endemicsYouCanClaimMultiple}`;
 const backLinkUrl = `/apply/${endemicsCheckDetails}`;
@@ -70,20 +69,8 @@ describe("you-can-claim-multiple page", () => {
   });
 
   describe("GET operation handler", () => {
+
     test("returns 200 and content is correct", async () => {
-      config.multiHerds.enabled = false;
-
-      const res = await server.inject({ ...optionsBase, method: "GET" });
-
-      expect(res.statusCode).toBe(200);
-      expect(getFarmerApplyData).toHaveBeenCalledTimes(2); // called an extra time due to logging-context middleware
-      expect(res.payload).toContain(backLinkUrl);
-      const sanitizedHTML = sanitizeHTML(res.payload);
-      expect(sanitizedHTML).toMatchSnapshot();
-    });
-
-    test("returns 200 and content is correct when multi herds is enabled", async () => {
-      config.multiHerds.enabled = true;
       const res = await server.inject({ ...optionsBase, method: "GET" });
 
       expect(res.statusCode).toBe(200);
