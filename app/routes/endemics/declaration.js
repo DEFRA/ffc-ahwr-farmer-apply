@@ -51,8 +51,7 @@ export const declarationRouteHandlers = [
           return boom.notFound();
         }
 
-        return h.view(
-          config.multiHerds.enabled ? `${endemicsDeclaration}-mh` : endemicsDeclaration,
+        return h.view(endemicsDeclaration,
           {
             backLink: `${config.urlPrefix}/${endemicsTimings}`,
             latestTermsAndConditionsUri: `${config.latestTermsAndConditionsUri}?continue=true&backLink=${config.urlPrefix}/${endemicsDeclaration}`,
@@ -78,8 +77,7 @@ export const declarationRouteHandlers = [
           const application = getFarmerApplyData(request);
 
           return h
-            .view(
-              config.multiHerds.enabled ? `${endemicsDeclaration}-mh` : endemicsDeclaration,
+            .view(endemicsDeclaration,
               {
                 backLink: `${config.urlPrefix}/${endemicsTimings}`,
                 latestTermsAndConditionsUri: `${config.latestTermsAndConditionsUri}?continue=true&backLink=${config.urlPrefix}/${endemicsDeclaration}`,

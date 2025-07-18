@@ -115,28 +115,6 @@ describe("Declaration test", () => {
     });
 
     test("returns 200 when application found", async () => {
-      config.multiHerds.enabled = false;
-      const application = { organisation };
-      getFarmerApplyData.mockReturnValue(application);
-      const options = {
-        method: "GET",
-        url,
-        auth,
-      };
-
-      const res = await server.inject(options);
-
-      expect(res.statusCode).toBe(200);
-      const $ = cheerio.load(res.payload);
-      expect($("h1").text()).toMatch("Review your agreement offer");
-      expect($("title").text()).toMatch(
-        "Review your agreement offer - Get funding to improve animal health and welfare",
-      );
-      ok($);
-    });
-
-    test("returns 200 when application found and multiHerds is enabled", async () => {
-      config.multiHerds.enabled = true;
       const application = { organisation };
       getFarmerApplyData.mockReturnValue(application);
       const options = {

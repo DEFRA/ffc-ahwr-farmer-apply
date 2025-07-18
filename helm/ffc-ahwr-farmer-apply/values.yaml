@@ -62,7 +62,6 @@ container:
   defraIdServiceId:
   defraIdPolicy:
   devLoginEnabled: 'false'
-  multiHerdsEnabled: 'false'
 
 ingress:
   class: nginx

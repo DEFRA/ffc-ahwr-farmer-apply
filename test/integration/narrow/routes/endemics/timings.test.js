@@ -3,7 +3,7 @@ import { endemicsDeclaration } from "../../../../../app/config/routes.js";
 import { createServer } from "../../../../../app/server.js";
 import { getCrumbs } from "../../../../utils/get-crumbs.js";
 import { getFarmerApplyData } from "../../../../../app/session/index.js";
-import { config } from "../../../../../app/config/index.js";
+
 const auth = {
   credentials: { reference: "1111", sbi: "111111111" },
   strategy: "cookie",
@@ -43,58 +43,8 @@ describe("Declaration test", () => {
   });
 
   describe(`GET ${url} route`, () => {
+
     test("returns 200 when application found", async () => {
-      config.multiHerds.enabled = false;
-      getFarmerApplyData.mockReturnValue({
-        name: "org-name",
-        sbi: "0123456789",
-        userType: "newUser",
-      });
-      const options = {
-        method: "GET",
-        url,
-        auth,
-      };
-
-      const res = await server.inject(options);
-
-      expect(res.statusCode).toBe(200);
-      const $ = cheerio.load(res.payload);
-      expect($("h1").text()).toMatch("Timing of reviews and follow-ups");
-      expect($("title").text()).toMatch(
-        "Timing of reviews and follow-ups - Get funding to improve animal health and welfare",
-      );
-      expect($("h3").text()).toEqual("org-name - SBI 0123456789");
-
-      expect($("main h2").length).toBe(2);
-    });
-
-    test("adds extra information for old world users", async () => {
-      config.multiHerds.enabled = false;
-      getFarmerApplyData.mockReturnValue({
-        name: "old-org-name",
-        sbi: "1010101010",
-      });
-      const options = {
-        method: "GET",
-        url,
-        auth,
-      };
-
-      const res = await server.inject(options);
-
-      expect(res.statusCode).toBe(200);
-      const $ = cheerio.load(res.payload);
-
-      const headers = $("main h2");
-      expect(headers.length).toBe(3);
-      expect($(headers.get(2)).text()).toBe(
-        "What to do if you completed a review in the old annual health and welfare review service",
-      );
-    });
-
-    test("returns 200 when application found and multi herds is enabled", async () => {
-      config.multiHerds.enabled = true;
       getFarmerApplyData.mockReturnValue({
         name: "org-name",
         sbi: "0123456789",
