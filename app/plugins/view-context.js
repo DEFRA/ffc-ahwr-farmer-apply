@@ -1,6 +1,6 @@
 import { config } from "../config/index.js";
 
-const { claimServiceUri, serviceUri, customerSurvey } =
+const { claimServiceUri, serviceUri, customerSurvey, dashboardServiceUri } =
   config;
 
 export const viewContextPlugin = {
@@ -25,6 +25,7 @@ export const viewContextPlugin = {
           ctx.claimServiceUri = claimServiceUri;
           ctx.serviceUri = serviceUri;
           ctx.customerSurveyUri = customerSurvey.uri;
+          ctx.dashboardServiceUri = dashboardServiceUri;
 
           response.source.context = ctx;
         }

@@ -1,5 +1,4 @@
 import { config } from "../config/index.js";
-import { accessibilityRouteHandlers } from "../routes/accessibility.js";
 import { assetsRouteHandlers } from "../routes/assets.js";
 import { cookieHandlers } from "../routes/cookies.js";
 import { healthHandlers } from "../routes/health.js";
@@ -16,7 +15,6 @@ import { devLoginHandlers } from "../routes/endemics/dev-sign-in.js";
 
 export const buildRoutes = () => {
   let routes = [
-    ...accessibilityRouteHandlers,
     ...assetsRouteHandlers,
     ...cookieHandlers,
     ...healthHandlers,
