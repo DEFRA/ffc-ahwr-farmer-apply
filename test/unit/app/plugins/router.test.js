@@ -17,7 +17,6 @@ describe("routes plugin test ", () => {
       "/apply",
       "/healthy",
       "/healthz",
-      "/apply/accessibility",
       "/apply/cookies",
       "/apply/privacy-policy",
       "/apply/start",
