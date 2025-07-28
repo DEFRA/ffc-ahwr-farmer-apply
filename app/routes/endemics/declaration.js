@@ -84,7 +84,7 @@ export const declarationRouteHandlers = [
                 backLink: `${config.urlPrefix}/${endemicsTimings}`,
                 latestTermsAndConditionsUri: `${config.latestTermsAndConditionsUri}?continue=true&backLink=${config.urlPrefix}/${endemicsDeclaration}`,
                 errorMessage: {
-                  text: "Select you have read and agree to the terms and conditions",
+                  text: "Select yes if you have read and agree to the terms and conditions",
                 },
                 organisation: formatOrganisation(application.organisation)
               })

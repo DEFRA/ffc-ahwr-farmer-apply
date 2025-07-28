@@ -263,7 +263,7 @@ describe("Declaration test", () => {
       const $ = cheerio.load(res.payload);
       expectPageContentOk($, organisation);
       expect($("#terms-error").text()).toMatch(
-        "Select you have read and agree to the terms and conditions",
+        "Select yes if you have read and agree to the terms and conditions",
       );
       expect(getFarmerApplyData).toHaveBeenCalledTimes(2);
       expect(getFarmerApplyData).toHaveBeenCalledWith(res.request);

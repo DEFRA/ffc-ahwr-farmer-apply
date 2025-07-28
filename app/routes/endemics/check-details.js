@@ -19,7 +19,7 @@ const {
 } = keys.farmerApplyData;
 
 const pageUrl = `${config.urlPrefix}/${endemicsCheckDetails}`;
-const errorMessageText = "Select if these details are correct";
+const errorMessageText = "Select yes if the details are correct";
 
 export const checkDetailsRouteHandlers = [
   {
