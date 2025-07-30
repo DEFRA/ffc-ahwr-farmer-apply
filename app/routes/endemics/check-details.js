@@ -11,6 +11,7 @@ import {
   endemicsDetailsNotCorrect,
   endemicsYouCanClaimMultiple,
 } from "../../config/routes.js";
+import { StatusCodes } from 'http-status-codes'
 
 const {
   organisation: organisationKey,
@@ -69,7 +70,7 @@ export const checkDetailsRouteHandlers = [
               errorMessage: { text: errorMessageText },
               ...getOrganisation(request, organisation, errorMessageText),
             })
-            .code(400)
+            .code(StatusCodes.BAD_REQUEST)
             .takeover();
         },
       },
@@ -86,7 +87,6 @@ export const checkDetailsRouteHandlers = [
         }
 
         return h.view(endemicsDetailsNotCorrect, {
-          ruralPaymentsAgency: config.ruralPaymentsAgency,
           title: "Details are not correct"
         });
       },

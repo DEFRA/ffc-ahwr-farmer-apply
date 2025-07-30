@@ -51,12 +51,6 @@ export const getConfig = () => {
     dashboardServiceUri: joi.string().uri(),
     useRedis: joi.bool(),
     urlPrefix: joi.string(),
-    ruralPaymentsAgency: {
-      loginUri: joi.string().uri(),
-      callChargesUri: joi.string().uri(),
-      email: joi.string().email(),
-      telephone: joi.string(),
-    },
     customerSurvey: {
       uri: joi.string().uri().optional(),
     },
@@ -66,9 +60,6 @@ export const getConfig = () => {
     },
     latestTermsAndConditionsUri: joi.string().required(),
     reapplyTimeLimitMonths: joi.number(),
-    multiHerds: {
-      enabled: joi.bool().required(),
-    },
     devLogin: {
       enabled: joi.bool().required(),
     },
@@ -114,12 +105,6 @@ export const getConfig = () => {
     dashboardServiceUri: process.env.DASHBOARD_SERVICE_URI,
     useRedis: process.env.NODE_ENV !== "test",
     urlPrefix: process.env.URL_PREFIX || urlPrefix,
-    ruralPaymentsAgency: {
-      loginUri: "https://www.ruralpayments.service.gov.uk",
-      callChargesUri: "https://www.gov.uk/call-charges",
-      email: "ruralpayments@defra.gov.uk",
-      telephone: "03000 200 301",
-    },
     customerSurvey: {
       uri: process.env.CUSTOMER_SURVEY_APPLY_URI,
     },
@@ -133,10 +118,7 @@ export const getConfig = () => {
     reapplyTimeLimitMonths: 10,
     devLogin: {
       enabled: process.env.DEV_LOGIN_ENABLED === "true",
-    },
-    multiHerds: {
-      enabled: process.env.MULTI_HERDS_ENABLED === "true",
-    },
+    }
   };
 
   const { error } = schema.validate(config, {

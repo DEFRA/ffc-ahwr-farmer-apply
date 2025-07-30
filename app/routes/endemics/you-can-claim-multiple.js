@@ -39,7 +39,7 @@ export const claimMultipleRouteHandlers = [
     options: {
       handler: async (request, h) => {
         const organisation = getFarmerApplyData(request, organisationKey);
-        return h.view(config.multiHerds.enabled ? `${endemicsYouCanClaimMultiple}-mh` : endemicsYouCanClaimMultiple, {
+        return h.view(endemicsYouCanClaimMultiple, {
           backLink,
           agreementStatuses,
           organisation,
@@ -62,8 +62,7 @@ export const claimMultipleRouteHandlers = [
           clear(request);
           request.cookieAuth.clear();
           return h.view(endemicsOfferRejected, {
-            termsRejected: true,
-            ruralPaymentsAgency: config.ruralPaymentsAgency,
+            termsRejected: true
           });
         }
 

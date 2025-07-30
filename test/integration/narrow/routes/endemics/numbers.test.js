@@ -8,7 +8,6 @@ import {
 } from "../../../../../app/config/routes.js";
 import { getFarmerApplyData } from "../../../../../app/session/index.js";
 import { createServer } from "../../../../../app/server";
-import { config } from "../../../../../app/config";
 
 const endemicsNumbersUrl = `/apply/${endemicsNumbers}`;
 const endemicsYouCanClaimMultipleUrl = `/apply/${endemicsYouCanClaimMultiple}`;
@@ -40,8 +39,8 @@ describe("Check review numbers page test", () => {
   };
 
   describe(`GET ${endemicsNumbers} route when logged in`, () => {
-    test("returns 200 and has correct backLink", async () => {
-      config.multiHerds.enabled = false;
+
+    test("returns 200 and has correct backLink when multi herds is enabled", async () => {
       const server = await createServer();
       await server.initialize();
 
@@ -53,7 +52,7 @@ describe("Check review numbers page test", () => {
 
       const $ = cheerio.load(res.payload);
       const titleClassName = ".govuk-heading-l";
-      const title = "Minimum number of livestock";
+      const title = "Minimum number of each species in each herd or flock";
       const pageTitleByClassName = $(titleClassName).text();
       const pageTitleByName = $("title").text();
       const fullTitle = `${title} - Get funding to improve animal health and welfare`;
@@ -69,36 +68,7 @@ describe("Check review numbers page test", () => {
 
       await server.stop();
     });
-  });
 
-  test("returns 200 and has correct backLink when multi herds is enabled", async () => {
-    config.multiHerds.enabled = true;
-    const server = await createServer();
-    await server.initialize();
-
-    getFarmerApplyData.mockReturnValue(org);
-
-    const res = await server.inject({ ...options, method: "GET" });
-
-    expect(res.statusCode).toBe(200);
-
-    const $ = cheerio.load(res.payload);
-    const titleClassName = ".govuk-heading-l";
-    const title = "Minimum number of each species in each herd or flock";
-    const pageTitleByClassName = $(titleClassName).text();
-    const pageTitleByName = $("title").text();
-    const fullTitle = `${title} - Get funding to improve animal health and welfare`;
-    const backLinkUrlByClassName = $(".govuk-back-link").attr("href");
-
-    expect(pageTitleByName).toContain(fullTitle);
-    expect(pageTitleByClassName).toEqual(title);
-    expect($(".govuk-heading-s").text()).toEqual(
-      `${org.name} - SBI ${org.sbi}`,
-    );
-    expect(backLinkUrlByClassName).toContain(endemicsYouCanClaimMultipleUrl);
-    ok($);
-
-    await server.stop();
   });
 
   describe(`POST ${endemicsNumbersUrl} route`, () => {

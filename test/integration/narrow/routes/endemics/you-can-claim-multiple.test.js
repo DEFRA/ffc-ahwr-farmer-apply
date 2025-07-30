@@ -10,7 +10,6 @@ import {
   setFarmerApplyData,
 } from "../../../../../app/session/index.js";
 import { createServer } from "../../../../../app/server.js";
-import { config } from "../../../../../app/config/index.js";
 
 const pageUrl = `/apply/${endemicsYouCanClaimMultiple}`;
 const backLinkUrl = `/apply/${endemicsCheckDetails}`;
@@ -71,7 +70,6 @@ describe("you-can-claim-multiple page", () => {
 
   describe("GET operation handler", () => {
     test("returns 200 and content is correct", async () => {
-      config.multiHerds.enabled = false;
 
       const res = await server.inject({ ...optionsBase, method: "GET" });
 
@@ -83,7 +81,6 @@ describe("you-can-claim-multiple page", () => {
     });
 
     test("returns 200 and content is correct when multi herds is enabled", async () => {
-      config.multiHerds.enabled = true;
       const res = await server.inject({ ...optionsBase, method: "GET" });
 
       expect(res.statusCode).toBe(200);

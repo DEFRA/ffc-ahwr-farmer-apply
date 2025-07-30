@@ -6,14 +6,6 @@ jest.mock(
   "../../../../app/auth/auth-code-grant/request-authorization-code-url",
 );
 jest.mock("../../../../app/session");
-jest.mock("../../../../app/config/index", () => ({
-  ...jest.requireActual("../../../../app/config/index"),
-  authConfig: {
-    defraId: {
-      enabled: true,
-    }
-  },
-}));
 
 describe("Auth plugin test", () => {
   describe("Accessing secured route without auth cookie redirects to DEFRA ID login", () => {

@@ -115,7 +115,6 @@ describe("Declaration test", () => {
     });
 
     test("returns 200 when application found", async () => {
-      config.multiHerds.enabled = false;
       const application = { organisation };
       getFarmerApplyData.mockReturnValue(application);
       const options = {
@@ -136,7 +135,6 @@ describe("Declaration test", () => {
     });
 
     test("returns 200 when application found and multiHerds is enabled", async () => {
-      config.multiHerds.enabled = true;
       const application = { organisation };
       getFarmerApplyData.mockReturnValue(application);
       const options = {
