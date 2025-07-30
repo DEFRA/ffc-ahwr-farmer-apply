@@ -29,7 +29,7 @@ export const timingsRouteHandlers = [
         const hasOldWorldApplication =
           organisation.userType !== userType.NEW_USER;
 
-        return h.view(config.multiHerds.enabled ? `${endemicsTimings}-mh` : endemicsTimings, {
+        return h.view(endemicsTimings, {
           hasOldWorldApplication,
           backLink,
           organisation,
@@ -52,8 +52,7 @@ export const timingsRouteHandlers = [
         clear(request);
 
         return h.view(endemicsOfferRejected, {
-          termsRejected: true,
-          ruralPaymentsAgency: config.ruralPaymentsAgency,
+          termsRejected: true
         });
       },
     },

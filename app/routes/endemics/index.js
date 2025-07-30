@@ -28,8 +28,7 @@ export const indexRouteHandlers = [
 
         return h.view(loginView, {
           devLogin,
-          defraIdLogin,
-          ruralPaymentsAgency: config.ruralPaymentsAgency,
+          defraIdLogin
         });
       },
     },

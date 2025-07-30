@@ -18,6 +18,7 @@ import {
   endemicsOfferRejected,
   endemicsTimings,
 } from "../../config/routes.js";
+import { StatusCodes } from 'http-status-codes'
 
 const {
   reference,
@@ -52,7 +53,7 @@ export const declarationRouteHandlers = [
         }
 
         return h.view(
-          config.multiHerds.enabled ? `${endemicsDeclaration}-mh` : endemicsDeclaration,
+          endemicsDeclaration,
           {
             backLink: `${config.urlPrefix}/${endemicsTimings}`,
             latestTermsAndConditionsUri: `${config.latestTermsAndConditionsUri}?continue=true&backLink=${config.urlPrefix}/${endemicsDeclaration}`,
@@ -79,7 +80,7 @@ export const declarationRouteHandlers = [
 
           return h
             .view(
-              config.multiHerds.enabled ? `${endemicsDeclaration}-mh` : endemicsDeclaration,
+              endemicsDeclaration,
               {
                 backLink: `${config.urlPrefix}/${endemicsTimings}`,
                 latestTermsAndConditionsUri: `${config.latestTermsAndConditionsUri}?continue=true&backLink=${config.urlPrefix}/${endemicsDeclaration}`,
@@ -88,7 +89,7 @@ export const declarationRouteHandlers = [
                 },
                 organisation: formatOrganisation(application.organisation)
               })
-            .code(400)
+            .code(StatusCodes.BAD_REQUEST)
             .takeover();
         },
       },
@@ -138,8 +139,7 @@ export const declarationRouteHandlers = [
 
         if (request.payload.offerStatus === "rejected") {
           return h.view(endemicsOfferRejected, {
-            offerRejected: true,
-            ruralPaymentsAgency: config.ruralPaymentsAgency,
+            offerRejected: true
           });
         }
 
@@ -152,7 +152,6 @@ export const declarationRouteHandlers = [
         return h.view(endemicsConfirmation, {
           reference: newApplicationReference,
           isNewUser: userType.NEW_USER === application.organisation.userType,
-          ruralPaymentsAgency: config.ruralPaymentsAgency,
           latestTermsAndConditionsUri: config.latestTermsAndConditionsUri,
         });
       },

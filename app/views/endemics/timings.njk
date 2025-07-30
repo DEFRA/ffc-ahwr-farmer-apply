@@ -29,9 +29,9 @@
     <h2 class="govuk-heading-m">Animal health and welfare reviews</h2>
     <p>To be eligible to claim for animal health and welfare reviews you must:</p>
     <ul class="govuk-list govuk-list--bullet">
-      <li>have an IAHW agreement in place before you do your first review</li>
-      <li>ensure reviews on a particular species are at least 10 months apart</li>
-      <li>have no more than 3 animal health and welfare reviews per species before 19 June 2027</li>
+      <li>have an Improve Animal Health and Welfare (IAHW) agreement in place before you do your first review, including any sampling or testing</li>
+      <li>ensure reviews on herds or flocks of a particular species, are at least 10 months apart</li>
+      <li>have no more than 3 reviews on any number of herds or flocks per species by 19 June 2027</li>
     </ul>
 
     <hr class="govuk-section-break govuk-section-break--m" />
@@ -39,28 +39,15 @@
     <h2 class="govuk-heading-m">Endemic disease follow-ups</h2>
     <p>To be eligible to claim for endemic disease follow-ups you must: </p>
     <ul class="govuk-list govuk-list--bullet">
-      <li>have an IAHW agreement in place before you do your first follow-up</li>
+      <li>have an IAHW agreement in place before you do your first follow-up, including any sampling or testing</li>
       <li>have had a review which you should claim for first</li>
+      <li>have the follow-up on the same herd or flock of a particular species as the review</li>
       <li>ensure the follow-up takes place no more than 10 months after your review</li>
-      <li>have the follow-up on the same species as the review</li>
-      <li>ensure that follow-ups for that species take place at least 10 months after your last follow-up and always be at least 10 months apart</li>
-      <li>have no more than 3 endemic disease follow-ups per species before 19 June 2027 </li>
+      <li>ensure that follow-ups on herds or flocks of a particular species, are always at least 10 months apart</li>      
+      <li>have no more than 3 follow-ups on any number of herds or flocks per species by 19 June 2027</li>
     </ul>
 
     <hr class="govuk-section-break govuk-section-break--m" />
-
-    {% if hasOldWorldApplication %}
-      <h2 class="govuk-heading-m">What to do if you completed a review in the old annual health and welfare review service</h2>
-      <p>You must:</p>
-      <ul class="govuk-list govuk-list--bullet">
-        <li>have an IAHW agreement in place before carrying out a follow-up</li>
-        <li>claim for any previous reviews carried out in the old annual health and welfare review service to be eligible to set up an IAHW agreement</li>
-        <li>carry out a follow-up within 10 months of the previous review visit</li>
-        <li>carry out the follow-up on the same species as the review</li>
-        <li>wait until 10 months after your last review before doing a new review under this agreement. This applies even if your review claim was rejected</li>
-      </ul>
-      <hr class="govuk-section-break govuk-section-break--m" />
-    {% endif %}
 
     <form method="POST" autocomplete="off" novalidate="novalidate" id ="submitDeclarationForm">
       <input type="hidden" name="crumb" value="{{crumb}}"/>
