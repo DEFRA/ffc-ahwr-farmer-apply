@@ -18,7 +18,7 @@ export async function sendApplication(application, sessionId) {
 
   if (response?.applicationState !== states.submitted) {
     // throws an error in the above function
-    return;
+    return undefined;
   }
 
   return response?.applicationReference;

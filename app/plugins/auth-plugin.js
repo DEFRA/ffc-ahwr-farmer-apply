@@ -22,7 +22,7 @@ export const authPlugin = {
         redirectTo: (request) => {
           return requestAuthorizationCodeUrl(request);
         },
-        validateFunc: async (request, s) => {
+        validateFunc: async (request, _s) => {
           const result = { valid: false };
 
           if (getFarmerApplyData(request, organisationKey)) {
