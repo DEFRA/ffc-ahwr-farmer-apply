@@ -13,59 +13,61 @@ const ONE_YEAR_IN_MILLIS = ONE_DAY_IN_MILLIS * DAYS_IN_YEAR;
 const DEFAULT_APP_PORT = 3000;
 const DEFAULT_REDIS_PORT = 6379;
 
-const schema = joi.object({
-  appInsights: joi.object(),
-  namespace: joi.string().optional(),
-  cache: {
-    expiresIn: joi.number(),
-    options: {
-      host: joi.string(),
-      partition: joi.string(),
-      password: joi.string().allow(""),
-      port: joi.number(),
-      tls: joi.object(),
+const getSchema = () => {
+  return joi.object({
+    appInsights: joi.object(),
+    namespace: joi.string().optional(),
+    cache: {
+      expiresIn: joi.number(),
+      options: {
+        host: joi.string(),
+        partition: joi.string(),
+        password: joi.string().allow(""),
+        port: joi.number(),
+        tls: joi.object(),
+      },
     },
-  },
-  cookie: {
-    cookieNameCookiePolicy: joi.string(),
-    cookieNameAuth: joi.string(),
-    cookieNameSession: joi.string(),
-    isSameSite: joi.string(),
-    isSecure: joi.bool(),
-    password: joi.string().min(32).required(),
-    ttl: joi.number(),
-  },
-  cookiePolicy: {
-    clearInvalid: joi.bool(),
-    encoding: joi.string().valid("base64json"),
-    isSameSite: joi.string(),
-    isSecure: joi.bool(),
-    password: joi.string().min(32).required(),
-    path: joi.string(),
-    ttl: joi.number(),
-  },
-  env: joi.string().valid("development", "test", "production"),
-  googleTagManagerKey: joi.string().allow(null, ""),
-  isDev: joi.bool(),
-  port: joi.number(),
-  serviceUri: joi.string().uri(),
-  claimServiceUri: joi.string().uri(),
-  dashboardServiceUri: joi.string().uri(),
-  useRedis: joi.bool(),
-  urlPrefix: joi.string(),
-  customerSurvey: {
-    uri: joi.string().uri().optional(),
-  },
-  applicationApi: applicationApiConfigSchema,
-  wreckHttp: {
-    timeoutMilliseconds: joi.number(),
-  },
-  latestTermsAndConditionsUri: joi.string().required(),
-  reapplyTimeLimitMonths: joi.number(),
-  devLogin: {
-    enabled: joi.bool().required(),
-  },
-});
+    cookie: {
+      cookieNameCookiePolicy: joi.string(),
+      cookieNameAuth: joi.string(),
+      cookieNameSession: joi.string(),
+      isSameSite: joi.string(),
+      isSecure: joi.bool(),
+      password: joi.string().min(32).required(),
+      ttl: joi.number(),
+    },
+    cookiePolicy: {
+      clearInvalid: joi.bool(),
+      encoding: joi.string().valid("base64json"),
+      isSameSite: joi.string(),
+      isSecure: joi.bool(),
+      password: joi.string().min(32).required(),
+      path: joi.string(),
+      ttl: joi.number(),
+    },
+    env: joi.string().valid("development", "test", "production"),
+    googleTagManagerKey: joi.string().allow(null, ""),
+    isDev: joi.bool(),
+    port: joi.number(),
+    serviceUri: joi.string().uri(),
+    claimServiceUri: joi.string().uri(),
+    dashboardServiceUri: joi.string().uri(),
+    useRedis: joi.bool(),
+    urlPrefix: joi.string(),
+    customerSurvey: {
+      uri: joi.string().uri().optional(),
+    },
+    applicationApi: applicationApiConfigSchema,
+    wreckHttp: {
+      timeoutMilliseconds: joi.number(),
+    },
+    latestTermsAndConditionsUri: joi.string().required(),
+    reapplyTimeLimitMonths: joi.number(),
+    devLogin: {
+      enabled: joi.bool().required(),
+    },
+  })
+};
 
 export const getConfig = () => {
   const urlPrefix = "/apply";
@@ -127,7 +129,7 @@ export const getConfig = () => {
     }
   };
 
-  const { error } = schema.validate(mainConfig, {
+  const { error } = getSchema().validate(mainConfig, {
     abortEarly: false,
     convert: false,
   });
