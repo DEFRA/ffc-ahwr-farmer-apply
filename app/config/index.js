@@ -3,15 +3,18 @@ import { applicationApiConfigSchema } from "../api-requests/application-api.conf
 import appInsights from "applicationinsights";
 import { config as applicationApiConfig } from "../api-requests/application-api.config.js";
 
-export const getConfig = () => {
-  const urlPrefix = "/apply";
+const DAYS_IN_YEAR = 365;
+const DAYS_CACHE_ENTRY_VALID = 3;
+const TEN_SECONDS_IN_MILLIS = 10000;
+const ONE_DAY_IN_MILLIS = 1000 * 60 * 60 * 24;
+const THREE_DAYS_IN_MILLIS = ONE_DAY_IN_MILLIS * DAYS_CACHE_ENTRY_VALID;
+const ONE_YEAR_IN_MILLIS = ONE_DAY_IN_MILLIS * DAYS_IN_YEAR;
 
-  const tenSecondsInMilliseconds = 10000;
-  const oneDayInMilliseconds = 1000 * 60 * 60 * 24;
-  const threeDaysInMilliseconds = oneDayInMilliseconds * 3;
-  const oneYearInMilliseconds = oneDayInMilliseconds * 365;
+const DEFAULT_APP_PORT = 3000;
+const DEFAULT_REDIS_PORT = 6379;
 
-  const schema = joi.object({
+const getSchema = () => {
+  return joi.object({
     appInsights: joi.object(),
     namespace: joi.string().optional(),
     cache: {
@@ -63,18 +66,23 @@ export const getConfig = () => {
     devLogin: {
       enabled: joi.bool().required(),
     },
-  });
+  })
+};
 
-  const config = {
+export const getConfig = () => {
+  const urlPrefix = "/apply";
+
+
+  const mainConfig = {
     appInsights,
     namespace: process.env.NAMESPACE,
     cache: {
-      expiresIn: threeDaysInMilliseconds,
+      expiresIn: THREE_DAYS_IN_MILLIS,
       options: {
         host: process.env.REDIS_HOSTNAME || "redis-hostname.default",
         partition: "ffc-ahwr-frontend",
         password: process.env.REDIS_PASSWORD,
-        port: Number(process.env.REDIS_PORT) || 6379,
+        port: Number(process.env.REDIS_PORT) || DEFAULT_REDIS_PORT,
         tls: process.env.NODE_ENV === "production" ? {} : undefined,
       },
     },
@@ -85,7 +93,7 @@ export const getConfig = () => {
       isSameSite: "Lax",
       isSecure: process.env.NODE_ENV === "production",
       password: process.env.COOKIE_PASSWORD,
-      ttl: threeDaysInMilliseconds,
+      ttl: THREE_DAYS_IN_MILLIS,
     },
     cookiePolicy: {
       clearInvalid: false,
@@ -94,12 +102,12 @@ export const getConfig = () => {
       isSecure: process.env.NODE_ENV === "production",
       path: "/",
       password: process.env.COOKIE_PASSWORD,
-      ttl: oneYearInMilliseconds,
+      ttl: ONE_YEAR_IN_MILLIS,
     },
     env: process.env.NODE_ENV || "development",
     googleTagManagerKey: process.env.GOOGLE_TAG_MANAGER_KEY,
     isDev: process.env.NODE_ENV === "development",
-    port: Number(process.env.PORT) || 3000,
+    port: Number(process.env.PORT) || DEFAULT_APP_PORT,
     serviceUri: process.env.SERVICE_URI,
     claimServiceUri: process.env.CLAIM_SERVICE_URI,
     dashboardServiceUri: process.env.DASHBOARD_SERVICE_URI,
@@ -112,7 +120,7 @@ export const getConfig = () => {
     wreckHttp: {
       timeoutMilliseconds:
         Number(process.env.WRECK_HTTP_TIMEOUT_MILLISECONDS) ||
-        tenSecondsInMilliseconds,
+        TEN_SECONDS_IN_MILLIS,
     },
     latestTermsAndConditionsUri: process.env.TERMS_AND_CONDITIONS_URL,
     reapplyTimeLimitMonths: 10,
@@ -121,7 +129,7 @@ export const getConfig = () => {
     }
   };
 
-  const { error } = schema.validate(config, {
+  const { error } = getSchema().validate(mainConfig, {
     abortEarly: false,
     convert: false,
   });
@@ -130,7 +138,7 @@ export const getConfig = () => {
     throw new Error(`The server config is invalid. ${error.message}`);
   }
 
-  return config;
+  return mainConfig;
 };
 
 export const config = getConfig();

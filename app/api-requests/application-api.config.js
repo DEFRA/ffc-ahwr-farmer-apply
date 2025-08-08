@@ -1,19 +1,19 @@
 import { applicationApiConfigSchema } from "./application-api.config.schema.js";
 
-const getConfig = () => {
-  const config = {
+export const getConfig = () => {
+  const apiConfig = {
     uri: process.env.APPLICATION_API_URI,
   };
 
-  const result = applicationApiConfigSchema.validate(config, {
+  const { error } = applicationApiConfigSchema.validate(apiConfig, {
     abortEarly: false,
   });
 
-  if (result.error) {
-    throw new Error(`The config is invalid: ${result.error.message}`);
+  if (error) {
+    throw new Error(`The config is invalid: ${error.message}`);
   }
 
-  return config;
+  return apiConfig;
 };
 
 export const config = getConfig();
