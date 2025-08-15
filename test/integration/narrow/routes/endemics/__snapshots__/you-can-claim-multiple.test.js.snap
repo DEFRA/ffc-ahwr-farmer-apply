@@ -244,32 +244,6 @@ data-module="govuk-service-navigation"
       
       
       
-        <nav aria-label="Menu" class="govuk-service-navigation__wrapper">
-          <button type="button" class="govuk-service-navigation__toggle govuk-js-service-navigation-toggle" aria-controls="navigation" hidden>
-            Menu
-          </button>
-
-          <ul class="govuk-service-navigation__list" id="navigation" >
-
-            
-              
-
-              
-              <li class="govuk-service-navigation__item">
-                
-                  <a class="govuk-service-navigation__link" href="http://localhost:3003/vet-visits">
-                    
-                
-                Manage your claims
-              
-                  </a>
-                
-              </li>
-            
-
-            </ul>
-        </nav>
-      
     </div>
 
     </div>
@@ -408,7 +382,7 @@ data-module="govuk-service-navigation"
           <ul class="govuk-footer__inline-list">
                
             <li class="govuk-footer__inline-list-item">
-              <a class="govuk-footer__link" href="http://localhost:3003/accessibility">
+              <a class="govuk-footer__link" href="dashboard-service/accessibility">
                 Accessibility
               </a>
             </li>
@@ -717,32 +691,6 @@ data-module="govuk-service-navigation"
       
       
       
-        <nav aria-label="Menu" class="govuk-service-navigation__wrapper">
-          <button type="button" class="govuk-service-navigation__toggle govuk-js-service-navigation-toggle" aria-controls="navigation" hidden>
-            Menu
-          </button>
-
-          <ul class="govuk-service-navigation__list" id="navigation" >
-
-            
-              
-
-              
-              <li class="govuk-service-navigation__item">
-                
-                  <a class="govuk-service-navigation__link" href="http://localhost:3003/vet-visits">
-                    
-                
-                Manage your claims
-              
-                  </a>
-                
-              </li>
-            
-
-            </ul>
-        </nav>
-      
     </div>
 
     </div>
@@ -881,7 +829,7 @@ data-module="govuk-service-navigation"
           <ul class="govuk-footer__inline-list">
                
             <li class="govuk-footer__inline-list-item">
-              <a class="govuk-footer__link" href="http://localhost:3003/accessibility">
+              <a class="govuk-footer__link" href="dashboard-service/accessibility">
                 Accessibility
               </a>
             </li>
