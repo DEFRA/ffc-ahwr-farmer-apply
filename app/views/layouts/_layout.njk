@@ -18,7 +18,7 @@
 {% from "govuk/components/fieldset/macro.njk"            import govukFieldset %}
 {% from "govuk/components/inset-text/macro.njk"          import govukInsetText %}
 {% from "govuk/components/error-summary/macro.njk"       import govukErrorSummary %}
-
+{% from "govuk/components/service-navigation/macro.njk"  import govukServiceNavigation %}
 
 {% from "../macros/search-box.njk"                       import searchBox %}
 {% from "../macros/rpa-contact-details.njk"              import rpaContactDetails %}
@@ -26,8 +26,11 @@
 
 {% block pageTitle %}{{ serviceName }} - GOV.UK{% endblock %}
 {% set urlPrefix = "<%= htmlWebpackPlugin.options.metadata.urlPrefix %>" %}
+{% set govukRebrand = true %}
 
 {% block head %}
+  <link rel="icon" sizes="48x48" href="/apply/assets/rebrand/images/favicon.ico">
+  <link rel="icon" sizes="any" href="/apply/assets/rebrand/images/favicon.svg" type="image/svg+xml">
   {% if cookiesPolicy.analytics %}
     {% include "../tag-manager/_head-content.njk" %}
   {% endif %}
@@ -45,10 +48,19 @@
 
 {% block header %}
   {{ govukHeader({
+    rebrand: true,
     homepageUrl: "https://www.gov.uk/",
-    containerClasses: "govuk-width-container",
+    containerClasses: "govuk-width-container"
+  }) }}
+  {{ govukServiceNavigation({
     serviceName: serviceName,
-    serviceUrl: "https://www.gov.uk/government/collections/funding-to-improve-animal-health-and-welfare-guidance-for-farmers-and-vets"
+    serviceUrl: "https://www.gov.uk/government/collections/funding-to-improve-animal-health-and-welfare-guidance-for-farmers-and-vets",
+    navigation: [
+    {
+      href: dashboardServiceUri + "/vet-visits",
+      text: "Manage your claims"
+    }
+  ]
   }) }}
   <div class="govuk-grid-row govuk-width-container">
     {{ govukPhaseBanner({
@@ -91,6 +103,7 @@
 
 {% block footer %}
   {{ govukFooter({
+    rebrand: true,
     meta: {
       html: footerHtml
     }
