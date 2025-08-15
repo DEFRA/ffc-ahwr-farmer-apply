@@ -21,6 +21,7 @@ jest.mock("../../../../../app/config/index.js", () => ({
     customerSurvey: {
       uri: "http://this-is-a-test-uri",
     },
+    dashboardServiceUri: 'dashboard-service'
   },
 }));
 

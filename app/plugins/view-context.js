@@ -1,8 +1,7 @@
 import { config } from "../config/index.js";
 import { RPA_CONTACT_DETAILS } from 'ffc-ahwr-common-library'
 
-const { claimServiceUri, serviceUri, customerSurvey, dashboardServiceUri } =
-  config;
+const { claimServiceUri, serviceUri, customerSurvey, dashboardServiceUri } = config;
 
 export const viewContextPlugin = {
   plugin: {
