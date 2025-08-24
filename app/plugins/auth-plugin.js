@@ -22,14 +22,14 @@ export const authPlugin = {
         redirectTo: (request) => {
           return requestAuthorizationCodeUrl(request);
         },
-        validateFunc: async (request, _s) => {
-          const result = { valid: false };
-
-          if (getFarmerApplyData(request, organisationKey)) {
-            result.valid = true;
+        validateFunc: async (request) => {
+          if (config.devLogin.enabled) {
+            if (getFarmerApplyData(request, organisationKey)) {
+              return { valid: true }
+            }
           }
 
-          return result;
+          return { valid: request.auth.isAuthenticated }
         },
       });
       server.auth.default({ strategy: "session", mode: "required" });
