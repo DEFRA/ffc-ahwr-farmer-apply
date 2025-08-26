@@ -23,11 +23,7 @@ export const authPlugin = {
           return requestAuthorizationCodeUrl(request);
         },
         validateFunc: async (request) => {
-          if (config.devLogin.enabled && getFarmerApplyData(request, organisationKey)) {
-            return { valid: true }
-          }
-
-          return { valid: request.auth.isAuthenticated }
+          return { valid: Boolean(getFarmerApplyData(request, organisationKey)) }
         },
       });
       server.auth.default({ strategy: "session", mode: "required" });
