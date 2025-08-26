@@ -220,6 +220,13 @@ exports[`you-can-claim-multiple page GET operation handler returns 200 and conte
   </div>
 </header>
 
+
+  
+  
+  
+    
+  
+
   
 
   <section aria-label="Service information" 
@@ -243,6 +250,32 @@ data-module="govuk-service-navigation"
 
       
       
+      
+        <nav aria-label="Menu" class="govuk-service-navigation__wrapper">
+          <button type="button" class="govuk-service-navigation__toggle govuk-js-service-navigation-toggle" aria-controls="navigation" hidden>
+            Menu
+          </button>
+
+          <ul class="govuk-service-navigation__list" id="navigation" >
+
+            
+              
+
+              
+              <li class="govuk-service-navigation__item">
+                
+                  <a class="govuk-service-navigation__link" href="dashboard-service/sign-out">
+                    
+                
+                Sign out
+              
+                  </a>
+                
+              </li>
+            
+
+            </ul>
+        </nav>
       
     </div>
 
@@ -667,6 +700,13 @@ exports[`you-can-claim-multiple page GET operation handler returns 200 and conte
   </div>
 </header>
 
+
+  
+  
+  
+    
+  
+
   
 
   <section aria-label="Service information" 
@@ -690,6 +730,32 @@ data-module="govuk-service-navigation"
 
       
       
+      
+        <nav aria-label="Menu" class="govuk-service-navigation__wrapper">
+          <button type="button" class="govuk-service-navigation__toggle govuk-js-service-navigation-toggle" aria-controls="navigation" hidden>
+            Menu
+          </button>
+
+          <ul class="govuk-service-navigation__list" id="navigation" >
+
+            
+              
+
+              
+              <li class="govuk-service-navigation__item">
+                
+                  <a class="govuk-service-navigation__link" href="dashboard-service/sign-out">
+                    
+                
+                Sign out
+              
+                  </a>
+                
+              </li>
+            
+
+            </ul>
+        </nav>
       
     </div>
 

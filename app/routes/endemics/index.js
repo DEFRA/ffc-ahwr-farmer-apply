@@ -8,7 +8,7 @@ export const indexRouteHandlers = [
     method: "GET",
     path: `${config.urlPrefix}/endemics/start`,
     options: {
-      auth: false,
+      auth: { mode: "try" },
       handler: async (request, h) => {
         // prevents previous session's reference being used when returning to the service
         setFarmerApplyData(request, keys.farmerApplyData.reference, null);

@@ -22,14 +22,8 @@ export const authPlugin = {
         redirectTo: (request) => {
           return requestAuthorizationCodeUrl(request);
         },
-        validateFunc: async (request, _s) => {
-          const result = { valid: false };
-
-          if (getFarmerApplyData(request, organisationKey)) {
-            result.valid = true;
-          }
-
-          return result;
+        validateFunc: async (request) => {
+          return { valid: Boolean(getFarmerApplyData(request, organisationKey)) }
         },
       });
       server.auth.default({ strategy: "session", mode: "required" });
