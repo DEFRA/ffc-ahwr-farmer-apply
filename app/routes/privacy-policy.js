@@ -5,7 +5,7 @@ export const privacyPolicyRouteHandlers = [
     method: "GET",
     path: `${config.urlPrefix}/privacy-policy`,
     options: {
-      auth: false,
+      auth: { mode: "try" },
       handler: async (_, h) => {
         return h.view("privacy-policy");
       },

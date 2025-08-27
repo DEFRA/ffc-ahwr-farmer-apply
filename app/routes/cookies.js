@@ -13,7 +13,7 @@ export const cookieHandlers = [
     method: "GET",
     path: `${urlPrefix}/cookies`,
     options: {
-      auth: false,
+      auth: { mode: "try" },
       handler: async (request, h) => {
         return h.view(
           "cookies/cookie-policy",
