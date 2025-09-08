@@ -26,7 +26,7 @@ export const localDevAuthPlugin = {
         validateFunc: async (request, _s) => {
           const result = { valid: false };
 
-          if(!getFarmerApplyData(request, organisationKey) && request.query?.org) {
+          if (!getFarmerApplyData(request, organisationKey) && request.query?.org) {
             setFarmerApplyData(request, organisationKey, JSON.parse(Buffer.from(request.query.org, "base64").toString("ascii")));
             setCustomer(request, crnKey,  request.query.crn);
             setCustomer(request, idKey, request.query.custId);

@@ -5,7 +5,6 @@ import { keys } from "../../../../../app/session/keys";
 import { states, userType } from "../../../../../app/constants/constants";
 import { config } from "../../../../../app/config";
 import {
-  clear,
   getFarmerApplyData,
   setFarmerApplyData,
   setTempReference,
@@ -187,7 +186,6 @@ describe("Declaration test", () => {
         "Application complete - Get funding to improve animal health and welfare",
       );
       ok($);
-      expect(clear).toBeCalledTimes(1);
       expect(setFarmerApplyData).toHaveBeenCalledTimes(3);
       expect(setFarmerApplyData).toHaveBeenNthCalledWith(
         1,
@@ -230,7 +228,6 @@ describe("Declaration test", () => {
         "Agreement offer rejected - Get funding to improve animal health and welfare",
       );
       ok($);
-      expect(clear).toBeCalledTimes(1);
       expect(setFarmerApplyData).toHaveBeenCalledTimes(3);
       expect(setFarmerApplyData).toHaveBeenNthCalledWith(
         1,

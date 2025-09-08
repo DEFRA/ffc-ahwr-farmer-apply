@@ -3,7 +3,6 @@ import boom from "@hapi/boom";
 import joi from "joi";
 import { keys } from "../../session/keys.js";
 import {
-  clear,
   getCustomer,
   getFarmerApplyData,
   setFarmerApplyData,
@@ -133,9 +132,6 @@ export const declarationRouteHandlers = [
             },
           });
         }
-
-        clear(request);
-        request.cookieAuth.clear();
 
         if (request.payload.offerStatus === "rejected") {
           return h.view(endemicsOfferRejected, {

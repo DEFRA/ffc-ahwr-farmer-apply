@@ -1,8 +1,4 @@
-import {
-  clear,
-  getFarmerApplyData,
-  setFarmerApplyData,
-} from "../../session/index.js";
+import { getFarmerApplyData, setFarmerApplyData } from "../../session/index.js";
 import { userType } from "../../constants/constants.js";
 import {
   endemicsDeclaration,
@@ -48,8 +44,6 @@ export const timingsRouteHandlers = [
         }
 
         setFarmerApplyData(request, agreeVisitTimings, "no");
-        request.cookieAuth.clear();
-        clear(request);
 
         return h.view(endemicsOfferRejected, {
           termsRejected: true
