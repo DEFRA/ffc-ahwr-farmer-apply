@@ -1,9 +1,5 @@
 import { keys } from "../../session/keys.js";
-import {
-  clear,
-  getFarmerApplyData,
-  setFarmerApplyData,
-} from "../../session/index.js";
+import { getFarmerApplyData, setFarmerApplyData } from "../../session/index.js";
 import { config } from "../../config/index.js";
 import {
   endemicsCheckDetails,
@@ -59,8 +55,6 @@ export const claimMultipleRouteHandlers = [
         setFarmerApplyData(request, agreeMultipleSpecies, status.value);
 
         if (status.value !== agreeStatusValue) {
-          clear(request);
-          request.cookieAuth.clear();
           return h.view(endemicsOfferRejected, {
             termsRejected: true
           });

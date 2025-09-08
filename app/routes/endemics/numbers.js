@@ -1,8 +1,4 @@
-import {
-  clear,
-  getFarmerApplyData,
-  setFarmerApplyData,
-} from "../../session/index.js";
+import { getFarmerApplyData, setFarmerApplyData } from "../../session/index.js";
 import { config } from "../../config/index.js";
 import { keys } from "../../session/keys.js";
 import {
@@ -57,9 +53,7 @@ export const numbersRouteHandlers = [
           return h.redirect(nextPage);
         } else {
           setFarmerApplyData(request, agreeSpeciesNumbers, "no");
-          clear(request);
-          request.cookieAuth.clear();
-
+         
           return h.view(endemicsOfferRejected, {
             termsRejected: true
           });

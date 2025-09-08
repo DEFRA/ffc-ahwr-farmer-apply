@@ -4,11 +4,7 @@ import {
   endemicsNumbers,
   endemicsYouCanClaimMultiple,
 } from "../../../../../app/config/routes.js";
-import {
-  clear,
-  getFarmerApplyData,
-  setFarmerApplyData,
-} from "../../../../../app/session/index.js";
+import { getFarmerApplyData, setFarmerApplyData } from "../../../../../app/session/index.js";
 import { createServer } from "../../../../../app/server.js";
 
 const pageUrl = `/apply/${endemicsYouCanClaimMultiple}`;
@@ -134,7 +130,6 @@ describe("you-can-claim-multiple page", () => {
 
       expect(res.statusCode).toBe(200);
       expect(setFarmerApplyData).toHaveBeenCalledTimes(1);
-      expect(clear).toHaveBeenCalledTimes(1);
       expect(res.headers.location).not.toEqual(nextPageUrl);
     });
   });
