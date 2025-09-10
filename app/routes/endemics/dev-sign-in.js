@@ -68,8 +68,7 @@ export const devLoginHandlers = [
         const { sbi } = request.payload;
 
         if (config.env === "development") {
-          const [personSummary, organisationSummary] =
-            await createDevDetails(sbi);
+          const [personSummary, organisationSummary] = await createDevDetails(sbi);
           setCustomer(request, keys.customer.id, personSummary.id);
           setCustomer(
             request,
@@ -80,9 +79,7 @@ export const devLoginHandlers = [
           request.cookieAuth.set({ email: personSummary.email, userType: farmerApply });
         }
 
-        return h.redirect(
-          `${sendTo}/dev-sign-in?sbi=${sbi}&cameFrom=apply`,
-        );
+        return h.redirect(`${sendTo}/dev-sign-in?sbi=${sbi}`);
       },
     },
   },

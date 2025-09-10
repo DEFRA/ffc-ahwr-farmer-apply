@@ -1,14 +1,13 @@
 import { getCrumbs } from "../../../../utils/get-crumbs.js";
 import {
-  endemicsCheckDetails,
   endemicsNumbers,
   endemicsYouCanClaimMultiple,
 } from "../../../../../app/config/routes.js";
 import { getFarmerApplyData, setFarmerApplyData } from "../../../../../app/session/index.js";
 import { createServer } from "../../../../../app/server.js";
+import { config } from "../../../../../app/config/index.js";
 
 const pageUrl = `/apply/${endemicsYouCanClaimMultiple}`;
-const backLinkUrl = `/apply/${endemicsCheckDetails}`;
 const nextPageUrl = `/apply/${endemicsNumbers}`;
 
 jest.mock("../../../../../app/config/index.js", () => ({
@@ -32,6 +31,10 @@ jest.mock("../../../../../app/session", () => ({
   setFarmerApplyData: jest.fn(),
   clear: jest.fn(),
   getCustomer: jest.fn().mockReturnValue(1111),
+}));
+
+jest.mock("../../../../../app/api-requests/business-applied-before.js", () => ({
+  businessAppliedBefore: jest.fn().mockResolvedValue("newUser")
 }));
 
 const sanitizeHTML = (html) => {
@@ -67,22 +70,11 @@ describe("you-can-claim-multiple page", () => {
 
   describe("GET operation handler", () => {
     test("returns 200 and content is correct", async () => {
-
       const res = await server.inject({ ...optionsBase, method: "GET" });
 
       expect(res.statusCode).toBe(200);
       expect(getFarmerApplyData).toHaveBeenCalledTimes(2); // called an extra time due to logging-context middleware
-      expect(res.payload).toContain(backLinkUrl);
-      const sanitizedHTML = sanitizeHTML(res.payload);
-      expect(sanitizedHTML).toMatchSnapshot();
-    });
-
-    test("returns 200 and content is correct when multi herds is enabled", async () => {
-      const res = await server.inject({ ...optionsBase, method: "GET" });
-
-      expect(res.statusCode).toBe(200);
-      expect(getFarmerApplyData).toHaveBeenCalledTimes(2); // called an extra time due to logging-context middleware
-      expect(res.payload).toContain(backLinkUrl);
+      expect(res.payload).toContain(`${config.dashboardServiceUri}/check-details`);
       const sanitizedHTML = sanitizeHTML(res.payload);
       expect(sanitizedHTML).toMatchSnapshot();
     });

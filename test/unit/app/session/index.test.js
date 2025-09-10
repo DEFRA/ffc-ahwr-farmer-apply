@@ -11,7 +11,6 @@ describe("session", () => {
   const tokensSectionKey = "tokens";
   const customerSectionKey = "customer";
   const pkcecodesSectionKey = "pkcecodes";
-  const routeReturn = "returnRoute";
   const tempReference = "tempReference";
 
   const value = "value";
@@ -28,8 +27,7 @@ describe("session", () => {
     },
     { func: "getToken", expectedSectionKey: tokensSectionKey },
     { func: "getCustomer", expectedSectionKey: customerSectionKey },
-    { func: "getPkcecodes", expectedSectionKey: pkcecodesSectionKey },
-    { func: "getReturnRoute", expectedSectionKey: routeReturn },
+    { func: "getPkcecodes", expectedSectionKey: pkcecodesSectionKey }
   ];
 
   const setFunctionsToTest = [
@@ -44,8 +42,7 @@ describe("session", () => {
     { func: "setToken", expectedSectionKey: tokensSectionKey },
     { func: "setCustomer", expectedSectionKey: customerSectionKey },
     { func: "setPkcecodes", expectedSectionKey: pkcecodesSectionKey },
-    { func: "setTempReference", expectedSectionKey: tempReference },
-    { func: "setReturnRoute", expectedSectionKey: routeReturn },
+    { func: "setTempReference", expectedSectionKey: tempReference }
   ];
 
   const keysAndValuesToTest = [
@@ -237,14 +234,12 @@ describe("session", () => {
     };
     session.clear(requestSetMock);
 
-    expect(requestSetMock.yar.clear).toHaveBeenCalledTimes(7);
-    expect(requestSetMock.yar.clear).toHaveBeenCalledWith("farmerApplyData");
-    expect(requestSetMock.yar.clear).toHaveBeenCalledWith("selectYourBusiness");
-    expect(requestSetMock.yar.clear).toHaveBeenCalledWith("organisation");
-    expect(requestSetMock.yar.clear).toHaveBeenCalledWith("answers");
-    expect(requestSetMock.yar.clear).toHaveBeenCalledWith("customer");
-    expect(requestSetMock.yar.clear).toHaveBeenCalledWith("tempReference");
-    expect(requestSetMock.yar.clear).toHaveBeenCalledWith("returnRoute");
+    const expectedClearedKeys = ["farmerApplyData", "selectYourBusiness", "organisation", "answers", "customer", "tempReference"];
+    expect(requestSetMock.yar.clear).toHaveBeenCalledTimes(expectedClearedKeys.length);
+
+    expectedClearedKeys.forEach(key => {
+      expect(requestSetMock.yar.clear).toHaveBeenCalledWith(key)
+    });
   });
 
   test("raises an event if organisation and reference set", () => {

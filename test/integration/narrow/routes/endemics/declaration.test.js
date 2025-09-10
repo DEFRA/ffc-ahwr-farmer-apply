@@ -83,7 +83,7 @@ describe("Declaration test", () => {
   });
 
   describe(`GET ${url} route`, () => {
-    test("when not logged in redirects to defra id", async () => {
+    test("when not logged in redirects to dashboard /sign-in", async () => {
       const options = {
         method: "GET",
         url,
@@ -92,11 +92,7 @@ describe("Declaration test", () => {
       const res = await server.inject(options);
 
       expect(res.statusCode).toBe(302);
-      expect(res.headers.location.toString()).toEqual(
-        expect.stringContaining(
-          "https://testtenant.b2clogin.com/testtenant.onmicrosoft.com/oauth2/v2.0/authorize",
-        ),
-      );
+      expect(res.headers.location.toString()).toEqual(`${config.dashboardServiceUri}/sign-in`);
     });
 
     test("returns 404 when no application found", async () => {
@@ -284,7 +280,7 @@ describe("Declaration test", () => {
       );
     });
 
-    test("when not logged in redirects to defra id", async () => {
+    test("when not logged in redirects to dashboard /sign-in", async () => {
       const crumb = await getCrumbs(server);
       const options = {
         method: "POST",
@@ -296,11 +292,7 @@ describe("Declaration test", () => {
       const res = await server.inject(options);
 
       expect(res.statusCode).toBe(302);
-      expect(res.headers.location.toString()).toEqual(
-        expect.stringContaining(
-          "https://testtenant.b2clogin.com/testtenant.onmicrosoft.com/oauth2/v2.0/authorize",
-        ),
-      );
+      expect(res.headers.location.toString()).toEqual(`${config.dashboardServiceUri}/sign-in`);
     });
   });
 

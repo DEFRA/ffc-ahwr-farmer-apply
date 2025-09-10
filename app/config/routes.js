@@ -1,4 +1,3 @@
-export const endemicsCheckDetails = "endemics/check-details";
 export const endemicsYouCanClaimMultiple = "endemics/you-can-claim-multiple";
 export const endemicsNumbers = "endemics/numbers";
 export const endemicsTimings = "endemics/timings";

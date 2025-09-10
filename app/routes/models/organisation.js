@@ -1,7 +1,6 @@
 import { getYesNoRadios } from "./form-component/yes-no-radios.js";
 import { keys } from "../../session/keys.js";
 import { getCustomer, getFarmerApplyData } from "../../session/index.js";
-import { requestAuthorizationCodeUrl } from "../../auth/auth-code-grant/request-authorization-code-url.js";
 
 const { confirmCheckDetails } = keys.farmerApplyData;
 
@@ -34,7 +33,7 @@ export const getOrganisation = (request, organisation, errorText) => {
   const labelText = "Are these details correct?";
   return {
     backLink: {
-      href: requestAuthorizationCodeUrl(request),
+      href: 'TODO',
     },
     organisation,
     listData: { rows },
