@@ -8,7 +8,6 @@ describe("Farmer apply home page test", () => {
         hostname: "https://testtenant.b2clogin.com/testtenant.onmicrosoft.com",
         oAuthAuthorisePath: "/oauth2/v2.0/authorize",
         policy: "testpolicy",
-        dashboardRedirectUri: "http://localhost:3003/endemics/signin-oidc",
         clientId: "dummyclientid",
         serviceId: "dummyserviceid",
         scope: "openid dummyclientid offline_access",

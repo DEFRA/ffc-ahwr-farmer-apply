@@ -40,7 +40,6 @@ Please ask a developer for an example `.env` file that you can include in the ro
 | AZURE_STORAGE_CREATE_CONTAINERS      | Set true to use connection string, false to connect using azure credentials for blobstorage      |
 | DEFRA_ID_TENANT                      | The Azure tenant for Defra Id                                                                    |
 | DEFRA_ID_POLICY                      | Defra Id policy                                                                                  |
-| DEFRA_ID_REDIRECT_URI                | Defra Id redirect URI                                                                            |
 | DEFRA_ID_JWT_ISSUER_ID               | Defra Id JWT Issuer id                                                                           |
 | DEFRA_ID_CLIENT_ID                   | The application ID assigned to your app during the registration with Defra Id                    |
 | DEFRA_ID_CLIENT_SECRET               | Secret supplied by Defra Id                                                                      |

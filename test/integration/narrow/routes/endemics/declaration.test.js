@@ -31,7 +31,6 @@ jest.mock("../../../../../app/config/auth", () => ({
       hostname: "https://testtenant.b2clogin.com/testtenant.onmicrosoft.com",
       oAuthAuthorisePath: "/oauth2/v2.0/authorize",
       policy: "testpolicy",
-      dashboardRedirectUri: "http://localhost:3003/signin-oidc",
       clientId: "dummyclientid",
       serviceId: "dummyserviceid",
       scope: "openid dummyclientid offline_access",

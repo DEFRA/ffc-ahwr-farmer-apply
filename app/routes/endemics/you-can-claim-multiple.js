@@ -41,6 +41,7 @@ export const claimMultipleRouteHandlers = [
  
          const organisation = getFarmerApplyData(request, organisationKey);
          if (!organisation) {
+          console.log('in');
            return boom.notFound();
          }
  

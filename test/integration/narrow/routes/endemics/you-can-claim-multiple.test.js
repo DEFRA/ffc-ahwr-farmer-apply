@@ -1,11 +1,9 @@
 import { getCrumbs } from "../../../../utils/get-crumbs.js";
-import {
-  endemicsNumbers,
-  endemicsYouCanClaimMultiple,
-} from "../../../../../app/config/routes.js";
+import { endemicsNumbers, endemicsYouCanClaimMultiple } from "../../../../../app/config/routes.js";
 import { getFarmerApplyData, setFarmerApplyData } from "../../../../../app/session/index.js";
 import { createServer } from "../../../../../app/server.js";
 import { config } from "../../../../../app/config/index.js";
+import { StatusCodes } from "http-status-codes";
 
 const pageUrl = `/apply/${endemicsYouCanClaimMultiple}`;
 const nextPageUrl = `/apply/${endemicsNumbers}`;
@@ -72,12 +70,19 @@ describe("you-can-claim-multiple page", () => {
     test("returns 200 and content is correct", async () => {
       const res = await server.inject({ ...optionsBase, method: "GET" });
 
-      expect(res.statusCode).toBe(200);
+      expect(res.statusCode).toBe(StatusCodes.OK);
       expect(getFarmerApplyData).toHaveBeenCalledTimes(2); // called an extra time due to logging-context middleware
       expect(res.payload).toContain(`${config.dashboardServiceUri}/check-details`);
       const sanitizedHTML = sanitizeHTML(res.payload);
       expect(sanitizedHTML).toMatchSnapshot();
     });
+
+    test("returns 404 if there is no organisation", async () => {
+      getFarmerApplyData.mockReturnValue(null)
+      const res = await server.inject({ ...optionsBase, method: "GET" });
+
+      expect(res.statusCode).toBe(StatusCodes.NOT_FOUND);
+    })
   });
 
   describe("POST operation handler", () => {
@@ -104,7 +109,7 @@ describe("you-can-claim-multiple page", () => {
 
       const res = await server.inject(options);
 
-      expect(res.statusCode).toBe(302);
+      expect(res.statusCode).toBe(StatusCodes.MOVED_TEMPORARILY);
       expect(setFarmerApplyData).toHaveBeenCalledTimes(1);
       expect(res.headers.location).toEqual(nextPageUrl);
     });
@@ -120,7 +125,7 @@ describe("you-can-claim-multiple page", () => {
 
       const res = await server.inject(options);
 
-      expect(res.statusCode).toBe(200);
+      expect(res.statusCode).toBe(StatusCodes.OK);
       expect(setFarmerApplyData).toHaveBeenCalledTimes(1);
       expect(res.headers.location).not.toEqual(nextPageUrl);
     });
