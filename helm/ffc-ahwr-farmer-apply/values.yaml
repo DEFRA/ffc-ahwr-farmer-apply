@@ -56,11 +56,6 @@ container:
   urlPrefix: /apply
   termsAndConditionsUrl:
   applicationApiUri:
-  defraIdTenant:
-  defraIdClientId:
-  defraIdServiceId:
-  defraIdPolicy:
-  devLoginEnabled: 'false'
 
 ingress:
   class: nginx

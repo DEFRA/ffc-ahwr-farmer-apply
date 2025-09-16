@@ -9,7 +9,6 @@ services:
     container_name: ffc-ahwr-farmer-apply-development
     environment:
       USE_PRETTY_PRINT: ${USE_PRETTY_PRINT:-true}
-      DEV_LOGIN_ENABLED: ${DEV_LOGIN_ENABLED:-true}
       DASHBOARD_SERVICE_URI: ${DASHBOARD_SERVICE_URI:-http://localhost:3003}
     ports:
       - "3000:3000"

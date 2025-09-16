@@ -63,9 +63,6 @@ const getSchema = () => {
     },
     latestTermsAndConditionsUri: joi.string().required(),
     reapplyTimeLimitMonths: joi.number(),
-    devLogin: {
-      enabled: joi.bool().required(),
-    },
   })
 };
 
@@ -124,9 +121,6 @@ export const getConfig = () => {
     },
     latestTermsAndConditionsUri: process.env.TERMS_AND_CONDITIONS_URL,
     reapplyTimeLimitMonths: 10,
-    devLogin: {
-      enabled: process.env.DEV_LOGIN_ENABLED === "true",
-    }
   };
 
   const { error } = getSchema().validate(mainConfig, {

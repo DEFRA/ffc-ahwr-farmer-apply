@@ -15,8 +15,7 @@ import { sessionPlugin } from "./plugins/session.js";
 import { viewContextPlugin } from "./plugins/view-context.js";
 import { viewsPlugin } from "./plugins/views.js";
 import { routerPlugin } from "./plugins/router.js";
-import { devSignInRedirectPlugin } from "./plugins/dev-sign-in-redirect.js";
-import { localDevAuthPlugin } from './plugins/dev-auth-plugin.js'
+import { localDevAuthPlugin } from "./plugins/dev-auth-plugin.js";
 
 const catbox = config.useRedis ? catboxRedis : catboxMemory;
 const cacheConfig = config.useRedis ? config.cache.options : {};
@@ -47,7 +46,8 @@ export async function createServer() {
   await server.register(crumbPlugin);
   await server.register(hapiCookiePlugin);
   await server.register(hapiInertPlugin.plugin);
-  if(config.env === "development") {
+
+  if (config.env === "development") {
     await  server.register(localDevAuthPlugin);
   } else {
     await server.register(authPlugin);
@@ -62,10 +62,6 @@ export async function createServer() {
   await server.register(viewContextPlugin);
   await server.register(viewsPlugin);
   await server.register(headersPlugin);
-
-  if (config.devLogin.enabled) {
-    await server.register(devSignInRedirectPlugin);
-  }
 
   return server;
 }

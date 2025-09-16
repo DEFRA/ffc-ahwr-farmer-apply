@@ -35,25 +35,24 @@ export const claimMultipleRouteHandlers = [
     path: pageUrl,
     options: {
       handler: async (request, h) => {
-         // on way in we must generate a new reference
-         const tempApplicationId = generateRandomID();
-         setFarmerApplyData(request, referenceKey, tempApplicationId);
- 
-         const organisation = getFarmerApplyData(request, organisationKey);
-         if (!organisation) {
-          console.log('in');
-           return boom.notFound();
-         }
- 
-         request.logger.setBindings({ sbi: organisation.sbi });
- 
-         const userType = await businessAppliedBefore(organisation.sbi);
+        // on way in we must generate a new reference
+        const tempApplicationId = generateRandomID();
+        setFarmerApplyData(request, referenceKey, tempApplicationId);
 
-         setFarmerApplyData(request, organisationKey, {
-           ...organisation,
-           userType,
-         });
- 
+        const organisation = getFarmerApplyData(request, organisationKey);
+        if (!organisation) {
+          return boom.notFound();
+        }
+
+        request.logger.setBindings({ sbi: organisation.sbi });
+
+        const userType = await businessAppliedBefore(organisation.sbi);
+
+        setFarmerApplyData(request, organisationKey, {
+          ...organisation,
+          userType,
+        });
+
         return h.view(endemicsYouCanClaimMultiple, {
           backLink,
           agreementStatuses,
@@ -68,14 +67,14 @@ export const claimMultipleRouteHandlers = [
     options: {
       handler: async (request, h) => {
         const status = agreementStatuses.find(
-          (s) => s.value === request.payload.agreementStatus,
+          (s) => s.value === request.payload.agreementStatus
         );
 
         setFarmerApplyData(request, agreeMultipleSpecies, status.value);
 
         if (status.value !== agreeStatusValue) {
           return h.view(endemicsOfferRejected, {
-            termsRejected: true
+            termsRejected: true,
           });
         }
 

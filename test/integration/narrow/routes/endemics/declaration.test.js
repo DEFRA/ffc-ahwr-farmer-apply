@@ -24,19 +24,6 @@ jest.mock("applicationinsights", () => ({
   defaultClient: { trackException: jest.fn(), trackEvent: jest.fn() },
   dispose: jest.fn(),
 }));
-jest.mock("../../../../../app/config/auth", () => ({
-  authConfig: {
-    ...jest.requireActual("../../../../../app/config/auth").authConfig,
-    defraId: {
-      hostname: "https://testtenant.b2clogin.com/testtenant.onmicrosoft.com",
-      oAuthAuthorisePath: "/oauth2/v2.0/authorize",
-      policy: "testpolicy",
-      clientId: "dummyclientid",
-      serviceId: "dummyserviceid",
-      scope: "openid dummyclientid offline_access",
-    },
-  },
-}));
 
 const {
   farmerApplyData: { declaration },
