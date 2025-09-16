@@ -9,9 +9,7 @@ const TEN_SECONDS_IN_MILLIS = 10000;
 const ONE_DAY_IN_MILLIS = 1000 * 60 * 60 * 24;
 const THREE_DAYS_IN_MILLIS = ONE_DAY_IN_MILLIS * DAYS_CACHE_ENTRY_VALID;
 const ONE_YEAR_IN_MILLIS = ONE_DAY_IN_MILLIS * DAYS_IN_YEAR;
-
 const DEFAULT_APP_PORT = 3000;
-const DEFAULT_REDIS_PORT = 6379;
 
 const getSchema = () => {
   return joi.object({
@@ -76,10 +74,10 @@ export const getConfig = () => {
     cache: {
       expiresIn: THREE_DAYS_IN_MILLIS,
       options: {
-        host: process.env.REDIS_HOSTNAME || "redis-hostname.default",
+        host: process.env.REDIS_HOSTNAME ?? "redis-hostname.default",
         partition: "ffc-ahwr-frontend",
         password: process.env.REDIS_PASSWORD,
-        port: Number(process.env.REDIS_PORT) || DEFAULT_REDIS_PORT,
+        port: Number.parseInt(process.env.REDIS_PORT ?? "6379", 10),
         tls: process.env.NODE_ENV === "production" ? {} : undefined,
       },
     },
