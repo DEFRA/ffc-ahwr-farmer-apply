@@ -1,7 +1,6 @@
 import { keys } from "../../session/keys.js";
 import { getFarmerApplyData, setFarmerApplyData } from "../../session/index.js";
 import { config } from "../../config/index.js";
-import boom from "@hapi/boom";
 import {
   endemicsNumbers,
   endemicsOfferRejected,
@@ -40,9 +39,6 @@ export const claimMultipleRouteHandlers = [
         setFarmerApplyData(request, referenceKey, tempApplicationId);
 
         const organisation = getFarmerApplyData(request, organisationKey);
-        if (!organisation) {
-          return boom.notFound();
-        }
 
         request.logger.setBindings({ sbi: organisation.sbi });
 

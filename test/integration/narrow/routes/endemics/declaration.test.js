@@ -12,6 +12,7 @@ import {
 import { receiveMessage } from "../../../../../app/messaging/receive-message";
 import { sendMessage } from "../../../../../app/messaging/send-message";
 import { createServer } from "../../../../../app/server";
+import { StatusCodes } from "http-status-codes";
 
 jest.mock("../../../../../app/session/index");
 jest.mock("../../../../../app/messaging/receive-message", () => ({
@@ -81,7 +82,7 @@ describe("Declaration test", () => {
       expect(res.headers.location.toString()).toEqual(`${config.dashboardServiceUri}/sign-in`);
     });
 
-    test("returns 404 when no application found", async () => {
+    test("returns 500 when no application found", async () => {
       const options = {
         method: "GET",
         url,
@@ -90,9 +91,9 @@ describe("Declaration test", () => {
 
       const res = await server.inject(options);
 
-      expect(res.statusCode).toBe(404);
+      expect(res.statusCode).toBe(StatusCodes.INTERNAL_SERVER_ERROR);
       const $ = cheerio.load(res.payload);
-      expect($(".govuk-heading-l").text()).toEqual("404 - Not Found");
+      expect($(".govuk-heading-l").text()).toEqual("Sorry, there is a problem with the service");
     });
 
     test("returns 200 when application found", async () => {
@@ -168,7 +169,7 @@ describe("Declaration test", () => {
         "Application complete - Get funding to improve animal health and welfare",
       );
       ok($);
-      expect(setFarmerApplyData).toHaveBeenCalledTimes(3);
+      expect(setFarmerApplyData).toHaveBeenCalledTimes(4);
       expect(setFarmerApplyData).toHaveBeenNthCalledWith(
         1,
         res.request,
@@ -210,7 +211,7 @@ describe("Declaration test", () => {
         "Agreement offer rejected - Get funding to improve animal health and welfare",
       );
       ok($);
-      expect(setFarmerApplyData).toHaveBeenCalledTimes(3);
+      expect(setFarmerApplyData).toHaveBeenCalledTimes(4);
       expect(setFarmerApplyData).toHaveBeenNthCalledWith(
         1,
         res.request,

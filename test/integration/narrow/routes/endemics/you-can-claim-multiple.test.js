@@ -77,11 +77,11 @@ describe("you-can-claim-multiple page", () => {
       expect(sanitizedHTML).toMatchSnapshot();
     });
 
-    test("returns 404 if there is no organisation", async () => {
+    test("returns 500 if there is no organisation", async () => {
       getFarmerApplyData.mockReturnValue(null)
       const res = await server.inject({ ...optionsBase, method: "GET" });
 
-      expect(res.statusCode).toBe(StatusCodes.NOT_FOUND);
+      expect(res.statusCode).toBe(StatusCodes.INTERNAL_SERVER_ERROR);
     })
   });
 
