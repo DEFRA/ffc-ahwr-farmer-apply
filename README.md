@@ -38,16 +38,6 @@ Please ask a developer for an example `.env` file that you can include in the ro
 | MESSAGE_QUEUE_USER                   | Azure Service Bus SAS policy name, e.g. `RootManageSharedAccessKey`                              |
 | SERVICE_URI                          | URI of service (used in links, in emails) e.g. `http://localhost:3000` or `https://defra.gov.uk` |
 | AZURE_STORAGE_CREATE_CONTAINERS      | Set true to use connection string, false to connect using azure credentials for blobstorage      |
-| RPA_HOST_NAME                        | Rural payment agency api endpoint host name                                                      |
-| RPA_GET_PERSON_SUMMARY_URL           | Rural payment agency URL for the get person summary api                                          |
-| RPA_GET_ORGANISATION_PERMISSIONS_URL | Rural payment agency URL for the get organisation permissions api                                |
-| RPA_GET_ORGANISATION_URL             | Rural payment agency URL for the get organisation api                                            |
-| APIM_OCP_SUBSCRIPTION_KEY            | Unique key used to manage auth requests with Azure API management                                |
-| APIM_HOST_NAME                       | Azure API management host name                                                                   |
-| APIM_OAUTH_PATH                      | Azure API management authorisation endpoint path                                                 |
-| APIM_CLIENT_ID                       | Client Id as registered with Azure API management                                                |
-| APIM_CLIENT_SECRET                   | Client Secret as registered with Azure API management                                            |
-| APIM_SCOPE                           | Scope of the access token being requested from Azure API management                              |
 | TERMS_AND_CONDITIONS_URL             | URL for latest service terms and conditions                                                      |
 | USE_PRETTY_PRINT                     | Flag to enable pretty logs                                                                       |
 

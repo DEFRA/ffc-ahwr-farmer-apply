@@ -49,6 +49,10 @@ export const declarationRouteHandlers = [
       handler: async (request, h) => {
         const application = getFarmerApplyData(request);
 
+        if (!application) {
+          throw new Error('No application found in session');
+        }
+
         return h.view(
           endemicsDeclaration,
           {
