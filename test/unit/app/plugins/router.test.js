@@ -13,13 +13,11 @@ describe("routes plugin test ", () => {
       })
 
     expect(routePaths).toEqual([
-      "/apply",
       "/healthy",
       "/healthz",
       "/{any*}",
       "/apply/cookies",
       "/apply/privacy-policy",
-      "/apply/start",
       "/apply/assets/{path*}",
       "/apply/endemics/declaration",
       "/apply/endemics/numbers",

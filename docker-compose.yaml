@@ -25,4 +25,3 @@ services:
       URL_PREFIX: "/apply"
       APPLICATION_API_URI: http://host.docker.internal:3001/api
       TERMS_AND_CONDITIONS_URL: ${TERMS_AND_CONDITIONS_URL:-http://localhost:3000/apply/terms/v3}
-      MULTI_HERDS_ENABLED: ${MULTI_HERDS_ENABLED:-false}

@@ -11,19 +11,7 @@ describe("Farmer apply privacy policy page test", () => {
     jest.resetModules();
 
     jest.mock("../../../../app/session");
-    jest.mock("../../../../app/config", () => ({
-      ...jest.requireActual("../../../../app/config"),
-      authConfig: {
-        defraId: {
-          hostname: "https://tenant.b2clogin.com/tenant.onmicrosoft.com",
-          oAuthAuthorisePath: "/oauth2/v2.0/authorize",
-          policy: "b2c_1a_signupsigninsfi",
-          clientId: "dummy_client_id",
-          serviceId: "dummy_service_id",
-          scope: "openid dummy_client_id offline_access",
-        },
-      },
-    }));
+    jest.mock("../../../../app/config");
   });
 
   let server;

@@ -34,7 +34,7 @@ describe("Declaration test", () => {
 
   describe(`GET ${url} route`, () => {
 
-    test("returns 200 when application found and multi herds is enabled", async () => {
+    test("returns 200 when application found", async () => {
       getFarmerApplyData.mockReturnValue({
         name: "org-name",
         sbi: "0123456789",
