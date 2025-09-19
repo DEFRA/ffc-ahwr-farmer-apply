@@ -40,7 +40,7 @@ describe("Check review numbers page test", () => {
 
   describe(`GET ${endemicsNumbers} route when logged in`, () => {
 
-    test("returns 200 and has correct backLink when multi herds is enabled", async () => {
+    test("returns 200 and has correct backLink", async () => {
       const server = await createServer();
       await server.initialize();
 
