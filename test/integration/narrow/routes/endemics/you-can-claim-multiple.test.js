@@ -1,14 +1,11 @@
 import { getCrumbs } from "../../../../utils/get-crumbs.js";
-import {
-  endemicsCheckDetails,
-  endemicsNumbers,
-  endemicsYouCanClaimMultiple,
-} from "../../../../../app/config/routes.js";
+import { endemicsNumbers, endemicsYouCanClaimMultiple } from "../../../../../app/config/routes.js";
 import { getFarmerApplyData, setFarmerApplyData } from "../../../../../app/session/index.js";
 import { createServer } from "../../../../../app/server.js";
+import { config } from "../../../../../app/config/index.js";
+import { StatusCodes } from "http-status-codes";
 
 const pageUrl = `/apply/${endemicsYouCanClaimMultiple}`;
-const backLinkUrl = `/apply/${endemicsCheckDetails}`;
 const nextPageUrl = `/apply/${endemicsNumbers}`;
 
 jest.mock("../../../../../app/config/index.js", () => ({
@@ -32,6 +29,10 @@ jest.mock("../../../../../app/session", () => ({
   setFarmerApplyData: jest.fn(),
   clear: jest.fn(),
   getCustomer: jest.fn().mockReturnValue(1111),
+}));
+
+jest.mock("../../../../../app/api-requests/business-applied-before.js", () => ({
+  businessAppliedBefore: jest.fn().mockResolvedValue("newUser")
 }));
 
 const sanitizeHTML = (html) => {
@@ -67,25 +68,21 @@ describe("you-can-claim-multiple page", () => {
 
   describe("GET operation handler", () => {
     test("returns 200 and content is correct", async () => {
-
       const res = await server.inject({ ...optionsBase, method: "GET" });
 
-      expect(res.statusCode).toBe(200);
+      expect(res.statusCode).toBe(StatusCodes.OK);
       expect(getFarmerApplyData).toHaveBeenCalledTimes(2); // called an extra time due to logging-context middleware
-      expect(res.payload).toContain(backLinkUrl);
+      expect(res.payload).toContain(`${config.dashboardServiceUri}/check-details`);
       const sanitizedHTML = sanitizeHTML(res.payload);
       expect(sanitizedHTML).toMatchSnapshot();
     });
 
-    test("returns 200 and content is correct when multi herds is enabled", async () => {
+    test("returns 500 if there is no organisation", async () => {
+      getFarmerApplyData.mockReturnValue(null)
       const res = await server.inject({ ...optionsBase, method: "GET" });
 
-      expect(res.statusCode).toBe(200);
-      expect(getFarmerApplyData).toHaveBeenCalledTimes(2); // called an extra time due to logging-context middleware
-      expect(res.payload).toContain(backLinkUrl);
-      const sanitizedHTML = sanitizeHTML(res.payload);
-      expect(sanitizedHTML).toMatchSnapshot();
-    });
+      expect(res.statusCode).toBe(StatusCodes.INTERNAL_SERVER_ERROR);
+    })
   });
 
   describe("POST operation handler", () => {
@@ -112,7 +109,7 @@ describe("you-can-claim-multiple page", () => {
 
       const res = await server.inject(options);
 
-      expect(res.statusCode).toBe(302);
+      expect(res.statusCode).toBe(StatusCodes.MOVED_TEMPORARILY);
       expect(setFarmerApplyData).toHaveBeenCalledTimes(1);
       expect(res.headers.location).toEqual(nextPageUrl);
     });
@@ -128,7 +125,7 @@ describe("you-can-claim-multiple page", () => {
 
       const res = await server.inject(options);
 
-      expect(res.statusCode).toBe(200);
+      expect(res.statusCode).toBe(StatusCodes.OK);
       expect(setFarmerApplyData).toHaveBeenCalledTimes(1);
       expect(res.headers.location).not.toEqual(nextPageUrl);
     });

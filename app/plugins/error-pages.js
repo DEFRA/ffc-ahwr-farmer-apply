@@ -1,4 +1,5 @@
 import { StatusCodes } from 'http-status-codes'
+import { config } from '../config/index.js';
 
 export const errorPagesPlugin = {
   plugin: {
@@ -9,23 +10,30 @@ export const errorPagesPlugin = {
 
         if (response.isBoom) {
           const { payload } = response.output;
+          const { statusCode, message: payloadMessage } = payload
 
-          if (payload.statusCode >= StatusCodes.NOT_FOUND && payload.statusCode < StatusCodes.INTERNAL_SERVER_ERROR) {
+          if (statusCode === StatusCodes.NOT_FOUND) {
+            // handled specifically by a route handler that renders a 404 page for unknown pages
+            return h.continue
+          }
+
+          // Status codes between 400-499 (excluding 404 as that is handled above)
+          if (statusCode >= StatusCodes.BAD_REQUEST && statusCode < StatusCodes.INTERNAL_SERVER_ERROR) {
             return h
               .view("error-pages/4xx", { payload })
-              .code(payload.statusCode);
+              .code(statusCode);
           }
 
           request.logger.error(
             {
-              statusCode: payload.statusCode,
-              message: payload.message,
+              statusCode,
+              message: payloadMessage,
               stack: response.data ? response.data.stack : response.stack,
             },
             "pre response error",
           );
 
-          return h.view("error-pages/500").code(payload.statusCode);
+          return h.view("error-pages/500", { applyStartLink: `${config.serviceUri}/you-can-claim-multiple` }).code(statusCode);
         }
 
         return h.continue;

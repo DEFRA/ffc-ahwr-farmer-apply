@@ -24,6 +24,7 @@ const {
   declaration,
   offerStatus,
   organisation: organisationKey,
+  confirmCheckDetails
 } = keys.farmerApplyData;
 
 const resetFarmerApplyDataBeforeApplication = (application) => {
@@ -47,8 +48,9 @@ export const declarationRouteHandlers = [
     options: {
       handler: async (request, h) => {
         const application = getFarmerApplyData(request);
+
         if (!application) {
-          return boom.notFound();
+          throw new Error('No application found in session');
         }
 
         return h.view(
@@ -95,6 +97,7 @@ export const declarationRouteHandlers = [
       handler: async (request, h) => {
         setFarmerApplyData(request, declaration, true);
         setFarmerApplyData(request, offerStatus, request.payload.offerStatus);
+        setFarmerApplyData(request, confirmCheckDetails, "yes");
 
         const application = getFarmerApplyData(request);
         const tempApplicationReference = application.reference;

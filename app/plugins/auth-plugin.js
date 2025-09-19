@@ -1,7 +1,6 @@
 import { config } from "../config/index.js";
 import { getFarmerApplyData } from "../session/index.js";
 import { keys } from "../session/keys.js";
-import { requestAuthorizationCodeUrl } from "../auth/auth-code-grant/request-authorization-code-url.js";
 
 const organisationKey = keys.farmerApplyData.organisation;
 
@@ -19,8 +18,8 @@ export const authPlugin = {
           ttl: config.cookie.ttl,
         },
         keepAlive: true,
-        redirectTo: (request) => {
-          return requestAuthorizationCodeUrl(request);
+        redirectTo: (_request) => {
+          return `${config.dashboardServiceUri}/sign-in`
         },
         validateFunc: async (request) => {
           return { valid: Boolean(getFarmerApplyData(request, organisationKey)) }

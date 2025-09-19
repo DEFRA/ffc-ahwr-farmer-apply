@@ -46,7 +46,6 @@ container:
   messageQueueHost: namespace.servicebus.windows.net
   port: 3000
   redisHostname: redis-hostname.default
-  redisPartition: ffc-ahwr-farmer-apply
   redisPassword: redis
   redisPort: 6379
   serviceUri:
@@ -56,12 +55,6 @@ container:
   urlPrefix: /apply
   termsAndConditionsUrl:
   applicationApiUri:
-  defraIdTenant:
-  defraIdDashboardRedirectUri:
-  defraIdClientId:
-  defraIdServiceId:
-  defraIdPolicy:
-  devLoginEnabled: 'false'
 
 ingress:
   class: nginx
