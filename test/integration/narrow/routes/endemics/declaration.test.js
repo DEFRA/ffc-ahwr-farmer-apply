@@ -115,26 +115,6 @@ describe("Declaration test", () => {
         "Review your agreement offer - Get funding to improve animal health and welfare",
       );
       ok($);
-    });
-
-    test("returns 200 when application found and multiHerds is enabled", async () => {
-      const application = { organisation };
-      getFarmerApplyData.mockReturnValue(application);
-      const options = {
-        method: "GET",
-        url,
-        auth,
-      };
-
-      const res = await server.inject(options);
-
-      expect(res.statusCode).toBe(200);
-      const $ = cheerio.load(res.payload);
-      expect($("h1").text()).toMatch("Review your agreement offer");
-      expect($("title").text()).toMatch(
-        "Review your agreement offer - Get funding to improve animal health and welfare",
-      );
-      ok($);
       const expectedHerdsText = `If the RPA requests evidence that your reviews or follow-ups took place, or details of the herd or flocks you have, you must provide it. This will be on your vet summary.`;
       const herdsText = $('p').filter((i, el) => {
         return $(el).text().trim().startsWith('If the RPA requests evidence');
