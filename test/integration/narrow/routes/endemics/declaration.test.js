@@ -5,6 +5,7 @@ import { keys } from "../../../../../app/session/keys";
 import { states, userType } from "../../../../../app/constants/constants";
 import { config } from "../../../../../app/config";
 import {
+  clearApplyRedirect,
   getFarmerApplyData,
   setFarmerApplyData,
   setTempReference,
@@ -185,6 +186,7 @@ describe("Declaration test", () => {
       expect(getFarmerApplyData).toHaveBeenCalledTimes(4);
       expect(getFarmerApplyData).toHaveBeenCalledWith(res.request);
       expect(sendMessage).toHaveBeenCalledTimes(1);
+      expect(clearApplyRedirect).toHaveBeenCalledTimes(1);
     });
 
     test("returns 200, shows offer rejection content on rejection", async () => {
