@@ -11,6 +11,7 @@ export const entries = {
   customer: "customer",
   tempReference: "tempReference",
   type: "type", // EM or VV
+  signInRedirect: "signInRedirect"
 };
 
 export function lacksAny(request, entryKey, keys) {
@@ -51,13 +52,8 @@ function get(request, entryKey, key) {
   return key ? request.yar?.get(entryKey)?.[key] : request.yar?.get(entryKey);
 }
 
-export function clear(request) {
-  request.yar.clear(entries.farmerApplyData);
-  request.yar.clear(entries.organisation);
-  request.yar.clear(entries.answers);
-  request.yar.clear(entries.selectYourBusiness);
-  request.yar.clear(entries.customer);
-  request.yar.clear(entries.tempReference);
+export function clearApplyRedirect(request) {
+  request.yar.clear(entries.signInRedirect);
 }
 
 export function setFarmerApplyData(request, key, value) {

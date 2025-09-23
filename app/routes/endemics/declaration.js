@@ -3,6 +3,7 @@ import boom from "@hapi/boom";
 import joi from "joi";
 import { keys } from "../../session/keys.js";
 import {
+  clearApplyRedirect,
   getCustomer,
   getFarmerApplyData,
   setFarmerApplyData,
@@ -134,6 +135,8 @@ export const declarationRouteHandlers = [
               crn: getCustomer(request, keys.customer.crn),
             },
           });
+
+          clearApplyRedirect(request);
         }
 
         if (request.payload.offerStatus === "rejected") {

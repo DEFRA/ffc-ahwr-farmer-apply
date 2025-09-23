@@ -222,25 +222,6 @@ describe("session", () => {
       ).toBeTruthy();
     },
   );
-  test("session clear clears correct keys", async () => {
-    const yarMock = {
-      get: jest.fn(),
-      set: jest.fn(),
-      clear: jest.fn(),
-    };
-    const requestSetMock = {
-      yar: yarMock,
-      headers: { "x-forwarded-for": "1.1.1.1" },
-    };
-    session.clear(requestSetMock);
-
-    const expectedClearedKeys = ["farmerApplyData", "selectYourBusiness", "organisation", "answers", "customer", "tempReference"];
-    expect(requestSetMock.yar.clear).toHaveBeenCalledTimes(expectedClearedKeys.length);
-
-    expectedClearedKeys.forEach(key => {
-      expect(requestSetMock.yar.clear).toHaveBeenCalledWith(key)
-    });
-  });
 
   test("raises an event if organisation and reference set", () => {
     const organisation = {};
