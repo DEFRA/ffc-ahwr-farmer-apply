@@ -19,6 +19,7 @@ import {
   endemicsTimings,
 } from "../../config/routes.js";
 import { StatusCodes } from 'http-status-codes'
+import { preApplyHandler } from "../../lib/pre-apply-handler.js";
 
 const {
   reference,
@@ -47,6 +48,7 @@ export const declarationRouteHandlers = [
     method: "get",
     path: `${config.urlPrefix}/${endemicsDeclaration}`,
     options: {
+      pre: [{ method: preApplyHandler }],
       handler: async (request, h) => {
         const application = getFarmerApplyData(request);
 

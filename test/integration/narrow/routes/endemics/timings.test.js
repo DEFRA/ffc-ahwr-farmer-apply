@@ -3,6 +3,8 @@ import { endemicsDeclaration } from "../../../../../app/config/routes.js";
 import { createServer } from "../../../../../app/server.js";
 import { getCrumbs } from "../../../../utils/get-crumbs.js";
 import { getFarmerApplyData } from "../../../../../app/session/index.js";
+import { getLatestApplicationsBySbi } from "../../../../../app/api-requests/application-api";
+
 const auth = {
   credentials: { reference: "1111", sbi: "111111111" },
   strategy: "cookie",
@@ -21,6 +23,8 @@ jest.mock("applicationinsights", () => ({
   dispose: jest.fn(),
 }));
 
+jest.mock("../../../../../app/api-requests/application-api");
+
 describe("Declaration test", () => {
   let server;
 
@@ -35,6 +39,7 @@ describe("Declaration test", () => {
   describe(`GET ${url} route`, () => {
 
     test("returns 200 when application found", async () => {
+      getLatestApplicationsBySbi.mockResolvedValueOnce([]);
       getFarmerApplyData.mockReturnValue({
         name: "org-name",
         sbi: "0123456789",

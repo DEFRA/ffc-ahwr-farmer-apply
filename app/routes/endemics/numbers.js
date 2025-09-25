@@ -7,6 +7,7 @@ import {
   endemicsTimings,
   endemicsYouCanClaimMultiple,
 } from "../../config/routes.js";
+import { preApplyHandler } from "../../lib/pre-apply-handler.js";
 
 const { agreeSpeciesNumbers, organisation: organisationKey } =
   keys.farmerApplyData;
@@ -30,6 +31,7 @@ export const numbersRouteHandlers = [
     method: "GET",
     path: pageUrl,
     options: {
+      pre: [{ method: preApplyHandler }],
       handler: async (request, h) => {
         const backLink = `${urlPrefix}/${endemicsYouCanClaimMultiple}`;
         const organisation = getFarmerApplyData(request, organisationKey);

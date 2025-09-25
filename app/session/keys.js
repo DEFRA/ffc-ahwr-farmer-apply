@@ -29,7 +29,6 @@ export const keys = {
   tokens: {
     idToken: "idToken",
     accessToken: "accessToken",
-    tokenExpiry: "tokenExpiry",
     refreshToken: "refreshToken",
     state: "state",
     nonce: "nonce",

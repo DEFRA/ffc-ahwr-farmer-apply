@@ -31,8 +31,8 @@ jest.mock("../../../../../app/session", () => ({
   getCustomer: jest.fn().mockReturnValue(1111),
 }));
 
-jest.mock("../../../../../app/api-requests/business-applied-before.js", () => ({
-  businessAppliedBefore: jest.fn().mockResolvedValue("newUser")
+jest.mock("../../../../../app/api-requests/application-api", () => ({
+  getLatestApplicationsBySbi: jest.fn().mockResolvedValue([])
 }));
 
 const sanitizeHTML = (html) => {
@@ -71,7 +71,7 @@ describe("you-can-claim-multiple page", () => {
       const res = await server.inject({ ...optionsBase, method: "GET" });
 
       expect(res.statusCode).toBe(StatusCodes.OK);
-      expect(getFarmerApplyData).toHaveBeenCalledTimes(2); // called an extra time due to logging-context middleware
+      expect(getFarmerApplyData).toHaveBeenCalledTimes(3); // called 2 extra times due to logging-context middleware and pre apply handler
       expect(res.payload).toContain(`${config.dashboardServiceUri}/check-details`);
       const sanitizedHTML = sanitizeHTML(res.payload);
       expect(sanitizedHTML).toMatchSnapshot();

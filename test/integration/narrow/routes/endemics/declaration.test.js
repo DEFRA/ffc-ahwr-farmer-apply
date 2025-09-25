@@ -14,6 +14,7 @@ import { receiveMessage } from "../../../../../app/messaging/receive-message";
 import { sendMessage } from "../../../../../app/messaging/send-message";
 import { createServer } from "../../../../../app/server";
 import { StatusCodes } from "http-status-codes";
+import { getLatestApplicationsBySbi } from "../../../../../app/api-requests/application-api";
 
 jest.mock("../../../../../app/session/index");
 jest.mock("../../../../../app/messaging/receive-message", () => ({
@@ -26,16 +27,13 @@ jest.mock("applicationinsights", () => ({
   defaultClient: { trackException: jest.fn(), trackEvent: jest.fn() },
   dispose: jest.fn(),
 }));
+jest.mock("../../../../../app/api-requests/application-api");
 
-const {
-  farmerApplyData: { declaration },
-} = keys;
+const { farmerApplyData: { declaration } } = keys;
 
 function expectPageContentOk($, organisation) {
   expect($("h1.govuk-heading-l").text()).toEqual("Review your agreement offer");
-  expect($("title").text()).toMatch(
-    "Review your agreement offer - Get funding to improve animal health and welfare",
-  );
+  expect($("title").text()).toMatch("Review your agreement offer - Get funding to improve animal health and welfare");
   expect($("#organisation-name").text()).toEqual(organisation.name);
   expect($("#organisation-address").text()).toEqual(organisation.address);
   expect($("#organisation-sbi").text()).toEqual(organisation.sbi);
@@ -83,7 +81,30 @@ describe("Declaration test", () => {
       expect(res.headers.location.toString()).toEqual(`${config.dashboardServiceUri}/sign-in`);
     });
 
-    test("returns 500 when no application found", async () => {
+    test("returns 500 when no application found in session", async () => {
+      getLatestApplicationsBySbi.mockResolvedValueOnce([]);
+      const options = {
+        method: "GET",
+        url,
+        auth,
+      };
+
+      const res = await server.inject(options);
+
+      expect(res.statusCode).toBe(StatusCodes.INTERNAL_SERVER_ERROR);
+      const $ = cheerio.load(res.payload);
+      expect($(".govuk-heading-l").text()).toEqual("Sorry, there is a problem with the service");
+    });
+
+    test("returns 500 when user has a previous new world agreement", async () => {
+      getLatestApplicationsBySbi.mockResolvedValueOnce([{
+        reference: 'AHWR-2470-6BA9',
+        createdAt: new Date('2022-01-01'),
+        statusId: 1,
+        type: 'EE'
+      }]);
+      const application = { organisation };
+      getFarmerApplyData.mockReturnValue(application);
       const options = {
         method: "GET",
         url,
@@ -98,6 +119,7 @@ describe("Declaration test", () => {
     });
 
     test("returns 200 when application found", async () => {
+      getLatestApplicationsBySbi.mockResolvedValueOnce([]);
       const application = { organisation };
       getFarmerApplyData.mockReturnValue(application);
       const options = {
