@@ -16,6 +16,8 @@ jest.mock("../../../../../app/session/index.js", () => ({
   setFarmerApplyData: jest.fn(),
   clear: jest.fn(),
   getCustomer: jest.fn().mockReturnValue(1111),
+  getApplication: jest.fn(),
+  setApplication: jest.fn()
 }));
 
 jest.mock("applicationinsights", () => ({

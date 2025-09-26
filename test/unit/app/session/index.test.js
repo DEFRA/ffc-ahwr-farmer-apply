@@ -7,10 +7,7 @@ afterEach(jest.resetAllMocks);
 
 describe("session", () => {
   const farmerApplyDataSectionKey = "farmerApplyData";
-  const selectYourBusinessSectionKey = "selectYourBusiness";
-  const tokensSectionKey = "tokens";
   const customerSectionKey = "customer";
-  const pkcecodesSectionKey = "pkcecodes";
   const tempReference = "tempReference";
 
   const value = "value";
@@ -21,13 +18,7 @@ describe("session", () => {
       func: "getFarmerApplyData",
       expectedSectionKey: farmerApplyDataSectionKey,
     },
-    {
-      func: "getSelectYourBusiness",
-      expectedSectionKey: selectYourBusinessSectionKey,
-    },
-    { func: "getToken", expectedSectionKey: tokensSectionKey },
     { func: "getCustomer", expectedSectionKey: customerSectionKey },
-    { func: "getPkcecodes", expectedSectionKey: pkcecodesSectionKey }
   ];
 
   const setFunctionsToTest = [
@@ -35,13 +26,7 @@ describe("session", () => {
       func: "setFarmerApplyData",
       expectedSectionKey: farmerApplyDataSectionKey,
     },
-    {
-      func: "setSelectYourBusiness",
-      expectedSectionKey: selectYourBusinessSectionKey,
-    },
-    { func: "setToken", expectedSectionKey: tokensSectionKey },
     { func: "setCustomer", expectedSectionKey: customerSectionKey },
-    { func: "setPkcecodes", expectedSectionKey: pkcecodesSectionKey },
     { func: "setTempReference", expectedSectionKey: tempReference }
   ];
 
@@ -245,7 +230,7 @@ describe("session", () => {
     const request = {
       yar: {
         set: jest.fn(),
-        get: jest.fn().mockReturnValue({ reference }),
+        get: jest.fn().mockReturnValueOnce(null).mockReturnValueOnce({ reference }),
       },
       headers: {},
       info: {},

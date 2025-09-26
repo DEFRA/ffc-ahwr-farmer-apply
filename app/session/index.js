@@ -3,15 +3,10 @@ import { raiseEvent } from "../event/raise-event.js";
 
 export const entries = {
   farmerApplyData: "farmerApplyData",
-  selectYourBusiness: "selectYourBusiness",
-  organisation: "organisation",
-  answers: "answers",
-  pkcecodes: "pkcecodes",
-  tokens: "tokens",
   customer: "customer",
   tempReference: "tempReference",
-  type: "type", // EM or VV
-  signInRedirect: "signInRedirect"
+  signInRedirect: "signInRedirect",
+  application: "application"
 };
 
 export function lacksAny(request, entryKey, keys) {
@@ -60,32 +55,8 @@ export function setFarmerApplyData(request, key, value) {
   set(request, entries.farmerApplyData, key, value);
 }
 
-export function setSelectYourBusiness(request, key, value) {
-  set(request, entries.selectYourBusiness, key, value);
-}
-
-export function getSelectYourBusiness(request, key) {
-  return get(request, entries.selectYourBusiness, key);
-}
-
 export function getFarmerApplyData(request, key) {
   return get(request, entries.farmerApplyData, key);
-}
-
-export function setToken(request, key, value) {
-  set(request, entries.tokens, key, value);
-}
-
-export function getToken(request, key) {
-  return get(request, entries.tokens, key);
-}
-
-export function setPkcecodes(request, key, value) {
-  set(request, entries.pkcecodes, key, value);
-}
-
-export function getPkcecodes(request, key) {
-  return get(request, entries.pkcecodes, key);
 }
 
 export const setCustomer = (request, key, value) => {
@@ -99,4 +70,12 @@ export const getCustomer = (request, key) => {
 export const setTempReference = (request, key, value) => {
   set(request, entries.tempReference, key, value);
 };
+
+export const setApplication = (request, key, value) => {
+  set(request, entries.application, key, value);
+};
+
+export const getApplication = (request, key) => {
+  return get(request, entries.application, key);
+}
 

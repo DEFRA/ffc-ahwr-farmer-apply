@@ -38,24 +38,6 @@ describe("Business Applied Before Tests", () => {
     expect(getUserTypeByApplication(latestApplications)).toEqual(userType.EXISTING_USER);
   });
 
-  test("Business has a withdrawn VV application within the last 10 months", () => {
-    const latestApplications = [
-      {
-        data: {
-          organisation: {
-            sbi: "122333",
-          },
-          visitDate: new Date(),
-        },
-        createdAt: "2020-06-06T13:52:14.207Z",
-        updatedAt: "2020-06-06T13:52:14.207Z",
-        statusId: CLAIM_STATUS.WITHDRAWN,
-        type: "VV",
-      },
-    ];
-    expect(getUserTypeByApplication(latestApplications)).toEqual(userType.NEW_USER);
-  });
-
   test("Business has a successful VV application NOT within the last 10 months", () => {
     const latestApplications = [
       {

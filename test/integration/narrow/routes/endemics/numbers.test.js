@@ -19,6 +19,8 @@ jest.mock("../../../../../app/session", () => ({
   getCustomer: jest.fn().mockResolvedValue(111111111),
   setFarmerApplyData: jest.fn(),
   clear: jest.fn(),
+  getApplication: jest.fn(),
+  setApplication: jest.fn()
 }));
 
 jest.mock("../../../../../app/api-requests/application-api");
