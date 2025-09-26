@@ -14,7 +14,7 @@ export const preApplyHandler = async (request, h) => {
 
     if (!application) {
       const latestApplications = await getLatestApplicationsBySbi(organisation.sbi);
-      const newWorldApplications = latestApplications.filter((application) => application.type === applicationType.ENDEMICS);
+      const newWorldApplications = latestApplications.filter((newWorldApp) => newWorldApp.type === applicationType.ENDEMICS);
       application = newWorldApplications.length ? getLatestApplication(newWorldApplications) : null;
       setApplication(request, applicationKey, application);
     }
