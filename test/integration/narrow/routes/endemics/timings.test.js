@@ -3,6 +3,8 @@ import { endemicsDeclaration } from "../../../../../app/config/routes.js";
 import { createServer } from "../../../../../app/server.js";
 import { getCrumbs } from "../../../../utils/get-crumbs.js";
 import { getFarmerApplyData } from "../../../../../app/session/index.js";
+import { getLatestApplicationsBySbi } from "../../../../../app/api-requests/application-api";
+
 const auth = {
   credentials: { reference: "1111", sbi: "111111111" },
   strategy: "cookie",
@@ -14,12 +16,16 @@ jest.mock("../../../../../app/session/index.js", () => ({
   setFarmerApplyData: jest.fn(),
   clear: jest.fn(),
   getCustomer: jest.fn().mockReturnValue(1111),
+  getApplication: jest.fn(),
+  setApplication: jest.fn()
 }));
 
 jest.mock("applicationinsights", () => ({
   defaultClient: { trackException: jest.fn(), trackEvent: jest.fn() },
   dispose: jest.fn(),
 }));
+
+jest.mock("../../../../../app/api-requests/application-api");
 
 describe("Declaration test", () => {
   let server;
@@ -35,6 +41,7 @@ describe("Declaration test", () => {
   describe(`GET ${url} route`, () => {
 
     test("returns 200 when application found", async () => {
+      getLatestApplicationsBySbi.mockResolvedValueOnce([]);
       getFarmerApplyData.mockReturnValue({
         name: "org-name",
         sbi: "0123456789",

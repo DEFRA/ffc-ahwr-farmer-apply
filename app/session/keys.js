@@ -1,10 +1,5 @@
 export const keys = {
-  answers: {
-    cattle: "cattle",
-    cattleType: "cattleType",
-    pigs: "pigs",
-    sheep: "sheep",
-  },
+  application: "application",
   farmerApplyData: {
     eligibleSpecies: "eligibleSpecies",
     declaration: "declaration",
@@ -18,21 +13,6 @@ export const keys = {
     reference: "reference",
     offerStatus: "offerStatus",
     type: "type",
-  },
-  selectYourBusiness: {
-    eligibleBusinesses: "eligibleBusinesses",
-    whichBusiness: "whichBusiness",
-  },
-  pkcecodes: {
-    verifier: "verifier",
-  },
-  tokens: {
-    idToken: "idToken",
-    accessToken: "accessToken",
-    tokenExpiry: "tokenExpiry",
-    refreshToken: "refreshToken",
-    state: "state",
-    nonce: "nonce",
   },
   customer: {
     id: "id",

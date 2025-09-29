@@ -8,6 +8,7 @@ import {
 } from "../../../../../app/config/routes.js";
 import { getFarmerApplyData } from "../../../../../app/session/index.js";
 import { createServer } from "../../../../../app/server";
+import { getLatestApplicationsBySbi } from "../../../../../app/api-requests/application-api";
 
 const endemicsNumbersUrl = `/apply/${endemicsNumbers}`;
 const endemicsYouCanClaimMultipleUrl = `/apply/${endemicsYouCanClaimMultiple}`;
@@ -18,7 +19,11 @@ jest.mock("../../../../../app/session", () => ({
   getCustomer: jest.fn().mockResolvedValue(111111111),
   setFarmerApplyData: jest.fn(),
   clear: jest.fn(),
+  getApplication: jest.fn(),
+  setApplication: jest.fn()
 }));
+
+jest.mock("../../../../../app/api-requests/application-api");
 
 describe("Check review numbers page test", () => {
   const auth = {
@@ -41,6 +46,7 @@ describe("Check review numbers page test", () => {
   describe(`GET ${endemicsNumbers} route when logged in`, () => {
 
     test("returns 200 and has correct backLink", async () => {
+      getLatestApplicationsBySbi.mockResolvedValueOnce([]);
       const server = await createServer();
       await server.initialize();
 

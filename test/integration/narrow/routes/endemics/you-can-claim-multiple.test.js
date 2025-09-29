@@ -1,6 +1,6 @@
 import { getCrumbs } from "../../../../utils/get-crumbs.js";
 import { endemicsNumbers, endemicsYouCanClaimMultiple } from "../../../../../app/config/routes.js";
-import { getFarmerApplyData, setFarmerApplyData } from "../../../../../app/session/index.js";
+import { getFarmerApplyData, setFarmerApplyData, setApplication, getApplication } from "../../../../../app/session/index.js";
 import { createServer } from "../../../../../app/server.js";
 import { config } from "../../../../../app/config/index.js";
 import { StatusCodes } from "http-status-codes";
@@ -29,10 +29,12 @@ jest.mock("../../../../../app/session", () => ({
   setFarmerApplyData: jest.fn(),
   clear: jest.fn(),
   getCustomer: jest.fn().mockReturnValue(1111),
+  getApplication: jest.fn(),
+  setApplication: jest.fn()
 }));
 
-jest.mock("../../../../../app/api-requests/business-applied-before.js", () => ({
-  businessAppliedBefore: jest.fn().mockResolvedValue("newUser")
+jest.mock("../../../../../app/api-requests/application-api", () => ({
+  getLatestApplicationsBySbi: jest.fn().mockResolvedValue([])
 }));
 
 const sanitizeHTML = (html) => {
@@ -71,10 +73,24 @@ describe("you-can-claim-multiple page", () => {
       const res = await server.inject({ ...optionsBase, method: "GET" });
 
       expect(res.statusCode).toBe(StatusCodes.OK);
-      expect(getFarmerApplyData).toHaveBeenCalledTimes(2); // called an extra time due to logging-context middleware
+      expect(getFarmerApplyData).toHaveBeenCalledTimes(3); // called 2 extra times due to logging-context middleware and pre apply handler
       expect(res.payload).toContain(`${config.dashboardServiceUri}/check-details`);
       const sanitizedHTML = sanitizeHTML(res.payload);
       expect(sanitizedHTML).toMatchSnapshot();
+      expect(setApplication).toHaveBeenCalled();
+    });
+
+    test("returns 500 when a new world application is already set in the session", async () => {
+      getApplication.mockReturnValue({
+        reference: 'AHWR-2470-6BA9',
+        createdAt: new Date('2022-01-01'),
+        statusId: 1,
+        type: 'EE'
+      });
+      const res = await server.inject({ ...optionsBase, method: "GET" });
+
+      expect(res.statusCode).toBe(StatusCodes.INTERNAL_SERVER_ERROR);
+      expect(setApplication).not.toHaveBeenCalled();
     });
 
     test("returns 500 if there is no organisation", async () => {

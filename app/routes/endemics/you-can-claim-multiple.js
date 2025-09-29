@@ -7,7 +7,9 @@ import {
   endemicsYouCanClaimMultiple,
 } from "../../config/routes.js";
 import { generateRandomID } from "../../lib/create-temp-reference.js";
-import { businessAppliedBefore } from "../../api-requests/business-applied-before.js";
+import { getUserTypeByApplication } from "../../api-requests/get-user-type-by-application.js";
+import { getLatestApplicationsBySbi } from "../../api-requests/application-api.js";
+import { preApplyHandler } from "../../lib/pre-apply-handler.js";
 
 const { agreeMultipleSpecies, organisation: organisationKey, reference: referenceKey } = keys.farmerApplyData;
 const { urlPrefix, dashboardServiceUri } = config;
@@ -33,6 +35,7 @@ export const claimMultipleRouteHandlers = [
     method: "GET",
     path: pageUrl,
     options: {
+      pre: [{ method: preApplyHandler }],
       handler: async (request, h) => {
         // on way in we must generate a new reference
         const tempApplicationId = generateRandomID();
@@ -42,7 +45,9 @@ export const claimMultipleRouteHandlers = [
 
         request.logger.setBindings({ sbi: organisation.sbi });
 
-        const userType = await businessAppliedBefore(organisation.sbi);
+        const latestApplications = await getLatestApplicationsBySbi(organisation.sbi);
+
+        const userType = getUserTypeByApplication(latestApplications);
 
         setFarmerApplyData(request, organisationKey, {
           ...organisation,
@@ -62,9 +67,7 @@ export const claimMultipleRouteHandlers = [
     path: pageUrl,
     options: {
       handler: async (request, h) => {
-        const status = agreementStatuses.find(
-          (s) => s.value === request.payload.agreementStatus
-        );
+        const status = agreementStatuses.find((s) => s.value === request.payload.agreementStatus);
 
         setFarmerApplyData(request, agreeMultipleSpecies, status.value);
 

@@ -8,6 +8,7 @@ import {
 } from "../../config/routes.js";
 import { config } from "../../config/index.js";
 import { keys } from "../../session/keys.js";
+import { preApplyHandler } from "../../lib/pre-apply-handler.js";
 
 const { agreeVisitTimings, organisation: organisationKey } =
   keys.farmerApplyData;
@@ -20,6 +21,7 @@ export const timingsRouteHandlers = [
     method: "GET",
     path: `${urlPrefix}/${endemicsTimings}`,
     options: {
+      pre: [{ method: preApplyHandler }],
       handler: async (request, h) => {
         const organisation = getFarmerApplyData(request, organisationKey);
         const hasOldWorldApplication =
