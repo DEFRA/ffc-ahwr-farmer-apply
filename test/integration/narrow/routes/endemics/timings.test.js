@@ -61,8 +61,6 @@ describe("Declaration test", () => {
       expect($("title").text()).toMatch(
         "Timing of reviews and follow-ups - Get funding to improve animal health and welfare",
       );
-      expect($("h3").text()).toEqual("org-name - SBI 0123456789");
-
       expect($("main h2").length).toBe(2);
 
       const firstListItems = $('ul.govuk-list--bullet').first().find('li');

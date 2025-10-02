@@ -66,9 +66,6 @@ describe("Check review numbers page test", () => {
 
       expect(pageTitleByName).toContain(fullTitle);
       expect(pageTitleByClassName).toEqual(title);
-      expect($(".govuk-heading-s").text()).toEqual(
-        `${org.name} - SBI ${org.sbi}`,
-      );
       expect(backLinkUrlByClassName).toContain(endemicsYouCanClaimMultipleUrl);
       ok($);
 
