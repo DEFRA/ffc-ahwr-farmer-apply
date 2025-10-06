@@ -21,7 +21,7 @@ export const preApplyHandler = async (request, h) => {
 
     request.logger.setBindings({ sbi: organisation.sbi });
 
-    if (application?.statusId === CLAIM_STATUS.AGREED) {
+    if (application?.statusId === CLAIM_STATUS.AGREED && !application.applicationRedacts.length) {
       throw new Error("User attempted to use apply journey despite already having an agreed agreement.");
     }
   }
