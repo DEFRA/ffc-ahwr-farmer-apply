@@ -4,6 +4,7 @@ import { getFarmerApplyData, setFarmerApplyData, setApplication, getApplication 
 import { createServer } from "../../../../../app/server.js";
 import { config } from "../../../../../app/config/index.js";
 import { StatusCodes } from "http-status-codes";
+import { getLatestApplicationsBySbi } from "../../../../../app/api-requests/application-api.js";
 
 const pageUrl = `/apply/${endemicsYouCanClaimMultiple}`;
 const nextPageUrl = `/apply/${endemicsNumbers}`;
@@ -85,7 +86,8 @@ describe("you-can-claim-multiple page", () => {
         reference: 'AHWR-2470-6BA9',
         createdAt: new Date('2022-01-01'),
         statusId: 1,
-        type: 'EE'
+        type: 'EE',
+        applicationRedacts: []
       });
       const res = await server.inject({ ...optionsBase, method: "GET" });
 
@@ -99,6 +101,34 @@ describe("you-can-claim-multiple page", () => {
 
       expect(res.statusCode).toBe(StatusCodes.INTERNAL_SERVER_ERROR);
     })
+
+    test("returns 200 when existing agreed agreement and redacted", async () => {
+      getApplication.mockReturnValue()
+      getLatestApplicationsBySbi.mockResolvedValue([{
+        type: 'EE',
+        statusId: 1,
+        createdAt: new Date('2022-01-01'),
+        applicationRedacts: [{        
+          success: 'Y'
+        }]
+      }])
+      getFarmerApplyData.mockReturnValue({
+        id: "organisation",
+        name: "org-name",
+        address: "org-address",
+        sbi: "0123456789",
+        farmerName: "Mr Farm",
+      })
+
+      const res = await server.inject({ ...optionsBase, method: "GET" });
+
+      expect(res.statusCode).toBe(StatusCodes.OK);
+      expect(getFarmerApplyData).toHaveBeenCalledTimes(3); // called 2 extra times due to logging-context middleware and pre apply handler
+      expect(res.payload).toContain(`${config.dashboardServiceUri}/check-details`);
+      const sanitizedHTML = sanitizeHTML(res.payload);
+      expect(sanitizedHTML).toMatchSnapshot();
+      expect(setApplication).toHaveBeenCalled();
+    });
   });
 
   describe("POST operation handler", () => {
