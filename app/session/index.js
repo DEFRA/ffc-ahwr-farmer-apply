@@ -1,6 +1,8 @@
 import { getSessionEvent } from "../event/get-session-event.js";
 import { raiseEvent } from "../event/raise-event.js";
-import { keys } from "./keys.js";
+import { keys as sessionKeys } from "./keys.js";
+
+const { farmerApplyData: { organisation: organisationKey, reference: referenceKey } } = sessionKeys;
 
 export const entries = {
   farmerApplyData: "farmerApplyData",
@@ -24,8 +26,8 @@ function set(request, entryKey, key, value) {
   const entryValue = request.yar?.get(entryKey) || {};
   entryValue[key] = typeof value === "string" ? value.trim() : value;
   request.yar.set(entryKey, entryValue);
-  const organisation = getFarmerApplyData(request, keys.farmerApplyData.organisation);
-  const reference = getFarmerApplyData(request, keys.farmerApplyData.reference);
+  const organisation = getFarmerApplyData(request, organisationKey);
+  const reference = getFarmerApplyData(request, referenceKey);
   const xForwardedForHeader = request.headers["x-forwarded-for"];
   const ip = xForwardedForHeader
     ? xForwardedForHeader.split(",")[0]
