@@ -1,5 +1,4 @@
 import { StatusCodes } from 'http-status-codes'
-import { config } from '../config/index.js';
 
 export const errorPagesPlugin = {
   plugin: {
@@ -33,7 +32,7 @@ export const errorPagesPlugin = {
             "pre response error",
           );
 
-          return h.view("error-pages/500", { applyStartLink: `${config.serviceUri}/you-can-claim-multiple` }).code(statusCode);
+          return h.view("error-pages/500").code(statusCode);
         }
 
         return h.continue;

@@ -28,6 +28,7 @@ export const viewContextPlugin = {
           ctx.dashboardServiceUri = dashboardServiceUri;
           ctx.ruralPaymentsAgency = RPA_CONTACT_DETAILS;
           ctx.userIsSignedIn = request.auth.isAuthenticated
+          ctx.applyStartLink = `${serviceUri}/endemics/you-can-claim-multiple`;
 
           response.source.context = ctx;
         }

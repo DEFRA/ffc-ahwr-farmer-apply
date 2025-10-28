@@ -4,6 +4,8 @@ import { applicationType } from "../constants/constants.js";
 import { getApplication, getFarmerApplyData, setApplication } from "../session/index.js";
 import { keys } from "../session/keys.js";
 import { getLatestApplication } from "./utils.js";
+import appInsights from 'applicationinsights'
+import { config } from '../config/index.js'
 
 const { farmerApplyData: { organisation: organisationKey }, application: applicationKey } = keys;
 
@@ -21,8 +23,9 @@ export const preApplyHandler = async (request, h) => {
 
     request.logger.setBindings({ sbi: organisation.sbi });
 
-    if (application?.statusId === CLAIM_STATUS.AGREED && !application.applicationRedacts.length) {
-      throw new Error("User attempted to use apply journey despite already having an agreed agreement.");
+    if (application?.statusId === CLAIM_STATUS.AGREED && !application.applicationRedacts?.length) {
+      appInsights.defaultClient.trackException({ exception: new Error("User attempted to use apply journey despite already having an agreed agreement.") });
+      return h.redirect(`${config.dashboardServiceUri}/vet-visits`).takeover();
     }
   }
 
