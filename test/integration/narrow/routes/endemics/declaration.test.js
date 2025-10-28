@@ -15,6 +15,7 @@ import { sendMessage } from "../../../../../app/messaging/send-message";
 import { createServer } from "../../../../../app/server";
 import { StatusCodes } from "http-status-codes";
 import { getLatestApplicationsBySbi } from "../../../../../app/api-requests/application-api";
+import appInsights from 'applicationinsights'
 
 jest.mock("../../../../../app/session/index");
 jest.mock("../../../../../app/messaging/receive-message", () => ({
@@ -96,7 +97,7 @@ describe("Declaration test", () => {
       expect($(".govuk-heading-l").text()).toEqual("Sorry, there is a problem with the service");
     });
 
-    test("returns 500 when user has a previous new world agreement", async () => {
+    test("tracks exception and redirects user to dashboard when user has a previous new world agreement", async () => {
       getLatestApplicationsBySbi.mockResolvedValueOnce([{
         reference: 'AHWR-2470-6BA9',
         createdAt: new Date('2022-01-01'),
@@ -113,9 +114,9 @@ describe("Declaration test", () => {
 
       const res = await server.inject(options);
 
-      expect(res.statusCode).toBe(StatusCodes.INTERNAL_SERVER_ERROR);
-      const $ = cheerio.load(res.payload);
-      expect($(".govuk-heading-l").text()).toEqual("Sorry, there is a problem with the service");
+      expect(res.statusCode).toBe(StatusCodes.MOVED_TEMPORARILY);
+      expect(res.headers.location.toString()).toEqual(`${config.dashboardServiceUri}/vet-visits`);
+      expect(appInsights.defaultClient.trackException).toHaveBeenCalledWith({ exception : new Error('User attempted to use apply journey despite already having an agreed agreement.')});
     });
 
     test("returns 200 when application found", async () => {

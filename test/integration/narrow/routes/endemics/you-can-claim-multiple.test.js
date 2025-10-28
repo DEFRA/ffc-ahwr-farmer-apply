@@ -5,6 +5,7 @@ import { createServer } from "../../../../../app/server.js";
 import { config } from "../../../../../app/config/index.js";
 import { StatusCodes } from "http-status-codes";
 import { getLatestApplicationsBySbi } from "../../../../../app/api-requests/application-api.js";
+import appInsights from 'applicationinsights'
 
 const pageUrl = `/apply/${endemicsYouCanClaimMultiple}`;
 const nextPageUrl = `/apply/${endemicsNumbers}`;
@@ -36,6 +37,11 @@ jest.mock("../../../../../app/session", () => ({
 
 jest.mock("../../../../../app/api-requests/application-api", () => ({
   getLatestApplicationsBySbi: jest.fn().mockResolvedValue([])
+}));
+
+jest.mock("applicationinsights", () => ({
+  defaultClient: { trackException: jest.fn(), trackEvent: jest.fn() },
+  dispose: jest.fn(),
 }));
 
 const sanitizeHTML = (html) => {
@@ -81,7 +87,7 @@ describe("you-can-claim-multiple page", () => {
       expect(setApplication).toHaveBeenCalled();
     });
 
-    test("returns 500 when a new world application is already set in the session", async () => {
+    test("tracks exception and redirects user to dashboard when user has a previous new world agreement", async () => {
       getApplication.mockReturnValue({
         reference: 'AHWR-2470-6BA9',
         createdAt: new Date('2022-01-01'),
@@ -91,8 +97,9 @@ describe("you-can-claim-multiple page", () => {
       });
       const res = await server.inject({ ...optionsBase, method: "GET" });
 
-      expect(res.statusCode).toBe(StatusCodes.INTERNAL_SERVER_ERROR);
-      expect(setApplication).not.toHaveBeenCalled();
+      expect(res.statusCode).toBe(StatusCodes.MOVED_TEMPORARILY);
+      expect(res.headers.location.toString()).toEqual(`${config.dashboardServiceUri}/vet-visits`);
+      expect(appInsights.defaultClient.trackException).toHaveBeenCalledWith({ exception : new Error('User attempted to use apply journey despite already having an agreed agreement.')});
     });
 
     test("returns 500 if there is no organisation", async () => {

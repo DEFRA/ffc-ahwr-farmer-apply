@@ -16,8 +16,7 @@ export const missingPagesRoutes = [{
       return h
         .view('error-pages/404',
           {
-            signInLink: !userIsSignedIn ? `${config.dashboardServiceUri}/sign-in` : undefined,
-            applyStartLink: `${config.serviceUri}/endemics/you-can-claim-multiple`
+            signInLink: !userIsSignedIn ? `${config.dashboardServiceUri}/sign-in` : undefined
           })
         .code(StatusCodes.NOT_FOUND)
     }

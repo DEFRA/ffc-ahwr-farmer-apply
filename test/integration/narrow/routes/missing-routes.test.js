@@ -31,6 +31,7 @@ describe('Missing routes', () => {
 
     expect($('h1').text()).toMatch('404 - Page not found')
     expect($('p:nth-child(2) > a').text().trim()).toContain('Sign in')
+    expect($('p > a').get(2).attribs.href).toMatch('/endemics/you-can-claim-multiple')
   })
 
   test('GET an unregistered route when user is signed in', async () => {
@@ -49,5 +50,6 @@ describe('Missing routes', () => {
 
     expect($('h1').text()).toMatch('404 - Page not found')
     expect($('p:nth-child(2) > a').text().trim()).not.toContain('Sign in')
+    expect($('p > a').get(2).attribs.href).toMatch('/endemics/you-can-claim-multiple')
   })
 })

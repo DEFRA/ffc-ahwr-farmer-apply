@@ -6,9 +6,12 @@ import {
   endemicsTimings,
   endemicsYouCanClaimMultiple,
 } from "../../../../../app/config/routes.js";
-import { getFarmerApplyData } from "../../../../../app/session/index.js";
+import { getApplication, getFarmerApplyData } from '../../../../../app/session/index.js'
 import { createServer } from "../../../../../app/server";
 import { getLatestApplicationsBySbi } from "../../../../../app/api-requests/application-api";
+import { StatusCodes } from 'http-status-codes'
+import { config } from '../../../../../app/config/index.js'
+import appInsights from 'applicationinsights'
 
 const endemicsNumbersUrl = `/apply/${endemicsNumbers}`;
 const endemicsYouCanClaimMultipleUrl = `/apply/${endemicsYouCanClaimMultiple}`;
@@ -24,6 +27,11 @@ jest.mock("../../../../../app/session", () => ({
 }));
 
 jest.mock("../../../../../app/api-requests/application-api");
+
+jest.mock("applicationinsights", () => ({
+  defaultClient: { trackException: jest.fn(), trackEvent: jest.fn() },
+  dispose: jest.fn(),
+}));
 
 describe("Check review numbers page test", () => {
   const auth = {
@@ -70,6 +78,25 @@ describe("Check review numbers page test", () => {
       ok($);
 
       await server.stop();
+    });
+
+    test("tracks exception and redirects user to dashboard when user has a previous new world agreement", async () => {
+      getFarmerApplyData.mockReturnValue(org);
+      getApplication.mockReturnValue({
+        reference: 'AHWR-2470-6BA9',
+        createdAt: new Date('2022-01-01'),
+        statusId: 1,
+        type: 'EE',
+        applicationRedacts: []
+      });
+      const server = await createServer();
+      await server.initialize();
+
+      const res = await server.inject({ ...options, method: "GET" });
+
+      expect(res.statusCode).toBe(StatusCodes.MOVED_TEMPORARILY);
+      expect(res.headers.location.toString()).toEqual(`${config.dashboardServiceUri}/vet-visits`);
+      expect(appInsights.defaultClient.trackException).toHaveBeenCalledWith({ exception : new Error('User attempted to use apply journey despite already having an agreed agreement.')});
     });
 
   });

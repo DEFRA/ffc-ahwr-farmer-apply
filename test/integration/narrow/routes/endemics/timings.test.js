@@ -2,8 +2,11 @@ import * as cheerio from "cheerio";
 import { endemicsDeclaration } from "../../../../../app/config/routes.js";
 import { createServer } from "../../../../../app/server.js";
 import { getCrumbs } from "../../../../utils/get-crumbs.js";
-import { getFarmerApplyData } from "../../../../../app/session/index.js";
+import { getApplication, getFarmerApplyData } from '../../../../../app/session/index.js'
 import { getLatestApplicationsBySbi } from "../../../../../app/api-requests/application-api";
+import { StatusCodes } from 'http-status-codes'
+import { config } from '../../../../../app/config/index.js'
+import appInsights from 'applicationinsights'
 
 const auth = {
   credentials: { reference: "1111", sbi: "111111111" },
@@ -74,6 +77,31 @@ describe("Declaration test", () => {
       const actualItems = firstListItems.map((i, el) => $(el).text().trim()).get();
 
       expect(actualItems).toEqual(expectedItems);
+    });
+
+    test("tracks exception and redirects user to dashboard when user has a previous new world agreement", async () => {
+      getFarmerApplyData.mockReturnValue({
+        sbi: "0123456789"
+      });
+      getApplication.mockReturnValue({
+        reference: 'AHWR-2470-6BA9',
+        createdAt: new Date('2022-01-01'),
+        statusId: 1,
+        type: 'EE',
+        applicationRedacts: []
+      });
+
+      const options = {
+        method: "GET",
+        url,
+        auth,
+      };
+
+      const res = await server.inject(options);
+
+      expect(res.statusCode).toBe(StatusCodes.MOVED_TEMPORARILY);
+      expect(res.headers.location.toString()).toEqual(`${config.dashboardServiceUri}/vet-visits`);
+      expect(appInsights.defaultClient.trackException).toHaveBeenCalledWith({ exception : new Error('User attempted to use apply journey despite already having an agreed agreement.')});
     });
   });
 
